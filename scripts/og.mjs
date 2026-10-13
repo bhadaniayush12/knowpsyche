@@ -3,10 +3,11 @@
 // sharp rasterises the SVG. Same input, same PNG: no dates, no randomness.
 // House style: paper background, ink text, the psi mark. The accent colour is only in the motif and the bottom bar.
 // The cards name the page only: no scores, no claims.
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import satori from 'satori';
 import sharp from 'sharp';
 import { markSvg } from '../src/lib/brand/mark.js';
+import { publishedArticles } from './lib/articles.mjs';
 
 const root = new URL('../', import.meta.url);
 const OUT = new URL('public/og/', root);
@@ -113,6 +114,7 @@ const cards = [
   { slug: 'site', eyebrow: 'Psychology tests', title: 'Psychology tests, explained', accent: C.ink },
   { slug: 'tests', eyebrow: 'Tests', title: 'All 7 psychology tests', accent: C.ink },
   { slug: 'about', eyebrow: 'KnowPsyche', title: 'About KnowPsyche', accent: C.ink },
+  { slug: 'learn', eyebrow: 'Learn psychology', title: 'Learn psychology, in plain English', accent: C.ink },
   { slug: 'reaction-time-test', eyebrow: 'Test / 01 · Attention', title: 'Reaction time test', accent: C.yellow, motif: motifs.reaction },
   { slug: 'enneagram-test', eyebrow: 'Test / 02 · Personality', title: 'Enneagram test', accent: C.violet, motif: motifs.enneagram },
   { slug: 'photographic-memory-test', eyebrow: 'Test / 03 · Memory', title: 'Photographic memory test', accent: C.mintGo, motif: motifs.photographic },
@@ -121,6 +123,23 @@ const cards = [
   { slug: 'stroop-test', eyebrow: 'Test / 06 · Focus', title: 'Stroop test', accent: C.coral, motif: motifs.stroop },
   { slug: 'emotional-intelligence-test', eyebrow: 'Test / 07 · Emotions', title: 'Emotional intelligence test', accent: C.violetInk, motif: motifs.emotional },
 ];
+
+// Learn articles: one card each (learn-<slug>.png), titled by the article, in the accent and motif of its
+// relatedTest. The pillar article (no relatedTest) gets the site style. The eyebrow names the category,
+// with "Learn · " in front when that still fits on one line (about 26 mono characters at this size).
+const EYEBROW_MAX = 26;
+for (const a of publishedArticles()) {
+  const test = cards.find((c) => c.slug === a.data.relatedTest);
+  const withLearn = `Learn · ${a.data.category}`;
+  cards.push({
+    slug: `learn-${a.id}`,
+    eyebrow: withLearn.length <= EYEBROW_MAX ? withLearn : a.data.category,
+    title: a.data.title,
+    accent: test?.accent ?? C.ink,
+    motif: test?.motif,
+    digits: test?.digits,
+  });
+}
 
 // Title type, as on the page H1s: Space Grotesk 600, tight tracking, the last word in the italic serif.
 // The serif is set at the same size: its x-height is already a touch taller than the sans, which makes up
@@ -183,6 +202,8 @@ const card = ({ eyebrow, accent, motif, digits: showDigits }, { lines, size }) =
   );
 
 mkdirSync(OUT, { recursive: true });
+// Article cards are rebuilt every time, so a deleted or drafted article leaves no card behind.
+for (const f of readdirSync(OUT)) if (f.startsWith('learn-')) rmSync(new URL(f, OUT));
 for (const c of cards) {
   const svg = await satori(card(c, await layoutTitle(c.title)), { width: W, height: H, fonts });
   const png = await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toBuffer();
