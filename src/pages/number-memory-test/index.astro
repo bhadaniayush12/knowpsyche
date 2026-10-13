@@ -1,0 +1,416 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import BandScale from '../../components/result/BandScale.astro';
+import WhatItMeans from '../../components/result/WhatItMeans.astro';
+import TryThis from '../../components/result/TryThis.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import CopyScores from '../../components/result/CopyScores.astro';
+import { faqs, numberBands, page, result, sources, ui } from '../../data/tests/number-memory';
+import { LIVES, START_DIGITS } from '../../lib/tests/number-memory';
+
+const segClass = ['flex-[3] bg-paper', 'flex-[2] bg-lilac', 'flex-[2] bg-lilac-bright', 'flex-[3] bg-blue'];
+const ranges = ['3–5', '6–7', '8–9', '10+'];
+const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-5 py-3 text-base font-semibold text-paper transition-colors duration-300 ease-house hover:bg-blue';
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/number-memory-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+>
+  <div slot="stage" tabindex="-1" class="nm-card rounded-[26px] outline-none border border-line-card bg-white p-[clamp(16px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)]">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+        <span class="nm-len">{ui.digits(START_DIGITS)}</span>
+        <span class="inline-flex items-center gap-2">
+          <span class="flex gap-1" aria-hidden="true">
+            {Array.from({ length: LIVES }, () => <span class="nm-life block size-2.5 rounded-full border border-ink bg-coral"></span>)}
+          </span>
+          <span class="nm-lives text-muted">{ui.livesLeft(LIVES)}</span>
+        </span>
+      </div>
+      <button type="button" class="nm-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+    </div>
+
+    <!-- Every view sits in the same grid cell; unused ones are invisible, so the card keeps one height. -->
+    <div class="nm-views mt-5 grid min-h-[300px] sm:min-h-[280px]" data-view="idle">
+      <div data-v="idle" class="nm-view flex flex-col items-center justify-center gap-3 text-center">
+        <p class="m-0 text-[17px] text-ink-soft">{ui.ready}</p>
+      </div>
+
+      <div data-v="tip" class="nm-view flex flex-col items-center justify-center gap-3 text-center">
+        <p class="serif m-0 max-w-[520px] text-[clamp(26px,3.4vw,36px)] leading-[1.15] text-blue">{ui.chunkTip}</p>
+      </div>
+
+      <div data-v="show" class="nm-view nm-show flex flex-col items-center justify-center gap-5 text-center select-none">
+        <p class="mono m-0 text-[11px] text-muted">{ui.remember}</p>
+        <p class="nm-number m-0 max-w-full text-[clamp(40px,9vw,88px)] leading-[1.05] font-semibold tracking-[.06em] break-all" aria-live="polite"></p>
+        <div class="h-2 w-full max-w-[420px] overflow-hidden rounded-full bg-line" aria-hidden="true">
+          <div class="nm-bar h-full origin-left rounded-full bg-blue"></div>
+        </div>
+      </div>
+
+      <form data-v="input" class="nm-view nm-form flex flex-col items-center justify-center gap-4 text-center" novalidate>
+        <label for="nm-answer" class="text-[17px] font-medium">{ui.type}</label>
+        <div class="flex w-full max-w-[460px] flex-wrap justify-center gap-2.5">
+          <input
+            id="nm-answer"
+            class="nm-input mono min-h-14 min-w-0 flex-[1_1_220px] rounded-12 border border-ink bg-paper px-4 text-center text-[clamp(22px,4vw,30px)] tracking-[.12em] text-ink"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            enterkeyhint="done"
+          />
+          <button type="submit" class:list={[btn, 'min-h-14']}>{ui.submit}</button>
+        </div>
+      </form>
+
+      <div data-v="correct" class="nm-view flex flex-col items-center justify-center gap-2 text-center">
+        <p class="m-0 inline-flex items-center gap-2 text-[clamp(28px,4vw,40px)] font-semibold text-teal-ink">
+          <svg viewBox="0 0 24 24" class="size-[1em]" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5" /></svg>
+          {ui.correct}
+        </p>
+      </div>
+
+      <div data-v="wrong" class="nm-view flex flex-col justify-center gap-4">
+        <p class="m-0 inline-flex items-center gap-2 text-[22px] font-semibold text-coral-ink">
+          <svg viewBox="0 0 24 24" class="size-[1em]" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          {ui.wrong}
+        </p>
+        <dl class="m-0 grid gap-3">
+          <div class="flex flex-col gap-1.5">
+            <dt class="mono text-[11px] text-muted">{ui.rightNumber}</dt>
+            <dd class="nm-right m-0 flex flex-wrap gap-1"></dd>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <dt class="mono text-[11px] text-muted">{ui.yourAnswer}</dt>
+            <dd class="nm-yours m-0 flex flex-wrap gap-1"></dd>
+          </div>
+        </dl>
+        <p class="nm-diff sr-only"></p>
+        <p class="nm-middle m-0 max-w-[620px] border-l-[3px] border-blue pl-3.5 text-[15.5px] leading-[1.55] text-ink-soft" hidden>{ui.middle}</p>
+        <div><button type="button" class:list={['nm-next', btn]}>{ui.nextNumber}</button></div>
+      </div>
+    </div>
+  </div>
+
+  <Fragment slot="result">
+    <ResultHeadline />
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[999_1_520px] flex-col gap-[22px]">
+          <div class="flex flex-wrap items-end gap-[18px]">
+            <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]" data-r="span">0</div>
+            <div class="serif pb-2.5 text-[34px] text-blue">digits held</div>
+          </div>
+          <BandScale segments={numberBands.map((b, i) => ({ class: segClass[i], range: ranges[i], label: b.badge }))} />
+        </div>
+        <div class="flex min-w-0 flex-[1_1_280px] flex-col justify-between gap-3.5 border border-ink bg-card p-[22px]">
+          <div class="mono text-[11px]">Your longest number</div>
+          <div class="mono text-[clamp(22px,2.4vw,28px)] leading-[1.15] font-medium tracking-[.04em] break-all text-teal-ink" data-r="longest">—</div>
+          <CopyScores label={ui.copyScore} class="mt-1 border-t border-line-inner pt-3" />
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <WhatItMeans change={result.change} />
+
+    <TryThis />
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  .nm-view { grid-area: 1 / 1; visibility: hidden; }
+  .nm-views[data-view='idle'] [data-v='idle'],
+  .nm-views[data-view='tip'] [data-v='tip'],
+  .nm-views[data-view='show'] [data-v='show'],
+  .nm-views[data-view='input'] [data-v='input'],
+  .nm-views[data-view='correct'] [data-v='correct'],
+  .nm-views[data-view='wrong'] [data-v='wrong'] { visibility: visible; }
+  .nm-show, .nm-show * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  .nm-digit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.6em;
+    height: 1.9em;
+    padding: 0 .2em;
+    border: 1px solid var(--color-line-inner);
+    border-radius: 6px;
+    background: var(--color-card);
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: clamp(18px, 3.4vw, 24px);
+  }
+  /* A mismatch is coral AND underlined, so colour is never the only signal. */
+  .nm-digit[data-miss] {
+    background: var(--color-tint-red);
+    border-color: var(--color-coral-ink);
+    color: var(--color-coral-ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
+  }
+  .nm-life[data-lost] { background: transparent; }
+</style>
+
+<script>
+  import { result as copy, ui } from '../../data/tests/number-memory';
+  import {
+    answer,
+    CHUNK_TIP_MS,
+    cleanAnswer,
+    compareDigits,
+    displayMs,
+    generateNumber,
+    getBand,
+    isMiddleMistake,
+    meaningLine,
+    scalePercent,
+    shareText,
+    startGame,
+    takeChunkTip,
+    type NumberState,
+  } from '../../lib/tests/number-memory';
+  import { createShareCard } from '../../lib/share-card';
+  import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
+
+  /** How long "Correct" shows before the next number. */
+  const CORRECT_MS = 800;
+
+  type View = 'idle' | 'tip' | 'show' | 'input' | 'correct' | 'wrong' | 'done';
+
+  const card = $('.nm-card');
+  const views = $('.nm-views');
+  const showEl = $('.nm-show');
+  const numberEl = $('.nm-number');
+  const bar = $('.nm-bar');
+  const form = $<HTMLFormElement>('.nm-form');
+  const input = $<HTMLInputElement>('.nm-input');
+  const lenEl = $('.nm-len');
+  const livesEl = $('.nm-lives');
+  const lifeDots = $$('.nm-life');
+  const next = $<HTMLButtonElement>('.nm-next');
+  const resultEl = $('[data-result]');
+  const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
+  const share = createShareCard($('[data-share]'));
+
+  // The game lives only in these variables. Nothing is stored or sent.
+  let view: View = 'idle';
+  let game: NumberState = startGame();
+  let target = '';
+  let longest = '';
+  let cancel: () => void = () => {};
+
+  const setView = (v: View) => {
+    view = v;
+    // "done" keeps the last answer on screen.
+    if (v !== 'done') views.dataset.view = v;
+  };
+
+  const renderHud = () => {
+    lenEl.textContent = ui.digits(game.digits);
+    livesEl.textContent = ui.livesLeft(game.lives);
+    lifeDots.forEach((d, i) => d.toggleAttribute('data-lost', i >= game.lives));
+  };
+
+  const round = () => {
+    cancel();
+    renderHud();
+    const t = takeChunkTip(game);
+    game = t.state;
+    if (t.show) {
+      setView('tip');
+      cancel = runFor(CHUNK_TIP_MS, showNumber);
+      return;
+    }
+    showNumber();
+  };
+
+  const showNumber = () => {
+    target = generateNumber(game.digits);
+    numberEl.textContent = target;
+    setView('show');
+    cancel = runFor(
+      displayMs(game.digits),
+      () => {
+        // Gone from the page, not just hidden.
+        numberEl.textContent = '';
+        input.value = '';
+        setView('input');
+        input.focus({ preventScroll: true });
+      },
+      (p) => (bar.style.transform = `scaleX(${1 - p})`),
+    );
+  };
+
+  const digitRow = (s: string, misses: Set<number>, length: number) =>
+    Array.from({ length }, (_, i) => {
+      const d = document.createElement('span');
+      d.className = 'nm-digit';
+      d.textContent = s[i] ?? '·';
+      if (misses.has(i)) d.dataset.miss = '';
+      return d;
+    });
+
+  const submit = () => {
+    if (view !== 'input') return;
+    const given = cleanAnswer(input.value);
+    if (!given) return;
+    const cmp = compareDigits(target, given);
+    game = answer(game, cmp.correct);
+    if (cmp.correct) {
+      longest = target;
+      setView('correct');
+      cancel = runFor(CORRECT_MS, round);
+      return;
+    }
+    const misses = new Set(cmp.mismatches);
+    $('.nm-right').replaceChildren(...digitRow(target, misses, target.length));
+    const yours = $('.nm-yours');
+    if (given.length) yours.replaceChildren(...digitRow(given, misses, Math.max(given.length, target.length)));
+    $('.nm-diff').textContent = `You typed ${given.split('').join(' ')}. The number was ${target.split('').join(' ')}. Different at digit ${cmp.mismatches.map((i) => i + 1).join(', ')}.`;
+    $('.nm-middle').hidden = !isMiddleMistake(target.length, cmp.mismatches);
+    renderHud();
+    setView('wrong');
+    if (game.over) {
+      next.textContent = ui.seeResult;
+      // The result goes in now, while this keypress still explains why the page grew (no layout shift).
+      finish();
+    } else {
+      next.textContent = ui.nextNumber;
+    }
+    next.focus({ preventScroll: true });
+  };
+
+  const finish = () => {
+    setView('done');
+    const n = game.best;
+    const band = getBand(n);
+    r('eyebrow').textContent = 'Your result · Number memory';
+    r('headline').textContent = `${n} digits — ${band.badge}`;
+    r('span').textContent = String(n);
+    r('longest').textContent = longest || '—';
+    const pos = `${scalePercent(n).toFixed(1)}%`;
+    r('marker').style.left = pos;
+    const ml = r('marker-label');
+    ml.style.left = pos;
+    ml.textContent = `You · ${n}`;
+    r('meaning').textContent = meaningLine(n);
+    r('tip').textContent = copy.tip;
+
+    void share.update({
+      label: 'My digit span',
+      big: String(n),
+      unit: 'digits',
+      badge: band.badge,
+      tagline: 'Can you beat it?',
+      tag: 'Test / 04',
+      text: shareText(n),
+      url: 'https://knowpsyche.com/number-memory-test/',
+      filename: 'knowpsyche-number-memory',
+    });
+    resultEl.hidden = false;
+  };
+
+  const showResult = () => {
+    r('headline').focus({ preventScroll: true });
+    resultEl.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  };
+
+  const reset = () => {
+    cancel();
+    game = startGame();
+    target = '';
+    longest = '';
+    numberEl.textContent = '';
+    input.value = '';
+    dealOnReturn = false;
+    setView('idle');
+    renderHud();
+    resultEl.hidden = true;
+  };
+
+  const start = () => {
+    reset();
+    card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    card.focus({ preventScroll: true });
+    round();
+  };
+
+  // ---------- Input ----------
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    submit();
+  });
+  // Paste is fine: the answer is cleaned to digits (spaces, dashes and line breaks dropped).
+  input.addEventListener('input', () => {
+    const clean = cleanAnswer(input.value);
+    if (clean !== input.value) input.value = clean;
+  });
+  next.addEventListener('click', () => {
+    if (view === 'done') showResult();
+    else if (view === 'wrong') round();
+  });
+
+  // The number can't be selected, copied or long-pressed while it's on screen.
+  for (const type of ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart']) {
+    showEl.addEventListener(type, (e) => e.preventDefault());
+  }
+  document.addEventListener('copy', (e) => {
+    if (view === 'show') e.preventDefault();
+  });
+
+  $('[data-test-start]').addEventListener('click', start);
+  $('.nm-restart').addEventListener('click', () => {
+    reset();
+    $<HTMLButtonElement>('[data-test-start]').focus();
+  });
+  $$('[data-try-again]').forEach((b) => b.addEventListener('click', start));
+
+  // Your own record to compare with later, since we save nothing.
+  bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
+    if (view !== 'done') return '';
+    return `My digit span: ${game.best} digits — ${getBand(game.best).badge} (${today()}, knowpsyche.com/number-memory-test/)`;
+  });
+
+  guardLeave(() => view !== 'idle' && view !== 'done', ui.leaveWarning);
+
+  // Leaving the tab while the number shows would spoil the round, so a new number is dealt on return (no life lost).
+  let dealOnReturn = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && (view === 'show' || view === 'tip')) {
+      cancel();
+      numberEl.textContent = '';
+      dealOnReturn = true;
+    } else if (!document.hidden && dealOnReturn) {
+      dealOnReturn = false;
+      showNumber();
+    }
+  });
+
+  reset();
+</script>
