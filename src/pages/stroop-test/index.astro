@@ -279,6 +279,10 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
   const share = createShareCard($('[data-share]'));
 
+  // Bound once; the text is filled in when a result is shown.
+  let copyText = '';
+  bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => copyText);
+
   let mode: Mode = 'idle';
   let trialList: StroopTrial[] = [];
   let trialIndex = 0;
@@ -485,18 +489,12 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     $('[data-r=meaning]', resultEl).textContent = meaningLine(scores);
     $('[data-r=tip]', resultEl).textContent = copy.tip;
 
-    // Copy button
-    const copyBtn = $('[data-copy-btn]', resultEl);
-    const copyStatus = $('[data-copy-status]', resultEl);
-    if (copyBtn && copyStatus) {
-      bindCopy(copyBtn, copyStatus, () =>
-        [
-          `Stroop effect: ${scores.stroopEffectMs} ms (${band.badge})`,
-          `Matching: ${scores.matchingAvgMs} ms · Clashing: ${scores.clashingAvgMs} ms · Accuracy: ${scores.accuracy}%`,
-          `knowpsyche.com/stroop-test · ${today()}`,
-        ].join('\n')
-      );
-    }
+    // Your own record to compare later. Nothing is saved.
+    copyText = [
+      `Stroop effect: ${scores.stroopEffectMs} ms (${band.badge})`,
+      `Matching: ${scores.matchingAvgMs} ms · Clashing: ${scores.clashingAvgMs} ms · Accuracy: ${scores.accuracy}%`,
+      `knowpsyche.com/stroop-test · ${today()}`,
+    ].join('\n');
 
     // Share card
     void share.update({

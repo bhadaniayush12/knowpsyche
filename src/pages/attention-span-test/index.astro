@@ -229,6 +229,10 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
   const share = createShareCard($('[data-share]'));
 
+  // Bound once; the text is filled in when a result is shown.
+  let copyText = '';
+  bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => copyText);
+
   let mode: Mode = 'idle';
   let trialList: CircleColor[] = [];
   let trialIndex = 0;
@@ -425,19 +429,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     $('[data-r=meaning]', resultEl).textContent = meaningLine(scores);
     $('[data-r=tip]', resultEl).textContent = copy.tip;
 
-    // Copy button
-    const copyBtn = $('[data-copy-btn]', resultEl);
-    const copyStatus = $('[data-copy-status]', resultEl);
-    if (copyBtn && copyStatus) {
-      bindCopy(copyBtn, copyStatus, () =>
-        [
-          `Attention span: ${scores.overall}/100 (${band.badge})`,
-          `Focus: ${scores.focus}% · Self-control: ${scores.selfControl}% · Speed: ${scores.speed} ms`,
-          `Steadiness: ${scores.steadiness.dipped ? resultUi.copyDipped : resultUi.steady}`,
-          `knowpsyche.com/attention-span-test · ${today()}`,
-        ].join('\n')
-      );
-    }
+    // Your own record to compare later. Nothing is saved.
+    copyText = [
+      `Attention span: ${scores.overall}/100 (${band.badge})`,
+      `Focus: ${scores.focus}% · Self-control: ${scores.selfControl}% · Speed: ${scores.speed} ms`,
+      `Steadiness: ${scores.steadiness.dipped ? resultUi.copyDipped : resultUi.steady}`,
+      `knowpsyche.com/attention-span-test · ${today()}`,
+    ].join('\n');
 
     // Share card
     void share.update({
