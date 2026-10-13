@@ -23,6 +23,14 @@ const C = {
   inkSoft: '#3d3952',
   paper: '#F4F0E7',
   blue: '#4E61CB',
+  yellow: '#EDCA69',
+  violet: '#9678BE',
+  violetInk: '#7550A6',
+  teal: '#3f8f82',
+  tealDeep: '#2f6f63',
+  mintGo: '#8FD0C2',
+  coral: '#D87568',
+  red: '#C9584B',
 };
 
 const W = 1200;
@@ -35,20 +43,6 @@ const BAR = 8;
 const COL = W - PAD - MOTIF - MOTIF_RIGHT - 40;
 // Title size: as big as the longer of the two lines allows, up to TITLE_MAX.
 const TITLE_MAX = 124;
-
-// Eyebrows match each page's (src/data/tests/*.ts), minus the duration.
-const cards = [
-  { slug: 'site', eyebrow: 'Psychology tests', title: 'Psychology tests, explained', accent: C.blue },
-  { slug: 'tests', eyebrow: 'Tests', title: 'All 7 psychology tests', accent: C.blue },
-  { slug: 'about', eyebrow: 'KnowPsyche', title: 'About KnowPsyche', accent: C.blue },
-  { slug: 'reaction-time-test', eyebrow: 'Test / 01 · Attention', title: 'Reaction time test', accent: C.blue },
-  { slug: 'enneagram-test', eyebrow: 'Test / 02 · Personality', title: 'Enneagram test', accent: C.blue },
-  { slug: 'photographic-memory-test', eyebrow: 'Test / 03 · Memory', title: 'Photographic memory test', accent: C.blue },
-  { slug: 'number-memory-test', eyebrow: 'Test / 04 · Memory', title: 'Number memory test', accent: C.blue },
-  { slug: 'attention-span-test', eyebrow: 'Test / 05 · Attention', title: 'Attention span test', accent: C.blue },
-  { slug: 'stroop-test', eyebrow: 'Test / 06 · Focus', title: 'Stroop test', accent: C.blue },
-  { slug: 'emotional-intelligence-test', eyebrow: 'Test / 07 · Emotions', title: 'Emotional intelligence test', accent: C.blue },
-];
 
 const svgUri = (body, size) =>
   `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">${body}</svg>`).toString('base64')}`;
@@ -64,6 +58,74 @@ const psi = svgUri(
 
 const h = (type, style, ...children) => ({ type, props: { style: { display: 'flex', ...style }, children } });
 const img = (src, size) => ({ type: 'img', props: { src, width: size, height: size } });
+
+// Motifs: one plain geometric drawing per test in a 400×400 box, in the test's accent colour.
+const S = MOTIF;
+const at = (r, deg) => [S / 2 + r * Math.sin((deg * Math.PI) / 180), S / 2 - r * Math.cos((deg * Math.PI) / 180)].map((v) => +v.toFixed(2));
+const motifs = {
+  // A large circle with a smaller one inside.
+  reaction: (a) => svgUri(`<circle cx="200" cy="200" r="186" fill="none" stroke="${a}" stroke-width="14"/><circle cx="200" cy="200" r="96" fill="${a}"/>`, S),
+  // Nine points on a circle (9 at the top), joined as the enneagram figure: 1-4-2-8-5-7-1 and 3-6-9.
+  enneagram: (a) => {
+    const p = (n) => at(176, (n % 9) * 40);
+    const path = (ns) => 'M' + ns.map((n) => p(n).join(' ')).join('L');
+    return svgUri(
+      `<circle cx="200" cy="200" r="176" fill="none" stroke="${a}" stroke-width="5"/>` +
+        `<path d="${path([1, 4, 2, 8, 5, 7, 1])}${path([3, 6, 9, 3])}" fill="none" stroke="${a}" stroke-width="5" stroke-linejoin="round"/>` +
+        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `<circle cx="${p(n)[0]}" cy="${p(n)[1]}" r="20" fill="${a}"/>`).join(''),
+      S,
+    );
+  },
+  // A 3×3 grid of tiles, some filled.
+  photographic: (a) =>
+    svgUri(
+      [1, 0, 0, 0, 1, 1, 0, 1, 0]
+        .map((on, i) => {
+          const x = (i % 3) * 144 + 3;
+          const y = Math.floor(i / 3) * 144 + 3;
+          return on ? `<rect x="${x - 3}" y="${y - 3}" width="112" height="112" rx="18" fill="${a}"/>` : `<rect x="${x}" y="${y}" width="106" height="106" rx="15" fill="none" stroke="${a}" stroke-width="6"/>`;
+        })
+        .join(''),
+      S,
+    ),
+  // Concentric circles around a dot.
+  attention: (a) => svgUri([186, 140, 94].map((r) => `<circle cx="200" cy="200" r="${r}" fill="none" stroke="${a}" stroke-width="8"/>`).join('') + `<circle cx="200" cy="200" r="40" fill="${a}"/>`, S),
+  // Three overlapping rounded blocks in the Stroop ink colours (red, blue, yellow; stroop-test page),
+  // stacked with a paper edge so each stays a clean colour.
+  stroop: () =>
+    svgUri(
+      [[C.red, 6], [C.blue, 98], [C.yellow, 190]]
+        .map(([c, o]) => `<rect x="${o}" y="${o}" width="204" height="204" rx="36" fill="${c}" stroke="${C.paper}" stroke-width="10"/>`)
+        .join(''),
+      S,
+    ),
+  // Two overlapping circles.
+  emotional: (a) => svgUri([130, 270].map((cx) => `<circle cx="${cx}" cy="200" r="130" fill="${a}" fill-opacity=".7"/>`).join(''), S),
+};
+
+// Three outlined digits, stepped down so they read as digits rather than one number. "4 8 2" are the first
+// digits of the number on the homepage test card (TestGlyph.astro).
+const digits = (a) =>
+  h(
+    'div',
+    { width: S, height: S, position: 'relative', fontFamily: 'Space Grotesk', fontSize: 220, lineHeight: 1, color: 'transparent', WebkitTextStroke: `7px ${a}` },
+    ...['4', '8', '2'].map((d, i) => h('div', { position: 'absolute', left: 8 + i * 132, top: -10 + i * 100 }, d)),
+  );
+
+// Accents: no two tests share one. Text stays ink; the accent is only in the motif and the bottom bar.
+// Eyebrows match each page's (src/data/tests/*.ts), minus the duration.
+const cards = [
+  { slug: 'site', eyebrow: 'Psychology tests', title: 'Psychology tests, explained', accent: C.ink },
+  { slug: 'tests', eyebrow: 'Tests', title: 'All 7 psychology tests', accent: C.ink },
+  { slug: 'about', eyebrow: 'KnowPsyche', title: 'About KnowPsyche', accent: C.ink },
+  { slug: 'reaction-time-test', eyebrow: 'Test / 01 · Attention', title: 'Reaction time test', accent: C.yellow, motif: motifs.reaction },
+  { slug: 'enneagram-test', eyebrow: 'Test / 02 · Personality', title: 'Enneagram test', accent: C.violet, motif: motifs.enneagram },
+  { slug: 'photographic-memory-test', eyebrow: 'Test / 03 · Memory', title: 'Photographic memory test', accent: C.mintGo, motif: motifs.photographic },
+  { slug: 'number-memory-test', eyebrow: 'Test / 04 · Memory', title: 'Number memory test', accent: C.teal, digits: true },
+  { slug: 'attention-span-test', eyebrow: 'Test / 05 · Attention', title: 'Attention span test', accent: C.blue, motif: motifs.attention },
+  { slug: 'stroop-test', eyebrow: 'Test / 06 · Focus', title: 'Stroop test', accent: C.coral, motif: motifs.stroop },
+  { slug: 'emotional-intelligence-test', eyebrow: 'Test / 07 · Emotions', title: 'Emotional intelligence test', accent: C.violetInk, motif: motifs.emotional },
+];
 
 // Title type, as on the page H1s: Space Grotesk 600, tight tracking, the last word in the italic serif.
 // The serif is set at the same size: its x-height is already a touch taller than the sans, which makes up
@@ -100,7 +162,7 @@ const layoutTitle = async (title) => {
 
 const mono = { fontFamily: 'DM Mono', fontWeight: 400, color: C.inkSoft, textTransform: 'uppercase', letterSpacing: '0.04em' };
 
-const card = ({ eyebrow, accent, motif }, { lines, size }) =>
+const card = ({ eyebrow, accent, motif, digits: showDigits }, { lines, size }) =>
   h(
     'div',
     { position: 'relative', width: W, height: H, background: C.paper, color: C.ink, fontFamily: 'Space Grotesk' },
@@ -110,18 +172,18 @@ const card = ({ eyebrow, accent, motif }, { lines, size }) =>
       { position: 'absolute', top: 48, left: PAD, right: PAD, alignItems: 'center', gap: 20 },
       img(psi, 76),
       h('div', { alignItems: 'baseline', fontSize: 48, fontWeight: 600, letterSpacing: '-0.03em' }, 'know', h('span', { fontFamily: 'Instrument Serif', fontStyle: 'italic', fontWeight: 400, fontSize: 54, color: C.blue }, 'psyche')),
-      h('div', { ...mono, marginLeft: 'auto', fontSize: 32, textTransform: 'none', letterSpacing: '0' }, 'knowpsyche.com'),
+      h('div', { ...mono, marginLeft: 'auto', fontSize: 34, textTransform: 'none', letterSpacing: '0' }, 'knowpsyche.com'),
     ),
     // Left column, centred between the header and the bar.
     h(
       'div',
       { position: 'absolute', top: 124, bottom: BAR, left: PAD, width: COL, flexDirection: 'column', justifyContent: 'center' },
-      h('div', { ...mono, fontSize: 36, marginBottom: 26 }, eyebrow),
+      h('div', { ...mono, fontSize: 40, marginBottom: 26 }, eyebrow),
       h('div', { flexDirection: 'column', gap: Math.round(size * 0.04) }, titleLine(lines[0], false, size), titleLine(lines[1], true, size)),
       h('div', { ...mono, fontSize: 30, marginTop: 34 }, 'Free · Nothing stored'),
     ),
     // Motif, centred on the same band as the left column.
-    h('div', { position: 'absolute', right: MOTIF_RIGHT, top: 124 + (H - 124 - BAR - MOTIF) / 2, width: MOTIF, height: MOTIF }, motif ?? img(psi, MOTIF)),
+    h('div', { position: 'absolute', right: MOTIF_RIGHT, top: 124 + (H - 124 - BAR - MOTIF) / 2, width: MOTIF, height: MOTIF }, showDigits ? digits(accent) : img(motif ? motif(accent) : psi, MOTIF)),
     h('div', { position: 'absolute', left: 0, right: 0, bottom: 0, height: BAR, background: accent }),
   );
 
