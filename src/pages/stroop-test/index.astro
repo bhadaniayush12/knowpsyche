@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, page, result, resultUi, sources, stroopBands, ui } from '../../data/tests/stroop';
 import { TOTAL_TRIALS } from '../../lib/tests/stroop';
 
@@ -28,6 +29,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   metaLine={page.metaLine}
   faqs={faqs}
   sources={sources}
+  preloadBold
 >
   <div
     slot="stage"
@@ -50,10 +52,13 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         <span class="st-counter">{ui.practiceLabel}</span>
         <span class="st-note text-muted">{ui.practiceNote}</span>
       </div>
-      <button
-        type="button"
-        class="st-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"
-      >{ui.restart}</button>
+      <div class="flex gap-2">
+        <FeedbackToggle />
+        <button
+          type="button"
+          class="st-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"
+        >{ui.restart}</button>
+      </div>
     </div>
 
     <!-- Word display arena -->
@@ -247,6 +252,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     type StroopTrial,
   } from '../../lib/tests/stroop';
   import { createShareCard } from '../../lib/share-card';
+  import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
@@ -359,7 +365,9 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     runNextTrial();
   }
 
+  /** Practice only: the scored run gives no feedback, so it plays no sound either. */
   function setFeedback(text: string, good: boolean) {
+    cue(good ? 'right' : 'wrong');
     feedbackEl.textContent = text;
     feedbackEl.className = `st-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
   }
@@ -554,8 +562,13 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
   startPracticeBtn.addEventListener('click', startPractice);
   startMainBtn.addEventListener('click', startMainRun);
-  restartBtn.addEventListener('click', restartAll);
-  pausedRestartBtn.addEventListener('click', restartAll);
+  // After a restart, Space or Enter on the focused button starts practice again.
+  for (const btn of [restartBtn, pausedRestartBtn]) {
+    btn.addEventListener('click', () => {
+      restartAll();
+      startPracticeBtn.focus({ preventScroll: true });
+    });
+  }
 
   // Top "Start the test" button in the intro header
   const introStartBtn = $('[data-test-start]');
@@ -572,6 +585,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   $$('[data-try-again]').forEach((btn) => {
     btn.addEventListener('click', () => {
       restartAll();
+      // The pressed button is now hidden with the result; give focus somewhere useful.
+      startPracticeBtn.focus({ preventScroll: true });
       card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     });
   });
@@ -600,4 +615,6 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     if (e.repeat) return;
     handleAnswer(color, e.timeStamp);
   });
+
+  bindFeedbackToggle();
 </script>
