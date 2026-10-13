@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reaction Time Test — KnowPsyche</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F0E7}
+a{color:#252238}a:hover{color:#4E61CB}
+.kp{font-family:'Space Grotesk',system-ui,sans-serif;color:#252238;background:#F4F0E7}
+.kp *{box-sizing:border-box}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.mono{font-family:'DM Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.09em}
+.kp button{font-family:inherit;cursor:pointer}
+.kp button:focus-visible,.kp a:focus-visible,.kp summary:focus-visible{outline:2px solid #4E61CB;outline-offset:3px}
+.kp details summary{cursor:pointer;list-style:none}
+.kp details summary::-webkit-details-marker{display:none}
+.pop{animation:pop .35s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes glow{0%,100%{box-shadow:0 26px 54px rgba(36,34,56,.16)}45%{box-shadow:0 0 0 14px rgba(237,202,105,.45),0 26px 54px rgba(36,34,56,.16)}}
+@media (prefers-reduced-motion:reduce){.kp *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="kp">
+<header style="max-width:1320px;margin:0 auto;padding:18px clamp(16px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #BDB6C8">
+  <a href="Main.dc.html" aria-label="KnowPsyche home" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+    <span aria-hidden="true" style="width:34px;height:34px;border-radius:10px;background:#242238;color:#F4F0E7;display:inline-flex;align-items:center;justify-content:center;font-family:'Instrument Serif',Georgia,serif;font-size:26px;line-height:1;padding-bottom:3px">ψ</span>
+    <span style="font-size:20px;font-weight:600;letter-spacing:-.03em">know<span class="serif" style="font-size:23px;color:#4E61CB">psyche</span></span>
+  </a>
+  <nav aria-label="Main" style="display:flex;gap:24px;flex-wrap:wrap;font-size:15px">
+    <a href="Main.dc.html" style="text-decoration:none">Tests</a><a href="Main.dc.html" style="text-decoration:none">Learn</a><a href="Main.dc.html" style="text-decoration:none">Field notes</a>
+  </nav>
+</header>
+
+<main style="max-width:1120px;margin:0 auto;padding:28px clamp(16px,3vw,40px) 80px">
+  <div class="mono" style="font-size:11px;color:#5b5670;margin-bottom:18px"><a href="Main.dc.html" style="color:#5b5670">Home</a> / <a href="Main.dc.html" style="color:#5b5670">Tests</a> / Reaction time</div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px">
+    <div>
+      <div class="mono" style="font-size:11px;color:#4E61CB;margin-bottom:10px">Test / 01 · Attention · 1–2 min</div>
+      <h1 style="margin:0;font-size:clamp(40px,5.4vw,72px);line-height:.95;letter-spacing:-.05em;font-weight:600">Reaction time <span class="serif" style="color:#4E61CB">test</span></h1>
+      <p style="margin:12px 0 0;font-size:17px;line-height:1.55;max-width:560px;color:#3d3952">Wait for the screen to change, then click as fast as you can. Five tries, then your average.</p>
+    </div>
+    <div role="group" aria-label="Mode" style="display:flex;gap:6px;flex-wrap:wrap">
+      <sc-for list="{{modes}}" as="m" hint-placeholder-count="4">
+        <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.pressed}}" class="mono" style="{{m.style}}">{{m.label}}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <button type="button" onClick="{{arena}}" aria-live="polite" style="{{arenaStyle}}">
+    <span class="mono" style="position:absolute;top:16px;left:18px;font-size:11px;opacity:.8">{{modeName}} · try {{tryNo}} / 5</span>
+    <span class="mono" style="position:absolute;top:16px;right:18px;font-size:11px;opacity:.8">{{phaseTag}}</span>
+    <span class="pop" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 20px">
+      <span style="font-size:clamp(44px,7vw,96px);font-weight:600;letter-spacing:-.05em;line-height:1">{{big}}</span>
+      <span style="font-size:18px;opacity:.9;max-width:520px">{{small}}</span>
+    </span>
+  </button>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap" aria-label="Your tries">
+      <sc-for list="{{slots}}" as="sl" hint-placeholder-count="5">
+        <span class="mono" style="{{sl.style}}">{{sl.v}}</span>
+      </sc-for>
+    </div>
+    <sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+      <a href="Result.dc.html" style="background:#252238;color:#F4F0E7;text-decoration:none;padding:14px 20px;border-radius:12px;min-height:48px;display:inline-flex;align-items:center;font-weight:600">See what {{avg}} ms means →</a>
+    </sc-if>
+  </div>
+  <p class="mono" style="font-size:10.5px;color:#5b5670;margin:12px 0 0">Your screen and mouse add delay too. Scores are computed in your browser and never stored.</p>
+
+  <div class="mono" style="margin:40px 0;border:1px dashed #9a93ab;border-radius:16px;color:#7a748a;font-size:11px;height:100px;display:flex;align-items:center;justify-content:center">Ad slot · responsive · below the test, never inside it</div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:48px">
+    <article style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:44px">
+      <section>
+        <h2 style="margin:0 0 14px;font-size:34px;letter-spacing:-.04em;font-weight:600">What is a good reaction time?</h2>
+        <p style="margin:0 0 22px;font-size:17px;line-height:1.7;color:#3d3952">In browser tests like this one, most people land somewhere around 200–300 ms. Your device matters: screens, mice and touchscreens can each add tens of milliseconds before your brain is even involved.</p>
+        <div style="border:1px solid #E1DACB;border-radius:20px;padding:24px;background:#FFFFFF">
+          <div style="display:flex;height:44px;border-radius:12px;overflow:hidden">
+            <div style="flex:2;background:#4E61CB;color:#fff;display:flex;align-items:center;padding:0 10px;font-size:13px;font-weight:600">Very fast</div>
+            <div style="flex:2;background:#E5DFEF;display:flex;align-items:center;padding:0 10px;font-size:13px;font-weight:600;border-left:1px solid #252238">Typical range</div>
+            <div style="flex:4;background:#F4F0E7;display:flex;align-items:center;padding:0 10px;font-size:13px;font-weight:600;border-left:1px solid #252238">Slower — tired, distracted or laggy device</div>
+          </div>
+          <div class="mono" style="display:flex;justify-content:space-between;font-size:11px;margin-top:8px;color:#5b5670"><span>100 ms</span><span>200</span><span>300</span><span>400</span><span>500 ms</span></div>
+        </div>
+      </section>
+      <section>
+        <h2 style="margin:0 0 18px;font-size:34px;letter-spacing:-.04em;font-weight:600">What happens in those <span class="serif" style="color:#4E61CB">250 ms</span></h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+          <div style="border-top:4px solid #D87568;padding-top:12px"><div class="mono" style="font-size:11px">01 · See</div><p style="margin:8px 0 0;font-size:15px;line-height:1.55">Light hits your retina and the signal travels to the visual cortex at the back of your head.</p></div>
+          <div style="border-top:4px solid #4E61CB;padding-top:12px"><div class="mono" style="font-size:11px">02 · Decide</div><p style="margin:8px 0 0;font-size:15px;line-height:1.55">Your brain recognises the change and decides it is the signal you were waiting for.</p></div>
+          <div style="border-top:4px solid #5D9C91;padding-top:12px"><div class="mono" style="font-size:11px">03 · Act</div><p style="margin:8px 0 0;font-size:15px;line-height:1.55">A command runs down your spinal cord and nerves to the muscles in your finger.</p></div>
+        </div>
+        <a href="Main.dc.html" style="display:inline-block;margin-top:16px;font-weight:600">Dive into the neurons behind this →</a>
+      </section>
+      <section>
+        <h2 style="margin:0 0 14px;font-size:34px;letter-spacing:-.04em;font-weight:600">What changes your score</h2>
+        <ul style="margin:0;padding-left:20px;font-size:16.5px;line-height:1.8;color:#3d3952">
+          <li><b>Sleep and alertness</b> — being tired is one of the biggest slow-downs.</li>
+          <li><b>Practice</b> — you get a little faster as the task becomes familiar.</li>
+          <li><b>Age</b> — reaction time tends to slow gradually as we get older.</li>
+          <li><b>Your device</b> — monitor refresh rate and input lag add delay you cannot see.</li>
+        </ul>
+      </section>
+      <section>
+        <h2 style="margin:0 0 14px;font-size:34px;letter-spacing:-.04em;font-weight:600">Questions</h2>
+        <details style="border-top:1px solid #252238;padding:16px 0"><summary style="font-size:18px;font-weight:600;display:flex;justify-content:space-between;gap:12px"><span>Can I improve my reaction time?</span><span class="mono" style="font-size:12px">+</span></summary><p style="margin:10px 0 0;font-size:16px;line-height:1.65;color:#3d3952">A little. Good sleep, being alert and practising the task help. Big jumps usually mean a faster device, not a faster brain.</p></details>
+        <details style="border-top:1px solid #252238;padding:16px 0"><summary style="font-size:18px;font-weight:600;display:flex;justify-content:space-between;gap:12px"><span>Why is my score slower on a phone?</span><span class="mono" style="font-size:12px">+</span></summary><p style="margin:10px 0 0;font-size:16px;line-height:1.65;color:#3d3952">Touchscreens and phone displays often add more delay than a desktop mouse and monitor.</p></details>
+        <details style="border-top:1px solid #252238;border-bottom:1px solid #252238;padding:16px 0"><summary style="font-size:18px;font-weight:600;display:flex;justify-content:space-between;gap:12px"><span>Is this a medical test?</span><span class="mono" style="font-size:12px">+</span></summary><p style="margin:10px 0 0;font-size:16px;line-height:1.65;color:#3d3952">No. It is an educational activity for curiosity and self-reflection, not a diagnosis.</p></details>
+      </section>
+    </article>
+    <aside style="flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:18px">
+      <div style="background:#EDCA69;padding:20px;transform:rotate(-1.2deg);box-shadow:3px 4px 0 rgba(37,34,56,.25)">
+        <div class="mono" style="font-size:10px;margin-bottom:8px">Field rule</div>
+        <div class="serif" style="font-size:26px;line-height:1.1">One try is noise. Five tries is a pattern.</div>
+      </div>
+      <div style="border:1px solid #E1DACB;border-radius:20px;padding:18px;background:#FFFFFF">
+        <div class="mono" style="font-size:11px;margin-bottom:12px">Next thread</div>
+        <a href="Main.dc.html" style="display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid #BDB6C8;text-decoration:none;font-weight:600"><span>Stroop effect</span><span class="mono" style="font-size:11px;color:#D87568">1 min</span></a>
+        <a href="Main.dc.html" style="display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid #BDB6C8;text-decoration:none;font-weight:600"><span>Attention span</span><span class="mono" style="font-size:11px;color:#4E61CB">2–3 min</span></a>
+        <a href="Main.dc.html" style="display:flex;justify-content:space-between;padding:12px 0;border-top:1px solid #BDB6C8;text-decoration:none;font-weight:600"><span>Number memory</span><span class="mono" style="font-size:11px;color:#3f7a70">1–2 min</span></a>
+      </div>
+      <div class="mono" style="border:1px dashed #9a93ab;border-radius:16px;color:#7a748a;font-size:11px;height:250px;display:flex;align-items:center;justify-content:center">Ad slot · 300×250</div>
+    </aside>
+  </div>
+</main>
+<footer style="background:#252238;color:#F4F0E7">
+  <div class="mono" style="max-width:1120px;margin:0 auto;padding:28px clamp(16px,3vw,40px);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10.5px;opacity:.8"><span>© 2026 KnowPsyche</span><span>Educational self-reflection only · not a diagnostic tool</span></div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3000}}'>
+class Component extends DCLogic {
+  state = { phase: 'idle', tries: [], last: 0, mode: 0 };
+  componentWillUnmount() { clearTimeout(this.t); }
+  begin(reset) {
+    clearTimeout(this.t);
+    this.setState(reset ? { phase: 'wait', tries: [] } : { phase: 'wait' });
+    const delay = 1400 + Math.random() * 2600;
+    this.t = setTimeout(() => { this.t0 = performance.now(); this.setState({ phase: 'go' }); }, delay);
+  }
+  renderVals() {
+    const s = this.state;
+    const n = s.tries.length;
+    const avg = n ? Math.round(s.tries.reduce((a, b) => a + b, 0) / n) : 0;
+    const M = ['Visual', 'Sound', 'F1 lights', 'Spacebar'];
+    const P = {
+      idle: { bg: '#252238', fg: '#F4F0E7', big: 'Click to start', small: 'When this box turns light teal, click as fast as you can.', tag: 'Ready' },
+      wait: { bg: '#8E3B32', fg: '#FFFFFF', big: 'Wait for it…', small: 'Do not click yet.', tag: 'Waiting' },
+      go: { bg: '#8FD0C2', fg: '#252238', big: 'CLICK!', small: 'Now!', tag: 'Go' },
+      early: { bg: '#EDCA69', fg: '#252238', big: 'Too soon', small: 'You clicked before the change. Click to try again.', tag: 'Early' },
+      shown: { bg: '#4E61CB', fg: '#FFFFFF', big: s.last + ' ms', small: 'Click to keep going.', tag: 'Try ' + n + ' done' },
+      done: { bg: '#252238', fg: '#F4F0E7', big: avg + ' ms', small: 'Your average across 5 tries. Click to start over.', tag: 'Complete' }
+    };
+    const p = P[s.phase];
+    const slots = [0, 1, 2, 3, 4].map((i) => ({
+      v: s.tries[i] ? s.tries[i] + ' ms' : '— —',
+      style: 'font-size:12px;padding:9px 14px;border-radius:999px;border:1px solid #252238;min-width:84px;text-align:center;' + (s.tries[i] ? 'background:#252238;color:#F4F0E7' : 'background:transparent;color:#7a748a')
+    }));
+    const modes = M.map((label, i) => ({
+      label,
+      pressed: i === s.mode ? 'true' : 'false',
+      pick: () => this.setState({ mode: i }),
+      style: 'font-size:11px;padding:10px 16px;min-height:44px;border-radius:999px;border:1px solid #252238;' + (i === s.mode ? 'background:#252238;color:#F4F0E7' : 'background:transparent;color:#252238')
+    }));
+    return {
+      modes, slots, avg,
+      modeName: M[s.mode],
+      tryNo: Math.min(n + (s.phase === 'done' ? 0 : 1), 5),
+      done: s.phase === 'done',
+      big: p.big, small: p.small, phaseTag: p.tag,
+      arenaStyle: 'position:relative;width:100%;height:clamp(320px,46vw,460px);border:0;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;transition:background .12s;box-shadow:0 26px 54px rgba(36,34,56,.16);touch-action:manipulation;' + (s.phase === 'done' ? 'animation:glow 2.6s cubic-bezier(.45,.05,.25,1) 2;' : '') + 'background:' + p.bg + ';color:' + p.fg,
+      arena: () => {
+        const ph = this.state.phase;
+        if (ph === 'wait') { clearTimeout(this.t); this.setState({ phase: 'early' }); return; }
+        if (ph === 'go') {
+          const ms = Math.round(performance.now() - this.t0);
+          const tries = [...this.state.tries, ms];
+          this.setState({ phase: tries.length >= 5 ? 'done' : 'shown', last: ms, tries });
+          return;
+        }
+        this.begin(ph === 'done');
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
