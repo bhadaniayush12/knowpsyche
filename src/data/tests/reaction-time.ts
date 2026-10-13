@@ -23,6 +23,8 @@ export const page = {
     "How fast do you react? Click when the screen changes. Get your average in milliseconds, see what's typical, and learn what affects your speed.",
   h1: 'Reaction time test',
   intro: 'Wait for the box to change, then click as fast as you can. Five tries, then your average.',
+  // Touch screens: same line with "tap" (shared rule: timed tests on phones say "tap").
+  introTouch: 'Wait for the box to change, then tap as fast as you can. Five tries, then your average.',
   crumb: 'Reaction time',
   // Drafted.
   eyebrow: 'Test / 01 · Attention · 1–2 min',
