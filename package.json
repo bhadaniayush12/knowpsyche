@@ -13,7 +13,8 @@
     "test": "vitest run",
     "check": "node scripts/check-links.mjs",
     "og": "node scripts/og.mjs",
-    "prebuild": "npm run og"
+    "prebuild": "npm run og && npm run icons",
+    "icons": "node scripts/icons.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

@@ -8,6 +8,7 @@
 // - missing canonical (noindex pages are skipped)
 // - JSON-LD that isn't valid JSON
 // - og:image and twitter:image missing, or the og:image not a 1200×630 PNG in dist/
+// - icon files missing from dist/ or the wrong size, pages without the icon links, a manifest that isn't valid JSON
 // - robots.txt that doesn't allow all or doesn't point to the sitemap
 // - a sitemap that doesn't list exactly the indexable pages (no 404, no noindex pages, no redirects)
 // Exits 1 when anything is found.
@@ -63,6 +64,9 @@ for (const file of htmlFiles) {
   const ids = new Set([...html.matchAll(/\sid\s*=\s*"([^"]+)"/g)].map((m) => m[1]));
   pages.set(file, { html, ids, url: urlPathOf(file) });
 }
+
+/** Width and height from a PNG header, or null if it isn't a PNG. */
+const pngSize = (buf) => (buf.subarray(1, 4).toString() === 'PNG' ? [buf.readUInt32BE(16), buf.readUInt32BE(20)] : null);
 
 const problems = [];
 const report = (page, msg) => problems.push(`${page}  ${msg}`);
@@ -149,13 +153,20 @@ for (const [file, { html, url }] of pages) {
     const ogFile = og.startsWith(SITE) ? fileFor(og.slice(SITE.length)) : null;
     if (!ogFile) report(url, `og:image not in dist: ${og}`);
     else {
-      const png = readFileSync(ogFile);
-      const isPng = png.subarray(1, 4).toString() === 'PNG';
-      const [w, h] = isPng ? [png.readUInt32BE(16), png.readUInt32BE(20)] : [];
+      const [w, h] = pngSize(readFileSync(ogFile)) ?? [];
       if (w !== 1200 || h !== 630) report(url, `og:image is not a 1200x630 PNG: ${og}`);
     }
   }
   if (!/<meta\b[^>]*name\s*=\s*"twitter:image"[^>]*content\s*=\s*"[^"]+"/i.test(html)) report(url, 'missing twitter:image');
+
+  // Icon links (scripts/icons.mjs makes the files).
+  const headLinks = [...html.matchAll(/<link\b[^>]*>/gi)].map((m) => m[0]);
+  const hasLink = (rel, href, type) =>
+    headLinks.some((t) => attr(t, 'rel') === rel && attr(t, 'href') === href && (!type || attr(t, 'type') === type));
+  if (!hasLink('icon', '/favicon.svg', 'image/svg+xml')) report(url, 'missing <link rel="icon"> for /favicon.svg');
+  if (!hasLink('icon', '/favicon-32.png', 'image/png')) report(url, 'missing <link rel="icon"> for /favicon-32.png');
+  if (!hasLink('apple-touch-icon', '/apple-touch-icon.png')) report(url, 'missing <link rel="apple-touch-icon">');
+  if (!hasLink('manifest', '/site.webmanifest')) report(url, 'missing <link rel="manifest">');
 
   // JSON-LD.
   for (const m of html.matchAll(/<script\b[^>]*type\s*=\s*"application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -164,6 +175,43 @@ for (const [file, { html, url }] of pages) {
     } catch (e) {
       report(url, `invalid JSON-LD: ${e.message}`);
     }
+  }
+}
+
+// Icons: every file there, PNGs at their exact size, and a manifest that parses and points at real icons.
+const ICONS = {
+  'favicon.svg': null,
+  'favicon.ico': null,
+  'favicon-32.png': 32,
+  'apple-touch-icon.png': 180,
+  'icon-192.png': 192,
+  'icon-512.png': 512,
+  'icon-512-maskable.png': 512,
+};
+for (const [name, size] of Object.entries(ICONS)) {
+  const f = join(DIST, name);
+  if (!existsSync(f)) {
+    problems.push(`${name} missing`);
+    continue;
+  }
+  if (size) {
+    const [w, h] = pngSize(readFileSync(f)) ?? [];
+    if (w !== size || h !== size) problems.push(`${name} is not a ${size}x${size} PNG`);
+  }
+}
+const manifestFile = join(DIST, 'site.webmanifest');
+if (!existsSync(manifestFile)) problems.push('site.webmanifest missing');
+else {
+  try {
+    const manifest = JSON.parse(readFileSync(manifestFile, 'utf8'));
+    if (!manifest.name || !manifest.short_name) problems.push('site.webmanifest: missing name or short_name');
+    if (!Array.isArray(manifest.icons) || manifest.icons.length === 0) problems.push('site.webmanifest: no icons');
+    for (const icon of manifest.icons ?? []) {
+      if (!icon.src || !fileFor(icon.src)) problems.push(`site.webmanifest: icon not in dist: ${icon.src}`);
+    }
+    if (!(manifest.icons ?? []).some((i) => i.purpose === 'maskable')) problems.push('site.webmanifest: no maskable icon');
+  } catch (e) {
+    problems.push(`site.webmanifest is not valid JSON: ${e.message}`);
   }
 }
 

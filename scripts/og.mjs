@@ -6,6 +6,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import satori from 'satori';
 import sharp from 'sharp';
+import { markSvg } from '../src/lib/brand/mark.js';
 
 const root = new URL('../', import.meta.url);
 const OUT = new URL('public/og/', root);
@@ -47,14 +48,8 @@ const TITLE_MAX = 124;
 const svgUri = (body, size) =>
   `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">${body}</svg>`).toString('base64')}`;
 
-// The psi mark: ψ in paper on an ink rounded square (Header.astro). The house fonts have no Greek glyphs,
-// so the ψ is drawn as strokes.
-const psi = svgUri(
-  `<rect width="36" height="36" rx="11" fill="${C.ink}"/>` +
-    `<g fill="none" stroke="${C.paper}" stroke-linecap="round"><path stroke-width="2.4" d="M18 7.5v21M15.5 7.5h5M15 28.5h6"/>` +
-    `<path stroke-width="1.8" d="M9.5 11.5c1.2-1.4 2.2-.8 2.2 1.2 0 6.2 2.4 9 6.3 9s6.3-2.8 6.3-9c0-2 1-2.6 2.2-1.2"/></g>`,
-  36,
-);
+// The psi mark, from the one shared drawing (src/lib/brand/mark.js).
+const psi = `data:image/svg+xml;base64,${Buffer.from(markSvg()).toString('base64')}`;
 
 const h = (type, style, ...children) => ({ type, props: { style: { display: 'flex', ...style }, children } });
 const img = (src, size) => ({ type: 'img', props: { src, width: size, height: size } });

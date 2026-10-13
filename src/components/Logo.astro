@@ -1,0 +1,20 @@
+---
+// The psi mark and the "know" + serif "psyche" wordmark. Paths come from src/lib/brand/mark.js,
+// the same source as the OG cards and the favicons.
+import { MARK_RADIUS, MARK_SIZE, PSI_BOWL, PSI_STEM, PSI_WEIGHTS } from '../lib/brand/mark.js';
+
+interface Props {
+  /** Show "knowpsyche" next to the mark. */
+  wordmark?: boolean;
+}
+const { wordmark = true } = Astro.props;
+const w = PSI_WEIGHTS.regular;
+---
+<svg aria-hidden="true" class="block size-9 flex-none" viewBox={`0 0 ${MARK_SIZE} ${MARK_SIZE}`}>
+  <rect width={MARK_SIZE} height={MARK_SIZE} rx={MARK_RADIUS} fill="var(--color-ink)"></rect>
+  <g fill="none" stroke="var(--color-paper)" stroke-linecap="round">
+    <path stroke-width={w.stem} d={PSI_STEM}></path>
+    <path stroke-width={w.bowl} d={PSI_BOWL}></path>
+  </g>
+</svg>
+{wordmark && <span class="text-[22px] font-semibold tracking-[-.03em]">know<span class="serif text-[25px] text-blue">psyche</span></span>}

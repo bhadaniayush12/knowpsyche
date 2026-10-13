@@ -1,5 +1,6 @@
 ---
 import Button from './ui/Button.astro';
+import Logo from './Logo.astro';
 
 interface Props {
   /** `home` = Main design (no rule, 1200px). `inner` = About/Method design (bottom rule, 1320px). */
@@ -25,11 +26,7 @@ const ctaHref = variant === 'home' ? '#tests' : '/tests/';
   ]}
 >
   <a href="/" aria-label="KnowPsyche home" class="flex min-h-11 items-center gap-2.5 no-underline hover:text-ink">
-    <span
-      aria-hidden="true"
-      class="inline-flex size-9 items-center justify-center rounded-[11px] bg-ink pb-[3px] font-serif text-[27px] leading-none text-paper"
-    >ψ</span>
-    <span class="text-[22px] font-semibold tracking-[-.03em]">know<span class="serif text-[25px] text-blue">psyche</span></span>
+    <Logo />
   </a>
 
   <nav aria-label="Main" class="hidden items-center gap-[clamp(14px,2.4vw,30px)] text-[15.5px] md:flex">
