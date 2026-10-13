@@ -10,6 +10,7 @@ import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import BandScale from '../../components/result/BandScale.astro';
+import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
 import { TRIES } from '../../lib/tests/reaction-time';
 
@@ -51,13 +52,14 @@ const ticks = [100, 200, 300, 400, 500];
       aria-describedby="rt-status"
     >
       <span class="rt-count mono absolute top-4 left-[18px] text-[11px] opacity-80">Visual · try 1 / {TRIES}</span>
-      <span class="rt-tag mono absolute top-4 right-[18px] text-[11px] opacity-80">Ready</span>
+      <span class="rt-tag mono absolute top-4 right-[18px] min-w-[10ch] text-right text-[11px] opacity-80">Ready</span>
       <span class="rt-lights absolute top-[18%] left-1/2 flex -translate-x-1/2 gap-[clamp(8px,2vw,18px)]" aria-hidden="true" hidden>
         {Array.from({ length: 5 }, () => <span class="rt-light block size-[clamp(34px,7vw,64px)] rounded-full border-2 border-paper/25 bg-[#3a3752]"></span>)}
       </span>
-      <span class="rt-label pop flex flex-col items-center gap-2.5 px-5">
-        <span class="rt-big text-[clamp(44px,7vw,96px)] leading-none font-semibold tracking-[-.05em]">{fill(arena.idle.big)}</span>
-        <span class="rt-small max-w-[520px] text-lg opacity-90">{fill(arena.idle.small.visual)}</span>
+      <!-- Full-width lines and a fixed-width tag: when the text changes nothing moves sideways (no layout shift). -->
+      <span class="rt-label pop flex w-full flex-col items-center gap-2.5 px-5">
+        <span class="rt-big w-full text-[clamp(44px,7vw,96px)] leading-none font-semibold tracking-[-.05em]">{fill(arena.idle.big)}</span>
+        <span class="rt-small w-full max-w-[520px] text-lg opacity-90">{fill(arena.idle.small.visual)}</span>
       </span>
     </button>
     <p id="rt-status" class="rt-live sr-only" aria-live="assertive"></p>
@@ -68,7 +70,10 @@ const ticks = [100, 200, 300, 400, 500];
           <span role="listitem" class="rt-slot mono min-w-[84px] rounded-full border border-ink px-3.5 py-[9px] text-center text-xs text-muted">— —</span>
         ))}
       </div>
-      <button type="button" class="rt-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      <div class="flex gap-2">
+        <FeedbackToggle />
+        <button type="button" class="rt-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      </div>
     </div>
   </div>
 
@@ -147,6 +152,7 @@ const ticks = [100, 200, 300, 400, 500];
     waitMs,
   } from '../../lib/tests/reaction-time';
   import { createShareCard } from '../../lib/share-card';
+  import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { $, $$, bindCopy, today } from '../../lib/test-ui';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
@@ -389,6 +395,7 @@ const ticks = [100, 200, 300, 400, 500];
         cancelAnimationFrame(frame);
         if (mode === 'f1') renderLights(0);
         phase = 'early';
+        cue('wrong');
         render();
         return;
       case 'go': {
@@ -396,6 +403,7 @@ const ticks = [100, 200, 300, 400, 500];
         const out = addTry(tries, last);
         tries = out.tries;
         phase = !out.counted ? 'guess' : out.done ? 'done' : 'shown';
+        cue(out.counted ? 'right' : 'wrong');
         render();
         if (phase === 'done') showResult();
         return;
@@ -499,5 +507,6 @@ const ticks = [100, 200, 300, 400, 500];
     }
   });
 
+  bindFeedbackToggle();
   render();
 </script>
