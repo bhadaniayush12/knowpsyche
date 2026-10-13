@@ -77,12 +77,9 @@ export const result = {
   noSlowdown: "Clashing words didn't slow you down.",
   // Drafted: shown when either word type has no correct answer, so there's no effect to report.
   notMeasured: "We couldn't measure this one. Try again.",
-  next: {
-    href: '/attention-span-test/',
-    name: 'Attention span',
-    time: '2–3 min',
-    line: 'Try the Attention span test to see how well you hold back an automatic response.',
-  },
+  // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
+  // Drafted: the doc's line points back to Attention span; the chain now follows the doc order 1–7.
+  nextLine: 'Now a change of pace: see how well you notice and handle feelings.',
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 

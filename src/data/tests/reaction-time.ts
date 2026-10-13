@@ -80,12 +80,9 @@ export const arena = {
 export const result = {
   change:
     'Sleep, alertness, practice and age all play a part. So does your device: screens and mice can add tens of milliseconds before your brain is even involved.',
-  next: {
-    href: '/attention-span-test/',
-    name: 'Attention span',
-    time: '2–3 min',
-    line: 'Fast hands are one thing — what about holding back? Try the Attention span test.',
-  },
+  // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
+  // Drafted: the doc's line points to Attention span; the chain now follows the doc order 1–7.
+  nextLine: 'Speed is one side of you. See what drives your choices in the Enneagram test.',
   learn: { href: '/method/', label: 'How we build our tests →' },
   spreadChallenge: 'Fast, but a bit inconsistent. Can you get all five within 50 ms?',
   morningNight: 'Tiredness slows reactions. Test yourself in the morning and again late at night — see the difference.',

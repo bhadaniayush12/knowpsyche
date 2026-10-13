@@ -82,12 +82,8 @@ export const result = {
   // Drafted: "Try this" reuses FAQ 4's answer word for word (the doc gives no tip).
   tip: "Remove notifications, work in focused blocks (for example 25 minutes), sleep well, and take short breaks before you're exhausted.",
   dippedNote: "Your focus dipped in the second half — that's normal; attention tires with time.",
-  next: {
-    href: '/stroop-test/',
-    name: 'Stroop test',
-    time: '1 min',
-    line: 'Try the Stroop test — it puts your focus up against your reading habit.',
-  },
+  // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
+  nextLine: 'Try the Stroop test — it puts your focus up against your reading habit.',
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 

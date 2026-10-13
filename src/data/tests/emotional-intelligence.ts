@@ -124,12 +124,9 @@ export const result = {
   sameAnswerNote: 'You gave every statement the same answer. Your result may be less useful. Want to try again?',
   closing:
     "Emotional intelligence isn't fixed. Everyone's result moves as they practise. Come back in a few months and see what's changed.",
-  next: {
-    href: '/enneagram-test/',
-    name: 'Enneagram',
-    time: '8 min',
-    line: 'See what drives you underneath',
-  },
+  // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
+  // Drafted: the last test links to /tests/ (the doc suggests the Enneagram, which would loop).
+  nextLine: "That's all seven. See the full list and pick one to try again.",
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 

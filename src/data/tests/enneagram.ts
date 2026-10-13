@@ -186,12 +186,9 @@ export const result = {
   evenMeaning: 'Three or more types scored within a point of each other, so no single type stands out this time.',
   evenTip:
     'Read your top three descriptions above. The one that feels most true about your motives — not just your behaviour — is usually your type.',
-  next: {
-    href: '/emotional-intelligence-test/',
-    name: 'Emotional intelligence',
-    time: '5 min',
-    line: "You know what drives you. Now see how well you read feelings — yours and other people's.",
-  },
+  // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
+  // Drafted: part-1.md has no next-test line for the Enneagram.
+  nextLine: 'You know what drives you. Now see how much you remember from a quick look.',
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 

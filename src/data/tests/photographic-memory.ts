@@ -50,12 +50,8 @@ export const result = {
     'Focus, tiredness and strategy. Many people do better by grouping tiles into shapes instead of remembering single squares.',
   // Try this = FAQ 4's answer (approved in the build plan).
   tip: 'Practice helps, and so does grouping tiles into shapes or patterns.',
-  next: {
-    href: '/number-memory-test/',
-    name: 'Number memory',
-    time: '1–2 min',
-    line: 'Try Number memory to compare how you hold numbers versus pictures.',
-  },
+  // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
+  nextLine: 'Try Number memory to compare how you hold numbers versus pictures.',
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 
