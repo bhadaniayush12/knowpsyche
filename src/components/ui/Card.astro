@@ -34,8 +34,8 @@ const { test, class: className, details = false } = Astro.props;
   </div>
   {details && (
     <dl class="m-0 flex flex-col gap-1 text-[14px] leading-[1.45]">
-      <div class="flex gap-1.5"><dt class="opacity-75">Length:</dt><dd class="m-0">{test.count}</dd></div>
-      <div class="flex gap-1.5"><dt class="opacity-75">Looks at:</dt><dd class="m-0">{test.looksAt}</dd></div>
+      <div class="flex gap-1.5"><dt class="shrink-0 opacity-75">Length:</dt><dd class="m-0">{test.count}</dd></div>
+      <div class="flex gap-1.5"><dt class="shrink-0 opacity-75">Looks at:</dt><dd class="m-0">{test.looksAt}</dd></div>
     </dl>
   )}
   <span class="mt-auto text-[15.5px] font-semibold">Start test →</span>
