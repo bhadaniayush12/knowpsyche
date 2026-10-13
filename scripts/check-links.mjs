@@ -6,6 +6,9 @@
 // - duplicate <title> and duplicate meta descriptions
 // - missing canonical (noindex pages are skipped)
 // - JSON-LD that isn't valid JSON
+// - og:image and twitter:image missing, or the og:image not a 1200×630 PNG in dist/
+// - robots.txt that doesn't allow all or doesn't point to the sitemap
+// - a sitemap that doesn't list exactly the indexable pages (no 404, no noindex pages, no redirects)
 // Exits 1 when anything is found.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
@@ -126,6 +129,22 @@ for (const [file, { html, url }] of pages) {
     report(url, 'missing canonical');
   }
 
+  // Share image: og:image must be a 1200×630 PNG we ship. Width and height are read from the PNG header.
+  const ogTag = html.match(/<meta\b[^>]*property\s*=\s*"og:image"[^>]*>/i)?.[0];
+  const og = ogTag && attr(ogTag, 'content');
+  if (!og) report(url, 'missing og:image');
+  else {
+    const ogFile = og.startsWith(SITE) ? fileFor(og.slice(SITE.length)) : null;
+    if (!ogFile) report(url, `og:image not in dist: ${og}`);
+    else {
+      const png = readFileSync(ogFile);
+      const isPng = png.subarray(1, 4).toString() === 'PNG';
+      const [w, h] = isPng ? [png.readUInt32BE(16), png.readUInt32BE(20)] : [];
+      if (w !== 1200 || h !== 630) report(url, `og:image is not a 1200x630 PNG: ${og}`);
+    }
+  }
+  if (!/<meta\b[^>]*name\s*=\s*"twitter:image"[^>]*content\s*=\s*"[^"]+"/i.test(html)) report(url, 'missing twitter:image');
+
   // JSON-LD.
   for (const m of html.matchAll(/<script\b[^>]*type\s*=\s*"application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
     try {
@@ -134,6 +153,48 @@ for (const [file, { html, url }] of pages) {
       report(url, `invalid JSON-LD: ${e.message}`);
     }
   }
+}
+
+// robots.txt: allow everything and point to the sitemap index.
+const robotsFile = join(DIST, 'robots.txt');
+if (!existsSync(robotsFile)) problems.push('robots.txt missing');
+else {
+  const robots = readFileSync(robotsFile, 'utf8');
+  if (!/^Allow:\s*\/\s*$/m.test(robots)) problems.push('robots.txt: no "Allow: /"');
+  if (/^Disallow:\s*\S/m.test(robots)) problems.push('robots.txt: has a Disallow rule');
+  if (!robots.split('\n').some((l) => l.trim() === `Sitemap: ${SITE}/sitemap-index.xml`)) {
+    problems.push(`robots.txt: no "Sitemap: ${SITE}/sitemap-index.xml" line`);
+  }
+}
+
+// Sitemap: exactly the indexable pages. Not the 404, not noindex pages, not redirect sources.
+const locs = (xml) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
+const indexFile = join(DIST, 'sitemap-index.xml');
+if (!existsSync(indexFile)) problems.push('sitemap-index.xml missing');
+else {
+  const listed = new Set();
+  for (const sm of locs(readFileSync(indexFile, 'utf8'))) {
+    const smFile = sm.startsWith(SITE) && join(DIST, sm.slice(SITE.length));
+    if (!smFile || !existsSync(smFile)) {
+      problems.push(`sitemap-index.xml lists a missing sitemap: ${sm}`);
+      continue;
+    }
+    for (const loc of locs(readFileSync(smFile, 'utf8'))) listed.add(loc.startsWith(SITE) ? loc.slice(SITE.length) || '/' : loc);
+  }
+  const noindexPage = (html) => /<meta\b[^>]*name\s*=\s*"robots"[^>]*content\s*=\s*"[^"]*noindex/i.test(html);
+  const indexable = new Set([...pages.values()].filter((p) => p.url !== '/404.html' && !noindexPage(p.html)).map((p) => p.url));
+  for (const u of indexable) if (!listed.has(u)) problems.push(`sitemap: missing ${u}`);
+  for (const u of listed) if (!indexable.has(u)) problems.push(`sitemap: lists ${u}, which is not an indexable page`);
+  const redirectsFile = join(DIST, '_redirects');
+  if (existsSync(redirectsFile)) {
+    for (const line of readFileSync(redirectsFile, 'utf8').split('\n')) {
+      const from = line.trim().split(/\s+/)[0];
+      if (from && !from.startsWith('#') && listed.has(from)) problems.push(`sitemap: lists redirect source ${from}`);
+    }
+  }
+  const notFound = pages.get(join(DIST, '404.html'));
+  if (!notFound) problems.push('404.html missing');
+  else if (!noindexPage(notFound.html)) problems.push('404.html is not noindex');
 }
 
 for (const [title, urls] of titles) if (urls.length > 1) problems.push(`duplicate title "${title}": ${urls.join(', ')}`);
