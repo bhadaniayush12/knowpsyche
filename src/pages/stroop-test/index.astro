@@ -221,7 +221,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   .st-word[data-ink='red'] { color: var(--color-red); }
   .st-word[data-ink='blue'] { color: var(--color-blue); }
   .st-word[data-ink='green'] { color: var(--color-teal-deep); }
-  .st-word[data-ink='yellow'] { color: var(--color-yellow); }
+  /* Yellow on the card is only 1.5:1, so the word gets an ink outline (as in global.css) to stay readable. */
+  .st-word[data-ink='yellow'] { color: var(--color-yellow); -webkit-text-stroke: 1.5px var(--color-ink); }
 
   .st-word[data-blank] {
     opacity: 0;
