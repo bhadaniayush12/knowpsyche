@@ -1,0 +1,15 @@
+---
+/**
+ * "Copy my scores" button. The page script binds it with `bindCopy()` from src/lib/test-ui.ts.
+ * Gives people their own record to compare with later, since we save nothing.
+ */
+interface Props {
+  label: string;
+  class?: string;
+}
+const { label, class: className } = Astro.props;
+---
+<div class:list={['flex flex-wrap items-center gap-x-3 gap-y-1', className]}>
+  <button type="button" data-copy-scores class="mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">{label}</button>
+  <span data-copy-status role="status" aria-live="polite" class="text-[14px] text-ink-soft"></span>
+</div>

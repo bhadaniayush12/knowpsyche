@@ -8,6 +8,7 @@ import BandsNote from '../../components/result/BandsNote.astro';
 import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
+import CopyScores from '../../components/result/CopyScores.astro';
 import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
 import { TRIES } from '../../lib/tests/reaction-time';
 
@@ -99,6 +100,7 @@ const ticks = [100, 200, 300, 400, 500];
           <div class="mono flex justify-between text-[11px]"><span>Your {TRIES} tries</span><span class="text-teal-ink">Best <span data-r="best"></span></span></div>
           <div data-r="bars" class="flex h-[200px] items-end gap-3 border-b border-ink" role="list" aria-label="Your tries in order"></div>
           <div class="mono flex justify-between text-[10px] text-muted" aria-hidden="true"><span>Try 1</span><span>Try {TRIES}</span></div>
+          <CopyScores label="Copy my times" class="mt-1 border-t border-line-inner pt-3" />
         </div>
       </div>
     </ScoreVisual>
@@ -152,6 +154,7 @@ const ticks = [100, 200, 300, 400, 500];
     waitMs,
   } from '../../lib/tests/reaction-time';
   import { createShareCard } from '../../lib/share-card';
+  import { bindCopy, today } from '../../lib/test-ui';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
 
@@ -422,6 +425,13 @@ const ticks = [100, 200, 300, 400, 500];
     resultEl.hidden = true;
     render();
   };
+
+  // Your own record, so "test yourself in the morning and again late at night" can be compared. Nothing is saved.
+  bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
+    if (tries.length < TRIES) return '';
+    const s = summarize(tries);
+    return `My reaction time: ${s.average} ms — ${getBand(s.average).badge} (${modeInfo(mode).label} mode, ${today()}, knowpsyche.com/reaction-time-test/)\nTries: ${tries.join(', ')} ms · fastest ${s.fastest} ms`;
+  });
 
   // ---------- Input ----------
   const running = () => phase === 'wait' || phase === 'go';
