@@ -40,6 +40,10 @@ export const ui = {
   levelDone: 'Level done.',
   wrong: (lives: number) => `Wrong tile. ${lives === 1 ? '1 life' : `${lives} lives`} left.`,
   over: 'No lives left. Your result is below.',
+  // Drafted: after a wrong pick, the tiles still to find are outlined.
+  missedHint: 'The outlined tiles are the ones you missed.',
+  // Drafted: screen-reader label for an outlined tile.
+  missedTile: 'one you missed',
   livesLeft: (lives: number) => (lives === 1 ? '1 life left' : `${lives} lives left`),
   copyScore: 'Copy my score',
   leaveWarning: 'Your progress will be lost if you leave this page.',

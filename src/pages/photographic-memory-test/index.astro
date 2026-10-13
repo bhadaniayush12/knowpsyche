@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, page, photoBands, result, sources, ui } from '../../data/tests/photographic-memory';
 import { LIVES } from '../../lib/tests/photographic-memory';
 
@@ -40,7 +41,10 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
           <span class="pm-lives text-muted">{ui.livesLeft(LIVES)}</span>
         </span>
       </div>
-      <button type="button" class="pm-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      <div class="flex gap-2">
+        <FeedbackToggle />
+        <button type="button" class="pm-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      </div>
     </div>
     <p class="pm-status mt-3 mb-4 min-h-[3.1em] sm:min-h-[1.55em] px-2 text-center text-[17px] leading-[1.55] font-medium sm:px-0" aria-live="polite">{ui.ready}</p>
     <div class="pm-board mx-auto grid aspect-square w-full max-w-[480px] gap-1.5 sm:gap-2" role="group" aria-label="Tiles" style="grid-template-columns:repeat(3,1fr)"></div>
@@ -105,6 +109,8 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
   .pm-tile[data-state='lit'] { background: var(--color-blue); border-color: var(--color-blue); }
   .pm-tile[data-state='correct'] { background: var(--color-teal); border-color: var(--color-teal-deep); color: #fff; }
   .pm-tile[data-state='wrong'] { background: var(--color-coral); border-color: var(--color-coral-ink); color: var(--color-ink); }
+  /* After a wrong pick: the pattern tiles not yet found, so people can see what they missed. Calm, not an alarm. */
+  .pm-tile[data-state='missed'] { background: var(--color-tint-teal); border: 2px dashed var(--color-teal-deep); color: var(--color-teal-deep); }
   .pm-life[data-lost] { background: transparent; }
 </style>
 
@@ -125,11 +131,12 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     type PhotoState,
   } from '../../lib/tests/photographic-memory';
   import { createShareCard } from '../../lib/share-card';
+  import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   /** Pause after a finished level, and after a wrong tile, before the next pattern. */
   const PAUSE_DONE_MS = 700;
-  const PAUSE_WRONG_MS = 1100;
+  const PAUSE_WRONG_MS = 1800;
 
   const card = $('.pm-card');
   const board = $('.pm-board');
@@ -142,6 +149,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
   const share = createShareCard($('[data-share]'));
 
   const ICON_OK = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+  const ICON_MISSED = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="6.5"/></svg>';
   const ICON_X = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 
   type Phase = 'idle' | 'notice' | 'watch' | 'input' | 'pause' | 'done';
@@ -168,12 +176,17 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     return `Row ${row}, column ${col}${state ? `, ${state}` : ''}`;
   };
 
-  const setTile = (i: number, state: '' | 'lit' | 'correct' | 'wrong') => {
+  const setTile = (i: number, state: '' | 'lit' | 'correct' | 'wrong' | 'missed') => {
     const t = tiles[i];
     if (state) t.dataset.state = state;
     else delete t.dataset.state;
-    t.innerHTML = state === 'correct' ? ICON_OK : state === 'wrong' ? ICON_X : '';
-    t.setAttribute('aria-label', tileLabel(i, state));
+    t.innerHTML = state === 'correct' ? ICON_OK : state === 'wrong' ? ICON_X : state === 'missed' ? ICON_MISSED : '';
+    t.setAttribute('aria-label', tileLabel(i, state === 'missed' ? ui.missedTile : state));
+  };
+
+  /** After a wrong pick, outline the pattern tiles that weren't found yet. */
+  const showMissed = (s: PhotoState) => {
+    s.pattern.filter((c) => !s.picked.includes(c)).forEach((c) => setTile(c, 'missed'));
   };
 
   /** Builds an n×n board of buttons. Only rebuilt when the size changes; focus stays on the board. */
@@ -242,6 +255,8 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     game = out.state;
     const wrong = out.outcome === 'wrong' || out.outcome === 'gameOver';
     setTile(i, wrong ? 'wrong' : 'correct');
+    cue(wrong ? 'wrong' : 'right');
+    if (wrong) showMissed(game);
     if (out.outcome === 'correct') return;
     renderHud();
     setPhase('pause');
@@ -252,12 +267,13 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
         beginRound();
       });
     } else if (out.outcome === 'wrong') {
-      status.textContent = ui.wrong(game.lives);
+      status.textContent = `${ui.wrong(game.lives)} ${ui.missedHint}`;
       cancel = runFor(PAUSE_WRONG_MS, () => {
         game = nextRound(game!);
         beginRound();
       });
     } else {
+      // The hint was shown on the two misses before this one; adding it here would wrap to a third line on phones.
       status.textContent = ui.over;
       // The result goes in right away, while this tap still counts as the reason the page grew
       // (no layout shift). Scrolling to it waits, so the wrong tile can be seen first.
@@ -390,5 +406,6 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     }
   });
 
+  bindFeedbackToggle();
   reset();
 </script>
