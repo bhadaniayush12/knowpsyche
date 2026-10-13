@@ -357,6 +357,19 @@ details[open] .plus {
   }
 }
 
+/* Small text links (the breadcrumb): an invisible 44×44 tap area centred on the link, so it can be
+   hit on a phone without changing how the line looks. */
+.hit-44 { position: relative; }
+.hit-44::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
 /* "Click" with a mouse, "Tap" on touch screens. Both lines share one grid cell and the unused one is
    hidden with visibility, so the box keeps the size of the longer one and nothing shifts. */
 .pointer-swap { display: inline-grid; }

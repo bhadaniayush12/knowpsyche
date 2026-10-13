@@ -141,7 +141,7 @@ const first = footerModes[0];
       <div class="flex flex-wrap items-center justify-between gap-5">
         <span class="text-[clamp(28px,3vw,40px)] font-semibold tracking-[-.04em]">Keep looking <span class="serif text-yellow">inward.</span></span>
         <nav aria-label="Footer" class="flex flex-wrap gap-x-[22px]">
-          {compactLinks.map((l) => <a href={l.href} class="inline-flex min-h-11 items-center text-paper no-underline hover:text-yellow">{l.label}</a>)}
+          {compactLinks.map((l) => <a href={l.href} class="inline-flex min-h-11 min-w-11 items-center justify-center text-paper no-underline hover:text-yellow">{l.label}</a>)}
         </nav>
       </div>
       <p class="m-0 max-w-[760px] text-[13.5px] leading-[1.55] opacity-75">{DISCLAIMER}</p>

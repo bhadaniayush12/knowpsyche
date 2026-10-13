@@ -89,14 +89,14 @@ const breadcrumbLd = trail.length > 0 && {
   <body id="top">
     <a
       href="#main"
-      class="sr-only z-50 rounded-10 bg-ink px-4 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:text-paper"
+      class="sr-only z-50 rounded-10 bg-ink px-4 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:inline-flex focus:min-h-11 focus:items-center focus:text-paper"
     >Skip to content</a>
     <Header variant={variant} />
     <main id="main">
       {trail.length > 0 && (
         <nav aria-label="Breadcrumb" class="mono mx-auto px-[clamp(16px,3vw,40px)] pt-7 text-[11px] text-muted" style={{ maxWidth: `${crumbWidth}px` }}>
           {trail.map((c, i) => i < trail.length - 1
-            ? <><a href={c.href} class="text-muted">{c.name}</a> / </>
+            ? <><a href={c.href} class="hit-44 text-muted">{c.name}</a> / </>
             : <span aria-current="page">{c.name}</span>)}
         </nav>
       )}
