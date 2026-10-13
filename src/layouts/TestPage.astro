@@ -41,9 +41,11 @@ interface Props {
   sourcesNote?: string;
   /** Defaults to the card scripts/og.mjs makes for this slug: /og/<slug>.png. */
   ogImage?: string;
+  /** Preload Space Grotesk 700 too, when the running test uses it. */
+  preloadBold?: boolean;
 }
 
-const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, sourcesNote, ogImage = `/og/${path.replace(/\//g, '')}.png` } = Astro.props;
+const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, sourcesNote, ogImage = `/og/${path.replace(/\//g, '')}.png`, preloadBold = false } = Astro.props;
 
 // The design sets the last word of the H1 in the serif accent.
 const cut = h1.lastIndexOf(' ');
@@ -54,7 +56,7 @@ const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
 const articles = articlesForTest(await getCollection('learn'), path.replace(/\//g, ''));
 ---
 <BaseLayout title={title} description={description} path={path} crumbs={[{ name: 'Tests', href: '/tests/' }, { name: crumb }]} crumbWidth={1120} ogImage={ogImage}>
-  <FontPreloads slot="head" />
+  <FontPreloads slot="head" bold={preloadBold} />
   <div class="mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-[18px] pb-20">
 
     <section class="mb-[22px] flex flex-wrap items-end justify-between gap-5" aria-labelledby="test-title">
