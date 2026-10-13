@@ -1,0 +1,29 @@
+---
+/**
+ * One numbered section of a policy page. The number comes from the section's place in `toc`,
+ * so it always matches the "On this page" list. `boxed` = the lilac shadow box (Disclaimer);
+ * `note` = the darker closing line inside it.
+ */
+interface Props {
+  id: string;
+  toc: { id: string }[];
+  /** Colour of the number label, e.g. `text-blue`. */
+  color: string;
+  title: string;
+  boxed?: boolean;
+  note?: string;
+}
+const { id, toc, color, title, boxed = false, note } = Astro.props;
+const index = toc.findIndex((t) => t.id === id);
+if (index < 0) throw new Error(`PolicySection "${id}" is missing from the toc`);
+const num = String(index + 1).padStart(2, '0');
+---
+<section
+  id={id}
+  class:list={[boxed && 'border border-ink bg-lilac p-[clamp(20px,3vw,32px)] shadow-[6px_6px_0_var(--color-ink)]']}
+>
+  <div class:list={['mono mb-2.5 text-[11px]', color]}>{num}</div>
+  <h2>{title}</h2>
+  <slot />
+  {note && <p class="note">{note}</p>}
+</section>

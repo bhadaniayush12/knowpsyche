@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PolicyPage from '../../components/policy/PolicyPage.astro';
+import PolicySection from '../../components/policy/PolicySection.astro';
+
+// Copy word for word from docs/design/Privacy.dc.html. Placeholders filled as Dev decided:
+// date = 17 October 2026, the analytics sentence removed, a link to /terms/ added to section 06.
+const title = 'Privacy & disclaimer — KnowPsyche';
+const description =
+  "Your test answers are scored in your browser and never sent to us. Here's how cookies and Google ads work on KnowPsyche, and why no result is a diagnosis.";
+
+const summary = [
+  'Tests are scored in your browser. Your answers and scores are not sent to us.',
+  'No accounts, no sign-up, no email collection.',
+  'Google shows ads here and may use cookies. You can control this.',
+  'Nothing here is medical advice or a diagnosis.',
+];
+const toc = [
+  { id: 'collect', label: 'What we collect' },
+  { id: 'ads', label: 'Cookies & advertising' },
+  { id: 'choices', label: 'Your choices' },
+  { id: 'children', label: 'Children' },
+  { id: 'disclaimer', label: 'Disclaimer' },
+  { id: 'terms', label: 'Terms of use' },
+  { id: 'changes', label: 'Changes & contact' },
+];
+---
+<BaseLayout title={title} description={description} path="/privacy/" breadcrumb="Privacy & disclaimer">
+  <PolicyPage eyebrow="Privacy · disclaimer · terms · Last updated 17 October 2026" summary={summary} toc={toc}>
+    <Fragment slot="title">Your mind is yours.<br /><span class="serif text-blue">So is your data.</span></Fragment>
+
+    <PolicySection id="collect" toc={toc} color="text-blue" title="What we collect">
+      <p class="pp">Your test answers and scores are calculated on your own device and are not sent to our servers. If you share a result, the share image is created in your browser too.</p>
+      <p class="pp">Like most websites, our host may keep basic technical logs (such as IP address and browser type) to keep the site secure and working.</p>
+    </PolicySection>
+
+    <PolicySection id="ads" toc={toc} color="text-gold-ink" title="Cookies & advertising">
+      <p class="pp">We use Google AdSense to show ads. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites. Google's use of advertising cookies enables it and its partners to serve ads based on those visits.</p>
+      <p class="pp">Visitors in the European Economic Area, the UK and Switzerland are asked for consent before personalised ads are shown, through a Google-certified consent tool.</p>
+    </PolicySection>
+
+    <PolicySection id="choices" toc={toc} color="text-coral-ink" title="Your choices">
+      <p class="pp">You can turn off personalised advertising in <a href="https://adssettings.google.com/" rel="noopener">Google's Ads Settings</a>, or visit <a href="https://optout.aboutads.info/" rel="noopener">aboutads.info</a> to opt out of some third-party vendors' cookies. You can also block or delete cookies in your browser settings — the tests will still work.</p>
+    </PolicySection>
+
+    <PolicySection id="children" toc={toc} color="text-teal-ink" title="Children">
+      <p class="pp">KnowPsyche is not directed at children under 13, and we do not knowingly collect personal information from them.</p>
+    </PolicySection>
+
+    <PolicySection id="disclaimer" toc={toc} color="text-violet-ink" title="Disclaimer" boxed
+      note="If you are struggling or feel unsafe, please contact local emergency services or a crisis helpline in your country.">
+      <p class="pp">Everything on KnowPsyche is for education and self-reflection. Our tests are not clinical assessments, cannot diagnose any condition, and are not a substitute for advice from a qualified professional.</p>
+    </PolicySection>
+
+    <PolicySection id="terms" toc={toc} color="text-blue" title="Terms of use">
+      <p class="pp">You're welcome to use and share the site for personal, non-commercial purposes. Please don't copy our questions, text or illustrations without permission. We work hard to keep content accurate, but it is provided as-is, without guarantees. Read the full <a href="/terms/">terms of use</a>.</p>
+    </PolicySection>
+
+    <PolicySection id="changes" toc={toc} color="text-gold-ink" title="Changes & contact">
+      <p class="pp">If this policy changes, we'll update the date at the top of this page. Questions? Write to <a href="mailto:hello@knowpsyche.com">hello@knowpsyche.com</a> or use our <a href="/contact/">contact page</a>.</p>
+    </PolicySection>
+  </PolicyPage>
+</BaseLayout>

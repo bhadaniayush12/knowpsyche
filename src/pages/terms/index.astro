@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PolicyPage from '../../components/policy/PolicyPage.astro';
+import PolicySection from '../../components/policy/PolicySection.astro';
+
+// No design for this page: it uses the Privacy layout. Text written for KnowPsyche, pending Dev's approval.
+const title = 'Terms of use — KnowPsyche';
+const description =
+  'Plain-English terms for KnowPsyche: the tests are for learning, not medical advice. Our content is ours, and ads and links come from third parties.';
+
+const summary = [
+  'KnowPsyche is free to use, for learning and self-reflection.',
+  'Nothing here is medical or psychological advice.',
+  "The site comes as it is, with no promise that it's perfect.",
+  'Our questions and text are ours. Please ask before copying them.',
+];
+const toc = [
+  { id: 'using', label: 'Using KnowPsyche' },
+  { id: 'advice', label: 'Not medical advice' },
+  { id: 'warranty', label: 'No warranty' },
+  { id: 'content', label: 'Who owns the content' },
+  { id: 'third-parties', label: 'Ads & other sites' },
+  { id: 'changes', label: 'Changes to these terms' },
+  { id: 'contact', label: 'Contact' },
+];
+---
+<BaseLayout title={title} description={description} path="/terms/" breadcrumb="Terms of use">
+  <PolicyPage eyebrow="Terms of use · Last updated 21 October 2026" summary={summary} toc={toc}>
+    <Fragment slot="title">The ground rules.<br /><span class="serif text-blue">Short and plain.</span></Fragment>
+
+    <PolicySection id="using" toc={toc} color="text-blue" title="Using KnowPsyche">
+      <p class="pp">KnowPsyche is a free educational website. You can take the tests, read the pages and share your results for personal, non-commercial use. There's no account to make. By using the site, you agree to these terms; if you don't agree, please don't use it.</p>
+    </PolicySection>
+
+    <PolicySection id="advice" toc={toc} color="text-violet-ink" title="Not medical or psychological advice" boxed
+      note="If you are struggling or feel unsafe, please contact local emergency services or a crisis helpline in your country.">
+      <p class="pp">Our tests are for learning about yourself, not for diagnosing anything. A result shows how you did on one task, on one day, on one device. It can't tell you whether you have a health condition, and it isn't a substitute for advice from a doctor, psychologist or other qualified professional.</p>
+    </PolicySection>
+
+    <PolicySection id="warranty" toc={toc} color="text-coral-ink" title="No warranty">
+      <p class="pp">We check our pages and fix mistakes when we find them, but we can't promise that everything is accurate, complete or always online. The site is provided as-is. As far as the law allows, KnowPsyche isn't responsible for any loss that comes from using it or relying on a result.</p>
+    </PolicySection>
+
+    <PolicySection id="content" toc={toc} color="text-teal-ink" title="Who owns the content">
+      <p class="pp">The questions, text, illustrations and design on KnowPsyche belong to us unless a page says otherwise. Sharing a link or your own result is always fine. Copying our questions or pages into another site, app or product needs our written permission first. Research we cite belongs to its authors and is listed in each page's sources.</p>
+    </PolicySection>
+
+    <PolicySection id="third-parties" toc={toc} color="text-gold-ink" title="Ads and links to other sites">
+      <p class="pp">KnowPsyche is paid for by ads from Google AdSense. Those ads, and any links to other websites, are run by third parties. We don't control what they show or how they handle your data, so please check their own terms and privacy policies. Our <a href="/privacy/">privacy page</a> explains how cookies and ads work here.</p>
+    </PolicySection>
+
+    <PolicySection id="changes" toc={toc} color="text-blue" title="Changes to these terms">
+      <p class="pp">We may update these terms as the site grows. When we do, we'll change the date at the top of this page. If you keep using KnowPsyche after a change, the new terms apply.</p>
+    </PolicySection>
+
+    <PolicySection id="contact" toc={toc} color="text-gold-ink" title="Contact">
+      <p class="pp">Questions about these terms? Write to <a href="mailto:hello@knowpsyche.com">hello@knowpsyche.com</a> or use our <a href="/contact/">contact page</a>.</p>
+    </PolicySection>
+  </PolicyPage>
+</BaseLayout>

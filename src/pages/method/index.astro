@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Copy word for word from docs/design/Method.dc.html. Placeholders filled as Dev decided:
+// "every six months", last reviewed 17 October 2026.
+const title = 'Our method — KnowPsyche';
+const description =
+  "How KnowPsyche builds its tests: where the questions come from, how scoring works, what each result can and can't tell you, and what we never do.";
+
+const cards = [
+  {
+    label: '01 · Where questions come from',
+    border: 'border-t-blue',
+    color: 'text-blue',
+    text: 'Cognitive tasks are rebuilt from classic experiments described in research. Personality items are written by us or adapted from public-domain pools such as the International Personality Item Pool (IPIP). We never copy commercial tests or use their trademarked names.',
+  },
+  {
+    label: '02 · How scoring works',
+    border: 'border-t-gold',
+    color: 'text-gold-ink',
+    text: 'Scoring runs in your browser, and each test page shows its formula. Reaction time, for example, is the average of five timed tries. Nothing you answer is sent to us.',
+  },
+  {
+    label: '03 · What a result means',
+    border: 'border-t-coral',
+    color: 'text-coral-ink',
+    text: 'A result describes how you did on one task, on one day, on one device. We show ranges, not verdicts — and never claim to measure clinical conditions or certify IQ.',
+  },
+];
+
+const columns = ['Test', 'What it measures', 'Based on', 'Keep in mind'];
+// Each column's flex basis on wide screens, from the design.
+const flex = ['lg:flex-[1_1_180px]', 'lg:flex-[2_1_240px]', 'lg:flex-[2_1_220px]', 'lg:flex-[2_1_240px]'];
+const rows = [
+  ['Reaction time', 'Time from a visual change to your click', 'Simple reaction-time tasks', "Screens and mice add delay you can't see"],
+  ['Enneagram', 'Which of nine motivation patterns fits you best', 'Original statements based on the Enneagram model', 'The model has limited research support — use it for reflection'],
+  ['Photographic memory', 'How much of a visual layout you can rebuild', 'Visual short-term memory tasks', '“Photographic memory” is a popular name; true eidetic memory is rare and debated'],
+  ['Number memory', 'The longest number you can hold in mind', 'Digit-span tasks', 'Practice and chunking strategies raise scores'],
+  ['Attention span', 'Responding to targets while holding back on the rest', 'Go / No-Go tasks', 'A few minutes of one session, not your attention in daily life'],
+  ['Stroop effect', 'The slowdown when a word and its ink colour clash', "J. R. Stroop's 1935 experiments", 'Reading speed and colour vision both affect it'],
+  ['Emotional intelligence', 'How you see your own emotional awareness and responses', 'Original items informed by emotional-intelligence models', 'Self-report shows how you see yourself, not how others see you'],
+];
+---
+<BaseLayout title={title} description={description} path="/method/" breadcrumb="Our method">
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(40px,6vw,80px)] pb-20">
+    <section>
+      <div class="mono mb-[18px] text-[11px] text-muted">Our method · Fig. 00.2 · Evidence before certainty</div>
+      <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">How our tests work —<br /><span class="serif text-red">and where they stop.</span></h1>
+      <p class="m-0 mt-6 max-w-[680px] text-[19px] leading-[1.6] text-ink-soft">Short version: honest tasks, transparent scoring, every limit written down. Here is the long version.</p>
+    </section>
+
+    <section class="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-5">
+      {cards.map((c) => (
+        <div class:list={['flex flex-col gap-3 border border-t-[5px] border-ink bg-card p-[26px]', c.border]}>
+          <div class:list={['mono text-[11px]', c.color]}>{c.label}</div>
+          <p class="m-0 text-base leading-[1.65]">{c.text}</p>
+        </div>
+      ))}
+    </section>
+
+    <section>
+      <div class="mono mb-3 text-[11px] text-muted">Test by test</div>
+      <h2 class="m-0 mb-[26px] text-[clamp(36px,4.4vw,60px)] leading-[.95] font-semibold tracking-[-.05em]">What each test does, <span class="serif text-violet">and doesn't.</span></h2>
+      <!-- Flex rows (as designed) with ARIA table roles: Safari drops native table semantics on display:flex.
+           Below lg the rows stack, so the heading row is visually hidden and each cell shows its own label. -->
+      <div role="table" aria-label="What each test does, and doesn't" class="border-t border-ink">
+        <div role="rowgroup">
+          <div role="row" class="mono flex gap-4 border-b border-ink py-3 text-[10.5px] text-muted max-lg:sr-only">
+            {columns.map((c, i) => <span role="columnheader" class={flex[i]}>{c}</span>)}
+          </div>
+        </div>
+        <div role="rowgroup">
+          {rows.map((row, i) => (
+            <div role="row" class:list={['flex flex-col gap-3 border-b py-[18px] text-[15.5px] leading-[1.55] lg:flex-row lg:gap-4', i === rows.length - 1 ? 'border-ink' : 'border-line-inner']}>
+              {row.map((text, j) => (
+                <div role={j === 0 ? 'rowheader' : 'cell'} class:list={[flex[j], j === 0 && 'font-bold', j === 3 && 'text-ink-soft']}>
+                  {j > 0 && <span aria-hidden="true" class="mono mb-1 block text-[10.5px] font-normal text-muted lg:hidden">{columns[j]}</span>}
+                  {text}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="flex flex-wrap gap-6">
+      <div class="min-w-0 flex-[1_1_360px] border border-ink bg-lilac p-[clamp(22px,3vw,36px)] shadow-[8px_8px_0_var(--color-ink)]">
+        <div class="mono mb-3 text-[11px] text-muted">What we never do</div>
+        <ul class="m-0 pl-5 text-[17px] leading-[1.85]">
+          <li>Test for depression, anxiety, ADHD or any clinical condition</li>
+          <li>Sell “certified” IQ scores</li>
+          <li>Lock results behind an email or payment</li>
+          <li>Store your answers on our servers</li>
+        </ul>
+      </div>
+      <div class="flex min-w-0 flex-[1_1_360px] flex-col gap-3.5 border border-ink bg-card p-[clamp(22px,3vw,36px)]">
+        <div class="mono text-[11px] text-teal-ink">Sources &amp; corrections</div>
+        <p class="m-0 text-[17px] leading-[1.65]">Each test page lists the research it draws on. We review our pages every six months and whenever someone reports a problem.</p>
+        <a href="/contact/" class="inline-flex min-h-11 items-center self-start font-semibold underline">Report an error →</a>
+        <div class="mono border-t border-dashed border-line-inner pt-3 text-[10.5px] text-muted">Last reviewed: 17 October 2026</div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

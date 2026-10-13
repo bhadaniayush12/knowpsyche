@@ -26,6 +26,15 @@
   --color-lilac-bright: #B7A1FF;
   --color-mint-go: #8FD0C2;
   --color-wait-red: #8E3B32;
+  --color-gold: #C38D3D;
+  --color-sage: #5D9C91;
+
+  /* Small-text versions of the accents above: same hue, darkened to pass AA (≥4.5:1)
+     on paper, card and lilac. The design's lighter accents stay for borders and large type. */
+  --color-gold-ink: #7F5C27;
+  --color-coral-ink: #AF3C2D;
+  --color-violet-ink: #7550A6;
+  --color-teal-ink: #376B62;
 
   /* Tints */
   --color-lilac: #E5DFEF;
@@ -36,6 +45,7 @@
   --color-tint-teal: #EEF6F3;
   --color-tint-blue: #EEF0FB;
   --color-tint-red: #FBEFED;
+  --color-card: #FBF8F1;
 
   /* Lines */
   --color-line: #E1DACB;
@@ -45,6 +55,7 @@
   --color-line-pill: #D6CFC2;
   --color-line-inner: #BDB6C8;
   --color-trail: #C9C1DA;
+  --color-grid: #d6cfe3;
 
   --ease-house: cubic-bezier(.45, .05, .25, 1);
 

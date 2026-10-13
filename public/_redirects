@@ -1,0 +1,18 @@
+# Cloudflare Pages redirects: URLs people commonly guess, sent to the real page.
+# Anything else that doesn't exist gets 404.html with a 404 status (no catch-all rule needed).
+/privacy-policy           /privacy/               301
+/privacy-policy/          /privacy/               301
+/terms-of-service         /terms/                 301
+/terms-of-service/        /terms/                 301
+/terms-and-conditions     /terms/                 301
+/terms-and-conditions/    /terms/                 301
+/about-us                 /about/                 301
+/about-us/                /about/                 301
+/contact-us               /contact/               301
+/contact-us/              /contact/               301
+/reaction-time            /reaction-time-test/    301
+/reaction-time/           /reaction-time-test/    301
+/enneagram                /enneagram-test/        301
+/enneagram/               /enneagram-test/        301
+/stroop                   /stroop-test/           301
+/stroop/                  /stroop-test/           301

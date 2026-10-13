@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Copy word for word from docs/design/Contact.dc.html. Placeholders filled: the real address, "3 working days".
+const title = 'Contact KnowPsyche';
+const description =
+  'Email hello@knowpsyche.com to report an error, suggest a new test or ask about press and partnerships. We reply within 3 working days.';
+
+const cards = [
+  { label: '01 · Corrections', border: 'border-t-coral', color: 'text-coral-ink', title: 'Spotted an error?', text: 'Tell us the page and what looks wrong. If we agree, we fix it and add a note to the page.' },
+  { label: '02 · Ideas', border: 'border-t-blue', color: 'text-blue', title: 'Want a new test?', text: "Suggest an experiment or a question about the mind you'd like us to explain next." },
+  { label: '03 · Everything else', border: 'border-t-sage', color: 'text-teal-ink', title: 'Press & partnerships', text: 'Teachers, researchers and writers are welcome to get in touch.' },
+];
+---
+<BaseLayout title={title} description={description} path="/contact/" breadcrumb="Contact">
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-14 px-[clamp(16px,3vw,40px)] pt-[clamp(40px,6vw,80px)] pb-20">
+    <section class="flex flex-wrap items-end gap-10">
+      <div class="min-w-0 flex-[999_1_560px]">
+        <div class="mono mb-[18px] text-[11px] text-muted">Contact · Fig. 00.4</div>
+        <h1 class="m-0 text-[clamp(46px,6.2vw,96px)] leading-[.92] font-semibold tracking-[-.055em]">Say hello.<br /><span class="serif text-red">Or tell us we got it wrong.</span></h1>
+      </div>
+      <a
+        href="mailto:hello@knowpsyche.com"
+        class="mail flex min-w-0 flex-[1_1_360px] flex-col gap-2.5 border border-ink bg-yellow p-[26px] text-ink no-underline shadow-[10px_10px_0_var(--color-ink)] hover:text-ink"
+      >
+        <span class="mono text-[10.5px]">Write to</span>
+        <span class="text-[clamp(24px,2.6vw,34px)] font-semibold tracking-[-.03em] break-words">hello@knowpsyche.com</span>
+        <span class="text-[15px]">We reply within 3 working days ↗</span>
+      </a>
+    </section>
+
+    <section class="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-[18px]">
+      {cards.map((c) => (
+        <div class:list={['border border-t-[5px] border-ink bg-card p-6', c.border]}>
+          <div class:list={['mono text-[11px]', c.color]}>{c.label}</div>
+          <h2 class="m-0 mt-3 mb-2 text-2xl font-bold tracking-[-.03em]">{c.title}</h2>
+          <p class="m-0 text-[15.5px] leading-[1.6] text-ink-soft">{c.text}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="flex flex-wrap gap-7 border border-ink bg-lilac p-[clamp(22px,3vw,36px)]">
+      <div class="min-w-0 flex-[1_1_320px]">
+        <div class="mono mb-2.5 text-[11px] text-muted">Before you write</div>
+        <h2 class="m-0 text-[clamp(30px,3.4vw,44px)] leading-none font-semibold tracking-[-.04em]">What we <span class="serif text-violet-ink">can't</span> help with</h2>
+      </div>
+      <div class="flex min-w-0 flex-[2_1_420px] flex-col gap-3 text-[16.5px] leading-[1.6]">
+        <p class="m-0"><b>Personal interpretations.</b> We can't analyse your individual result or give personal advice.</p>
+        <p class="m-0"><b>Clinical questions.</b> KnowPsyche is not a clinic. For concerns about your health, please talk to a qualified professional.</p>
+        <p class="m-0 border border-ink bg-paper p-3.5"><b>If you're in crisis</b>, please contact local emergency services or a crisis helpline in your country now.</p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .mail {
+    transition: transform .25s, box-shadow .25s;
+  }
+  .mail:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 13px 13px 0 var(--color-ink);
+  }
+</style>

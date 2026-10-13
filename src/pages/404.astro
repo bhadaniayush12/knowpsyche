@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import TestGlyph from '../components/home/TestGlyph.astro';
+import { homeTests } from '../data/home';
+
+// Cloudflare Pages serves this for every unknown path, with a 404 status.
+const title = 'Page not found — KnowPsyche';
+const description =
+  "This page doesn't exist. Head back to the KnowPsyche homepage or pick one of our free psychology tests.";
+
+const pages = [
+  { href: '/', label: 'Home' },
+  { href: '/tests/', label: 'All tests' },
+  { href: '/about/', label: 'About' },
+  { href: '/method/', label: 'Method' },
+  { href: '/contact/', label: 'Contact' },
+];
+---
+<BaseLayout title={title} description={description} path="/404/" noindex>
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(56px,9vw,120px)] pb-20">
+    <section class="flex flex-col items-start gap-6">
+      <div class="mono text-[11px] text-muted">Error 404</div>
+      <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">Nothing to find here — <span class="serif text-blue">but plenty to try.</span></h1>
+      <!-- Filled in by the script below when the URL looks like a typo of a real page. Space is reserved so nothing jumps. -->
+      <p id="suggest" class="m-0 min-h-[58px] text-lg sm:min-h-[29px] leading-[1.6] text-ink-soft"></p>
+      <div class="flex flex-wrap gap-2.5">
+        <Button href="/">Go to the homepage</Button>
+        <Button href="/tests/" variant="outline">Browse the tests →</Button>
+      </div>
+    </section>
+
+    <section aria-labelledby="pick-title">
+      <h2 id="pick-title" class="m-0 mb-[26px] text-[clamp(36px,4.4vw,60px)] leading-[.95] font-semibold tracking-[-.05em]">Pick a test <span class="serif text-violet">instead.</span></h2>
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
+        {homeTests.map((t) => (
+          <Card test={t}>
+            <TestGlyph glyph={t.glyph} />
+          </Card>
+        ))}
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-4 border-t border-ink pt-8">
+      <nav aria-label="Or go to" class="flex flex-wrap items-center gap-x-6">
+        <span class="mono text-[11px] text-muted">Or go to</span>
+        {pages.map((p) => <a href={p.href} class="inline-flex min-h-11 items-center text-[17px] font-medium">{p.label}</a>)}
+      </nav>
+      <p class="m-0 text-base leading-[1.6] text-ink-soft">Followed a broken link to get here? <a href="/contact/" class="underline">Tell us</a> and we'll fix it.</p>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  import { suggestRoute } from '../lib/suggest';
+  import { routes } from '../data/routes';
+
+  // Reads the URL only. Nothing is sent anywhere.
+  const match = suggestRoute(location.pathname, routes);
+  const slot = document.getElementById('suggest');
+  if (match && slot) {
+    const link = document.createElement('a');
+    link.href = match.href;
+    link.className = 'font-semibold underline';
+    link.textContent = match.label;
+    slot.append('Did you mean the ', link, '?');
+  }
+</script>

@@ -20,14 +20,24 @@ interface Props {
   /** Absolute URL or site-relative path. Left out of the tags when not given. */
   ogImage?: string;
   noindex?: boolean;
+  /** Page name for the `BreadcrumbList` JSON-LD (Home → this page). Inner pages only. */
+  breadcrumb?: string;
   /** `home` = Main design header + full footer. `inner` = About/Method design header + compact footer. */
   variant?: 'home' | 'inner';
 }
 
-const { title, description, path, ogImage, noindex = false, variant = 'inner' } = Astro.props;
+const { title, description, path, ogImage, noindex = false, breadcrumb, variant = 'inner' } = Astro.props;
 const site = Astro.site ?? new URL('https://knowpsyche.com');
 const canonical = new URL(path, site).href;
 const image = ogImage ? new URL(ogImage, site).href : undefined;
+const breadcrumbLd = breadcrumb && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', site).href },
+    { '@type': 'ListItem', position: 2, name: breadcrumb, item: canonical },
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -37,8 +47,7 @@ const image = ogImage ? new URL(ogImage, site).href : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -50,7 +59,7 @@ const image = ogImage ? new URL(ogImage, site).href : undefined;
     <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     {image && <meta property="og:image" content={image} />}
 
     <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
@@ -58,6 +67,7 @@ const image = ogImage ? new URL(ogImage, site).href : undefined;
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
 
+    {breadcrumbLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />}
     <slot name="head" />
   </head>
   <body id="top">

@@ -1,0 +1,65 @@
+---
+/**
+ * Privacy design layout: eyebrow, h1 (`title` slot), four "short version" cards,
+ * an "On this page" list and the article (default slot). Used by /privacy/ and /terms/.
+ */
+interface Props {
+  eyebrow: string;
+  summary: string[];
+  toc: { id: string; label: string }[];
+}
+const { eyebrow, summary, toc } = Astro.props;
+---
+<div class="mx-auto max-w-[1200px] px-[clamp(16px,3vw,40px)] pt-[clamp(40px,6vw,80px)] pb-20">
+  <div class="mono mb-[18px] text-[11px] text-muted">{eyebrow}</div>
+  <h1 class="m-0 mb-9 text-[clamp(46px,6.2vw,96px)] leading-[.92] font-semibold tracking-[-.055em]"><slot name="title" /></h1>
+
+  <div class="mb-14 grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-3">
+    {summary.map((text, i) => (
+      <div class="bg-ink p-[22px] text-paper">
+        <div class="mono text-[10px] text-yellow">{i === 0 ? 'The short version · 1' : i + 1}</div>
+        <p class="m-0 mt-2.5 text-base leading-normal">{text}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="flex flex-wrap items-start gap-12">
+    <nav aria-label="On this page" class="flex min-w-0 flex-[1_1_220px] flex-col gap-1 border-t border-ink pt-3.5">
+      <div class="mono mb-1.5 text-[10.5px] text-muted">On this page</div>
+      {toc.map((t, i) => (
+        <a href={`#${t.id}`} class="flex min-h-11 items-center no-underline">{String(i + 1).padStart(2, '0')} · {t.label}</a>
+      ))}
+    </nav>
+    <article class="policy flex min-w-0 max-w-[760px] flex-[999_1_600px] flex-col gap-11">
+      <slot />
+    </article>
+  </div>
+</div>
+
+<style>
+  .policy :global(h2) {
+    margin: 0 0 12px;
+    font-size: 30px;
+    letter-spacing: -.035em;
+    font-weight: 600;
+  }
+  .policy :global(.pp) {
+    margin: 0 0 14px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+  .policy :global(.note) {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.7;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .policy :global(.pp a) {
+    text-decoration: underline;
+  }
+  .policy :global(section) {
+    scroll-margin-top: 24px;
+  }
+</style>
