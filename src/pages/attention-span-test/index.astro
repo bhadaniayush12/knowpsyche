@@ -1,0 +1,541 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import BandScale from '../../components/result/BandScale.astro';
+import WhatItMeans from '../../components/result/WhatItMeans.astro';
+import TryThis from '../../components/result/TryThis.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import CopyScores from '../../components/result/CopyScores.astro';
+import { attentionBands, faqs, page, result, sources, ui } from '../../data/tests/attention-span';
+import { TOTAL_TRIALS } from '../../lib/tests/attention-span';
+
+const segClass = ['flex-[70] bg-paper', 'flex-[15] bg-lilac', 'flex-[10] bg-lilac-bright', 'flex-[5] bg-blue'];
+const ranges = ['<70', '70–84', '85–94', '95+'];
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/attention-span-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  introTouch={page.introTouch}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+>
+  <div
+    slot="stage"
+    tabindex="-1"
+    class="as-card rounded-[26px] outline-none border border-line-card bg-white p-[clamp(16px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)] select-none"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+        <span class="as-counter">{ui.practiceLabel}</span>
+        <span class="as-note text-muted">{ui.practiceNote}</span>
+      </div>
+      <button
+        type="button"
+        class="as-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"
+      >{ui.restart}</button>
+    </div>
+
+    <!-- Progress bar across the top -->
+    <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
+      <div class="as-bar h-full w-0 rounded-full bg-blue transition-[width] duration-150"></div>
+    </div>
+
+    <!-- Stage arena: clickable everywhere -->
+    <div
+      role="region"
+      aria-label="Attention span stimulus area"
+      class="as-arena relative mt-4 flex h-[clamp(320px,46vw,440px)] w-full touch-manipulation select-none items-center justify-center rounded-[20px] border border-line-inner/40 bg-card text-center cursor-pointer transition-colors duration-150"
+    >
+      <!-- Idle view (before practice starts) -->
+      <div data-as-view="idle" class="flex flex-col items-center gap-3 px-4">
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
+        <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
+          Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.
+        </p>
+        <button
+          type="button"
+          class="as-start-practice mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
+        >
+          {ui.ready}
+        </button>
+      </div>
+
+      <!-- Active Stimulus view -->
+      <div data-as-view="active" class="flex flex-col items-center justify-center gap-4" hidden>
+        <div class="as-circle size-[clamp(110px,22vw,160px)] rounded-full transition-transform duration-75"></div>
+        <p class="as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium" aria-live="polite"></p>
+      </div>
+
+      <!-- Practice complete view -->
+      <div data-as-view="practice-done" class="flex flex-col items-center gap-3 px-4" hidden>
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">Practice complete</p>
+        <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
+          Ready for the real test? 80 circles with no feedback so you stay in flow.
+        </p>
+        <button
+          type="button"
+          class="as-start-main mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
+        >
+          {ui.startMain}
+        </button>
+      </div>
+
+      <!-- Paused view (when tab is hidden or blurred) -->
+      <div data-as-view="paused" class="flex flex-col items-center gap-3 px-4" hidden>
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-coral-ink">{ui.pausedTitle}</p>
+        <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.pausedMessage}</p>
+        <button
+          type="button"
+          class="as-paused-restart mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
+        >
+          {ui.restart}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <Fragment slot="result">
+    <ResultHeadline />
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[999_1_520px] flex-col gap-[22px]">
+          <div class="flex flex-wrap items-end gap-[18px]">
+            <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]">
+              <span data-r="overall">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]">/ 100</span>
+            </div>
+            <div class="serif pb-2.5 text-[34px] text-blue" data-r="badge">Steady</div>
+          </div>
+          <BandScale segments={attentionBands.map((b, i) => ({ class: segClass[i], range: ranges[i], label: b.badge }))} />
+        </div>
+
+        <div class="flex min-w-0 flex-[1_1_320px] flex-col justify-between gap-4 border border-ink bg-card p-[22px]">
+          <div class="mono text-[11px] text-muted">Test breakdown · 80 circles</div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
+              <span class="mono text-[10.5px] text-muted">Focus</span>
+              <span class="text-[28px] font-semibold tracking-[-.03em] text-teal-ink" data-r="focus">0%</span>
+              <span class="text-[12px] text-ink-soft">greens caught</span>
+            </div>
+            <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
+              <span class="mono text-[10.5px] text-muted">Self-control</span>
+              <span class="text-[28px] font-semibold tracking-[-.03em] text-teal-ink" data-r="self-control">0%</span>
+              <span class="text-[12px] text-ink-soft">reds held back</span>
+            </div>
+            <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
+              <span class="mono text-[10.5px] text-muted">Speed</span>
+              <span class="text-[28px] font-semibold tracking-[-.03em] text-ink" data-r="speed">0 ms</span>
+              <span class="text-[12px] text-ink-soft">avg reaction time</span>
+            </div>
+            <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
+              <span class="mono text-[10.5px] text-muted">Steadiness</span>
+              <span class="text-[28px] font-semibold tracking-[-.03em] text-ink" data-r="steadiness">Steady</span>
+              <span class="text-[12px] text-ink-soft" data-r="steadiness-detail">across both halves</span>
+            </div>
+          </div>
+          <CopyScores label={ui.copyScore} class="mt-1 border-t border-line-inner pt-3" />
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <WhatItMeans change={result.change} />
+
+    <TryThis />
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  .as-circle[data-color='green'] {
+    background-color: var(--color-teal-deep);
+    box-shadow: 0 0 28px rgba(47, 111, 99, 0.45);
+  }
+  .as-circle[data-color='red'] {
+    background-color: var(--color-red);
+    box-shadow: 0 0 28px rgba(201, 88, 75, 0.45);
+  }
+  .as-circle[data-blank] {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .as-circle {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { result as copy, ui } from '../../data/tests/attention-span';
+  import {
+    calculateAttentionScores,
+    generateAttentionTrials,
+    getBand,
+    getGapMs,
+    getPracticeTrials,
+    meaningLine,
+    scalePercent,
+    shareText,
+    CIRCLE_DURATION_MS,
+    TOTAL_TRIALS,
+    type AttentionScores,
+    type CircleColor,
+    type TrialResult,
+  } from '../../lib/tests/attention-span';
+  import { createShareCard } from '../../lib/share-card';
+  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
+
+  type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
+
+  const card = $('.as-card');
+  const arena = $('.as-arena');
+  const counter = $('.as-counter');
+  const note = $('.as-note');
+  const bar = $('.as-bar');
+  const restartBtn = $('.as-restart');
+  const startPracticeBtn = $('.as-start-practice');
+  const startMainBtn = $('.as-start-main');
+  const pausedRestartBtn = $('.as-paused-restart');
+  const circleEl = $('.as-circle');
+  const feedbackEl = $('.as-feedback');
+  const resultEl = $('[data-result]');
+  const isCardOnScreen = onScreen(card);
+
+  const views = {
+    idle: $('[data-as-view="idle"]', arena),
+    active: $('[data-as-view="active"]', arena),
+    practiceDone: $('[data-as-view="practice-done"]', arena),
+    paused: $('[data-as-view="paused"]', arena),
+  };
+
+  const share = createShareCard($('[data-share]'));
+
+  let mode: Mode = 'idle';
+  let trialList: CircleColor[] = [];
+  let trialIndex = 0;
+  let trialResults: TrialResult[] = [];
+  let currentTrialClicked = false;
+  let stimulusPaintTime = 0;
+  let timerId: number | null = null;
+  let animFrameId: number | null = null;
+
+  function setView(target: 'idle' | 'active' | 'practiceDone' | 'paused') {
+    views.idle.hidden = target !== 'idle';
+    views.active.hidden = target !== 'active';
+    views.practiceDone.hidden = target !== 'practiceDone';
+    views.paused.hidden = target !== 'paused';
+  }
+
+  function clearTimers() {
+    if (timerId !== null) {
+      window.clearTimeout(timerId);
+      timerId = null;
+    }
+    if (animFrameId !== null) {
+      window.cancelAnimationFrame(animFrameId);
+      animFrameId = null;
+    }
+  }
+
+  function pauseBrokenRun() {
+    if (mode !== 'main') return;
+    clearTimers();
+    mode = 'paused';
+    circleEl.removeAttribute('data-color');
+    circleEl.setAttribute('data-blank', '');
+    setView('paused');
+  }
+
+  // Guard against broken runs when tab loses focus or visibility
+  window.addEventListener('blur', pauseBrokenRun);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pauseBrokenRun();
+  });
+
+  guardLeave(() => mode === 'main' || mode === 'practice', ui.leaveWarning);
+
+  function startPractice() {
+    clearTimers();
+    mode = 'practice';
+    trialList = getPracticeTrials();
+    trialIndex = 0;
+    trialResults = [];
+    counter.textContent = ui.practiceLabel;
+    note.textContent = ui.practiceNote;
+    bar.style.width = '0%';
+    setView('active');
+    runNextTrial();
+  }
+
+  function startMainRun() {
+    clearTimers();
+    mode = 'main';
+    trialList = generateAttentionTrials();
+    trialIndex = 0;
+    trialResults = [];
+    counter.textContent = ui.circleCount(1, TOTAL_TRIALS);
+    note.textContent = 'No feedback · stay focused';
+    bar.style.width = '0%';
+    setView('active');
+    feedbackEl.textContent = '';
+    runNextTrial();
+  }
+
+  function runNextTrial() {
+    if (trialIndex >= trialList.length) {
+      if (mode === 'practice') {
+        mode = 'practice-done';
+        counter.textContent = 'Practice complete';
+        note.textContent = 'Ready for the real test';
+        bar.style.width = '100%';
+        setView('practiceDone');
+      } else if (mode === 'main') {
+        finishMainTest();
+      }
+      return;
+    }
+
+    currentTrialClicked = false;
+    const color = trialList[trialIndex];
+    if (mode === 'main') {
+      counter.textContent = ui.circleCount(trialIndex + 1, TOTAL_TRIALS);
+      const pct = Math.round((trialIndex / TOTAL_TRIALS) * 100);
+      bar.style.width = `${pct}%`;
+      feedbackEl.textContent = '';
+    } else {
+      counter.textContent = `Practice · ${trialIndex + 1} / ${trialList.length}`;
+      feedbackEl.textContent = '';
+    }
+
+    // Gap between circles (blank stage)
+    circleEl.removeAttribute('data-color');
+    circleEl.setAttribute('data-blank', '');
+
+    const gapMs = getGapMs();
+    timerId = window.setTimeout(() => {
+      // Paint circle using requestAnimationFrame and record actual paint timestamp
+      animFrameId = window.requestAnimationFrame((paintTime) => {
+        stimulusPaintTime = paintTime || performance.now();
+        circleEl.removeAttribute('data-blank');
+        circleEl.setAttribute('data-color', color);
+
+        // Circle stays for exactly 0.5 s (500 ms)
+        timerId = window.setTimeout(() => {
+          circleEl.removeAttribute('data-color');
+          circleEl.setAttribute('data-blank', '');
+
+          // Check if trial was unclicked
+          if (!currentTrialClicked) {
+            trialResults.push({ color, clicked: false });
+            if (mode === 'practice') {
+              if (color === 'red') {
+                feedbackEl.textContent = ui.niceIgnored;
+                feedbackEl.className = 'as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-teal-ink';
+              } else {
+                feedbackEl.textContent = ui.oopsGreen;
+                feedbackEl.className = 'as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-coral-ink';
+              }
+            }
+          }
+
+          trialIndex++;
+          // A brief pause before the next trial
+          timerId = window.setTimeout(() => {
+            runNextTrial();
+          }, mode === 'practice' ? 600 : 50);
+        }, CIRCLE_DURATION_MS);
+      });
+    }, gapMs);
+  }
+
+  function handleResponse() {
+    if (mode !== 'practice' && mode !== 'main') return;
+    if (currentTrialClicked) return;
+    const now = performance.now();
+    // Only accept clicks while stimulus is visible
+    if (!circleEl.hasAttribute('data-color')) return;
+
+    currentTrialClicked = true;
+    const rt = Math.max(1, Math.round(now - stimulusPaintTime));
+    const color = trialList[trialIndex];
+    trialResults.push({ color, clicked: true, reactionTimeMs: rt });
+
+    if (mode === 'practice') {
+      if (color === 'green') {
+        feedbackEl.textContent = ui.nice;
+        feedbackEl.className = 'as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-teal-ink';
+      } else {
+        feedbackEl.textContent = ui.oopsRed;
+        feedbackEl.className = 'as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-coral-ink';
+      }
+    }
+  }
+
+  function finishMainTest() {
+    clearTimers();
+    mode = 'done';
+    bar.style.width = '100%';
+    const scores = calculateAttentionScores(trialResults);
+    renderResults(scores);
+  }
+
+  function renderResults(scores: AttentionScores) {
+    const band = getBand(scores.overall);
+    resultEl.hidden = false;
+
+    // Headline
+    const headline = $('[data-r=headline]', resultEl);
+    headline.textContent = `${band.badge} · ${scores.overall} / 100`;
+    headline.focus();
+
+    // Scores
+    $('[data-r=overall]', resultEl).textContent = String(scores.overall);
+    $('[data-r=badge]', resultEl).textContent = band.badge;
+
+    // Marker
+    const marker = $('[data-r=marker]', resultEl);
+    const markerLabel = $('[data-r=marker-label]', resultEl);
+    const pct = scalePercent(scores.overall);
+    marker.style.left = `${pct}%`;
+    markerLabel.style.left = `${pct}%`;
+    markerLabel.textContent = `You · ${scores.overall}`;
+
+    // Breakdown
+    $('[data-r=focus]', resultEl).textContent = `${scores.focus}%`;
+    $('[data-r=self-control]', resultEl).textContent = `${scores.selfControl}%`;
+    $('[data-r=speed]', resultEl).textContent = scores.speed > 0 ? `${scores.speed} ms` : '—';
+
+    const steadinessEl = $('[data-r=steadiness]', resultEl);
+    const steadinessDetailEl = $('[data-r=steadiness-detail]', resultEl);
+    if (scores.steadiness.dipped) {
+      steadinessEl.textContent = 'Dipped';
+      steadinessEl.className = 'text-[28px] font-semibold tracking-[-.03em] text-coral-ink';
+      steadinessDetailEl.textContent = `second half −${scores.steadiness.diff} pts`;
+    } else {
+      steadinessEl.textContent = 'Steady';
+      steadinessEl.className = 'text-[28px] font-semibold tracking-[-.03em] text-teal-ink';
+      steadinessDetailEl.textContent = 'consistent across halves';
+    }
+
+    // Meaning & tip
+    $('[data-r=meaning]', resultEl).textContent = meaningLine(scores);
+    $('[data-r=tip]', resultEl).textContent = copy.tip;
+
+    // Copy button
+    const copyBtn = $('[data-copy-btn]', resultEl);
+    const copyStatus = $('[data-copy-status]', resultEl);
+    if (copyBtn && copyStatus) {
+      bindCopy(copyBtn, copyStatus, () =>
+        [
+          `Attention span: ${scores.overall}/100 (${band.badge})`,
+          `Focus: ${scores.focus}% · Self-control: ${scores.selfControl}% · Speed: ${scores.speed} ms`,
+          `Steadiness: ${scores.steadiness.dipped ? 'Dipped in 2nd half' : 'Steady'}`,
+          `knowpsyche.com/attention-span-test · ${today()}`,
+        ].join('\n')
+      );
+    }
+
+    // Share card
+    void share.update({
+      label: 'My attention score',
+      big: String(scores.overall),
+      unit: '/ 100',
+      badge: band.badge,
+      tagline: 'How well do you stay focused?',
+      tag: 'Test / 05',
+      text: shareText(scores.overall),
+      url: 'https://knowpsyche.com/attention-span-test/',
+      filename: 'attention-span-knowpsyche',
+    });
+
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function restartAll() {
+    clearTimers();
+    mode = 'idle';
+    trialIndex = 0;
+    trialResults = [];
+    currentTrialClicked = false;
+    counter.textContent = ui.practiceLabel;
+    note.textContent = ui.practiceNote;
+    bar.style.width = '0%';
+    circleEl.removeAttribute('data-color');
+    circleEl.setAttribute('data-blank', '');
+    feedbackEl.textContent = '';
+    resultEl.hidden = true;
+    setView('idle');
+  }
+
+  // Interactive events: Arena click / tap
+  arena.addEventListener('click', (e) => {
+    // If clicking on a button inside arena (e.g. start buttons), let button handle it
+    const target = e.target as HTMLElement;
+    if (target.closest('button')) return;
+
+    if (mode === 'idle') {
+      startPractice();
+    } else if (mode === 'practice-done') {
+      startMainRun();
+    } else if (mode === 'practice' || mode === 'main') {
+      handleResponse();
+    }
+  });
+
+  startPracticeBtn.addEventListener('click', startPractice);
+  startMainBtn.addEventListener('click', startMainRun);
+  pausedRestartBtn.addEventListener('click', restartAll);
+  restartBtn.addEventListener('click', restartAll);
+
+  // Top "Start the test" button in the intro header
+  const introStartBtn = $('[data-test-start]');
+  introStartBtn?.addEventListener('click', () => {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (mode === 'idle') {
+      startPractice();
+    } else if (mode === 'practice-done') {
+      startMainRun();
+    }
+  });
+
+  // Try again button
+  $$('[data-try-again]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      restartAll();
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // Keyboard navigation: Spacebar
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.key === ' ') {
+      // Don't intercept Space if scrolling outside test
+      if (!isCardOnScreen()) return;
+      e.preventDefault();
+      if (mode === 'idle') {
+        startPractice();
+      } else if (mode === 'practice-done') {
+        startMainRun();
+      } else if (mode === 'practice' || mode === 'main') {
+        handleResponse();
+      }
+    }
+  });
+</script>
