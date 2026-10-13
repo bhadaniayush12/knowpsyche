@@ -1,12 +1,14 @@
 ---
 import type { HomeTest } from '../../data/home';
 
-/** Test card for the homepage grid. The glyph goes in the default slot. */
+/** Test card for the homepage grid and /tests/. The glyph goes in the default slot. */
 interface Props {
   test: HomeTest;
   class?: string;
+  /** Adds the question count and what the test looks at (the /tests/ page). */
+  details?: boolean;
 }
-const { test, class: className } = Astro.props;
+const { test, class: className, details = false } = Astro.props;
 ---
 <a
   href={test.href}
@@ -30,5 +32,11 @@ const { test, class: className } = Astro.props;
     <h3 class="m-0 mb-1.5 text-[26px] font-semibold tracking-[-.035em]">{test.name}</h3>
     <p class="m-0 text-[15.5px] leading-[1.55] opacity-[.88]">{test.desc}</p>
   </div>
+  {details && (
+    <dl class="m-0 flex flex-col gap-1 text-[14px] leading-[1.45]">
+      <div class="flex gap-1.5"><dt class="opacity-75">Length:</dt><dd class="m-0">{test.count}</dd></div>
+      <div class="flex gap-1.5"><dt class="opacity-75">Looks at:</dt><dd class="m-0">{test.looksAt}</dd></div>
+    </dl>
+  )}
   <span class="mt-auto text-[15.5px] font-semibold">Start test →</span>
 </a>
