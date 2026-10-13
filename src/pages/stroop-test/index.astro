@@ -564,32 +564,28 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     });
   });
 
-  // Keyboard navigation: R, B, G, Y
+  // Keyboard: Space or Enter starts, R / B / G / Y answer. Shortcuts with Cmd/Ctrl/Alt (Cmd+R reload)
+  // are left alone, and Space/Enter on a focused button or link does that control's own job.
+  const keyColors: Record<string, StroopColor> = { r: 'red', b: 'blue', g: 'green', y: 'yellow' };
   window.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (!isCardOnScreen()) return;
     const key = e.key.toLowerCase();
-    if (mode === 'idle' && (key === ' ' || key === 'enter')) {
+    if (key === ' ' || key === 'enter') {
+      if (mode !== 'idle' && mode !== 'practice-done') return;
+      // The answer buttons do nothing between runs, so Space/Enter on them still starts.
+      const control = (e.target as HTMLElement).closest('a, button');
+      if (control && !control.classList.contains('st-btn')) return;
       e.preventDefault();
-      startPractice();
+      if (mode === 'idle') startPractice();
+      else startMainRun();
       return;
     }
-    if (mode === 'practice-done' && (key === ' ' || key === 'enter')) {
-      e.preventDefault();
-      startMainRun();
-      return;
-    }
-    if (key === 'r') {
-      e.preventDefault();
-      handleAnswer('red', e.timeStamp);
-    } else if (key === 'b') {
-      e.preventDefault();
-      handleAnswer('blue', e.timeStamp);
-    } else if (key === 'g') {
-      e.preventDefault();
-      handleAnswer('green', e.timeStamp);
-    } else if (key === 'y') {
-      e.preventDefault();
-      handleAnswer('yellow', e.timeStamp);
-    }
+    const color = keyColors[key];
+    if (!color || (mode !== 'practice' && mode !== 'main')) return;
+    e.preventDefault();
+    // A held key repeats; only the first press counts.
+    if (e.repeat) return;
+    handleAnswer(color, e.timeStamp);
   });
 </script>

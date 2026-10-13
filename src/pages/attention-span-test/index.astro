@@ -513,19 +513,21 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     });
   });
 
-  // Keyboard navigation: Spacebar
+  // Keyboard: Space starts and answers. On a focused button or link, Space does that control's own
+  // job, except during a run, when it always answers (bar Restart, so keyboard users can still restart).
   window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' || e.key === ' ') {
-      // Don't intercept Space if scrolling outside test
-      if (!isCardOnScreen()) return;
-      e.preventDefault();
-      if (mode === 'idle') {
-        startPractice();
-      } else if (mode === 'practice-done') {
-        startMainRun();
-      } else if (mode === 'practice' || mode === 'main') {
-        handleResponse(e.timeStamp);
-      }
-    }
+    if (e.key !== ' ' || e.metaKey || e.ctrlKey || e.altKey) return;
+    // Don't intercept Space if scrolling outside test
+    if (!isCardOnScreen()) return;
+    const target = e.target as HTMLElement;
+    const running = mode === 'practice' || mode === 'main';
+    if (running ? target === restartBtn || target === pausedRestartBtn : !!target.closest('a, button')) return;
+    if (!running && mode !== 'idle' && mode !== 'practice-done') return;
+    e.preventDefault();
+    // A held key repeats; only the first press counts.
+    if (e.repeat) return;
+    if (mode === 'idle') startPractice();
+    else if (mode === 'practice-done') startMainRun();
+    else handleResponse(e.timeStamp);
   });
 </script>
