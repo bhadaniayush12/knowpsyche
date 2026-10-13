@@ -6,11 +6,14 @@ export interface AttentionBand {
   min: number;
   badge: string;
   text: string;
+  /** Touch screens: same line with "tapped" (shared rule). */
+  textTouch?: string;
 }
 
 /** Bands: Under 70 (Drifting), 70–84 (Steady), 85–94 (Focused), 95+ (Laser). */
 export const attentionBands: AttentionBand[] = [
-  { min: 0, badge: 'Drifting', text: 'Your focus wandered or you clicked on reds. Very common when tired or distracted.' },
+  // textTouch drafted: the doc line with "tapped".
+  { min: 0, badge: 'Drifting', text: 'Your focus wandered or you clicked on reds. Very common when tired or distracted.', textTouch: 'Your focus wandered or you tapped on reds. Very common when tired or distracted.' },
   { min: 70, badge: 'Steady', text: 'You stayed with the task most of the time.' },
   { min: 85, badge: 'Focused', text: 'Strong focus and good self-control.' },
   { min: 95, badge: 'Laser', text: 'You barely missed a thing.' },

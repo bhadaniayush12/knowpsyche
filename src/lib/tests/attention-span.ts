@@ -176,9 +176,9 @@ export function getBand(overall: number): AttentionBand {
 /**
  * "What does it mean?" line from the content doc.
  */
-export function meaningLine(scores: AttentionScores): string {
+export function meaningLine(scores: AttentionScores, touch = false): string {
   const band = getBand(scores.overall);
-  let line = `${band.text} You caught ${scores.focus}% of greens and held back on ${scores.selfControl}% of reds.`;
+  let line = `${(touch && band.textTouch) || band.text} You caught ${scores.focus}% of greens and held back on ${scores.selfControl}% of reds.`;
   if (scores.steadiness.dipped) {
     line += ` ${result.dippedNote}`;
   }

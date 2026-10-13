@@ -218,4 +218,16 @@ describe('Attention span: band edges', () => {
   it('formats shareText correctly', () => {
     expect(shareText(95)).toBe('My attention score: 95/100 — Laser. Can you beat it?');
   });
+
+  it('says "tapped" instead of "clicked" on touch screens', () => {
+    // Every circle missed: overall under 70, the Drifting band.
+    const trials: TrialResult[] = [
+      ...Array.from({ length: 10 }, () => ({ color: 'green' as const, clicked: false })),
+      ...Array.from({ length: 10 }, () => ({ color: 'red' as const, clicked: true, reactionTimeMs: 300 })),
+    ];
+    const scores = calculateAttentionScores(trials);
+    expect(meaningLine(scores)).toContain('you clicked on reds');
+    expect(meaningLine(scores, true)).toContain('you tapped on reds');
+    expect(meaningLine(scores, true)).not.toContain('click');
+  });
 });
