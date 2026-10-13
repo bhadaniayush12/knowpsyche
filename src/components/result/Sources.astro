@@ -1,0 +1,14 @@
+---
+import type { Source } from '../../data/shared';
+
+interface Props {
+  sources: Source[];
+}
+const { sources } = Astro.props;
+---
+<section aria-labelledby="sources-title">
+  <h2 id="sources-title" class="mono m-0 mb-3 text-[11px] font-medium text-muted">Sources</h2>
+  <ol class="m-0 flex list-decimal flex-col gap-2 pl-5 text-[15px] leading-[1.6] text-ink-soft">
+    {sources.map((s) => <li>{s.before}<i>{s.title}</i>{s.after}</li>)}
+  </ol>
+</section>

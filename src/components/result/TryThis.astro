@@ -1,0 +1,10 @@
+---
+/** One "Try this" tip. Text goes in `[data-r=tip]`; the optional slot holds an action (e.g. Try again). */
+---
+<div class="flex flex-wrap items-center justify-between gap-4 rounded-18 bg-yellow p-5 shadow-[3px_4px_0_rgba(37,34,56,.25)]">
+  <div class="min-w-0 flex-[1_1_320px]">
+    <div class="mono mb-1.5 text-[11px]">Try this</div>
+    <p class="serif m-0 text-[clamp(22px,2.6vw,26px)] leading-[1.15]" data-r="tip"></p>
+  </div>
+  <slot />
+</div>

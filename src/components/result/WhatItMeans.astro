@@ -1,0 +1,17 @@
+---
+/** "What does it mean?" (filled by the page script into `[data-r=meaning]`) + "What can change it?" (static). */
+interface Props {
+  change: string;
+}
+const { change } = Astro.props;
+---
+<div class="grid border border-ink sm:grid-cols-2">
+  <div class="bg-card p-[clamp(18px,3vw,28px)]">
+    <h3 class="mono m-0 mb-2.5 text-[11px] font-medium text-blue">What does it mean?</h3>
+    <p class="m-0 text-[16.5px] leading-[1.6]" data-r="meaning"></p>
+  </div>
+  <div class="border-t border-ink bg-paper p-[clamp(18px,3vw,28px)] sm:border-t-0 sm:border-l">
+    <h3 class="mono m-0 mb-2.5 text-[11px] font-medium text-gold-ink">What can change it?</h3>
+    <p class="m-0 text-[16.5px] leading-[1.6]">{change}</p>
+  </div>
+</div>

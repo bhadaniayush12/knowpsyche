@@ -1,0 +1,24 @@
+---
+/**
+ * Ad placeholder. Renders nothing unless PUBLIC_ADS_ENABLED=true at build time.
+ * Allowed spots only (CLAUDE.md rule 6): below the intro, below the result, inside the FAQ area.
+ * Never inside a running test. Height is reserved so nothing shifts when an ad fills it.
+ */
+interface Props {
+  /** `banner` = full-width row, `box` = 300×250. */
+  size?: 'banner' | 'box';
+  class?: string;
+}
+const { size = 'banner', class: className } = Astro.props;
+const enabled = import.meta.env.PUBLIC_ADS_ENABLED === 'true';
+---
+{enabled && (
+  <aside
+    aria-label="Advertisement"
+    class:list={[
+      'ad-slot mono flex items-center justify-center rounded-[16px] border border-dashed border-line-inner text-[11px] text-muted',
+      size === 'banner' ? 'min-h-[100px] w-full' : 'mx-auto h-[250px] w-[300px] max-w-full',
+      className,
+    ]}
+  >Advertisement</aside>
+)}

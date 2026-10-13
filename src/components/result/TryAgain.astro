@@ -1,0 +1,17 @@
+---
+interface Props {
+  variant?: 'primary' | 'outline';
+  label?: string;
+  class?: string;
+}
+const { variant = 'outline', label = 'Try again ↺', class: className } = Astro.props;
+---
+<button
+  type="button"
+  data-try-again
+  class:list={[
+    'inline-flex min-h-[50px] items-center px-5 py-3 text-base transition-colors duration-300 ease-house',
+    variant === 'primary' ? 'border-0 bg-ink font-semibold text-paper hover:bg-blue' : 'border border-ink bg-transparent text-ink hover:border-blue hover:text-blue',
+    className,
+  ]}
+>{label}</button>

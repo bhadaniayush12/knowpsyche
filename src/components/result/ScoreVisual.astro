@@ -1,0 +1,8 @@
+---
+/** Wrapper for each test's own score visual (bar, number or type badge). */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+<div class:list={['min-w-0', className]}><slot /></div>

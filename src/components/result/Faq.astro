@@ -1,0 +1,37 @@
+---
+import AdSlot from '../AdSlot.astro';
+import type { Faq } from '../../data/shared';
+
+/** Visible FAQ + FAQPage JSON-LD built from the same list, so the two always match. */
+interface Props {
+  faqs: Faq[];
+  heading?: string;
+}
+const { faqs, heading = 'Questions' } = Astro.props;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+// Ad goes inside the FAQ area, after the first half of the questions.
+const split = Math.ceil(faqs.length / 2);
+---
+<section aria-labelledby="faq-title">
+  <h2 id="faq-title" class="m-0 mb-3.5 text-[clamp(28px,3.4vw,34px)] font-semibold tracking-[-.04em]">{heading}</h2>
+  <div class="border-b border-ink">
+    {faqs.map((f, i) => (
+      <>
+        {i === split && <AdSlot class="my-4" />}
+        <details class="border-t border-ink py-4">
+          <summary class="flex min-h-11 items-center justify-between gap-3 text-lg font-semibold"><span>{f.q}</span><span class="plus mono text-xs" aria-hidden="true">+</span></summary>
+          <p class="mt-2.5 mb-0 max-w-[720px] text-base leading-[1.65] text-ink-soft">{f.a}</p>
+        </details>
+      </>
+    ))}
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</section>
