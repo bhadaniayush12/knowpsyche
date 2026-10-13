@@ -8,6 +8,10 @@
 https://:project.pages.dev/*
   X-Robots-Tag: noindex
 
+# Preview deploys (abc123.knowpsyche.pages.dev) must never be indexed either.
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+
 # Hashed JS, CSS and fonts (Astro bundles the @fontsource files here). A new build gives new names.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
