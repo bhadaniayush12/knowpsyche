@@ -133,6 +133,110 @@
   }
 }
 
+/* ---------- Learn articles (docs/design/Article.dc.html) ----------
+   The markdown body of /learn/<slug>/. Callouts come from enhanceArticleHtml() in src/lib/learn/articles.ts. */
+@layer components {
+  .prose { color: var(--color-ink-soft); }
+  .prose p { margin: 0 0 1.15em; font-size: 19px; line-height: 1.75; }
+  .prose strong { color: var(--color-ink); }
+  .prose a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .prose a:hover { color: var(--color-blue); }
+  .prose h2 {
+    margin: 2.2em 0 .6em;
+    font-size: clamp(28px, 3vw, 36px);
+    line-height: 1.1;
+    letter-spacing: -.035em;
+    font-weight: 600;
+    color: var(--color-ink);
+    scroll-margin-top: 24px;
+  }
+  .prose h3 {
+    margin: 1.8em 0 .5em;
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -.02em;
+    font-weight: 600;
+    color: var(--color-ink);
+    scroll-margin-top: 24px;
+  }
+  .prose :is(ul, ol) { margin: 0 0 1.2em; padding-left: 24px; }
+  .prose li { margin-bottom: .6em; font-size: 19px; line-height: 1.7; }
+  .prose li > p { margin: 0; }
+
+  /* Lead paragraph with the serif drop cap. */
+  .prose > p:first-child { font-size: 22px; line-height: 1.6; color: var(--color-ink); }
+  .prose > p:first-child::first-letter {
+    float: left;
+    padding: 6px 10px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 92px;
+    line-height: .8;
+    color: var(--color-blue);
+  }
+
+  /* Pull quote: any blockquote that isn't a callout. */
+  .prose blockquote { margin: 36px 0; padding: 0 0 0 22px; border-left: 3px solid var(--color-coral); }
+  .prose blockquote p {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 32px;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+
+  /* Callouts. The design's blue label is 4.1:1 on lilac (below AA for 13px), so it uses violet-ink. */
+  .prose .callout p { margin: 0; }
+  .prose .callout-label { margin-bottom: 6px; font-size: 13px; font-weight: 600; line-height: 1.4; }
+  .prose .callout-key { margin: 28px 0; padding: 22px 24px; border-radius: 20px; background: var(--color-lilac); }
+  .prose .callout-key p:not(.callout-label) { font-size: 19px; line-height: 1.6; color: var(--color-ink); }
+  .prose .callout-key .callout-label { color: var(--color-violet-ink); }
+  .prose .callout-side {
+    margin: 28px 0;
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--color-yellow);
+    color: var(--color-ink);
+    transform: rotate(1.5deg);
+  }
+  .prose .callout-side p:not(.callout-label) { font-size: 15px; line-height: 1.55; }
+
+  /* Tables scroll inside their wrapper on narrow screens. */
+  .prose .table-wrap { margin: 28px 0; overflow-x: auto; }
+  .prose table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.5; }
+  .prose th { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--color-ink); text-align: left; font-weight: 600; color: var(--color-ink); }
+  .prose td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--color-line-row); vertical-align: top; }
+
+  /* Wide screens: side notes sit in the right-hand column, next to the text they belong to. */
+  @media (min-width: 1200px) {
+    .prose .callout-side {
+      float: right;
+      clear: right;
+      width: var(--side-col);
+      margin: 6px calc(-1 * (var(--side-col) + var(--col-gap))) 16px 0;
+    }
+  }
+}
+
+/* Reading progress bar: CSS scroll timeline only. Hidden where unsupported or with reduced motion. */
+.read-progress { display: none; }
+@supports (animation-timeline: scroll()) {
+  .read-progress { display: block; position: sticky; top: 0; z-index: 5; height: 4px; }
+  .read-progress span {
+    display: block;
+    height: 100%;
+    background: var(--color-blue);
+    transform-origin: left;
+    animation: grow linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .read-progress { display: none !important; }
+}
+
 /* ---------- Motion (ported from Main.dc.html) ---------- */
 .card {
   transition: transform .7s var(--ease-house), box-shadow .7s var(--ease-house);
