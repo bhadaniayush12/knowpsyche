@@ -160,6 +160,8 @@
     scroll-margin-top: 24px;
   }
   .prose :is(ul, ol) { margin: 0 0 1.2em; padding-left: 24px; }
+  .prose ul { list-style: disc; }
+  .prose ol { list-style: decimal; }
   .prose li { margin-bottom: .6em; font-size: 19px; line-height: 1.7; }
   .prose li > p { margin: 0; }
 
@@ -228,7 +230,10 @@
     height: 100%;
     background: var(--color-blue);
     transform-origin: left;
-    animation: grow linear both;
+    /* Longhands on purpose: the minifier would fold a shorthand + timeline into one invalid shorthand. */
+    animation-name: grow;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root);
   }
 }

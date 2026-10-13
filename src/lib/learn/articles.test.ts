@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { articlesForTest, byCategory, enhanceArticleHtml, published, readingTime, splitAtH2, tocFromHeadings, type ArticleLike } from './articles';
+import { articlesForTest, byCategory, dropTrailingLine, enhanceArticleHtml, published, readingTime, splitAtH2, tocFromHeadings, type ArticleLike } from './articles';
 
 const a = (id: string, o: Partial<ArticleLike['data']> = {}): ArticleLike => ({
   id,
@@ -89,6 +89,19 @@ describe('enhanceArticleHtml', () => {
     expect(enhanceArticleHtml('<table><tr><td>1</td></tr></table>')).toBe(
       '<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table><tr><td>1</td></tr></table></div>',
     );
+  });
+});
+
+describe('dropTrailingLine', () => {
+  const line = 'For learning and self-reflection, not medical advice.';
+  it('drops a last paragraph that repeats the line, italic or not', () => {
+    expect(dropTrailingLine('<p>Body.</p>\n<p><em>For learning and self-reflection, not medical advice.</em></p>\n', line)).toBe('<p>Body.</p>');
+    expect(dropTrailingLine('<p>Body.</p><p>For learning and self-reflection, not medical advice</p>', line)).toBe('<p>Body.</p>');
+  });
+  it('keeps everything else', () => {
+    const html = '<p>For learning and self-reflection, not medical advice.</p><p>Last words.</p>';
+    expect(dropTrailingLine(html, line)).toBe(html);
+    expect(dropTrailingLine('', line)).toBe('');
   });
 });
 

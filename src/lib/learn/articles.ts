@@ -53,6 +53,17 @@ export const enhanceArticleHtml = (html: string): string =>
     })
     .replace(/<table>[\s\S]*?<\/table>/g, (table) => `<div class="table-wrap" tabindex="0" role="region" aria-label="Table">${table}</div>`);
 
+/**
+ * Drops a last paragraph that only repeats `line` (e.g. an article ending with the "not medical advice"
+ * line, which the article template already prints under Sources). Tags, curly quotes and a final full
+ * stop don't matter.
+ */
+export const dropTrailingLine = (html: string, line: string): string => {
+  const norm = (s: string) => s.replace(/<[^>]+>/g, '').replace(/[’‘]/g, "'").replace(/[.\s]+$/, '').trim().toLowerCase();
+  const m = html.match(/<p>((?:(?!<p>)[\s\S])*?)<\/p>\s*$/);
+  return m && norm(m[1]) === norm(line) ? html.slice(0, m.index).trimEnd() : html;
+};
+
 /** "In this guide": the h2 headings, numbered 01, 02, … */
 export const tocFromHeadings = (headings: { depth: number; slug: string; text: string }[]) =>
   headings

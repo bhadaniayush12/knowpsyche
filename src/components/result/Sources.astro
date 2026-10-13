@@ -1,17 +1,30 @@
 ---
 import type { Source } from '../../data/shared';
 
+/**
+ * A source is either the test pages' { before, title, after } shape, or (Learn articles) a citation
+ * string with *italic* parts, or a linked { title, url }.
+ */
+type Item = Source | string | { title: string; url: string };
+
 interface Props {
-  sources: Source[];
+  sources: Item[];
   /** Optional line under the list, e.g. where a test's statements come from. */
   note?: string;
 }
 const { sources, note } = Astro.props;
+
+/** "A. (2008). Title. *Journal*." → text and italic parts, alternating. */
+const parts = (s: string) => s.split(/\*([^*]+)\*/);
 ---
 <section aria-labelledby="sources-title">
   <h2 id="sources-title" class="mono m-0 mb-3 text-[11px] font-medium text-muted">Sources</h2>
   <ol class="m-0 flex list-decimal flex-col gap-2 pl-5 text-[15px] leading-[1.6] text-ink-soft">
-    {sources.map((s) => <li>{s.before}<i>{s.title}</i>{s.after}</li>)}
+    {sources.map((s) =>
+      typeof s === 'string' ? <li>{parts(s).map((p, i) => (i % 2 ? <i>{p}</i> : p))}</li>
+      : 'url' in s ? <li><a href={s.url} rel="noopener" class="text-ink-soft">{parts(s.title).map((p, i) => (i % 2 ? <i>{p}</i> : p))}</a></li>
+      : <li>{s.before}<i>{s.title}</i>{s.after}</li>,
+    )}
   </ol>
   {note && <p class="mt-3 mb-0 text-[14.5px] leading-[1.6] text-ink-soft">{note}</p>}
 </section>

@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FontPreloads from '../../components/FontPreloads.astro';
+import ArticleCard from '../../components/learn/ArticleCard.astro';
+import { byCategory } from '../../lib/learn/articles';
+import { getArticles } from '../../lib/learn/collection';
+import { hubDescription, hubEmpty, hubEyebrow, hubH1, hubIntro, hubTitle } from '../../data/learn';
+
+const groups = byCategory(await getArticles());
+const id = (category: string) => `cat-${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+<BaseLayout title={hubTitle} description={hubDescription} path="/learn/" ogImage="/og/learn.png" crumbs={[{ name: 'Learn' }]}>
+  <FontPreloads slot="head" />
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
+    <section class="max-w-[720px]">
+      <div class="mono mb-[18px] text-[11px] text-muted">{hubEyebrow}</div>
+      <h1 class="m-0 text-[clamp(44px,6vw,88px)] leading-[.92] font-semibold tracking-[-.055em]">{hubH1[0]}<br /><span class="serif text-blue">{hubH1[1]}</span></h1>
+      <p class="mt-4 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{hubIntro}</p>
+    </section>
+
+    {groups.length === 0 && (
+      <p class="m-0 text-[17px] leading-[1.55] text-ink-soft">{hubEmpty} <a href="/tests/" class="font-semibold">All tests →</a></p>
+    )}
+
+    {groups.map((g) => (
+      <section aria-labelledby={id(g.category)}>
+        <h2 id={id(g.category)} class="m-0 mb-4 text-[clamp(28px,3.4vw,34px)] font-semibold tracking-[-.04em]">{g.category}</h2>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
+          {g.items.map((a) => <ArticleCard article={a} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
