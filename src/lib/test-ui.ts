@@ -52,16 +52,27 @@ export function prefersReducedMotion(): boolean {
 
 /**
  * Runs for `ms`, checked every frame against performance.now(), so display times never drift
- * the way chained setTimeouts do. `onFrame` gets progress 0–1. Returns a cancel function.
+ * the way chained setTimeouts do. `onFrame` gets progress 0–1. `onDone` gets the frame's timestamp:
+ * anything it changes is painted at the end of that frame, so it's the onset time for a stimulus.
+ * Pass that timestamp as `from` to time the next step from the painted frame; otherwise it starts
+ * mid-frame and every step ends one frame late. Returns a cancel function.
  */
-export function runFor(ms: number, onDone: () => void, onFrame?: (progress: number) => void): () => void {
-  const start = performance.now();
+export function runFor(
+  ms: number,
+  onDone: (frameTime: number) => void,
+  onFrame?: (progress: number) => void,
+  from = performance.now(),
+): () => void {
+  const start = from;
   let frame = 0;
   const tick = (now: number) => {
-    const p = Math.min(1, Math.max(0, (now - start) / ms));
+    // Frame timestamps jitter by a fraction of a ms. Without the 1 ms allowance, a step that ends
+    // exactly on a frame boundary (500 ms = 30 frames at 60 Hz) can slip a whole frame.
+    const elapsed = now - start;
+    const p = elapsed >= ms - 1 ? 1 : Math.max(0, elapsed / ms);
     onFrame?.(p);
     if (p >= 1) {
-      onDone();
+      onDone(now);
       return;
     }
     frame = requestAnimationFrame(tick);
