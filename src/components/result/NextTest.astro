@@ -1,15 +1,21 @@
 ---
+import { getCollection } from 'astro:content';
 import { nextAfter } from '../../data/home';
+import { articlesForTest } from '../../lib/learn/articles';
 
 interface Props {
   /** This test's path. The next one comes from the shared test list, in doc order; after the last, /tests/. */
   from: string;
   /** The "What next?" line. */
   line: string;
+  /** Fallback Learn card, used when no published article has this test as its relatedTest. */
   learn: { href: string; label: string };
 }
-const { from, line, learn } = Astro.props;
+const { from, line } = Astro.props;
 const next = nextAfter(from);
+// The Learn card goes to this test's first related article when one is published, else the fallback (/method/).
+const article = articlesForTest(await getCollection('learn'), from.replace(/\//g, ''))[0];
+const learn = article ? { href: `/learn/${article.id}/`, label: `${article.data.title} →` } : Astro.props.learn;
 ---
 <div class="flex flex-col gap-4">
   <h3 class="mono m-0 text-[11px] font-medium text-muted">What next?</h3>

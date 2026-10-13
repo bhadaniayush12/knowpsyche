@@ -23,6 +23,7 @@ export const routes: Route[] = [
     keys: [slugWords(t.href), t.name, ...(testAliases[t.href] ?? [])],
   })),
   { href: '/tests/', label: 'list of all tests', keys: ['all tests', 'tests list'] },
+  { href: '/learn/', label: 'Learn psychology guides', keys: ['learn', 'learn psychology', 'guides', 'articles', 'blog'] },
   { href: '/about/', label: 'About page', keys: ['about', 'about us', 'who'] },
   { href: '/method/', label: 'Method page', keys: ['method', 'methodology', 'how it works', 'sources'] },
   { href: '/privacy/', label: 'Privacy page', keys: ['privacy', 'privacy policy', 'disclaimer', 'cookies', 'cookie policy'] },
