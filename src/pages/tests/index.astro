@@ -10,7 +10,7 @@ const cut = h1.lastIndexOf(' ');
 const h1Lead = h1.slice(0, cut + 1);
 const h1Accent = h1.slice(cut + 1);
 ---
-<BaseLayout title={title} description={description} path="/tests/" breadcrumb="Tests">
+<BaseLayout title={title} description={description} path="/tests/" crumbs={[{ name: 'Tests' }]}>
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
     <section class="max-w-[720px]">
       <!-- Drafted eyebrow. -->

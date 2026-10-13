@@ -53,12 +53,9 @@ const cut = h1.lastIndexOf(' ');
 const h1Lead = cut > 0 ? h1.slice(0, cut + 1) : '';
 const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
 ---
-<BaseLayout title={title} description={description} path={path} breadcrumb={h1} ogImage={ogImage}>
+<BaseLayout title={title} description={description} path={path} crumbs={[{ name: 'Tests', href: '/tests/' }, { name: crumb }]} crumbWidth={1120} ogImage={ogImage}>
   {[grotesk400, grotesk500, grotesk600, serifItalic, mono400].map((href) => <link slot="head" rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
-  <div class="mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-7 pb-20">
-    <nav aria-label="Breadcrumb" class="mono mb-[18px] text-[11px] text-muted">
-      <a href="/" class="text-muted">Home</a> / <a href="/tests/" class="text-muted">Tests</a> / <span aria-current="page">{crumb}</span>
-    </nav>
+  <div class="mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-[18px] pb-20">
 
     <section class="mb-[22px] flex flex-wrap items-end justify-between gap-5" aria-labelledby="test-title">
       <div class="min-w-0 max-w-[620px]">

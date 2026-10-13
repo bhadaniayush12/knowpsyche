@@ -12,8 +12,8 @@ const cards = [
   { label: '03 · Everything else', border: 'border-t-sage', color: 'text-teal-ink', title: 'Press & partnerships', text: 'Teachers, researchers and writers are welcome to get in touch.' },
 ];
 ---
-<BaseLayout title={title} description={description} path="/contact/" breadcrumb="Contact">
-  <div class="mx-auto flex max-w-[1200px] flex-col gap-14 px-[clamp(16px,3vw,40px)] pt-[clamp(40px,6vw,80px)] pb-20">
+<BaseLayout title={title} description={description} path="/contact/" crumbs={[{ name: 'Contact' }]}>
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-14 px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section class="flex flex-wrap items-end gap-10">
       <div class="min-w-0 flex-[999_1_560px]">
         <div class="mono mb-[18px] text-[11px] text-muted">Contact · Fig. 00.4</div>

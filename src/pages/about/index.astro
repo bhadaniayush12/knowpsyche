@@ -15,8 +15,8 @@ const promises = [
   { n: '06', color: 'text-blue', title: 'Cite and correct', text: 'Sources are listed on each page. Spot a mistake? We fix it and say so.' },
 ];
 ---
-<BaseLayout title={title} description={description} path="/about/" breadcrumb="About">
-  <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(40px,6vw,80px)] pb-20">
+<BaseLayout title={title} description={description} path="/about/" crumbs={[{ name: 'About' }]}>
+  <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section class="flex flex-wrap items-end gap-10">
       <div class="min-w-0 flex-[999_1_600px]">
         <div class="mono mb-[18px] text-[11px] text-muted">About · Fig. 00 · Why this exists</div>

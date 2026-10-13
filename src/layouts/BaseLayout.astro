@@ -20,23 +20,34 @@ interface Props {
   /** Absolute URL or site-relative path. Left out of the tags when not given. */
   ogImage?: string;
   noindex?: boolean;
-  /** Page name for the `BreadcrumbList` JSON-LD (Home → this page). Inner pages only. */
-  breadcrumb?: string;
+  /**
+   * Breadcrumb trail after Home; the last item is this page. Renders the visible breadcrumb and the
+   * matching `BreadcrumbList` JSON-LD. Inner pages only.
+   */
+  crumbs?: { name: string; href?: string }[];
+  /** Max width of the breadcrumb row, to line up with the page's content column. */
+  crumbWidth?: number;
   /** `home` = Main design header + full footer. `inner` = About/Method design header + compact footer. */
   variant?: 'home' | 'inner';
 }
 
-const { title, description, path, ogImage, noindex = false, breadcrumb, variant = 'inner' } = Astro.props;
+const { title, description, path, ogImage, noindex = false, crumbs, crumbWidth = 1200, variant = 'inner' } = Astro.props;
 const site = Astro.site ?? new URL('https://knowpsyche.com');
 const canonical = new URL(path, site).href;
 const image = ogImage ? new URL(ogImage, site).href : undefined;
-const breadcrumbLd = breadcrumb && {
+// One list drives both the visible breadcrumb and the JSON-LD, so they always match.
+const trail = crumbs?.length
+  ? [{ name: 'Home', href: '/' }, ...crumbs.slice(0, -1), { ...crumbs[crumbs.length - 1], href: path }]
+  : [];
+const breadcrumbLd = trail.length > 0 && {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', site).href },
-    { '@type': 'ListItem', position: 2, name: breadcrumb, item: canonical },
-  ],
+  itemListElement: trail.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.href!, site).href,
+  })),
 };
 ---
 <!doctype html>
@@ -77,6 +88,13 @@ const breadcrumbLd = breadcrumb && {
     >Skip to content</a>
     <Header variant={variant} />
     <main id="main">
+      {trail.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mono mx-auto px-[clamp(16px,3vw,40px)] pt-7 text-[11px] text-muted" style={{ maxWidth: `${crumbWidth}px` }}>
+          {trail.map((c, i) => i < trail.length - 1
+            ? <><a href={c.href} class="text-muted">{c.name}</a> / </>
+            : <span aria-current="page">{c.name}</span>)}
+        </nav>
+      )}
       <slot />
     </main>
     <Footer variant={variant === 'home' ? 'full' : 'compact'} />

@@ -24,7 +24,7 @@ const toc = [
   { id: 'contact', label: 'Contact' },
 ];
 ---
-<BaseLayout title={title} description={description} path="/terms/" breadcrumb="Terms of use">
+<BaseLayout title={title} description={description} path="/terms/" crumbs={[{ name: 'Terms of use' }]}>
   <PolicyPage eyebrow="Terms of use · Last updated 21 October 2026" summary={summary} toc={toc}>
     <Fragment slot="title">The ground rules.<br /><span class="serif text-blue">Short and plain.</span></Fragment>
 

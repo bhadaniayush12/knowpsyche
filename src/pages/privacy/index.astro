@@ -25,7 +25,7 @@ const toc = [
   { id: 'changes', label: 'Changes & contact' },
 ];
 ---
-<BaseLayout title={title} description={description} path="/privacy/" breadcrumb="Privacy & disclaimer">
+<BaseLayout title={title} description={description} path="/privacy/" crumbs={[{ name: 'Privacy & disclaimer' }]}>
   <PolicyPage eyebrow="Privacy · disclaimer · terms · Last updated 17 October 2026" summary={summary} toc={toc}>
     <Fragment slot="title">Your mind is yours.<br /><span class="serif text-blue">So is your data.</span></Fragment>
 
