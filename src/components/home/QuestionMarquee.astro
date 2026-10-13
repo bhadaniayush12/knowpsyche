@@ -3,20 +3,22 @@ import Chip from '../ui/Chip.astro';
 import { marqueeQuestions } from '../../data/home';
 
 const chipClass = 'border border-line px-4 py-2.5 text-[15.5px] font-medium text-ink hover:text-ink';
-// Two identical groups; the track slides by exactly one group (-50%), so the loop has no seam.
-// Each group ends with the same right padding as the gap, so spacing stays even at the join.
+// The label stays put; only the questions move. Two identical chip groups slide by exactly
+// one group (-50%), and each group ends with the same padding as the gap, so the join is invisible.
 const groups = [false, true];
 ---
-<div class="marq-wrap overflow-hidden border-y border-line bg-paper py-4">
-  <div class="marq flex w-max">
-    {groups.map((copy) => (
-      <div class="flex items-center gap-3 pr-3" aria-hidden={copy ? 'true' : undefined}>
-        <span class="serif pr-2 pl-4 text-[22px] text-muted">People come here asking —</span>
-        {marqueeQuestions.map((q) => (
-          <Chip href="#tests" bg={q.bg} class={chipClass} tabindex={copy ? '-1' : undefined}>{q.t}</Chip>
-        ))}
-      </div>
-    ))}
+<div class="marq-wrap flex flex-col gap-2 border-y border-line bg-paper py-4 sm:flex-row sm:items-center sm:gap-0">
+  <span class="serif flex-none px-4 text-[22px] text-muted sm:pr-5 sm:pl-[clamp(16px,3vw,40px)]">People come here asking —</span>
+  <div class="min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_40px,#000_calc(100%-40px),transparent)]">
+    <div class="marq flex w-max">
+      {groups.map((copy) => (
+        <div class="flex items-center gap-3 pr-3" aria-hidden={copy ? 'true' : undefined}>
+          {marqueeQuestions.map((q) => (
+            <Chip href="#tests" bg={q.bg} class={chipClass} tabindex={copy ? '-1' : undefined}>{q.t}</Chip>
+          ))}
+        </div>
+      ))}
+    </div>
   </div>
 </div>
 <div class="bob pt-3.5 text-center text-[13px] text-muted" aria-hidden="true">scroll ↓</div>
