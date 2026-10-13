@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { attentionBands, faqs, page, result, resultUi, sources, ui } from '../../data/tests/attention-span';
 import { TOTAL_TRIALS } from '../../lib/tests/attention-span';
 
@@ -39,10 +40,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         <span class="as-counter">{ui.practiceLabel}</span>
         <span class="as-note text-muted">{ui.practiceNote}</span>
       </div>
-      <button
-        type="button"
-        class="as-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"
-      >{ui.restart}</button>
+      <div class="flex gap-2">
+        <FeedbackToggle />
+        <button
+          type="button"
+          class="as-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"
+        >{ui.restart}</button>
+      </div>
     </div>
 
     <!-- Progress bar across the top -->
@@ -199,6 +203,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     type TrialResult,
   } from '../../lib/tests/attention-span';
   import { createShareCard } from '../../lib/share-card';
+  import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
@@ -311,7 +316,9 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     runNextTrial();
   }
 
+  /** Practice only: the scored run gives no feedback, so it plays no sound either. */
   function setFeedback(text: string, good: boolean) {
+    cue(good ? 'right' : 'wrong');
     feedbackEl.textContent = text;
     feedbackEl.className = `as-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
   }
@@ -432,7 +439,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     }
 
     // Meaning & tip
-    $('[data-r=meaning]', resultEl).textContent = meaningLine(scores);
+    $('[data-r=meaning]', resultEl).textContent = meaningLine(scores, touch);
     $('[data-r=tip]', resultEl).textContent = copy.tip;
 
     // Your own record to compare later. Nothing is saved.
@@ -498,8 +505,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
   startPracticeBtn.addEventListener('click', startPractice);
   startMainBtn.addEventListener('click', startMainRun);
-  pausedRestartBtn.addEventListener('click', restartAll);
-  restartBtn.addEventListener('click', restartAll);
+  // After a restart, Space or Enter on the focused button starts practice again.
+  for (const btn of [restartBtn, pausedRestartBtn]) {
+    btn.addEventListener('click', () => {
+      restartAll();
+      startPracticeBtn.focus({ preventScroll: true });
+    });
+  }
 
   // Top "Start the test" button in the intro header
   const introStartBtn = $('[data-test-start]');
@@ -516,6 +528,8 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   $$('[data-try-again]').forEach((btn) => {
     btn.addEventListener('click', () => {
       restartAll();
+      // The pressed button is now hidden with the result; give focus somewhere useful.
+      startPracticeBtn.focus({ preventScroll: true });
       card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     });
   });
@@ -537,4 +551,6 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     else if (mode === 'practice-done') startMainRun();
     else handleResponse(e.timeStamp);
   });
+
+  bindFeedbackToggle();
 </script>
