@@ -52,7 +52,7 @@ faq:
     answer: 'No. It is a placeholder that tests the layout. Dev will replace it with the real article before launch.'
   - question: 'Where do the callouts come from?'
     answer: 'They are blockquotes in the markdown whose first words are bold, as the guide at the top of this file shows.'
-draft: false
+draft: true
 ---
 
 You click the moment the screen turns green, but the number that comes back is slower than you expected. This placeholder paragraph tests the drop cap and the lead size.
