@@ -66,6 +66,8 @@ export interface EnneagramResult {
   ranked: Ranked[];
   /** Wing(s) for each type in `top`. */
   wings: Partial<Record<TypeNumber, TypeNumber[]>>;
+  /** Set once the tie-break round has been applied. */
+  tieBreak?: TieBreak;
 }
 
 export function getResult(answers: readonly number[]): EnneagramResult {
@@ -77,4 +79,109 @@ export function getResult(answers: readonly number[]): EnneagramResult {
   const wings: EnneagramResult['wings'] = {};
   for (const n of top) wings[n] = wingsFor(n, sums);
   return { kind, top, ranked, wings };
+}
+
+// ---------- Strength of the result ----------
+
+/** A lead of this many points or more is a "clear lead". One answer can move a type by up to 4. */
+export const CLEAR_LEAD_POINTS = 4;
+
+export interface Strength {
+  label: 'clear' | 'close' | 'settled';
+  /** Points between the top type and the next. */
+  gap: number;
+  /** The runner-up type. */
+  next: TypeNumber;
+}
+
+/** How far ahead the main type is. Only for a single main type (`clear`, or a tie settled by the tie-break). */
+export function resultStrength(res: EnneagramResult): Strength {
+  const [first, second] = res.ranked;
+  if (res.tieBreak?.decided) {
+    // Runner-up = the finalist with the most tie-break points after the winner.
+    const tb = res.tieBreak;
+    const sumOf = (t: TypeNumber) => res.ranked.find((r) => r.type === t)!.sum;
+    const next = tb.finalists
+      .filter((t) => t !== res.top[0])
+      .sort((x, y) => (tb.scores[y] ?? 0) - (tb.scores[x] ?? 0) || sumOf(y) - sumOf(x) || x - y)[0];
+    return { label: 'settled', gap: Math.abs(sumOf(res.top[0]) - sumOf(next)), next };
+  }
+  const gap = first.sum - second.sum;
+  return { label: gap >= CLEAR_LEAD_POINTS ? 'clear' : 'close', gap, next: second.type };
+}
+
+// ---------- Why this type? ----------
+
+/** Indexes of the statements for `type` the person rated highest (4 or 5 first), up to `n`, in the order shown. */
+export function topStatements(answers: readonly number[], type: TypeNumber, n = 3): number[] {
+  return statements
+    .map((s, i) => ({ i, type: s.type, a: answers[i] }))
+    .filter((x) => x.type === type)
+    .sort((x, y) => y.a - x.a || x.i - y.i)
+    .slice(0, n)
+    .filter((x, k) => k === 0 || x.a >= 3)
+    .map((x) => x.i);
+}
+
+// ---------- Tie-break round ----------
+
+export type Motive = 'desire' | 'fear' | 'stress';
+export type Choice = 'a' | 'b' | 'same';
+
+export interface TieBreakQuestion {
+  a: TypeNumber;
+  b: TypeNumber;
+  motive: Motive;
+}
+
+export interface TieBreak {
+  finalists: TypeNumber[];
+  /** Points from the round: 1 per choice, ½ each for "About the same". */
+  scores: Partial<Record<TypeNumber, number>>;
+  /** True when one finalist came out ahead. */
+  decided: boolean;
+}
+
+/** Only run when 2 or 3 types are within a point. With 4 or more, the picture really is even. */
+export function needsTieBreak(res: EnneagramResult): boolean {
+  return res.top.length === 2 || res.top.length === 3;
+}
+
+const MOTIVES: Motive[] = ['desire', 'fear', 'stress'];
+
+/** Every pair of finalists, once per motive: 3 questions for two types, 9 for three. */
+export function tieBreakQuestions(finalists: readonly TypeNumber[]): TieBreakQuestion[] {
+  const pairs: [TypeNumber, TypeNumber][] = [];
+  for (let i = 0; i < finalists.length; i++) for (let j = i + 1; j < finalists.length; j++) pairs.push([finalists[i], finalists[j]]);
+  // Motive by motive, so the same pair never comes up twice in a row when there are three types.
+  return MOTIVES.flatMap((motive, m) => pairs.map(([a, b], k) => ((k + m) % 2 ? { a: b, b: a, motive } : { a, b, motive })));
+}
+
+/**
+ * Applies the tie-break choices. The finalist with the most points becomes the main type.
+ * Equal points stay tied (two types → `tie`, three → `even`, or a two-way tie if one finalist dropped out).
+ * Original scores and the bar chart are never changed.
+ */
+export function applyTieBreak(res: EnneagramResult, choices: readonly Choice[]): EnneagramResult {
+  const finalists = [...res.top];
+  const qs = tieBreakQuestions(finalists);
+  if (choices.length !== qs.length) throw new Error(`Expected ${qs.length} choices, got ${choices.length}`);
+  const scores = Object.fromEntries(finalists.map((t) => [t, 0])) as Record<TypeNumber, number>;
+  qs.forEach((q, i) => {
+    const c = choices[i];
+    if (c === 'a') scores[q.a] += 1;
+    else if (c === 'b') scores[q.b] += 1;
+    else {
+      scores[q.a] += 0.5;
+      scores[q.b] += 0.5;
+    }
+  });
+  const sumOf = (t: TypeNumber) => res.ranked.find((r) => r.type === t)!.sum;
+  const order = finalists.sort((x, y) => scores[y] - scores[x] || sumOf(y) - sumOf(x) || x - y);
+  const best = scores[order[0]];
+  const leaders = order.filter((t) => scores[t] === best);
+  const decided = leaders.length === 1;
+  const top = decided ? [order[0]] : leaders;
+  const kind: EnneagramResult['kind'] = top.length === 1 ? 'clear' : top.length === 2 ? 'tie' : 'even';
+  return { ...res, kind, top, tieBreak: { finalists: [...res.top], scores, decided } };
 }

@@ -1,6 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { statements, types, wingLines, type TypeNumber } from '../../data/tests/enneagram';
-import { getResult, neighbours, percent, rank, scoreTypes, STATEMENT_COUNT, wingLabel, wingsFor, type Sums } from './enneagram';
+import { statements, tieBreakLines, types, wingLines, type TypeNumber } from '../../data/tests/enneagram';
+import {
+  applyTieBreak,
+  getResult,
+  needsTieBreak,
+  neighbours,
+  percent,
+  rank,
+  resultStrength,
+  scoreTypes,
+  STATEMENT_COUNT,
+  tieBreakQuestions,
+  topStatements,
+  wingLabel,
+  wingsFor,
+  type Choice,
+  type Sums,
+} from './enneagram';
 
 /** Answers where each type's 5 statements all get the rating in `byType` (default 1). */
 function answersFor(byType: Partial<Record<TypeNumber, number>>, fallback = 1): number[] {
@@ -150,5 +166,113 @@ describe('getResult', () => {
     expect(r.top).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     expect(new Set(r.ranked.map((x) => x.pct))).toEqual(new Set([pct]));
     expect(r.wings[1]).toEqual([9, 2]);
+  });
+});
+
+describe('resultStrength', () => {
+  it('a lead of 4+ points is a clear lead', () => {
+    const s = resultStrength(getResult(answersForSums({ 4: 24, 5: 20 }, 10)));
+    expect(s).toEqual({ label: 'clear', gap: 4, next: 5 });
+  });
+
+  it('a lead of 2–3 points is a close call', () => {
+    expect(resultStrength(getResult(answersForSums({ 4: 22, 5: 20 }, 10)))).toEqual({ label: 'close', gap: 2, next: 5 });
+    expect(resultStrength(getResult(answersForSums({ 4: 23, 5: 20 }, 10))).label).toBe('close');
+  });
+
+  it('a settled tie names the tie-break runner-up', () => {
+    const tied = getResult(answersForSums({ 4: 22, 9: 21, 2: 21 }, 10)); // 4, 2, 9 within a point
+    expect(tied.top).toEqual([4, 2, 9]);
+    const qs = tieBreakQuestions(tied.top);
+    // 9 wins everything, 2 beats 4 when 9 isn't in the pair
+    const choices = qs.map((q): Choice => (q.a === 9 ? 'a' : q.b === 9 ? 'b' : q.a === 2 ? 'a' : 'b'));
+    const s = resultStrength(applyTieBreak(tied, choices));
+    expect(s.label).toBe('settled');
+    expect(s.next).toBe(2);
+    expect(s.gap).toBe(0);
+  });
+});
+
+describe('topStatements', () => {
+  it('returns the highest-rated statements for the type, in the order shown on ties', () => {
+    const answers = answersFor({}, 2);
+    const fours = statements.map((s, i) => (s.type === 4 ? i : -1)).filter((i) => i >= 0); // 3, 12, 21, 30, 39
+    answers[fours[3]] = 5;
+    answers[fours[1]] = 4;
+    answers[fours[4]] = 4;
+    expect(topStatements(answers, 4)).toEqual([fours[3], fours[1], fours[4]]);
+  });
+
+  it('drops weak extras (rated under 3) but always keeps the top one', () => {
+    const answers = answersFor({}, 1);
+    const firstFour = statements.findIndex((s) => s.type === 4);
+    answers[firstFour] = 4;
+    expect(topStatements(answers, 4)).toEqual([firstFour]);
+  });
+});
+
+describe('tie-break round', () => {
+  it('has a line for every type and motive', () => {
+    for (const t of types) {
+      const l = tieBreakLines[t.n];
+      expect(l.desire && l.fear && l.stress).toBeTruthy();
+    }
+  });
+
+  it('runs only for 2 or 3 near-tied types', () => {
+    expect(needsTieBreak(getResult(answersForSums({ 4: 24 }, 10)))).toBe(false);
+    expect(needsTieBreak(getResult(answersForSums({ 4: 22, 9: 22 }, 10)))).toBe(true);
+    expect(needsTieBreak(getResult(answersForSums({ 2: 20, 6: 20, 7: 19 }, 10)))).toBe(true);
+    expect(needsTieBreak(getResult(answersFor({}, 3)))).toBe(false); // all 9 even
+  });
+
+  it('asks 3 questions for two types and 9 for three, each pair once per motive', () => {
+    expect(tieBreakQuestions([4, 9])).toHaveLength(3);
+    const qs = tieBreakQuestions([2, 6, 7]);
+    expect(qs).toHaveLength(9);
+    for (const m of ['desire', 'fear', 'stress']) {
+      const pairs = qs.filter((q) => q.motive === m).map((q) => [q.a, q.b].sort().join('-'));
+      expect(pairs.sort()).toEqual(['2-6', '2-7', '6-7']);
+    }
+    // no pair twice in a row
+    qs.slice(1).forEach((q, i) => expect([q.a, q.b].sort().join()).not.toBe([qs[i].a, qs[i].b].sort().join()));
+  });
+
+  it('settles a two-way tie', () => {
+    const tied = getResult(answersForSums({ 4: 22, 9: 22 }, 10));
+    const choices = tieBreakQuestions(tied.top).map((q): Choice => (q.a === 9 ? 'a' : 'b'));
+    const r = applyTieBreak(tied, choices);
+    expect(r.kind).toBe('clear');
+    expect(r.top).toEqual([9]);
+    expect(r.tieBreak).toEqual({ finalists: [4, 9], scores: { 4: 0, 9: 3 }, decided: true });
+    expect(r.ranked).toEqual(tied.ranked); // scores and chart untouched
+  });
+
+  it('"About the same" every time leaves the tie in place', () => {
+    const tied = getResult(answersForSums({ 4: 22, 9: 21 }, 10));
+    const r = applyTieBreak(tied, ['same', 'same', 'same']);
+    expect(r.kind).toBe('tie');
+    expect(r.top).toEqual([4, 9]); // higher original score first
+    expect(r.tieBreak?.decided).toBe(false);
+  });
+
+  it('three types: one drops out, two stay tied', () => {
+    const even = getResult(answersForSums({ 2: 20, 6: 20, 7: 19 }, 10));
+    // 7 loses every time; 2 v 6 always "same"
+    const choices = tieBreakQuestions(even.top).map((q): Choice => (q.a === 7 ? 'b' : q.b === 7 ? 'a' : 'same'));
+    const r = applyTieBreak(even, choices);
+    expect(r.kind).toBe('tie');
+    expect(r.top).toEqual([2, 6]);
+  });
+
+  it('three types all equal stay even', () => {
+    const even = getResult(answersForSums({ 2: 20, 6: 20, 7: 20 }, 10));
+    const r = applyTieBreak(even, Array(9).fill('same'));
+    expect(r.kind).toBe('even');
+    expect(r.top).toHaveLength(3);
+  });
+
+  it('rejects the wrong number of choices', () => {
+    expect(() => applyTieBreak(getResult(answersForSums({ 4: 22, 9: 22 }, 10)), ['a'])).toThrow();
   });
 });

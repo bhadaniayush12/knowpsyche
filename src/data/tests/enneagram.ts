@@ -195,6 +195,50 @@ export const result = {
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 
+// ---------- Drafted after the 45-statement build (Enneagram review, 13 Oct). Not in part-1.md. ----------
+
+/**
+ * Tie-break round: when 2 or 3 types are within a point, people choose between the types' motives.
+ * Each line is a first-person version of that type's core desire, core fear and stress reaction.
+ */
+export const tieBreakLines: Record<TypeNumber, { desire: string; fear: string; stress: string }> = {
+  1: { desire: 'Doing things the right way', fear: 'Getting something wrong', stress: 'I get harder on myself' },
+  2: { desire: 'Being needed by the people I love', fear: 'Not being wanted', stress: 'I give more, then feel taken for granted' },
+  3: { desire: 'Being seen as successful', fear: "Feeling like I'm worth nothing", stress: 'I push harder to prove myself' },
+  4: { desire: 'Being true to who I really am', fear: 'Losing my sense of who I am', stress: 'I compare myself with others and pull back' },
+  5: { desire: 'Understanding how things work', fear: 'Being out of my depth', stress: 'I go quiet and need space' },
+  6: { desire: 'Feeling safe and backed up', fear: 'Being left without support', stress: 'I worry and second-guess' },
+  7: { desire: 'Being free to try new things', fear: 'Feeling trapped or missing out', stress: "I keep busy so I don't dwell on it" },
+  8: { desire: 'Being strong and in charge of my life', fear: 'Being controlled by someone else', stress: 'I get forceful and take over' },
+  9: { desire: 'Keeping things calm and peaceful', fear: 'Conflict with people I care about', stress: 'I switch off and put things off' },
+};
+
+export const tieBreak = {
+  intro: 'Your top types are close. A few quick choices will help tell them apart.',
+  prompts: {
+    desire: 'Which matters more to you?',
+    fear: 'Which would worry you more?',
+    stress: 'When you’re stressed, which sounds more like you?',
+  },
+  same: 'About the same',
+  skip: 'Skip and see my result',
+};
+
+export const ui = {
+  whyTitle: 'Why this type?',
+  whyIntro: 'You rated these statements highest:',
+  clearLead: (gap: number, next: number) => `Clear lead: ${gap} points ahead of Type ${next}.`,
+  closeCall: (gap: number, next: number) => `Close call: ${gap} points ahead of Type ${next}, so read both.`,
+  settled: (next: number) => `Close call: settled by the tie-break. Type ${next} came a close second, so read both.`,
+  runnerUp: (n: number) => `Also read: Type ${n}`,
+  showAll: 'Show all 9 scores',
+  showTop: 'Show top 3 only',
+  nineTypes: 'The nine types',
+  copyScores: 'Copy my scores',
+  leaveWarning: 'Your answers will be lost if you leave this page.',
+  timeLeft: (min: number) => (min <= 1 ? 'under a minute left' : `about ${min} min left`),
+};
+
 export const faqs: Faq[] = [
   { q: 'What is the Enneagram?', a: 'A model that describes nine patterns of motivation — what drives people, what they fear and how they react under stress.' },
   { q: 'What does "Enneagram" mean?', a: 'It comes from Greek: ennea means nine, and gramma means something drawn — a nine-pointed figure.' },
