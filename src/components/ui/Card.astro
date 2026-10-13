@@ -1,0 +1,34 @@
+---
+import type { HomeTest } from '../../data/home';
+
+/** Test card for the homepage grid. The glyph goes in the default slot. */
+interface Props {
+  test: HomeTest;
+  class?: string;
+}
+const { test, class: className } = Astro.props;
+---
+<a
+  href={test.href}
+  data-cat={test.cat}
+  class:list={[
+    'card flex min-h-[270px] flex-col gap-3.5 rounded-20 p-[22px] no-underline',
+    test.dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink',
+    className,
+  ]}
+  style={test.dark ? undefined : { background: test.tint }}
+>
+  <div class="flex items-center justify-between gap-2">
+    <span
+      class:list={['rounded-full px-2.5 py-[5px] text-[12.5px] font-semibold', test.dark ? 'bg-yellow text-ink' : 'bg-white']}
+      style={test.dark ? undefined : { color: test.color }}
+    >{test.kind}</span>
+    <span class="text-[13.5px] opacity-75">{test.time}</span>
+  </div>
+  <div class="glyph flex h-14 items-center"><slot /></div>
+  <div>
+    <h3 class="m-0 mb-1.5 text-[26px] font-semibold tracking-[-.035em]">{test.name}</h3>
+    <p class="m-0 text-[15.5px] leading-[1.55] opacity-[.88]">{test.desc}</p>
+  </div>
+  <span class="mt-auto text-[15.5px] font-semibold">Start test →</span>
+</a>

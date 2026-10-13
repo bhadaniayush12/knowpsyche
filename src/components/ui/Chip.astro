@@ -1,0 +1,18 @@
+---
+/** Small rounded pill. Renders a link when `href` is given. */
+interface Props {
+  href?: string;
+  bg?: string;
+  color?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, bg, color, class: className, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+<Tag
+  href={href}
+  class:list={['inline-flex items-center rounded-full whitespace-nowrap', href && 'chip no-underline', className]}
+  style={{ background: bg, color }}
+  {...rest}
+><slot /></Tag>

@@ -1,16 +1,52 @@
 ---
----
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import QuestionMarquee from '../components/home/QuestionMarquee.astro';
+import TestGrid from '../components/home/TestGrid.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
+import ResultsFaq from '../components/home/ResultsFaq.astro';
+import { homeFaqs } from '../data/home';
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+const title = 'Free Psychology Tests, Explained | KnowPsyche';
+const description =
+  'Free psychology tests that explain your result in plain English. Reaction time, Enneagram, memory, attention and more. Private by design: your answers never leave your browser.';
+
+const site = 'https://knowpsyche.com';
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${site}/#website`,
+    name: 'KnowPsyche',
+    url: `${site}/`,
+    description,
+    publisher: { '@id': `${site}/#organization` },
+    inLanguage: 'en',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${site}/#organization`,
+    name: 'KnowPsyche',
+    url: `${site}/`,
+    logo: `${site}/favicon.svg`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: homeFaqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+<BaseLayout title={title} description={description} path="/" variant="home">
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+  <Hero />
+  <QuestionMarquee />
+  <TestGrid />
+  <HowItWorks />
+  <ResultsFaq />
+</BaseLayout>

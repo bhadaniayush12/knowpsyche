@@ -1,0 +1,52 @@
+---
+import Button from '../ui/Button.astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import MiniReaction from './MiniReaction.astro';
+
+const words = ['memory.', 'focus.', 'personality.', 'feelings.', 'mind.', 'memory.'];
+const waves = [
+  { d: 'M0 90 C 240 40, 480 130, 720 90 S 1200 40, 1440 90 S 1920 130, 2160 90 S 2640 40, 2880 90 L2880 160 L0 160 Z', h: 160, dur: 60, fill: 'var(--color-lilac)', op: 0.55 },
+  { d: 'M0 100 C 300 60, 420 140, 720 100 S 1140 60, 1440 100 S 1860 140, 2160 100 S 2580 60, 2880 100 L2880 160 L0 160 Z', h: 120, dur: 42, fill: 'var(--color-cream)', op: 0.6 },
+  { d: 'M0 110 C 200 80, 520 140, 720 110 S 1240 80, 1440 110 S 1760 140, 2160 110 S 2680 80, 2880 110 L2880 160 L0 160 Z', h: 80, dur: 30, fill: 'var(--color-mint)', op: 0.7 },
+];
+---
+<div class="relative overflow-x-clip">
+  {waves.map((w) => (
+    <svg aria-hidden="true" viewBox="0 0 2880 160" preserveAspectRatio="none" class="pointer-events-none absolute bottom-0 left-0 w-[200%]" style={{ height: `${w.h}px` }}>
+      <g class="wave" style={{ animationDuration: `${w.dur}s` }}><path d={w.d} fill={w.fill} opacity={w.op}></path></g>
+    </svg>
+  ))}
+
+  <section
+    aria-labelledby="hero-title"
+    class="relative z-[1] mx-auto flex max-w-[1200px] flex-wrap items-center gap-[clamp(32px,5vw,64px)] px-[clamp(16px,3vw,40px)] pt-[clamp(28px,5vw,64px)] pb-[clamp(36px,4vw,56px)]"
+  >
+    <div class="flex min-w-0 flex-[1_1_480px] flex-col gap-[22px]">
+      <SectionLabel>Free psychology tests · no sign-up</SectionLabel>
+      <h1 id="hero-title" class="m-0 text-[clamp(58px,8.4vw,122px)] leading-[.9] font-semibold tracking-[-.06em]">
+        Know your<br />
+        <span class="relative inline-block">
+          <span aria-hidden="true" class="-mb-[.12em] inline-block h-[1.15em] overflow-hidden align-bottom leading-[1.15]">
+            <span class="cyc serif block tracking-[-.03em] text-blue">
+              {words.map((w) => <span class="block h-[1.15em]">{w}</span>)}
+            </span>
+          </span>
+          <span class="sr-only">mind.</span>
+          <svg viewBox="0 0 420 26" preserveAspectRatio="none" aria-hidden="true" class="absolute -bottom-[.12em] left-0 h-[.24em] w-full overflow-visible"><path d="M4 16 C 90 4, 180 24, 260 12 S 380 6, 416 14" class="draw" fill="none" stroke="var(--color-coral)" stroke-width="5" stroke-linecap="round"></path></svg>
+        </span>
+      </h1>
+      <p class="mt-1.5 mb-0 max-w-[500px] text-[19px] leading-[1.6] text-ink-soft">7 short, free tests — each with a clear, plain-English explanation of what your result says about you.</p>
+      <div class="flex flex-wrap gap-3">
+        <Button href="#tests">Take a free test →</Button>
+        <Button href="#how" variant="outline">How it works</Button>
+      </div>
+      <ul class="m-0 flex list-none flex-wrap gap-x-5 gap-y-1.5 p-0 text-[14.5px] text-ink-soft">
+        <li><b class="text-teal" aria-hidden="true">✓</b> 100% free</li>
+        <li><b class="text-teal" aria-hidden="true">✓</b> No email needed</li>
+        <li><b class="text-teal" aria-hidden="true">✓</b> Answers stay on your device</li>
+      </ul>
+    </div>
+
+    <MiniReaction />
+  </section>
+</div>

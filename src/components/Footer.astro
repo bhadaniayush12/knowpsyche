@@ -1,0 +1,177 @@
+---
+import SectionLabel from './ui/SectionLabel.astro';
+import { DISCLAIMER, footerModes } from '../data/home';
+
+interface Props {
+  /** `full` = Main design (homepage). `compact` = About/Method design (inner pages). */
+  variant?: 'full' | 'compact';
+}
+const { variant = 'compact' } = Astro.props;
+
+const columns = [
+  {
+    label: '01 — Tests',
+    links: [
+      { href: '/reaction-time-test/', label: 'Reaction time' },
+      { href: '/enneagram-test/', label: 'Enneagram' },
+      { href: '/photographic-memory-test/', label: 'Photographic memory' },
+      { href: '/number-memory-test/', label: 'Number memory' },
+    ],
+  },
+  {
+    label: '02 — More tests',
+    links: [
+      { href: '/attention-span-test/', label: 'Attention span' },
+      { href: '/stroop-test/', label: 'Stroop test' },
+      { href: '/emotional-intelligence-test/', label: 'Emotional intelligence' },
+    ],
+  },
+  {
+    label: '03 — KnowPsyche',
+    links: [
+      { href: '/about/', label: 'About' },
+      { href: '/method/', label: 'How we build tests' },
+      { href: '/privacy/', label: 'Privacy & disclaimer' },
+      { href: '/contact/', label: 'Contact' },
+    ],
+  },
+];
+
+const compactLinks = [
+  { href: '/tests/', label: 'Tests' },
+  { href: '/about/', label: 'About' },
+  { href: '/method/', label: 'Method' },
+  { href: '/privacy/', label: 'Privacy' },
+  { href: '/contact/', label: 'Contact' },
+];
+const first = footerModes[0];
+---
+{variant === 'full' ? (
+  <footer class="relative overflow-hidden bg-ink text-paper">
+    <svg aria-hidden="true" viewBox="0 0 2880 120" preserveAspectRatio="none" class="pointer-events-none absolute left-0 top-0 h-[90px] w-[200%]">
+      <g class="wave footer-wave" style={`animation-duration:${first.speed}`}>
+        <path d="M0 0 L2880 0 L2880 40 C 2640 90, 2400 10, 2160 40 S 1680 90, 1440 40 S 960 -10, 720 40 S 240 90, 0 40 Z" fill="var(--color-paper)"></path>
+      </g>
+    </svg>
+    <div class="relative mx-auto flex max-w-[1200px] flex-col gap-14 px-[clamp(16px,3vw,40px)] pt-[clamp(96px,10vw,140px)]">
+      <div class="flex flex-wrap items-end justify-between gap-10">
+        <p class="m-0 min-w-0 flex-[1_1_520px] text-[clamp(56px,8.6vw,132px)] leading-[.92] font-semibold tracking-[-.06em]">
+          <span class="reveal block">Pause.</span>
+          <span class="serif breathe-word block text-lilac-bright">Breathe.</span>
+          <span class="relative mt-[.2em] block w-max text-[.5em] tracking-[-.04em] opacity-55">Overthink.<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true" class="absolute -left-[2%] top-[44%] h-[.34em] w-[104%] overflow-visible"><path d="M2 12 C 80 4, 200 18, 298 8" class="strike" fill="none" stroke="var(--color-coral)" stroke-width="5" stroke-linecap="round"></path></svg></span>
+          <span class="late block text-yellow">Reframe.</span>
+        </p>
+
+        <div class="flex min-w-0 max-w-[420px] flex-[1_1_340px] flex-col gap-4 rounded-24 border border-paper/14 bg-paper/5 p-[22px]">
+          <div class="flex items-center justify-between gap-2.5">
+            <span class="text-lg font-semibold">Before you go</span>
+            <span class="text-[13px] opacity-60">pick a mode</span>
+          </div>
+          <div role="tablist" aria-label="Mode" class="mode-tabs grid grid-cols-3 gap-1 rounded-full bg-paper/8 p-1">
+            {footerModes.map((m, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`mode-tab-${m.key}`}
+                aria-controls={`mode-panel-${m.key}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                data-speed={m.speed}
+                data-col={m.col}
+                class="mode-tab min-h-[42px] rounded-full border-0 text-[14.5px] font-semibold transition-[background,color] duration-[600ms] ease-house"
+                style={i === 0 ? { background: m.col, color: 'var(--color-ink)' } : { background: 'transparent', color: 'var(--color-paper)' }}
+              >{m.label}</button>
+            ))}
+          </div>
+          {footerModes.map((m, i) => (
+            <div
+              role="tabpanel"
+              id={`mode-panel-${m.key}`}
+              aria-labelledby={`mode-tab-${m.key}`}
+              hidden={i !== 0}
+              class="mode-panel flex min-h-24 items-center gap-4"
+            >
+              <div aria-hidden="true" class="flex size-[84px] flex-none items-center justify-center rounded-full border border-paper/18">
+                <span class:list={['block size-14 rounded-full opacity-85', m.anim]} style={{ background: m.col }}></span>
+              </div>
+              <div class="fade text-[15.5px] leading-[1.55]">
+                <b class="mb-0.5 block text-[17px]">{m.title}</b>{m.note}
+                {m.cta && <> <a href={m.cta.href} class="whitespace-nowrap font-semibold text-yellow hover:text-yellow">{m.cta.label} →</a></>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <nav aria-label="Footer" class="grid grid-cols-1 border-t border-paper/22 sm:grid-cols-3">
+        {columns.map((c, i) => (
+          <div
+            class:list={[
+              'flex flex-col gap-2.5 py-[22px]',
+              i === 0 ? 'sm:pr-5' : 'sm:px-5',
+              i < columns.length - 1 && 'border-b border-paper/12 sm:border-b-0 sm:border-r',
+            ]}
+          >
+            <SectionLabel variant="plain">{c.label}</SectionLabel>
+            {c.links.map((l) => <a href={l.href} class="text-paper no-underline hover:text-yellow">{l.label}</a>)}
+          </div>
+        ))}
+      </nav>
+
+      <div class="flex flex-col gap-3 border-t border-paper/12 pt-[18px] text-[13.5px]">
+        <p class="m-0 max-w-[760px] leading-[1.55] opacity-75">{DISCLAIMER}</p>
+        <div class="flex flex-wrap justify-between gap-3 opacity-60">
+          <span>© 2026 KnowPsyche</span>
+          <a href="#top" class="text-paper hover:text-yellow">Back to top ↑</a>
+        </div>
+      </div>
+
+      <div aria-hidden="true" class="-mb-[.12em] overflow-hidden whitespace-nowrap text-[clamp(64px,17vw,250px)] leading-[.78] font-bold tracking-[-.07em] text-transparent [-webkit-text-stroke:1px_rgba(244,240,231,.2)]">
+        know<span class="serif font-normal tracking-[-.03em]">psyche</span>
+      </div>
+    </div>
+  </footer>
+) : (
+  <footer class="border-t border-paper/15 bg-ink text-paper">
+    <div class="mx-auto flex max-w-[1200px] flex-col gap-[22px] px-[clamp(16px,3vw,40px)] py-9">
+      <div class="flex flex-wrap items-center justify-between gap-5">
+        <span class="text-[clamp(28px,3vw,40px)] font-semibold tracking-[-.04em]">Keep looking <span class="serif text-yellow">inward.</span></span>
+        <nav aria-label="Footer" class="flex flex-wrap gap-x-[22px]">
+          {compactLinks.map((l) => <a href={l.href} class="inline-flex min-h-11 items-center text-paper no-underline hover:text-yellow">{l.label}</a>)}
+        </nav>
+      </div>
+      <p class="m-0 max-w-[760px] text-[13.5px] leading-[1.55] opacity-75">{DISCLAIMER}</p>
+      <div class="mono flex flex-wrap justify-between gap-3 border-t border-paper/20 pt-4 text-[10.5px] opacity-70">
+        <span>© 2026 KnowPsyche</span><span>Educational self-reflection only · not a diagnostic tool</span>
+      </div>
+    </div>
+  </footer>
+)}
+
+<script>
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.mode-tab'));
+    const wave = document.querySelector<SVGGElement>('.footer-wave');
+    const select = (tab: HTMLButtonElement) => {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        t.style.background = on ? (t.dataset.col ?? '') : 'transparent';
+        t.style.color = on ? 'var(--color-ink)' : 'var(--color-paper)';
+        const panel = document.getElementById(t.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      }
+      if (wave && tab.dataset.speed) wave.style.animationDuration = tab.dataset.speed;
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        const next = tabs[(i + step + tabs.length) % tabs.length];
+        select(next);
+        next.focus();
+      });
+    });
+  </script>

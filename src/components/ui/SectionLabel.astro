@@ -1,0 +1,16 @@
+---
+/** Eyebrow label. `pill` = soft lilac pill (hero), `plain` = small dim label (footer columns). */
+interface Props {
+  variant?: 'pill' | 'plain';
+  class?: string;
+}
+const { variant = 'pill', class: className } = Astro.props;
+---
+<span
+  class:list={[
+    variant === 'pill'
+      ? 'self-start rounded-full bg-lilac px-3 py-[7px] text-sm font-medium text-ink-soft'
+      : 'mb-1 text-[13px] font-medium opacity-50',
+    className,
+  ]}
+><slot /></span>

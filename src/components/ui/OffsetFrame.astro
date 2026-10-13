@@ -1,0 +1,28 @@
+---
+/**
+ * Slightly rotated panel with an optional strip of "tape" on top.
+ * Used for the step cards and the example result card on the homepage.
+ */
+interface Props {
+  rotate?: number;
+  tape?: { side: 'left' | 'right'; offset: number; color: string; rotate: number; opacity?: number };
+  class?: string;
+  style?: string;
+}
+const { rotate = 0, tape, class: className, style } = Astro.props;
+---
+<div class:list={['relative', className]} style={`transform:rotate(${rotate}deg);${style ?? ''}`}>
+  {tape && (
+    <span
+      aria-hidden="true"
+      class="absolute -top-[11px] h-[22px] w-[70px] rounded-[3px]"
+      style={{
+        [tape.side]: `${tape.offset}px`,
+        background: tape.color,
+        opacity: tape.opacity ?? 1,
+        transform: `rotate(${tape.rotate}deg)`,
+      }}
+    ></span>
+  )}
+  <slot />
+</div>

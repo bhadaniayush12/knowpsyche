@@ -1,0 +1,93 @@
+---
+import Button from './ui/Button.astro';
+
+interface Props {
+  /** `home` = Main design (no rule, 1200px). `inner` = About/Method design (bottom rule, 1320px). */
+  variant?: 'home' | 'inner';
+}
+const { variant = 'inner' } = Astro.props;
+
+const links = [
+  { href: '/tests/', label: 'Tests' },
+  { href: '/about/', label: 'About' },
+  { href: '/method/', label: 'Method' },
+  { href: '/contact/', label: 'Contact' },
+];
+const current = Astro.url.pathname;
+const isCurrent = (href: string) => current === href || current.startsWith(href);
+---
+<header
+  class:list={[
+    'relative mx-auto flex items-center justify-between gap-4 px-[clamp(16px,3vw,40px)] py-[18px]',
+    variant === 'home' ? 'max-w-[1200px]' : 'max-w-[1320px] border-b border-line-inner',
+  ]}
+>
+  <a href="/" aria-label="KnowPsyche home" class="flex min-h-11 items-center gap-2.5 no-underline hover:text-ink">
+    <span
+      aria-hidden="true"
+      class="inline-flex size-9 items-center justify-center rounded-[11px] bg-ink pb-[3px] font-serif text-[27px] leading-none text-paper"
+    >ψ</span>
+    <span class="text-[22px] font-semibold tracking-[-.03em]">know<span class="serif text-[25px] text-blue">psyche</span></span>
+  </a>
+
+  <nav aria-label="Main" class="hidden items-center gap-[clamp(14px,2.4vw,30px)] text-[15.5px] md:flex">
+    {links.map((l) => (
+      <a
+        href={l.href}
+        aria-current={isCurrent(l.href) ? 'page' : undefined}
+        class:list={['inline-flex min-h-11 items-center', isCurrent(l.href) ? 'underline underline-offset-[6px]' : 'no-underline']}
+      >{l.label}</a>
+    ))}
+    <Button href="/#tests" size="md">Take a free test</Button>
+  </nav>
+
+  <button
+    type="button"
+    class="menu-toggle inline-flex min-h-11 items-center gap-2 rounded-10 border-[1.5px] border-ink bg-transparent px-3.5 text-[15px] font-medium text-ink md:hidden"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+  >
+    <span class="menu-label">Menu</span>
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18"><path class="menu-icon" d="M2 5h14M2 9h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+  </button>
+
+  <nav
+    id="mobile-menu"
+    aria-label="Main"
+    class="mobile-menu absolute inset-x-[clamp(16px,3vw,40px)] top-full z-20 hidden flex-col rounded-18 border border-line-card bg-white p-2 shadow-lift md:hidden"
+  >
+    {links.map((l) => (
+      <a
+        href={l.href}
+        aria-current={isCurrent(l.href) ? 'page' : undefined}
+        class="flex min-h-12 items-center rounded-12 px-4 text-[17px] font-medium no-underline hover:bg-paper"
+      >{l.label}</a>
+    ))}
+    <a href="/#tests" class="mt-1 flex min-h-12 items-center rounded-12 bg-ink px-4 text-[17px] font-semibold text-paper no-underline hover:text-paper">Take a free test →</a>
+  </nav>
+  <noscript><style>@media (max-width:47.99rem){header{flex-wrap:wrap}.menu-toggle{display:none!important}.mobile-menu{position:static!important;display:flex!important;width:100%;box-shadow:none!important}}</style></noscript>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (toggle && menu) {
+    const label = toggle.querySelector('.menu-label');
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.classList.toggle('hidden', !open);
+      menu.classList.toggle('flex', open);
+      if (label) label.textContent = open ? 'Close' : 'Menu';
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>

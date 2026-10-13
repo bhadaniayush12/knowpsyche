@@ -1,0 +1,47 @@
+---
+import Card from '../ui/Card.astro';
+import TestGlyph from './TestGlyph.astro';
+import { homeTests, testFilters } from '../../data/home';
+---
+<section id="tests" aria-labelledby="tests-title" class="wrap scroll-mt-4 pt-[clamp(40px,6vw,80px)] pb-[clamp(56px,7vw,96px)]">
+  <div class="reveal mb-[30px] flex flex-wrap items-end justify-between gap-6">
+    <div class="flex flex-wrap items-end gap-[18px]">
+      <span class="serif outline-text text-[clamp(96px,13vw,180px)] leading-[.75] tracking-[-.04em]" aria-hidden="true">07</span>
+      <div class="pb-1.5">
+        <h2 id="tests-title" class="m-0 text-[clamp(34px,4vw,54px)] leading-none font-semibold tracking-[-.045em]">
+          <span class="sr-only">07 </span>free tests.<br /><span class="serif text-violet">Pick one.</span>
+        </h2>
+        <p class="mt-2.5 mb-0 max-w-[420px] text-[16.5px] leading-[1.55] text-ink-soft">1 to 8 minutes each. Every result explained in plain English.</p>
+      </div>
+    </div>
+    <div role="group" aria-label="Filter tests" class="test-filters flex flex-wrap gap-1.5">
+      {testFilters.map((f, i) => (
+        <button
+          type="button"
+          data-filter={f.key}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+          class="min-h-11 rounded-full border border-line-pill bg-white px-4 py-2.5 text-[14.5px] font-medium text-ink aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper"
+        >{f.label}</button>
+      ))}
+    </div>
+  </div>
+  <div class="test-grid grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
+    {homeTests.map((t) => (
+      <Card test={t} class="reveal">
+        <TestGlyph glyph={t.glyph} />
+      </Card>
+    ))}
+  </div>
+</section>
+
+<script>
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.test-filters [data-filter]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.test-grid [data-cat]'));
+  for (const btn of buttons) {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter;
+      for (const b of buttons) b.setAttribute('aria-pressed', String(b === btn));
+      for (const c of cards) c.hidden = key !== 'all' && c.dataset.cat !== key;
+    });
+  }
+</script>

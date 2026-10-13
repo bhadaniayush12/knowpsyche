@@ -1,0 +1,49 @@
+---
+import OffsetFrame from '../ui/OffsetFrame.astro';
+---
+<section id="how" aria-labelledby="how-title" class="scroll-mt-4 border-y border-line-soft bg-white">
+  <div class="wrap relative py-[clamp(56px,7vw,100px)]">
+    <h2 id="how-title" class="reveal m-0 mb-2 text-[clamp(40px,5.4vw,76px)] leading-[.95] font-semibold tracking-[-.05em]">Three steps.<br /><span class="serif text-blue">Zero homework.</span></h2>
+    <p class="reveal mt-0 mb-11 text-[17px] text-ink-soft">From curious to "huh, that's so me" in about five minutes.</p>
+    <div class="relative">
+      <svg viewBox="0 0 1120 120" preserveAspectRatio="none" aria-hidden="true" class="pointer-events-none absolute top-[30px] left-0 hidden h-[120px] w-full md:block"><path d="M60 70 C 220 -10, 330 140, 560 60 S 900 -20, 1080 70" class="trail" fill="none" stroke="var(--color-trail)" stroke-width="2.5" stroke-dasharray="8 10" stroke-linecap="round" style="stroke-dasharray:8 10"></path></svg>
+      <ol class="relative m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[22px] p-0">
+        <li class="reveal">
+          <OffsetFrame rotate={-1.2} tape={{ side: 'left', offset: 36, color: 'var(--color-yellow)', rotate: -4, opacity: 0.85 }} class="flex h-full flex-col gap-3 rounded-22 bg-paper p-[26px]">
+            <span class="serif outline-text text-[88px] leading-[.8]" aria-hidden="true">1</span>
+            <div class="flex h-[42px] items-center gap-1.5" aria-hidden="true">
+              <span class="rotate-[-4deg] rounded-full bg-lilac px-3 py-[7px] text-[13px] font-semibold">Memory</span>
+              <span class="rounded-full bg-ink px-3 py-[7px] text-[13px] font-semibold text-paper">Focus</span>
+              <span class="rotate-[5deg] rounded-full bg-tint-red px-3 py-[7px] text-[13px] font-semibold">Feelings</span>
+            </div>
+            <h3 class="m-0 text-2xl tracking-[-.03em]">Pick what you're curious about</h3>
+            <p class="m-0 text-base leading-[1.6] text-ink-soft">Memory, focus, personality or emotions. No wrong place to start.</p>
+          </OffsetFrame>
+        </li>
+        <li class="reveal">
+          <OffsetFrame rotate={0.8} tape={{ side: 'right', offset: 40, color: 'var(--color-lilac)', rotate: 5 }} class="flex h-full flex-col gap-3 rounded-22 bg-paper p-[26px]">
+            <span class="serif outline-text text-[88px] leading-[.8]" aria-hidden="true">2</span>
+            <div class="flex h-[42px] items-center gap-2.5">
+              <svg width="40" height="40" viewBox="0 0 40 40" class="spin" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--color-line)" stroke-width="5"></circle><circle cx="20" cy="20" r="16" fill="none" stroke="var(--color-teal)" stroke-width="5" stroke-dasharray="70 101" stroke-linecap="round"></circle></svg>
+              <span class="text-sm text-ink-soft">1–8 minutes · no account</span>
+            </div>
+            <h3 class="m-0 text-2xl tracking-[-.03em]">Play a game or answer honestly</h3>
+            <p class="m-0 text-base leading-[1.6] text-ink-soft">Quick challenges or simple questions. Nothing to install, nothing to sign.</p>
+          </OffsetFrame>
+        </li>
+        <li class="reveal">
+          <OffsetFrame rotate={-0.6} tape={{ side: 'left', offset: 44, color: 'var(--color-yellow)', rotate: 3, opacity: 0.85 }} class="flex h-full flex-col gap-3 rounded-22 bg-ink p-[26px] text-paper">
+            <span class="serif text-[88px] leading-[.8] text-transparent [-webkit-text-stroke:1.5px_var(--color-yellow)]" aria-hidden="true">3</span>
+            <div class="flex h-[42px] items-center" aria-hidden="true">
+              <div class="relative h-2.5 w-full rounded-full bg-[linear-gradient(90deg,var(--color-blue)_0_25%,#6d6789_25%_50%,#4a4566_50%_100%)]">
+                <span class="slide absolute -top-1.5 h-[22px] w-1 rounded-sm bg-yellow"></span>
+              </div>
+            </div>
+            <h3 class="m-0 text-2xl tracking-[-.03em]">Get it, in plain words</h3>
+            <p class="m-0 text-base leading-[1.6] opacity-85">What your result means, what can change it, and what to try next.</p>
+          </OffsetFrame>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>

@@ -1,1 +1,225 @@
 @import "tailwindcss";
+
+/* Tokens are taken from docs/design/*.dc.html (DESIGN.md has no token values). */
+@theme {
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-mono: "DM Mono", ui-monospace, monospace;
+
+  /* Core */
+  --color-ink: #242238;
+  --color-paper: #F4F0E7;
+  --color-white: #FFFFFF;
+  --color-ink-soft: #3d3952;
+  --color-muted: #5b5670;
+
+  /* Accents */
+  --color-blue: #4E61CB;
+  --color-coral: #D87568;
+  --color-teal: #3f8f82;
+  --color-teal-dark: #3f7a70;
+  --color-teal-deep: #2f6f63;
+  --color-violet: #9678BE;
+  --color-yellow: #EDCA69;
+  --color-ochre: #B07A2A;
+  --color-red: #C9584B;
+  --color-lilac-bright: #B7A1FF;
+  --color-mint-go: #8FD0C2;
+  --color-wait-red: #8E3B32;
+
+  /* Tints */
+  --color-lilac: #E5DFEF;
+  --color-cream: #FBEED0;
+  --color-mint: #E8F3F0;
+  --color-tint-violet: #F3EFF9;
+  --color-tint-ochre: #FBF4E7;
+  --color-tint-teal: #EEF6F3;
+  --color-tint-blue: #EEF0FB;
+  --color-tint-red: #FBEFED;
+
+  /* Lines */
+  --color-line: #E1DACB;
+  --color-line-soft: #E6E0D4;
+  --color-line-row: #EEE8DC;
+  --color-line-card: #DDD6E8;
+  --color-line-pill: #D6CFC2;
+  --color-line-inner: #BDB6C8;
+  --color-trail: #C9C1DA;
+
+  --ease-house: cubic-bezier(.45, .05, .25, 1);
+
+  --shadow-card: 0 18px 36px rgba(36, 34, 56, .14);
+  --shadow-lift: 0 30px 60px rgba(36, 34, 56, .12);
+  --shadow-panel: 0 20px 44px rgba(36, 34, 56, .12);
+  --shadow-tile: 0 10px 20px rgba(36, 34, 56, .15);
+
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-14: 14px;
+  --radius-18: 18px;
+  --radius-20: 20px;
+  --radius-22: 22px;
+  --radius-24: 24px;
+
+  --breakpoint-xs: 400px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: var(--color-ink);
+  }
+  a:hover {
+    color: var(--color-blue);
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+  details summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer components {
+  .serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -.01em;
+  }
+  .mono {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: .09em;
+  }
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-ink);
+  }
+  .wrap {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: clamp(16px, 3vw, 40px);
+  }
+}
+
+/* ---------- Motion (ported from Main.dc.html) ---------- */
+.card {
+  transition: transform .7s var(--ease-house), box-shadow .7s var(--ease-house);
+}
+.card:hover {
+  transform: translateY(-6px) rotate(-.4deg);
+  box-shadow: var(--shadow-card);
+}
+.card:hover .glyph {
+  transform: scale(1.08) rotate(-3deg);
+}
+.glyph {
+  transition: transform .8s var(--ease-house);
+  transform-origin: left center;
+}
+.chip {
+  transition: transform .5s var(--ease-house), background .5s;
+}
+.chip:hover {
+  transform: translateY(-2px);
+}
+details[open] .plus {
+  transform: rotate(45deg);
+}
+.plus {
+  display: inline-block;
+  transition: transform .25s;
+}
+
+.cyc { animation: cyc 12s cubic-bezier(.65, 0, .35, 1) infinite, morph 12s linear infinite; }
+.draw { stroke-dasharray: 420; stroke-dashoffset: 420; animation: draw 1.4s .4s cubic-bezier(.6, 0, .2, 1) forwards; }
+.marq { animation: marq 46s linear infinite; }
+.marq-wrap:hover .marq,
+.marq-wrap:focus-within .marq { animation-play-state: paused; }
+.float { animation: float 6s ease-in-out infinite; }
+.spin { animation: spin 30s linear infinite; }
+.bob { animation: bob 1.8s ease-in-out infinite; }
+.pop { animation: pop .6s var(--ease-house); }
+.pulse { animation: pulse 2.6s var(--ease-house) 2; }
+.pulse-loop { animation: pulse 2.6s var(--ease-house) infinite; }
+.fill { animation: fill 1.6s var(--ease-house) both; }
+.wave { animation: wave linear infinite; }
+.breathe { animation: breathe 10s var(--ease-house) infinite; }
+.breathe-word { display: inline-block; animation: bword 10s var(--ease-house) infinite; transform-origin: left center; }
+.strike { stroke-dasharray: 400; stroke-dashoffset: 400; animation: draw 1.6s .8s var(--ease-house) forwards; }
+.late { opacity: 0; animation: fade 1.2s 1.9s var(--ease-house) forwards; }
+.fade { animation: fade .45s ease both; }
+.slide { animation: slide 1.2s .3s cubic-bezier(.2, .8, .2, 1) both; }
+
+@keyframes cyc {
+  0%, 16% { transform: translateY(0); }
+  20%, 36% { transform: translateY(-1.15em); }
+  40%, 56% { transform: translateY(-2.3em); }
+  60%, 76% { transform: translateY(-3.45em); }
+  80%, 96% { transform: translateY(-4.6em); }
+  100% { transform: translateY(-5.75em); }
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes morph {
+  0%, 16%, 20%, 36%, 40%, 56%, 60%, 76%, 80%, 96%, 100% { filter: blur(0); }
+  18%, 38%, 58%, 78%, 98% { filter: blur(6px); }
+}
+@keyframes pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.07); } }
+@keyframes fill { from { width: 0; } }
+@keyframes wave { to { transform: translateX(-50%); } }
+@keyframes breathe { 0%, 100% { transform: scale(.62); } 40% { transform: scale(1); } }
+@keyframes bword { 0%, 100% { letter-spacing: -.03em; } 40% { letter-spacing: .02em; } }
+@keyframes marq { to { transform: translateX(-50%); } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-10px) rotate(4deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+@keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes slide { from { left: 0%; } to { left: 36.75%; } }
+@keyframes rise { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: none; } }
+@keyframes path { from { stroke-dashoffset: 1200; } to { stroke-dashoffset: 0; } }
+
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise var(--ease-house) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+  .trail {
+    stroke-dasharray: 1200;
+    animation: path linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 55%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .draw, .strike { stroke-dashoffset: 0; }
+  .late { opacity: 1; }
+  .reveal { opacity: 1; transform: none; }
+}

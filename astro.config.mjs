@@ -7,6 +7,10 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://knowpsyche.com',
+  trailingSlash: 'always',
+  output: 'static',
+
   vite: {
     plugins: [tailwindcss()]
   },

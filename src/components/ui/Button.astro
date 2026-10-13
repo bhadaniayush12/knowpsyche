@@ -1,0 +1,21 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'outline';
+  size?: 'md' | 'lg';
+  class?: string;
+}
+const { href, variant = 'primary', size = 'lg', class: className } = Astro.props;
+---
+<a
+  href={href}
+  class:list={[
+    'inline-flex items-center rounded-12 no-underline transition-colors duration-300 ease-house',
+    size === 'lg' ? 'min-h-[54px] px-[22px] py-4 text-[16.5px]' : 'min-h-11 rounded-10 px-4 py-[11px] text-[15.5px]',
+    variant === 'primary'
+      ? 'bg-ink font-semibold text-paper hover:bg-blue hover:text-paper'
+      : 'border-[1.5px] border-ink font-medium text-ink hover:border-blue',
+    variant === 'primary' && size === 'md' && 'font-normal',
+    className,
+  ]}
+><slot /></a>
