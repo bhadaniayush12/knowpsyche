@@ -74,7 +74,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       <!-- Active Stimulus view -->
       <div data-as-view="active" class="flex flex-col items-center justify-center gap-4" hidden>
         <div class="as-circle size-[clamp(110px,22vw,160px)] rounded-full transition-transform duration-75"></div>
-        <p class="as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium" aria-live="polite"></p>
+        <p class="as-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium" aria-live="polite"></p>
       </div>
 
       <!-- Practice complete view -->
@@ -297,6 +297,11 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     trialList = generateAttentionTrials();
     trialIndex = 0;
     // Practice answers are thrown away here: only the 80 main circles are scored.
+    // The result's space is taken now, invisibly, while this click or key explains why the page grew.
+    // The run can end with no input (last stimulus not answered), and showing it then would make
+    // everything below jump.
+    resultEl.classList.add('invisible');
+    resultEl.hidden = false;
     trialResults = [];
     counter.textContent = ui.circleCount(1, TOTAL_TRIALS);
     note.textContent = ui.mainNote;
@@ -308,7 +313,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
   function setFeedback(text: string, good: boolean) {
     feedbackEl.textContent = text;
-    feedbackEl.className = `as-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
+    feedbackEl.className = `as-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
   }
 
   // Gap (0.8–1.6 s, blank) → circle for exactly 0.5 s → next gap. Every step is checked per frame
@@ -389,6 +394,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   function renderResults(scores: AttentionScores) {
     const band = getBand(scores.overall);
     resultEl.hidden = false;
+    resultEl.classList.remove('invisible');
 
     // Headline
     $('[data-r=eyebrow]', resultEl).textContent = resultUi.eyebrow;

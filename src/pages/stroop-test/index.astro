@@ -58,7 +58,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     <!-- Word display arena -->
     <div
-      class="st-arena relative mt-4 flex min-h-[220px] sm:min-h-[260px] w-full flex-col items-center justify-center rounded-[20px] border border-line-inner/40 bg-card p-6 text-center"
+      class="st-arena relative mt-4 flex min-h-[290px] sm:min-h-[260px] w-full flex-col items-center justify-center rounded-[20px] border border-line-inner/40 bg-card p-6 text-center"
     >
       <!-- Idle view -->
       <div data-st-view="idle" class="flex flex-col items-center gap-3">
@@ -79,7 +79,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         <div
           class="st-word text-[clamp(54px,11vw,96px)] font-bold tracking-tight leading-none select-none transition-transform duration-75"
         ></div>
-        <p class="st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium" aria-live="polite"></p>
+        <p class="st-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium" aria-live="polite"></p>
       </div>
 
       <!-- Practice complete view -->
@@ -346,6 +346,11 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     trialList = generateStroopTrials();
     trialIndex = 0;
     // Practice answers are thrown away here: only the 40 main words are scored.
+    // The result's space is taken now, invisibly, while this click or key explains why the page grew.
+    // The run can end with no input (last stimulus not answered), and showing it then would make
+    // everything below jump.
+    resultEl.classList.add('invisible');
+    resultEl.hidden = false;
     responses = [];
     counter.textContent = ui.wordCount(1, TOTAL_TRIALS);
     note.textContent = ui.mainNote;
@@ -356,7 +361,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
   function setFeedback(text: string, good: boolean) {
     feedbackEl.textContent = text;
-    feedbackEl.className = `st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
+    feedbackEl.className = `st-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
   }
 
   // 0.4 s blank gap → word until answered (max 3 s, then missed) → next gap. Every step is checked
@@ -453,6 +458,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   function renderResults(scores: StroopScores) {
     const band = getBand(scores.stroopEffectMs);
     resultEl.hidden = false;
+    resultEl.classList.remove('invisible');
 
     // Headline
     $('[data-r=eyebrow]', resultEl).textContent = resultUi.eyebrow;
@@ -532,6 +538,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     const color = btn.dataset.color as StroopColor;
     btn.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
+      // Stops the button taking focus after the answer; on the last word focus has moved to the result.
+      e.preventDefault();
       handleAnswer(color, e.timeStamp);
     });
     btn.addEventListener('click', (e) => {
