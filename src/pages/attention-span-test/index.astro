@@ -66,7 +66,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
           type="button"
           class="as-start-practice mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
         >
-          {ui.ready}
+          <span class="pointer-swap"><span class="on-mouse">{ui.ready}</span><span class="on-touch">{ui.readyTouch}</span></span>
         </button>
       </div>
 
@@ -200,7 +200,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     type TrialResult,
   } from '../../lib/tests/attention-span';
   import { createShareCard } from '../../lib/share-card';
-  import { $, $$, bindCopy, guardLeave, onScreen, runFor, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
 
@@ -217,6 +217,9 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   const feedbackEl = $('.as-feedback');
   const resultEl = $('[data-result]');
   const isCardOnScreen = onScreen(card);
+  // "Tap" on touch screens, "click" with a mouse.
+  const touch = window.matchMedia('(pointer: coarse)').matches;
+  const scrollBehavior = (): ScrollBehavior => (prefersReducedMotion() ? 'auto' : 'smooth');
 
   const views = {
     idle: $('[data-as-view="idle"]', arena),
@@ -345,7 +348,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
           trialResults.push({ color, clicked: false });
           if (mode === 'practice') {
             if (color === 'red') setFeedback(ui.niceIgnored, true);
-            else setFeedback(ui.oopsGreen, false);
+            else setFeedback(touch ? ui.oopsGreenTouch : ui.oopsGreen, false);
           }
         }
         trialIndex++;
@@ -385,9 +388,10 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     resultEl.hidden = false;
 
     // Headline
+    $('[data-r=eyebrow]', resultEl).textContent = 'Your result · Attention span';
     const headline = $('[data-r=headline]', resultEl);
     headline.textContent = `${band.badge} · ${scores.overall} / 100`;
-    headline.focus();
+    headline.focus({ preventScroll: true });
 
     // Scores
     $('[data-r=overall]', resultEl).textContent = String(scores.overall);
@@ -449,7 +453,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       filename: 'attention-span-knowpsyche',
     });
 
-    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    resultEl.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   }
 
   function restartAll() {
@@ -497,7 +501,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   // Top "Start the test" button in the intro header
   const introStartBtn = $('[data-test-start]');
   introStartBtn?.addEventListener('click', () => {
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     if (mode === 'idle') {
       startPractice();
     } else if (mode === 'practice-done') {
@@ -509,7 +513,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   $$('[data-try-again]').forEach((btn) => {
     btn.addEventListener('click', () => {
       restartAll();
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     });
   });
 

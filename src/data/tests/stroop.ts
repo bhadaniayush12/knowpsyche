@@ -22,6 +22,8 @@ export const page = {
     'Name the ink colour, not the word. A 1-minute version of a famous 1935 experiment. See how much clashing words slow you down — free, instant.',
   h1: 'Stroop test',
   intro: 'A colour word will appear in coloured ink. Click the button for the INK colour — ignore what the word says. Be fast, but accurate.',
+  // Drafted: touch screens get the same line with "Tap" (shared rule).
+  introTouch: 'A colour word will appear in coloured ink. Tap the button for the INK colour — ignore what the word says. Be fast, but accurate.',
   crumb: 'Stroop test',
   // Drafted.
   eyebrow: 'Test / 06 · Focus · 1 min',
@@ -37,7 +39,8 @@ export const ui = {
   practiceWrong: 'Oops — pick the ink colour, not what the word says.',
   practiceMissed: 'Too slow — answer within 3 seconds.',
   // Drafted UI lines.
-  ready: 'Click or press a key to start practice.',
+  ready: 'Click or press Space to start practice.',
+  readyTouch: 'Tap to start practice.',
   practiceLabel: 'Practice round',
   practiceNote: '4 rounds with feedback · not scored',
   practiceFinished: 'Practice finished. Ready for the real test?',

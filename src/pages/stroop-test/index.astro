@@ -24,6 +24,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   eyebrow={page.eyebrow}
   h1={page.h1}
   intro={page.intro}
+  introTouch={page.introTouch}
   metaLine={page.metaLine}
   faqs={faqs}
   sources={sources}
@@ -38,7 +39,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       <p class="m-0 max-w-[560px] leading-relaxed">
         {ui.colourVisionNote}
       </p>
-      <a href="/attention-span-test/" class="mono text-[11px] font-semibold text-blue hover:underline">
+      <a href="/attention-span-test/" class="mono inline-flex min-h-11 items-center text-[11px] font-semibold text-blue hover:underline">
         {ui.skipNote}
       </a>
     </div>
@@ -69,7 +70,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
           type="button"
           class="st-start-practice mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
         >
-          {ui.ready}
+          <span class="pointer-swap"><span class="on-mouse">{ui.ready}</span><span class="on-touch">{ui.readyTouch}</span></span>
         </button>
       </div>
 
@@ -248,7 +249,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     type StroopTrial,
   } from '../../lib/tests/stroop';
   import { createShareCard } from '../../lib/share-card';
-  import { $, $$, bindCopy, guardLeave, onScreen, runFor, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
 
@@ -269,6 +270,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   const choiceBtns = $$<HTMLButtonElement>('.st-btn');
   const resultEl = $('[data-result]');
   const isCardOnScreen = onScreen(card);
+  const scrollBehavior = (): ScrollBehavior => (prefersReducedMotion() ? 'auto' : 'smooth');
 
   const views = {
     idle: $('[data-st-view="idle"]', arena),
@@ -451,9 +453,10 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     resultEl.hidden = false;
 
     // Headline
+    $('[data-r=eyebrow]', resultEl).textContent = 'Your result · Stroop test';
     const headline = $('[data-r=headline]', resultEl);
     headline.textContent = `${band.badge} · ${scores.stroopEffectMs} ms`;
-    headline.focus();
+    headline.focus({ preventScroll: true });
 
     // Scores
     $('[data-r=effect]', resultEl).textContent = String(scores.stroopEffectMs);
@@ -510,7 +513,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       filename: 'stroop-test-knowpsyche',
     });
 
-    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    resultEl.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   }
 
   function restartAll() {
@@ -548,7 +551,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   // Top "Start the test" button in the intro header
   const introStartBtn = $('[data-test-start]');
   introStartBtn?.addEventListener('click', () => {
-    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     if (mode === 'idle') {
       startPractice();
     } else if (mode === 'practice-done') {
@@ -560,7 +563,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   $$('[data-try-again]').forEach((btn) => {
     btn.addEventListener('click', () => {
       restartAll();
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     });
   });
 

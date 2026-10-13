@@ -248,6 +248,16 @@ details[open] .plus {
   }
 }
 
+/* "Click" with a mouse, "Tap" on touch screens. Both lines share one grid cell and the unused one is
+   hidden with visibility, so the box keeps the size of the longer one and nothing shifts. */
+.pointer-swap { display: inline-grid; }
+.pointer-swap > * { grid-area: 1 / 1; }
+.pointer-swap > .on-touch { visibility: hidden; }
+@media (pointer: coarse) {
+  .pointer-swap > .on-mouse { visibility: hidden; }
+  .pointer-swap > .on-touch { visibility: visible; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

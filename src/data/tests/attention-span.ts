@@ -37,6 +37,8 @@ export const ui = {
   // Drafted practice feedback for remaining practice outcomes.
   niceIgnored: 'Nice — you held back!',
   oopsGreen: 'Missed — click on green',
+  // Drafted: touch version of the line above.
+  oopsGreenTouch: 'Missed — tap on green',
   // Drafted UI lines.
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',
