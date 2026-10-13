@@ -4,6 +4,7 @@
 // - <img> without an alt attribute
 // - pages with zero or more than one <h1>
 // - duplicate <title> and duplicate meta descriptions
+// - a <title> over 60 characters or a meta description over 155 (Google cuts longer ones)
 // - missing canonical (noindex pages are skipped)
 // - JSON-LD that isn't valid JSON
 // - og:image and twitter:image missing, or the og:image not a 1200×630 PNG in dist/
@@ -15,6 +16,8 @@ import { join, relative, sep } from 'node:path';
 
 const DIST = new URL('../dist/', import.meta.url).pathname;
 const SITE = 'https://knowpsyche.com';
+const MAX_TITLE = 60;
+const MAX_DESC = 155;
 
 if (!existsSync(DIST)) {
   console.error('No dist/ folder. Run `npm run build` first.');
@@ -51,7 +54,8 @@ const attr = (tag, name) => {
   return m ? (m[1] ?? m[2] ?? m[3]) : undefined;
 };
 
-const decode = (s) => s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+const decode = (s) =>
+  s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
 
 const pages = new Map();
 for (const file of htmlFiles) {
@@ -116,12 +120,20 @@ for (const [file, { html, url }] of pages) {
   // Title and description.
   const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim();
   if (!title) report(url, 'missing <title>');
-  else titles.set(title, [...(titles.get(title) ?? []), url]);
+  else {
+    titles.set(title, [...(titles.get(title) ?? []), url]);
+    const n = decode(title).length;
+    if (n > MAX_TITLE) report(url, `title is ${n} characters (max ${MAX_TITLE})`);
+  }
 
   const descTag = html.match(/<meta\b[^>]*name\s*=\s*"description"[^>]*>/i)?.[0];
   const desc = descTag && attr(descTag, 'content');
   if (!desc) report(url, 'missing meta description');
-  else descriptions.set(desc, [...(descriptions.get(desc) ?? []), url]);
+  else {
+    descriptions.set(desc, [...(descriptions.get(desc) ?? []), url]);
+    const n = decode(desc).length;
+    if (n > MAX_DESC) report(url, `meta description is ${n} characters (max ${MAX_DESC})`);
+  }
 
   // Canonical, unless the page asks not to be indexed.
   const noindex = /<meta\b[^>]*name\s*=\s*"robots"[^>]*content\s*=\s*"[^"]*noindex/i.test(html);
