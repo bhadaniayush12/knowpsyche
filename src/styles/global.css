@@ -155,7 +155,7 @@ details[open] .plus {
 .draw { stroke-dasharray: 420; stroke-dashoffset: 420; animation: draw 1.4s .4s cubic-bezier(.6, 0, .2, 1) forwards; }
 .marq { animation: marq 26s linear infinite; }
 .marq-wrap:hover .marq,
-.marq-wrap:focus-within .marq { animation-play-state: paused; }
+.marq-wrap:has(a:focus-visible) .marq { animation-play-state: paused; }
 .float { animation: float 6s ease-in-out infinite; }
 .spin { animation: spin 30s linear infinite; }
 .bob { animation: bob 1.8s ease-in-out infinite; }
@@ -170,6 +170,30 @@ details[open] .plus {
 .late { opacity: 0; animation: fade 1.2s 1.9s var(--ease-house) forwards; }
 .fade { animation: fade .45s ease both; }
 .slide { animation: slide 1.2s .3s cubic-bezier(.2, .8, .2, 1) both; }
+
+/* Letter-spacing animation re-lays out text; containing it keeps that work inside this one word. */
+.breathe-word { contain: layout paint; }
+
+/* ---------- Motion control ----------
+   Loops = decorative motion that never ends. The "Pause motion" button (html[data-motion=paused])
+   freezes these. One-shots (draw, strike, late, slide) are left alone by the button so nothing
+   gets stuck half-drawn or invisible.
+   Zones: sections marked [data-motion-zone] pause everything while off screen, so loops don't
+   burn battery out of sight and one-shots wait until someone can actually see them.
+   Only applies when JS has run (html.js), so without JS everything plays as before. */
+[data-motion="paused"] :is(.wave, .cyc, .marq, .float, .spin, .bob, .breathe, .breathe-word, .pulse-loop),
+.marq-wrap[data-held] .marq {
+  animation-play-state: paused;
+}
+.js [data-motion-zone]:not([data-onscreen]) :is(.wave, .cyc, .marq, .float, .spin, .bob, .breathe, .breathe-word, .pulse-loop, .draw, .strike, .late, .slide) {
+  animation-play-state: paused;
+}
+
+@media print {
+  .reveal, .late { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .draw, .strike { animation: none !important; stroke-dashoffset: 0; }
+  .motion-toggle { display: none !important; }
+}
 
 @keyframes cyc {
   0%, 16% { transform: translateY(0); }
@@ -222,4 +246,6 @@ details[open] .plus {
   .draw, .strike { stroke-dashoffset: 0; }
   .late { opacity: 1; }
   .reveal { opacity: 1; transform: none; }
+  /* Nothing moves, so there's nothing to pause. */
+  .motion-toggle { display: none !important; }
 }

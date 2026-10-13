@@ -33,6 +33,7 @@ const image = ogImage ? new URL(ogImage, site).href : undefined;
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -69,5 +70,18 @@ const image = ogImage ? new URL(ogImage, site).href : undefined;
       <slot />
     </main>
     <Footer variant={variant === 'home' ? 'full' : 'compact'} />
+
+    <script>
+      // Pause animations in [data-motion-zone] sections while they're off screen (see global.css).
+      const zones = document.querySelectorAll<HTMLElement>('[data-motion-zone]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) (e.target as HTMLElement).toggleAttribute('data-onscreen', e.isIntersecting);
+        });
+        zones.forEach((z) => io.observe(z));
+      } else {
+        zones.forEach((z) => z.setAttribute('data-onscreen', ''));
+      }
+    </script>
   </body>
 </html>

@@ -7,18 +7,80 @@ const chipClass = 'border border-line px-4 py-2.5 text-[15.5px] font-medium text
 // one group (-50%), and each group ends with the same padding as the gap, so the join is invisible.
 const groups = [false, true];
 ---
-<div class="marq-wrap flex flex-col gap-2 border-y border-line bg-paper py-4 sm:flex-row sm:items-center sm:gap-0">
-  <span class="serif flex-none px-4 text-[22px] text-muted sm:pr-5 sm:pl-[clamp(16px,3vw,40px)]">People come here asking —</span>
-  <div class="min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_40px,#000_calc(100%-40px),transparent)]">
-    <div class="marq flex w-max">
-      {groups.map((copy) => (
-        <div class="flex items-center gap-3 pr-3" aria-hidden={copy ? 'true' : undefined}>
-          {marqueeQuestions.map((q) => (
-            <Chip href="#tests" bg={q.bg} class={chipClass} tabindex={copy ? '-1' : undefined}>{q.t}</Chip>
-          ))}
-        </div>
-      ))}
+<div data-motion-zone>
+  <div class="marq-wrap flex flex-wrap items-center gap-y-2 border-y border-line bg-paper py-4 sm:flex-nowrap">
+    <span class="serif order-1 min-w-0 flex-[1_1_auto] px-4 sm:flex-none text-[22px] text-muted sm:pr-5 sm:pl-[clamp(16px,3vw,40px)]">People come here asking —</span>
+
+    <div class="order-3 min-w-0 basis-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_40px,#000_calc(100%-40px),transparent)] sm:order-2 sm:flex-1 sm:basis-auto">
+      <div class="marq flex w-max">
+        {groups.map((copy) => (
+          <div class="flex items-center gap-3 pr-3" aria-hidden={copy ? 'true' : undefined}>
+            {marqueeQuestions.map((q) => (
+              <Chip href="#tests" bg={q.bg} class={chipClass} tabindex={copy ? '-1' : undefined}>{q.t}</Chip>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
+
+    <!-- Shown by JS (it needs JS to work) and hidden when the visitor has Reduce motion on. -->
+    <button
+      type="button"
+      class="motion-toggle order-2 mr-[clamp(16px,3vw,40px)] ml-auto inline-flex min-h-11 min-w-11 flex-none items-center justify-center gap-2 rounded-full border border-line-pill bg-white text-[13.5px] sm:px-3.5 font-medium text-ink hover:border-ink sm:order-3 sm:ml-2"
+      hidden
+    >
+      <svg class="motion-icon-pause" aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1.5" width="2.6" height="9" rx="1" fill="currentColor"></rect><rect x="7.4" y="1.5" width="2.6" height="9" rx="1" fill="currentColor"></rect></svg>
+      <svg class="motion-icon-play" aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" hidden><path d="M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5Z" fill="currentColor"></path></svg>
+      <span class="motion-label sr-only sm:not-sr-only">Pause motion</span>
+    </button>
   </div>
+  <div class="bob pt-3.5 text-center text-[13px] text-muted" aria-hidden="true">scroll ↓</div>
 </div>
-<div class="bob pt-3.5 text-center text-[13px] text-muted" aria-hidden="true">scroll ↓</div>
+
+<script>
+  const wrap = document.querySelector<HTMLElement>('.marq-wrap');
+  const toggle = document.querySelector<HTMLButtonElement>('.motion-toggle');
+
+  // Hold to pause: on touch there's no hover, so pressing the strip stops it while the finger is down.
+  if (wrap) {
+    const release = () => wrap.removeAttribute('data-held');
+    wrap.addEventListener('pointerdown', () => wrap.setAttribute('data-held', ''));
+    window.addEventListener('pointerup', release);
+    window.addEventListener('pointercancel', release);
+  }
+
+  // The hero word swaps with a short slide + blur. If paused mid-swap it would freeze half-way,
+  // so jump to the end of that swap first. Stable stretches are 0–16%, 20–36%, … 80–96%.
+  const settleCycler = () => {
+    const cyc = document.querySelector('.cyc');
+    if (!cyc) return;
+    for (const anim of cyc.getAnimations()) {
+      const duration = Number(anim.effect?.getTiming().duration) || 12000;
+      const t = Number(anim.currentTime ?? 0);
+      const cycleStart = t - (t % duration);
+      const pct = ((t % duration) / duration) * 100;
+      const inSwap = pct % 20 > 16;
+      if (inSwap) anim.currentTime = cycleStart + (Math.ceil(pct / 20) * 20 * duration) / 100;
+    }
+  };
+
+  if (toggle) {
+    const label = toggle.querySelector('.motion-label')!;
+    const iconPause = toggle.querySelector<SVGElement>('.motion-icon-pause')!;
+    const iconPlay = toggle.querySelector<SVGElement>('.motion-icon-play')!;
+    const root = document.documentElement;
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      const pausing = root.dataset.motion !== 'paused';
+      if (pausing) {
+        settleCycler();
+        root.dataset.motion = 'paused';
+      } else {
+        delete root.dataset.motion;
+      }
+      label.textContent = pausing ? 'Play motion' : 'Pause motion';
+      iconPause.toggleAttribute('hidden', pausing);
+      iconPlay.toggleAttribute('hidden', !pausing);
+    });
+  }
+</script>

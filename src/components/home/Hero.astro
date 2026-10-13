@@ -10,7 +10,7 @@ const waves = [
   { d: 'M0 110 C 200 80, 520 140, 720 110 S 1240 80, 1440 110 S 1760 140, 2160 110 S 2680 80, 2880 110 L2880 160 L0 160 Z', h: 80, dur: 30, fill: 'var(--color-mint)', op: 0.7 },
 ];
 ---
-<div class="relative overflow-x-clip">
+<div class="relative overflow-x-clip" data-motion-zone>
   {waves.map((w) => (
     <svg aria-hidden="true" viewBox="0 0 2880 160" preserveAspectRatio="none" class="pointer-events-none absolute bottom-0 left-0 w-[200%]" style={{ height: `${w.h}px` }}>
       <g class="wave" style={{ animationDuration: `${w.dur}s` }}><path d={w.d} fill={w.fill} opacity={w.op}></path></g>

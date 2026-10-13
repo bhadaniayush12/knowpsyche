@@ -47,7 +47,7 @@ const compactLinks = [
 const first = footerModes[0];
 ---
 {variant === 'full' ? (
-  <footer class="relative overflow-hidden bg-ink text-paper">
+  <footer class="relative overflow-hidden bg-ink text-paper" data-motion-zone>
     <svg aria-hidden="true" viewBox="0 0 2880 120" preserveAspectRatio="none" class="pointer-events-none absolute left-0 top-0 h-[90px] w-[200%]">
       <g class="wave footer-wave" style={`animation-duration:${first.speed}`}>
         <path d="M0 0 L2880 0 L2880 40 C 2640 90, 2400 10, 2160 40 S 1680 90, 1440 40 S 960 -10, 720 40 S 240 90, 0 40 Z" fill="var(--color-paper)"></path>
