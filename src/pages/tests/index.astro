@@ -4,18 +4,16 @@ import Card from '../../components/ui/Card.astro';
 import TestGlyph from '../../components/home/TestGlyph.astro';
 import { homeTests } from '../../data/home';
 import { PRIVATE_LINE } from '../../data/shared';
+import FontPreloads from '../../components/FontPreloads.astro';
 import { title, description, h1, intro } from '../../data/tests-index';
-
-const cut = h1.lastIndexOf(' ');
-const h1Lead = h1.slice(0, cut + 1);
-const h1Accent = h1.slice(cut + 1);
 ---
 <BaseLayout title={title} description={description} path="/tests/" crumbs={[{ name: 'Tests' }]}>
+  <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
     <section class="max-w-[720px]">
       <!-- Drafted eyebrow. -->
       <div class="mono mb-[18px] text-[11px] text-muted">Tests · 07 free</div>
-      <h1 class="m-0 text-[clamp(44px,6vw,88px)] leading-[.92] font-semibold tracking-[-.055em]">{h1Lead}<span class="serif text-violet">{h1Accent}</span></h1>
+      <h1 class="m-0 text-[clamp(44px,6vw,88px)] leading-[.92] font-semibold tracking-[-.055em]">{h1[0]}<br /><span class="serif text-violet">{h1[1]}</span></h1>
       <p class="mt-4 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{intro}</p>
       <p class="mt-3 mb-0 text-[13.5px] text-ink-soft">{PRIVATE_LINE}</p>
     </section>
