@@ -11,7 +11,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "check": "node scripts/check-links.mjs"
+    "check": "node scripts/check-links.mjs",
+    "og": "node scripts/og.mjs",
+    "prebuild": "npm run og"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -23,6 +25,8 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "satori": "^0.56.1",
+    "sharp": "^0.35.5",
     "vitest": "^5.0.4"
   }
 }
