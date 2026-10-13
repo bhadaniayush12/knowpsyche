@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, numberBands, page, result, sources, ui } from '../../data/tests/number-memory';
 import { LIVES, START_DIGITS } from '../../lib/tests/number-memory';
 
@@ -40,7 +41,10 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
           <span class="nm-lives text-muted">{ui.livesLeft(LIVES)}</span>
         </span>
       </div>
-      <button type="button" class="nm-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      <div class="flex gap-2">
+        <FeedbackToggle />
+        <button type="button" class="nm-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      </div>
     </div>
 
     <!-- Every view sits in the same grid cell; unused ones are invisible, so the card keeps one height. -->
@@ -196,6 +200,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     type NumberState,
   } from '../../lib/tests/number-memory';
   import { createShareCard } from '../../lib/share-card';
+  import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   /** How long "Correct" shows before the next number. */
@@ -282,6 +287,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     if (!given) return;
     const cmp = compareDigits(target, given);
     game = answer(game, cmp.correct);
+    cue(cmp.correct ? 'right' : 'wrong');
     if (cmp.correct) {
       longest = target;
       setView('correct');
@@ -412,5 +418,6 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     }
   });
 
+  bindFeedbackToggle();
   reset();
 </script>
