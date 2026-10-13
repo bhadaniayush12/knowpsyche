@@ -1,0 +1,383 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import WhatItMeans from '../../components/result/WhatItMeans.astro';
+import TryThis from '../../components/result/TryThis.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import { faqs, page, result, scale, sources, statements, types } from '../../data/tests/enneagram';
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/enneagram-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+>
+  <div slot="stage" class="en-card rounded-[26px] border border-line-card bg-white p-[clamp(18px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)]">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <span class="en-count mono text-[11px] text-muted">Statement 1 of {statements.length}</span>
+      <div class="flex gap-2">
+        <button type="button" class="en-back mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue disabled:cursor-default disabled:opacity-40 disabled:hover:border-ink disabled:hover:text-ink" disabled>← Back</button>
+        <button type="button" class="en-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+      </div>
+    </div>
+    <div class="mt-4 h-2 overflow-hidden rounded-full bg-line" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax={statements.length} aria-valuenow="0">
+      <div class="en-bar h-full rounded-full bg-blue transition-[width] duration-300 ease-house" style="width:0%"></div>
+    </div>
+    <p class="en-milestone mt-3 mb-0 min-h-[3.1em] sm:min-h-[1.55em] text-[14.5px] leading-[1.55] text-teal-ink" aria-live="polite"></p>
+
+    <p id="en-statement" class="en-statement mt-3 mb-0 min-h-[4.8em] text-[clamp(24px,3.4vw,40px)] leading-[1.2] font-semibold tracking-[-.03em] sm:min-h-[2.4em]" aria-live="polite">
+      <span class="en-text inline-block">{statements[0].text}</span>
+    </p>
+
+    <div role="group" aria-labelledby="en-statement" class="en-answers mt-6 grid gap-2 sm:grid-cols-5">
+      {scale.map((label, i) => (
+        <button
+          type="button"
+          data-value={i + 1}
+          aria-pressed="false"
+          aria-keyshortcuts={String(i + 1)}
+          class="en-answer flex min-h-14 items-center gap-3 rounded-14 border border-ink bg-paper px-4 py-3 text-left text-base font-medium text-ink transition-colors duration-200 hover:border-blue sm:flex-col sm:justify-center sm:gap-1.5 sm:px-2 sm:text-center"
+        >
+          <span class="en-key mono inline-flex size-7 flex-none items-center justify-center rounded-lg border border-current text-xs" aria-hidden="true">{i + 1}</span>
+          <span>{label}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <Fragment slot="result">
+    <ResultHeadline />
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[1_1_280px] flex-col justify-between gap-6 border border-ink bg-ink p-[26px] text-paper shadow-[10px_10px_0_var(--color-yellow)]">
+          <div class="mono text-[11px] opacity-80">Your type</div>
+          <div>
+            <div data-r="badge" class="text-[clamp(72px,10vw,128px)] leading-[.85] font-semibold tracking-[-.06em]"></div>
+            <div data-r="badge-name" class="serif mt-3 text-[clamp(24px,2.6vw,30px)] leading-[1.1] text-yellow"></div>
+          </div>
+        </div>
+        <div class="flex min-w-0 flex-[999_1_480px] flex-col gap-3 border border-ink bg-card p-[22px]">
+          <div class="mono flex flex-wrap justify-between gap-2 text-[11px]">
+            <span>All 9 scores</span>
+            <span class="flex gap-3">
+              <span class="inline-flex items-center gap-1.5"><span class="inline-block size-2.5 bg-blue" aria-hidden="true"></span>Main</span>
+              <span class="inline-flex items-center gap-1.5"><span class="inline-block size-2.5 bg-violet" aria-hidden="true"></span>Wing</span>
+            </span>
+          </div>
+          <ol data-r="bars" class="m-0 flex list-none flex-col gap-2.5 p-0"></ol>
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <WhatItMeans change={result.change} />
+
+    <div data-r="details" class="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))]"></div>
+
+    <section aria-labelledby="nine-title" class="flex flex-col gap-3">
+      <h3 id="nine-title" class="mono m-0 text-[11px] font-medium text-muted">The nine types</h3>
+      <div class="border border-ink">
+        <table class="w-full table-fixed border-collapse text-left text-[13.5px] leading-[1.4] sm:text-[14.5px] sm:leading-[1.45]">
+          <colgroup><col class="w-[36%]" /><col class="w-[32%]" /><col class="w-[32%]" /></colgroup>
+          <thead class="bg-lilac">
+            <tr>
+              <th scope="col" class="p-2.5 font-semibold sm:p-3">Type</th>
+              <th scope="col" class="border-l border-ink p-2.5 font-semibold sm:p-3">Core desire</th>
+              <th scope="col" class="border-l border-ink p-2.5 font-semibold sm:p-3">Core fear</th>
+            </tr>
+          </thead>
+          <tbody>
+            {types.map((t) => (
+              <tr data-type={t.n} class="en-row border-t border-ink bg-card">
+                <th scope="row" class="p-2.5 align-top font-semibold break-words sm:p-3"><span class="mono mr-1.5 text-[11px] text-muted">{t.n}</span>{t.name.replace(/^The /, '')}</th>
+                <td class="border-l border-ink p-2.5 align-top break-words sm:p-3">{t.desire}</td>
+                <td class="border-l border-ink p-2.5 align-top break-words sm:p-3">{t.fear}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <TryThis />
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  .en-answer[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+  .en-answer.en-chosen { background: var(--color-blue); color: #fff; border-color: var(--color-blue); animation: en-pulse .2s var(--ease-house); }
+  .en-text.en-in { animation: en-in .28s var(--ease-house); }
+  .en-row[data-mine] { background: var(--color-tint-blue); }
+  .en-row[data-mine] th { color: var(--color-blue); }
+  @keyframes en-pulse { 0% { transform: scale(1); } 45% { transform: scale(1.04); } 100% { transform: scale(1); } }
+  @keyframes en-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+</style>
+
+<script>
+  import { milestones, result as copy, statements, types, wingLines, type TypeNumber } from '../../data/tests/enneagram';
+  import { getResult, wingLabel, type EnneagramResult } from '../../lib/tests/enneagram';
+  import { createShareCard } from '../../lib/share-card';
+
+  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
+  const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
+
+  const card = $('.en-card');
+  const count = $('.en-count');
+  const bar = $('.en-bar');
+  const progress = $('[role=progressbar]', card);
+  const milestone = $('.en-milestone');
+  const text = $('.en-text');
+  const answerButtons = $$<HTMLButtonElement>('.en-answer');
+  const back = $<HTMLButtonElement>('.en-back');
+  const resultEl = $('[data-result]');
+  const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
+  const share = createShareCard($('[data-share]'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const TOTAL = statements.length;
+  const PULSE_MS = 200;
+  const typeInfo = (n: TypeNumber) => types[n - 1];
+
+  // Answers live only in this array. Nothing is stored or sent.
+  let answers: (number | null)[] = Array(TOTAL).fill(null);
+  let index = 0;
+  let locked = false;
+  let done = false;
+
+  const answeredCount = () => answers.filter((a) => a !== null).length;
+
+  const render = (animate = false) => {
+    const n = answeredCount();
+    count.textContent = `Statement ${index + 1} of ${TOTAL}`;
+    bar.style.width = `${((n / TOTAL) * 100).toFixed(2)}%`;
+    progress.setAttribute('aria-valuenow', String(n));
+    milestone.textContent = [...milestones].reverse().find((m) => n >= m.at)?.text ?? '';
+    text.textContent = statements[index].text;
+    answerButtons.forEach((b) => {
+      b.classList.remove('en-chosen');
+      b.setAttribute('aria-pressed', String(Number(b.dataset.value) === answers[index]));
+    });
+    back.disabled = index === 0;
+    if (animate && !reducedMotion.matches) {
+      text.classList.remove('en-in');
+      void text.offsetWidth;
+      text.classList.add('en-in');
+    }
+  };
+
+  const choose = (value: number) => {
+    if (locked || done) return;
+    answers[index] = value;
+    const btn = answerButtons[value - 1];
+    const advance = () => {
+      locked = false;
+      if (index === TOTAL - 1) {
+        finish();
+        return;
+      }
+      index += 1;
+      render(true);
+    };
+    if (reducedMotion.matches) {
+      advance();
+      return;
+    }
+    // Short pulse on the chosen button, then the next statement slides in.
+    locked = true;
+    answerButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    btn.classList.add('en-chosen');
+    window.setTimeout(advance, PULSE_MS);
+  };
+
+  const goBack = () => {
+    if (locked || done || index === 0) return;
+    index -= 1;
+    render(true);
+  };
+
+  const reset = () => {
+    answers = Array(TOTAL).fill(null);
+    index = 0;
+    locked = false;
+    done = false;
+    resultEl.hidden = true;
+    render();
+  };
+
+  // ---------- Result ----------
+  const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', txt = '') => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (txt) e.textContent = txt;
+    return e;
+  };
+  const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
+  /** "a 4" but "an 8". */
+  const an = (n: number | string) => (String(n).startsWith('8') ? 'an' : 'a');
+  const wingWords = (wings: TypeNumber[]) => `with ${an(wings[0])} ${wings.join(' or ')} wing`;
+
+  const renderBars = (res: EnneagramResult) => {
+    const wingSet = new Set(res.top.flatMap((n) => res.wings[n] ?? []));
+    const mainSet = new Set(res.top);
+    r('bars').replaceChildren(
+      ...res.ranked.map(({ type, pct }) => {
+        const t = typeInfo(type);
+        const role = mainSet.has(type) ? 'main' : wingSet.has(type) ? 'wing' : '';
+        const li = el('li', 'flex flex-col gap-1');
+        const row = el('div', 'flex items-baseline justify-between gap-3 text-[14.5px]');
+        const name = el('span', 'min-w-0');
+        name.append(el('b', 'font-semibold', `Type ${type}`), ` · ${t.name.replace(/^The /, '')}`);
+        if (role) name.append(el('span', 'mono ml-2 text-[10px] text-muted', role === 'main' ? 'Main' : 'Wing'));
+        row.append(name, el('span', 'mono flex-none text-[12px]', `${pct}%`));
+        const track = el('div', 'h-2.5 overflow-hidden rounded-full bg-line');
+        track.setAttribute('role', 'img');
+        track.setAttribute('aria-label', `Type ${type}: ${pct}%`);
+        const fill = el('div', 'fill h-full rounded-full');
+        fill.style.width = `${Math.max(pct, 1)}%`;
+        fill.style.background = role === 'main' ? 'var(--color-blue)' : role === 'wing' ? 'var(--color-violet)' : 'var(--color-muted)';
+        track.append(fill);
+        li.append(row, track);
+        return li;
+      }),
+    );
+  };
+
+  /** Detail card for one type: (for ties) the template sentences, then over-fire, wing line(s), desire/fear. */
+  const detailCard = (n: TypeNumber, wings: TypeNumber[], withTemplate: boolean) => {
+    const t = typeInfo(n);
+    const box = el('article', 'flex flex-col gap-3 border border-ink bg-card p-[clamp(18px,3vw,26px)]');
+    const head = el('div', 'flex flex-wrap items-baseline justify-between gap-2');
+    head.append(el('h3', 'm-0 text-[22px] font-semibold tracking-[-.03em]', `Type ${n} — ${t.name}`), el('span', 'mono text-[11px] text-blue', wingLabel(n, wings)));
+    box.append(head);
+    if (withTemplate) {
+      box.append(el('p', 'm-0 text-[16px] leading-[1.6]', `${t.drive} At your best you're ${t.best}. Watch for ${lower(t.stress)}.`));
+    }
+    box.append(el('p', 'm-0 text-[16px] leading-[1.6] text-ink-soft', t.overfire));
+    for (const w of wings) box.append(el('p', 'serif m-0 text-[20px] leading-[1.25] text-violet-ink', wingLines[`${n}w${w}`]));
+    const dl = el('dl', 'm-0 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[14.5px]');
+    dl.append(el('dt', 'mono pt-0.5 text-[10.5px] text-muted', 'Core desire'), el('dd', 'm-0', t.desire));
+    dl.append(el('dt', 'mono pt-0.5 text-[10.5px] text-muted', 'Core fear'), el('dd', 'm-0', t.fear));
+    box.append(dl);
+    return box;
+  };
+
+  /** Short card for the "even" result: name, desire and fear only. */
+  const shortCard = (n: TypeNumber) => {
+    const t = typeInfo(n);
+    const box = el('article', 'flex flex-col gap-1.5 border border-ink bg-card p-5');
+    box.append(el('h3', 'm-0 text-[19px] font-semibold tracking-[-.02em]', `Type ${n} — ${t.name}`));
+    box.append(el('p', 'm-0 text-[15px] text-ink-soft', `Core desire: ${t.desire}. Core fear: ${lower(t.fear)}.`));
+    return box;
+  };
+
+  const finish = () => {
+    done = true;
+    render();
+    const res = getResult(answers as number[]);
+    const [first, second] = res.top;
+    const t1 = typeInfo(first);
+    const w1 = res.wings[first] ?? [];
+    const meaning = r('meaning');
+    meaning.replaceChildren();
+    let tip = t1.tip;
+
+    if (res.kind === 'clear') {
+      r('eyebrow').textContent = `Your result · Enneagram · ${wingLabel(first, w1)}`;
+      r('headline').textContent = `You're most likely a Type ${first} — ${t1.name}`;
+      r('badge').textContent = w1.length === 1 ? wingLabel(first, w1) : `Type ${first}`;
+      r('badge-name').textContent = t1.name;
+      meaning.append("You're most likely a ", el('b', 'font-semibold', `Type ${first} — ${t1.name}`), ` ${wingWords(w1)}. ${t1.drive} At your best you're ${t1.best}. Watch for ${lower(t1.stress)}.`);
+      r('details').replaceChildren(detailCard(first, w1, false));
+    } else if (res.kind === 'tie') {
+      const t2 = typeInfo(second);
+      r('eyebrow').textContent = `Your result · Enneagram · ${first} or ${second}`;
+      r('headline').textContent = `You may be ${an(first)} ${first} or ${an(second)} ${second}`;
+      r('badge').textContent = `${first} or ${second}`;
+      r('badge-name').textContent = `${t1.name.replace(/^The /, '')} or ${t2.name.replace(/^The /, '')}`;
+      meaning.append(`You may be ${an(first)} ${first} or ${an(second)} ${second}. `);
+      meaning.append(el('b', 'font-semibold', `Type ${first} — ${t1.name}`), ` ${wingWords(w1)}, or `);
+      meaning.append(el('b', 'font-semibold', `Type ${second} — ${t2.name}`), ` ${wingWords(res.wings[second] ?? [])}. Both are described below.`);
+      r('details').replaceChildren(detailCard(first, w1, true), detailCard(second, res.wings[second] ?? [], true));
+    } else {
+      r('eyebrow').textContent = 'Your result · Enneagram';
+      r('headline').textContent = 'Your scores are very even';
+      r('badge').textContent = 'Even';
+      r('badge-name').textContent = 'No single type stood out';
+      meaning.textContent = copy.evenMeaning;
+      r('details').replaceChildren(...res.top.slice(0, 3).map(shortCard));
+      tip = copy.evenTip;
+    }
+
+    renderBars(res);
+    $$('.en-row', resultEl).forEach((row) => row.toggleAttribute('data-mine', res.kind !== 'even' && res.top.includes(Number(row.dataset.type) as TypeNumber)));
+    r('tip').textContent = tip;
+
+    const shareBase = { tag: 'Test / 02', url: 'https://knowpsyche.com/enneagram-test/', filename: 'knowpsyche-enneagram' };
+    if (res.kind === 'clear') {
+      const big = w1.length === 1 ? wingLabel(first, w1) : `Type ${first}`;
+      void share.update({ ...shareBase, label: big.startsWith('8') ? "I'm an" : "I'm a", big, badge: t1.name, tagline: t1.desire, text: `I'm ${big.startsWith('8') ? 'an' : 'a'} ${big} — ${t1.name}` });
+    } else if (res.kind === 'tie') {
+      void share.update({ ...shareBase, label: `I may be ${an(first)}`, big: `${first} or ${second}`, badge: 'Two close types', tagline: "What's your type?", text: `I may be ${an(first)} ${first} or ${an(second)} ${second} on the Enneagram. What's your type?` });
+    } else {
+      void share.update({ ...shareBase, label: 'My Enneagram scores', big: 'Even', badge: 'No single type stood out', tagline: "What's your type?", text: "My Enneagram scores came out very even. What's your type?" });
+    }
+
+    resultEl.hidden = false;
+    r('headline').focus({ preventScroll: true });
+    resultEl.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  };
+
+  // ---------- Input ----------
+  answerButtons.forEach((b) => b.addEventListener('click', () => choose(Number(b.dataset.value))));
+  back.addEventListener('click', goBack);
+  $('.en-restart').addEventListener('click', () => {
+    reset();
+    answerButtons[0].focus();
+  });
+
+  // Keys 1–5 answer from anywhere on the page while the test is running.
+  document.addEventListener('keydown', (e) => {
+    if (done || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+    if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable]')) return;
+    const v = Number(e.key);
+    if (Number.isInteger(v) && v >= 1 && v <= 5) {
+      e.preventDefault();
+      choose(v);
+    }
+  });
+
+  const focusCard = () => {
+    card.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+    answerButtons[0].focus({ preventScroll: true });
+  };
+  $('[data-test-start]').addEventListener('click', () => {
+    if (done) reset();
+    focusCard();
+  });
+  $$('[data-try-again]').forEach((b) =>
+    b.addEventListener('click', () => {
+      reset();
+      focusCard();
+    }),
+  );
+
+  render();
+</script>

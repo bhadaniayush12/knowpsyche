@@ -141,8 +141,8 @@ export async function drawShareCard(canvas: HTMLCanvasElement, d: ShareData) {
   ctx.stroke();
 
   // Badge
-  ctx.font = `600 64px ${SANS}`;
   spaced(ctx, -2);
+  ctx.font = `600 ${fit(ctx, d.badge, (px) => `600 ${px}px ${SANS}`, 64, w - pad * 2)}px ${SANS}`;
   ctx.fillStyle = PAPER;
   ctx.fillText(d.badge, pad, mid + 320);
   spaced(ctx, 0);
