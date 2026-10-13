@@ -36,10 +36,11 @@ interface Props {
   sources: Source[];
   /** Optional note under the sources list. */
   sourcesNote?: string;
+  /** Defaults to the card scripts/og.mjs makes for this slug: /og/<slug>.png. */
   ogImage?: string;
 }
 
-const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, sourcesNote, ogImage } = Astro.props;
+const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, sourcesNote, ogImage = `/og/${path.replace(/\//g, '')}.png` } = Astro.props;
 
 // The design sets the last word of the H1 in the serif accent.
 const cut = h1.lastIndexOf(' ');

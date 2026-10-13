@@ -17,7 +17,7 @@ interface Props {
   description: string;
   /** Path for the canonical URL, e.g. `/` or `/about/`. */
   path: string;
-  /** Absolute URL or site-relative path. Left out of the tags when not given. */
+  /** 1200×630 PNG, absolute URL or site-relative path. Made by scripts/og.mjs. */
   ogImage?: string;
   noindex?: boolean;
   /**
@@ -31,10 +31,10 @@ interface Props {
   variant?: 'home' | 'inner';
 }
 
-const { title, description, path, ogImage, noindex = false, crumbs, crumbWidth = 1200, variant = 'inner' } = Astro.props;
+const { title, description, path, ogImage = '/og/site.png', noindex = false, crumbs, crumbWidth = 1200, variant = 'inner' } = Astro.props;
 const site = Astro.site ?? new URL('https://knowpsyche.com');
 const canonical = new URL(path, site).href;
-const image = ogImage ? new URL(ogImage, site).href : undefined;
+const image = new URL(ogImage, site).href;
 // One list drives both the visible breadcrumb and the JSON-LD, so they always match.
 const trail = crumbs?.length
   ? [{ name: 'Home', href: '/' }, ...crumbs.slice(0, -1), { ...crumbs[crumbs.length - 1], href: path }]
@@ -71,12 +71,15 @@ const breadcrumbLd = trail.length > 0 && {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {!noindex && <meta property="og:url" content={canonical} />}
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={image} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {image && <meta name="twitter:image" content={image} />}
+    <meta name="twitter:image" content={image} />
 
     {breadcrumbLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />}
     <slot name="head" />

@@ -7,7 +7,7 @@ import { PRIVATE_LINE } from '../../data/shared';
 import FontPreloads from '../../components/FontPreloads.astro';
 import { title, description, h1, intro } from '../../data/tests-index';
 ---
-<BaseLayout title={title} description={description} path="/tests/" crumbs={[{ name: 'Tests' }]}>
+<BaseLayout title={title} description={description} path="/tests/" ogImage="/og/tests.png" crumbs={[{ name: 'Tests' }]}>
   <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
     <section class="max-w-[720px]">
