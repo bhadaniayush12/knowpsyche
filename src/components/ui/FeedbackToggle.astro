@@ -1,0 +1,49 @@
+---
+/**
+ * "Sound & vibration" switch, off by default and never remembered. The page script calls
+ * `bindFeedbackToggle()` from src/lib/feedback.ts. Only on tests with right and wrong answers.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+<button
+  type="button"
+  role="switch"
+  aria-checked="false"
+  data-feedback-toggle
+  class:list={['fb-toggle mono inline-flex min-h-11 items-center gap-2.5 border border-ink bg-transparent px-3 py-1 text-left text-xs leading-[1.25] text-ink hover:border-blue hover:text-blue sm:px-4', className]}
+>
+  <span class="fb-track" aria-hidden="true"><span class="fb-knob"></span></span>
+  <span>Sound &amp; vibration</span>
+</button>
+
+<style>
+  .fb-track {
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: 28px;
+    height: 16px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    transition: background-color .2s var(--ease-house);
+  }
+  .fb-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform .2s var(--ease-house);
+  }
+  .fb-toggle[aria-checked='true'] .fb-track { background: var(--color-ink); border-color: var(--color-ink); }
+  .fb-toggle[aria-checked='true'] .fb-knob { transform: translateX(12px); background: var(--color-paper); }
+  /* The global reduced-motion rule also stops these; this keeps the switch instant on its own. */
+  @media (prefers-reduced-motion: reduce) {
+    .fb-track, .fb-knob { transition: none; }
+  }
+</style>
