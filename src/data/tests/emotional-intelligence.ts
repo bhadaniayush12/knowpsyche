@@ -159,6 +159,10 @@ export const resultUi = {
   shareLabel: 'My emotional intelligence',
   shareStrongest: (names: string[]) => `Strongest: ${names.join(' & ')}`,
   shareTagline: 'How do you handle feelings?',
+  /** Area row and card label, e.g. "71/100 · Strong". */
+  scoreBand: (score: number, badge: string) => `${score}/100 · ${badge}`,
+  copyOverall: (overall: number, badge: string) => `Emotional intelligence: ${overall}/100 (${badge})`,
+  copyArea: (name: string, score: number, badge: string) => `${name}: ${score}/100 (${badge})`,
   shareText: (overall: number, names: string[]) =>
     `My emotional intelligence result: ${overall}/100. Strongest area: ${names.join(' & ')}. How do you handle feelings?`,
 };

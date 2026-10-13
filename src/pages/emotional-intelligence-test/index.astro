@@ -258,7 +258,7 @@ const first = statements[order[0] - 1];
     r('marker-label').textContent = `You · ${res.overall}`;
 
     for (const { area, score, band, high } of res.areas) {
-      const scoreBand = `${score}/100 · ${band.badge}`;
+      const scoreBand = resultUi.scoreBand(score, band.badge);
       const row = $(`[data-bar="${area.id}"]`, resultEl);
       $('[data-f=score-band]', row).textContent = scoreBand;
       $('[data-f=fill]', row).style.width = `${Math.max(score, 1)}%`;
@@ -298,8 +298,8 @@ const first = statements[order[0] - 1];
   // Your own record to compare with in a few months, since we save nothing.
   bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
     if (!shown) return '';
-    const lines = shown.areas.map((a) => `${a.area.name}: ${a.score}/100 (${a.band.badge})`);
-    return [`Emotional intelligence: ${shown.overall}/100 (${shown.overallBand.badge})`, ...lines, `knowpsyche.com/emotional-intelligence-test/ · ${today()}`].join('\n');
+    const lines = shown.areas.map((a) => resultUi.copyArea(a.area.name, a.score, a.band.badge));
+    return [resultUi.copyOverall(shown.overall, shown.overallBand.badge), ...lines, `knowpsyche.com/emotional-intelligence-test/ · ${today()}`].join('\n');
   });
 
   // Keys answer only while the card is on screen (or has focus), so reading the FAQ can't answer by accident.
