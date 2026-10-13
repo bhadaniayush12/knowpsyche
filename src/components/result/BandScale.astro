@@ -5,8 +5,8 @@
  */
 interface Props {
   /** One per band, left to right. `class` sets flex weight and colour, e.g. "flex-[2] bg-blue". */
-  segments: { class: string; label?: string }[];
-  /** Tick labels spread under the bar. Leave out to show each segment's `label` under it instead. */
+  segments: { class: string; range?: string; label?: string }[];
+  /** Tick labels spread under the bar. Leave out to show each segment's `range` + `label` under it instead. */
   ticks?: string[];
   class?: string;
 }
@@ -23,8 +23,13 @@ const { segments, ticks, class: className } = Astro.props;
       {ticks.map((t) => <span>{t}</span>)}
     </div>
   ) : (
-    <div class="mono mt-2.5 flex text-[10.5px] leading-[1.35] text-muted" aria-hidden="true">
-      {segments.map((s) => <span class:list={[s.class.split(' ').filter((c) => c.startsWith('flex-')), 'min-w-0 pr-1']}>{s.label}</span>)}
+    <div class="mt-2.5 flex" aria-hidden="true">
+      {segments.map((s) => (
+        <span class:list={[s.class.split(' ').filter((c) => c.startsWith('flex-')), 'flex min-w-0 flex-col gap-0.5 pr-1']}>
+          <span class="mono text-[11px] text-muted">{s.range}</span>
+          <span class="text-[11.5px] leading-[1.2] text-ink-soft sm:text-[12.5px]">{s.label}</span>
+        </span>
+      ))}
     </div>
   )}
 </div>

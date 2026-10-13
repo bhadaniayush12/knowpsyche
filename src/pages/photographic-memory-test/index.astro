@@ -1,0 +1,394 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import BandScale from '../../components/result/BandScale.astro';
+import WhatItMeans from '../../components/result/WhatItMeans.astro';
+import TryThis from '../../components/result/TryThis.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import CopyScores from '../../components/result/CopyScores.astro';
+import { faqs, page, photoBands, result, sources, ui } from '../../data/tests/photographic-memory';
+import { LIVES } from '../../lib/tests/photographic-memory';
+
+const segClass = ['flex-[4] bg-paper', 'flex-[4] bg-lilac', 'flex-[4] bg-lilac-bright', 'flex-[4] bg-blue'];
+const ranges = ['1–4', '5–8', '9–12', '13+'];
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/photographic-memory-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  introTouch={page.introTouch}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+>
+  <div slot="stage" class="pm-card rounded-[26px] border border-line-card bg-white px-2 py-4 shadow-[0_26px_54px_rgba(36,34,56,.12)] sm:p-[clamp(18px,4vw,40px)]">
+    <div class="flex flex-wrap items-center justify-between gap-3 px-2 sm:px-0">
+      <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+        <span class="pm-level">Level 1 · 3×3</span>
+        <span class="inline-flex items-center gap-2">
+          <span class="flex gap-1" aria-hidden="true">
+            {Array.from({ length: LIVES }, () => <span class="pm-life block size-2.5 rounded-full border border-ink bg-coral"></span>)}
+          </span>
+          <span class="pm-lives text-muted">{ui.livesLeft(LIVES)}</span>
+        </span>
+      </div>
+      <button type="button" class="pm-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+    </div>
+    <p class="pm-status mt-3 mb-4 min-h-[3.1em] sm:min-h-[1.55em] px-2 text-center text-[17px] leading-[1.55] font-medium sm:px-0" aria-live="polite">{ui.ready}</p>
+    <div class="pm-board mx-auto grid aspect-square w-full max-w-[480px] gap-1.5 sm:gap-2" role="group" aria-label="Tiles" style="grid-template-columns:repeat(3,1fr)"></div>
+  </div>
+
+  <Fragment slot="result">
+    <ResultHeadline />
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[999_1_520px] flex-col gap-[22px]">
+          <div class="flex flex-wrap items-end gap-[18px]">
+            <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]" data-r="level">0</div>
+            <div class="serif pb-2.5 text-[34px] text-blue">levels completed</div>
+          </div>
+          <BandScale segments={photoBands.map((b, i) => ({ class: segClass[i], range: ranges[i], label: b.badge }))} />
+        </div>
+        <div class="flex min-w-0 flex-[1_1_280px] flex-col justify-between gap-3.5 border border-ink bg-card p-[22px]">
+          <div class="mono text-[11px]">Tiles remembered</div>
+          <div class="text-[clamp(56px,7vw,88px)] leading-[.85] font-semibold tracking-[-.06em] text-teal-ink" data-r="tiles">0</div>
+          <p class="m-0 text-[14.5px] text-ink-soft">Every tile you picked correctly, across all your rounds.</p>
+          <CopyScores label={ui.copyScore} class="mt-1 border-t border-line-inner pt-3" />
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <WhatItMeans change={result.change} />
+
+    <TryThis />
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  .pm-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 44px;
+    border: 1px solid var(--color-ink);
+    border-radius: 10px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    padding: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Only a pick fades in. Lighting up and going dark are instant, so the 1.2 s display time is exact. */
+  .pm-tile[data-state='correct'],
+  .pm-tile[data-state='wrong'] { transition: background-color .15s var(--ease-house), border-color .15s var(--ease-house); }
+  .pm-tile svg { width: 42%; height: 42%; max-width: 30px; max-height: 30px; }
+  .pm-board[data-phase='input'] .pm-tile:not([data-state]):hover { background: var(--color-tint-blue); border-color: var(--color-blue); }
+  .pm-board:not([data-phase='input']) .pm-tile { cursor: default; }
+  .pm-tile[data-state='lit'] { background: var(--color-blue); border-color: var(--color-blue); }
+  .pm-tile[data-state='correct'] { background: var(--color-teal); border-color: var(--color-teal-deep); color: #fff; }
+  .pm-tile[data-state='wrong'] { background: var(--color-coral); border-color: var(--color-coral-ink); color: var(--color-ink); }
+  .pm-life[data-lost] { background: transparent; }
+</style>
+
+<script>
+  import { result as copy, ui } from '../../data/tests/photographic-memory';
+  import {
+    BIGGER_GRID_MS,
+    DISPLAY_MS,
+    getBand,
+    gridSize,
+    growsAt,
+    meaningLine,
+    nextRound,
+    pick,
+    scalePercent,
+    shareText,
+    startGame,
+    type PhotoState,
+  } from '../../lib/tests/photographic-memory';
+  import { createShareCard } from '../../lib/share-card';
+  import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
+
+  /** Pause after a finished level, and after a wrong tile, before the next pattern. */
+  const PAUSE_DONE_MS = 700;
+  const PAUSE_WRONG_MS = 1100;
+
+  const card = $('.pm-card');
+  const board = $('.pm-board');
+  const status = $('.pm-status');
+  const levelEl = $('.pm-level');
+  const livesEl = $('.pm-lives');
+  const lifeDots = $$('.pm-life');
+  const resultEl = $('[data-result]');
+  const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
+  const share = createShareCard($('[data-share]'));
+
+  const ICON_OK = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+  const ICON_X = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  type Phase = 'idle' | 'notice' | 'watch' | 'input' | 'pause' | 'done';
+  // The game lives only in these variables. Nothing is stored or sent.
+  let phase: Phase = 'idle';
+  let game: PhotoState | null = null;
+  let size = 0;
+  let tiles: HTMLButtonElement[] = [];
+  let focusIndex = 0;
+  let cancel: () => void = () => {};
+  /** Highest level whose "Bigger grid" line has been shown this run, so repeats don't show it again. */
+  let noticeShownFor = 0;
+
+  const setPhase = (p: Phase) => {
+    phase = p;
+    board.dataset.phase = p;
+    const locked = p !== 'input';
+    tiles.forEach((t) => t.setAttribute('aria-disabled', String(locked)));
+  };
+
+  const tileLabel = (i: number, state?: string) => {
+    const row = Math.floor(i / size) + 1;
+    const col = (i % size) + 1;
+    return `Row ${row}, column ${col}${state ? `, ${state}` : ''}`;
+  };
+
+  const setTile = (i: number, state: '' | 'lit' | 'correct' | 'wrong') => {
+    const t = tiles[i];
+    if (state) t.dataset.state = state;
+    else delete t.dataset.state;
+    t.innerHTML = state === 'correct' ? ICON_OK : state === 'wrong' ? ICON_X : '';
+    t.setAttribute('aria-label', tileLabel(i, state));
+  };
+
+  /** Builds an n×n board of buttons. Only rebuilt when the size changes; focus stays on the board. */
+  const buildBoard = (n: number) => {
+    if (n === size) {
+      tiles.forEach((_, i) => setTile(i, ''));
+      return;
+    }
+    const hadFocus = board.contains(document.activeElement);
+    size = n;
+    board.style.gridTemplateColumns = `repeat(${n},1fr)`;
+    tiles = Array.from({ length: n * n }, (_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pm-tile';
+      b.dataset.i = String(i);
+      return b;
+    });
+    board.replaceChildren(...tiles);
+    tiles.forEach((_, i) => setTile(i, ''));
+    focusIndex = Math.min(focusIndex, n * n - 1);
+    tiles.forEach((t, i) => (t.tabIndex = i === focusIndex ? 0 : -1));
+    if (hadFocus) tiles[focusIndex].focus({ preventScroll: true });
+    setPhase(phase);
+  };
+
+  const renderHud = () => {
+    const level = game?.level ?? 1;
+    const lives = game?.lives ?? 3;
+    levelEl.textContent = `Level ${level} · ${gridSize(level)}×${gridSize(level)}`;
+    livesEl.textContent = ui.livesLeft(lives);
+    lifeDots.forEach((d, i) => d.toggleAttribute('data-lost', i >= lives));
+  };
+
+  const beginRound = () => {
+    if (!game) return;
+    cancel();
+    renderHud();
+    buildBoard(gridSize(game.level));
+    if (growsAt(game.level) && noticeShownFor < game.level) {
+      noticeShownFor = game.level;
+      setPhase('notice');
+      status.textContent = ui.biggerGrid;
+      cancel = runFor(BIGGER_GRID_MS, showPattern);
+      return;
+    }
+    showPattern();
+  };
+
+  const showPattern = () => {
+    if (!game) return;
+    setPhase('watch');
+    status.textContent = ui.watch;
+    game.pattern.forEach((i) => setTile(i, 'lit'));
+    cancel = runFor(DISPLAY_MS, () => {
+      game!.pattern.forEach((i) => setTile(i, ''));
+      setPhase('input');
+      status.textContent = ui.yourTurn(game!.pattern.length);
+    });
+  };
+
+  const choose = (i: number) => {
+    if (phase !== 'input' || !game) return;
+    const out = pick(game, i);
+    if (out.outcome === 'ignored') return;
+    game = out.state;
+    const wrong = out.outcome === 'wrong' || out.outcome === 'gameOver';
+    setTile(i, wrong ? 'wrong' : 'correct');
+    if (out.outcome === 'correct') return;
+    renderHud();
+    setPhase('pause');
+    if (out.outcome === 'levelDone') {
+      status.textContent = ui.levelDone;
+      cancel = runFor(PAUSE_DONE_MS, () => {
+        game = nextRound(game!);
+        beginRound();
+      });
+    } else if (out.outcome === 'wrong') {
+      status.textContent = ui.wrong(game.lives);
+      cancel = runFor(PAUSE_WRONG_MS, () => {
+        game = nextRound(game!);
+        beginRound();
+      });
+    } else {
+      status.textContent = ui.over;
+      // The result goes in right away, while this tap still counts as the reason the page grew
+      // (no layout shift). Scrolling to it waits, so the wrong tile can be seen first.
+      finish();
+      cancel = runFor(PAUSE_WRONG_MS, showResult);
+    }
+  };
+
+  const finish = () => {
+    if (!game) return;
+    setPhase('done');
+    const score = game.completed;
+    const tilesN = game.tilesRemembered;
+    const band = getBand(score);
+    r('eyebrow').textContent = 'Your result · Photographic memory';
+    r('headline').textContent = `Level ${score} — ${band.badge}`;
+    r('level').textContent = String(score);
+    r('tiles').textContent = String(tilesN);
+    const pos = `${scalePercent(score).toFixed(1)}%`;
+    r('marker').style.left = pos;
+    const ml = r('marker-label');
+    ml.style.left = pos;
+    ml.textContent = `You · ${score}`;
+    r('meaning').textContent = meaningLine(score, tilesN);
+    r('tip').textContent = copy.tip;
+
+    void share.update({
+      label: 'My photographic memory',
+      big: String(score),
+      unit: score === 1 ? 'level' : 'levels',
+      badge: band.badge,
+      tagline: 'Can you beat it?',
+      tag: 'Test / 03',
+      text: shareText(score),
+      url: 'https://knowpsyche.com/photographic-memory-test/',
+      filename: 'knowpsyche-photographic-memory',
+    });
+
+    resultEl.hidden = false;
+  };
+
+  const showResult = () => {
+    r('headline').focus({ preventScroll: true });
+    resultEl.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  };
+
+  const reset = () => {
+    cancel();
+    game = null;
+    noticeShownFor = 0;
+    focusIndex = 0;
+    dealOnReturn = false;
+    tiles.forEach((t, i) => (t.tabIndex = i === 0 ? 0 : -1));
+    setPhase('idle');
+    renderHud();
+    buildBoard(3);
+    status.textContent = ui.ready;
+    resultEl.hidden = true;
+  };
+
+  const start = () => {
+    reset();
+    card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    tiles[0].focus({ preventScroll: true });
+    game = startGame();
+    beginRound();
+  };
+
+  // ---------- Input ----------
+  board.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLButtonElement>('.pm-tile');
+    if (t) choose(Number(t.dataset.i));
+  });
+
+  // Arrow keys move between tiles (one tab stop for the whole board); Space/Enter pick via the button itself.
+  board.addEventListener('keydown', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLButtonElement>('.pm-tile');
+    if (!t) return;
+    const i = Number(t.dataset.i);
+    const row = Math.floor(i / size);
+    let next = i;
+    switch (e.key) {
+      case 'ArrowRight': next = Math.min(i + 1, size * size - 1); break;
+      case 'ArrowLeft': next = Math.max(i - 1, 0); break;
+      case 'ArrowDown': next = i + size < size * size ? i + size : i; break;
+      case 'ArrowUp': next = i - size >= 0 ? i - size : i; break;
+      case 'Home': next = row * size; break;
+      case 'End': next = row * size + size - 1; break;
+      default: return;
+    }
+    e.preventDefault();
+    tiles[i].tabIndex = -1;
+    tiles[next].tabIndex = 0;
+    tiles[next].focus();
+    focusIndex = next;
+  });
+  board.addEventListener('focusin', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLButtonElement>('.pm-tile');
+    if (!t) return;
+    focusIndex = Number(t.dataset.i);
+    tiles.forEach((x, i) => (x.tabIndex = i === focusIndex ? 0 : -1));
+  });
+
+  $('[data-test-start]').addEventListener('click', start);
+  $('.pm-restart').addEventListener('click', () => {
+    reset();
+    tiles[0].focus();
+  });
+  $$('[data-try-again]').forEach((b) => b.addEventListener('click', start));
+
+  // Your own record to compare with later, since we save nothing.
+  bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
+    if (!game || phase !== 'done') return '';
+    const s = game.completed;
+    return `My photographic memory: level ${s} — ${getBand(s).badge} (${today()}, knowpsyche.com/photographic-memory-test/)\nTiles remembered: ${game.tilesRemembered}`;
+  });
+
+  guardLeave(() => phase !== 'idle' && phase !== 'done', ui.leaveWarning);
+
+  // Leaving the tab while tiles are lit would spoil the round, so the round is dealt again on return (no life lost).
+  let dealOnReturn = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && game && (phase === 'watch' || phase === 'notice')) {
+      cancel();
+      tiles.forEach((_, i) => setTile(i, ''));
+      dealOnReturn = true;
+    } else if (!document.hidden && dealOnReturn) {
+      dealOnReturn = false;
+      beginRound();
+    }
+  });
+
+  reset();
+</script>
