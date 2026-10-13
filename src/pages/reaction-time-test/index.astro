@@ -9,6 +9,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import BandScale from '../../components/result/BandScale.astro';
 import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
 import { TRIES } from '../../lib/tests/reaction-time';
 
@@ -81,18 +82,10 @@ const ticks = [100, 200, 300, 400, 500];
             <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]"><span data-r="avg">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]">ms</span></div>
             <div class="serif pb-2.5 text-[34px] text-blue">average of {TRIES}</div>
           </div>
-          <div class="border border-ink bg-card px-[22px] pt-[46px] pb-3.5">
-            <div class="relative flex h-10 border border-ink" aria-hidden="true">
-              <div class="flex-[2] bg-blue"></div>
-              <div class="flex-[2] border-l border-ink bg-lilac"></div>
-              <div class="flex-[4] border-l border-ink bg-paper"></div>
-              <div data-r="marker" class="absolute -top-3 -bottom-3 w-1 -translate-x-0.5 bg-coral" style="left:0%"></div>
-              <div data-r="marker-label" class="mono absolute -top-[38px] -translate-x-1/2 bg-coral-ink px-[7px] py-[3px] text-[11px] whitespace-nowrap text-white" style="left:0%"></div>
-            </div>
-            <div class="mono mt-2.5 flex justify-between text-[11px] text-muted" aria-hidden="true">
-              {ticks.map((t, i) => <span>{t}{i === ticks.length - 1 ? ' ms' : ''}</span>)}
-            </div>
-          </div>
+          <BandScale
+            segments={[{ class: 'flex-[2] bg-blue' }, { class: 'flex-[2] bg-lilac' }, { class: 'flex-[4] bg-paper' }]}
+            ticks={ticks.map((t, i) => `${t}${i === ticks.length - 1 ? ' ms' : ''}`)}
+          />
           <p data-r="mode-note" class="m-0 text-[15px] text-ink-soft" hidden></p>
         </div>
 
@@ -154,12 +147,9 @@ const ticks = [100, 200, 300, 400, 500];
     waitMs,
   } from '../../lib/tests/reaction-time';
   import { createShareCard } from '../../lib/share-card';
-  import { bindCopy, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, today } from '../../lib/test-ui';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
-
-  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
-  const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
 
   const box = $<HTMLButtonElement>('.rt-arena');
   const label = $('.rt-label');

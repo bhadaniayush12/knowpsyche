@@ -42,3 +42,31 @@ export function bindCopy(button: HTMLElement, status: HTMLElement, text: () => s
 export function today(): string {
   return new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
+
+export const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
+export const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
+
+export function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * Runs for `ms`, checked every frame against performance.now(), so display times never drift
+ * the way chained setTimeouts do. `onFrame` gets progress 0–1. Returns a cancel function.
+ */
+export function runFor(ms: number, onDone: () => void, onFrame?: (progress: number) => void): () => void {
+  const start = performance.now();
+  let frame = 0;
+  const tick = (now: number) => {
+    const p = Math.min(1, Math.max(0, (now - start) / ms));
+    onFrame?.(p);
+    if (p >= 1) {
+      onDone();
+      return;
+    }
+    frame = requestAnimationFrame(tick);
+  };
+  onFrame?.(0);
+  frame = requestAnimationFrame(tick);
+  return () => cancelAnimationFrame(frame);
+}

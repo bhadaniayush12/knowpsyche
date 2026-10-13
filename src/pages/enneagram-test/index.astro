@@ -190,10 +190,7 @@ const choiceBtn =
     type TieBreakQuestion,
   } from '../../lib/tests/enneagram';
   import { createShareCard } from '../../lib/share-card';
-  import { bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
-
-  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
-  const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
+  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
 
   const card = $('.en-card');
   const count = $('.en-count');

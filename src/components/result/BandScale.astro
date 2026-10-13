@@ -1,0 +1,30 @@
+---
+/**
+ * Band bar with a "You · N" marker. The page script sets `[data-r=marker]` and `[data-r=marker-label]`
+ * (`style.left` in %, label text). Decorative: the score itself is always given in text too.
+ */
+interface Props {
+  /** One per band, left to right. `class` sets flex weight and colour, e.g. "flex-[2] bg-blue". */
+  segments: { class: string; label?: string }[];
+  /** Tick labels spread under the bar. Leave out to show each segment's `label` under it instead. */
+  ticks?: string[];
+  class?: string;
+}
+const { segments, ticks, class: className } = Astro.props;
+---
+<div class:list={['border border-ink bg-card px-[22px] pt-[46px] pb-3.5', className]}>
+  <div class="relative flex h-10 border border-ink" aria-hidden="true">
+    {segments.map((s, i) => <div class:list={[s.class, i > 0 && 'border-l border-ink']}></div>)}
+    <div data-r="marker" class="absolute -top-3 -bottom-3 w-1 -translate-x-0.5 bg-coral" style="left:0%"></div>
+    <div data-r="marker-label" class="mono absolute -top-[38px] -translate-x-1/2 bg-coral-ink px-[7px] py-[3px] text-[11px] whitespace-nowrap text-white" style="left:0%"></div>
+  </div>
+  {ticks ? (
+    <div class="mono mt-2.5 flex justify-between text-[11px] text-muted" aria-hidden="true">
+      {ticks.map((t) => <span>{t}</span>)}
+    </div>
+  ) : (
+    <div class="mono mt-2.5 flex text-[10.5px] leading-[1.35] text-muted" aria-hidden="true">
+      {segments.map((s) => <span class:list={[s.class.split(' ').filter((c) => c.startsWith('flex-')), 'min-w-0 pr-1']}>{s.label}</span>)}
+    </div>
+  )}
+</div>
