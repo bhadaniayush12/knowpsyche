@@ -140,12 +140,18 @@ export const ui = {
   leaveWarning: 'Your answers will be lost if you leave this page.',
 };
 
+/** Shown instead of naming all four areas when they all tie (Dev's wording). */
+export const evenLine = 'Your four areas came out even.';
+const allEven = (names: string[]) => names.length === areas.length;
+
 /** Headline from the doc: "Your strongest area: Reading other people." */
 export const strongestLine = (names: string[]) =>
   names.length === 1
     ? `Your strongest area: ${names[0]}.`
-    : // Drafted: the doc says "If two areas tie, show both" but gives no wording.
-      `Your strongest areas: ${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}.`;
+    : allEven(names)
+      ? evenLine
+      : // Drafted: the doc says "If two areas tie, show both" but gives no wording.
+        `Your strongest areas: ${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}.`;
 
 /** Drafted: labels on the result's score card, the share card and the copied text. */
 export const resultUi = {
@@ -154,14 +160,14 @@ export const resultUi = {
   cardTitle: 'Your four areas · out of 100',
   tryThis: 'Try this',
   shareLabel: 'My emotional intelligence',
-  shareStrongest: (names: string[]) => `Strongest: ${names.join(' & ')}`,
+  shareStrongest: (names: string[]) => (allEven(names) ? evenLine : `Strongest: ${names.join(' & ')}`),
   shareTagline: 'How do you handle feelings?',
   /** Area row and card label, e.g. "71/100 · Strong". */
   scoreBand: (score: number, badge: string) => `${score}/100 · ${badge}`,
   copyOverall: (overall: number, badge: string) => `Emotional intelligence: ${overall}/100 (${badge})`,
   copyArea: (name: string, score: number, badge: string) => `${name}: ${score}/100 (${badge})`,
   shareText: (overall: number, names: string[]) =>
-    `My emotional intelligence result: ${overall}/100. Strongest area: ${names.join(' & ')}. How do you handle feelings?`,
+    `My emotional intelligence result: ${overall}/100. ${allEven(names) ? evenLine : `Strongest area: ${names.join(' & ')}.`} How do you handle feelings?`,
 };
 
 export const faqs: Faq[] = [

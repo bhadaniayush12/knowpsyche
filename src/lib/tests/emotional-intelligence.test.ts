@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { areas, order, statements, strongestLine, type AreaId } from '../../data/tests/emotional-intelligence';
+import { areas, order, resultUi, statements, strongestLine, type AreaId } from '../../data/tests/emotional-intelligence';
 import {
   getBand,
   getResult,
@@ -96,12 +96,21 @@ describe('EQ: strongest area and ties', () => {
     );
   });
 
-  it('lists all four when every area ties', () => {
+  it('says the areas came out even when all four tie', () => {
     const scores = { knowing: 60, managing: 60, reading: 60, relationships: 60 };
     expect(strongestAreas(scores)).toHaveLength(4);
-    expect(strongestLine(areas.map((a) => a.name))).toBe(
-      'Your strongest areas: Knowing your feelings, Managing your feelings, Reading other people and Handling relationships.',
+    const names = areas.map((a) => a.name);
+    expect(strongestLine(names)).toBe('Your four areas came out even.');
+    expect(resultUi.shareStrongest(names)).toBe('Your four areas came out even.');
+    expect(resultUi.shareText(50, names)).not.toContain('Strongest');
+  });
+
+  it('still lists three areas when three tie', () => {
+    const names = areas.slice(0, 3).map((a) => a.name);
+    expect(strongestLine(names)).toBe(
+      'Your strongest areas: Knowing your feelings, Managing your feelings and Reading other people.',
     );
+    expect(resultUi.shareStrongest(names)).toBe('Strongest: Knowing your feelings & Managing your feelings & Reading other people');
   });
 });
 
