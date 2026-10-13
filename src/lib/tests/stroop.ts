@@ -1,4 +1,4 @@
-import { stroopBands, ui, type StroopBand } from '../../data/tests/stroop';
+import { result, stroopBands, ui, type StroopBand } from '../../data/tests/stroop';
 
 export type StroopColor = 'red' | 'blue' | 'green' | 'yellow';
 
@@ -28,6 +28,8 @@ export interface StroopScores {
   matchingAvgMs: number;
   clashingAvgMs: number;
   stroopEffectMs: number;
+  /** False when either word type has no correct answer: there's no effect to report. */
+  measured: boolean;
   accuracy: number; // 0-100%
   under85Note: boolean;
   matchingCorrectCount: number;
@@ -148,14 +150,15 @@ export function calculateStroopScores(responses: readonly StroopResponse[]): Str
       : 0;
 
   // Stroop effect = avg time on clashing - avg time on matching (correct answers only)
-  // If either has 0 correct answers, effect is 0
-  const stroopEffectMs =
-    matchingCorrectCount > 0 && clashingCorrectCount > 0 ? Math.round(clashingAvgMs - matchingAvgMs) : 0;
+  // If either has 0 correct answers, the effect can't be measured (and is 0)
+  const measured = matchingCorrectCount > 0 && clashingCorrectCount > 0;
+  const stroopEffectMs = measured ? Math.round(clashingAvgMs - matchingAvgMs) : 0;
 
   return {
     matchingAvgMs,
     clashingAvgMs,
     stroopEffectMs,
+    measured,
     accuracy,
     under85Note,
     matchingCorrectCount,
@@ -182,8 +185,11 @@ export function getBand(effectMs: number): StroopBand {
  * "What does it mean?" line from the content doc.
  */
 export function meaningLine(scores: StroopScores): string {
+  if (!scores.measured) return result.notMeasured;
   const band = getBand(scores.stroopEffectMs);
-  let line = `Clashing words slowed you down by ${scores.stroopEffectMs} ms. ${band.text}`;
+  const slowdown =
+    scores.stroopEffectMs > 0 ? `Clashing words slowed you down by ${scores.stroopEffectMs} ms.` : result.noSlowdown;
+  let line = `${slowdown} ${band.text}`;
   if (scores.under85Note) {
     line += ` ${ui.lowAccuracyNote}`;
   }

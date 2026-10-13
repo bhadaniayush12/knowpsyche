@@ -39,6 +39,8 @@ export const ui = {
   oopsGreen: 'Missed — click on green',
   // Drafted: touch version of the line above.
   oopsGreenTouch: 'Missed — tap on green',
+  // Drafted: touch version of the stage line (the doc intro's first instruction, with "Tap").
+  stageLineTouch: 'Tap when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.',
   // Drafted: everything from here to the end of `ui`.
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',
@@ -66,7 +68,7 @@ export const resultUi = {
   focusDetail: 'greens caught',
   selfControlDetail: 'reds held back',
   speedDetail: 'avg reaction time',
-  steady: 'Steady',
+  steady: 'Consistent',
   steadyDetail: 'consistent across halves',
   dipped: 'Dipped',
   dippedDetail: (diff: number) => `second half −${diff} pts`,

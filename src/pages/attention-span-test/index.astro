@@ -59,9 +59,9 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       <!-- Idle view (before practice starts) -->
       <div data-as-view="idle" class="flex flex-col items-center gap-3 px-4">
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
-        <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
+        <p class="pointer-swap m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
           <!-- From the doc intro. -->
-          Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.
+          <span class="on-mouse">Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.</span><span class="on-touch" set:html={ui.stageLineTouch} />
         </p>
         <button
           type="button"
@@ -138,7 +138,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
             </div>
             <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
               <span class="mono text-[10.5px] text-muted">Steadiness</span>
-              <span class="text-[28px] font-semibold tracking-[-.03em] text-ink" data-r="steadiness">{resultUi.steady}</span>
+              <span class="text-[clamp(24px,7vw,28px)] font-semibold tracking-[-.03em] text-ink" data-r="steadiness">{resultUi.steady}</span>
               <span class="text-[12px] text-ink-soft" data-r="steadiness-detail">{resultUi.steadyDetail}</span>
             </div>
           </div>
@@ -423,11 +423,11 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     const steadinessDetailEl = $('[data-r=steadiness-detail]', resultEl);
     if (scores.steadiness.dipped) {
       steadinessEl.textContent = resultUi.dipped;
-      steadinessEl.className = 'text-[28px] font-semibold tracking-[-.03em] text-coral-ink';
+      steadinessEl.className = 'text-[clamp(24px,7vw,28px)] font-semibold tracking-[-.03em] text-coral-ink';
       steadinessDetailEl.textContent = resultUi.dippedDetail(scores.steadiness.diff);
     } else {
       steadinessEl.textContent = resultUi.steady;
-      steadinessEl.className = 'text-[28px] font-semibold tracking-[-.03em] text-teal-ink';
+      steadinessEl.className = 'text-[clamp(24px,7vw,28px)] font-semibold tracking-[-.03em] text-teal-ink';
       steadinessDetailEl.textContent = resultUi.steadyDetail;
     }
 

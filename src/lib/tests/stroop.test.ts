@@ -160,6 +160,49 @@ describe('Stroop: 85% accuracy note at 84%, 85%, and 86%', () => {
   });
 });
 
+describe('Stroop: zero, negative and unmeasured effect', () => {
+  const r = (congruent: boolean, ms: number, correct = true): StroopResponse => ({
+    trial: congruent ? { word: 'red', ink: 'red', congruent } : { word: 'green', ink: 'red', congruent },
+    picked: correct ? 'red' : 'blue',
+    correct,
+    reactionTimeMs: ms,
+  });
+
+  it('says the words didn\'t slow you down when the effect is negative, with the Under 80 band', () => {
+    const scores = calculateStroopScores([r(true, 600), r(false, 500)]);
+    expect(scores.measured).toBe(true);
+    expect(scores.stroopEffectMs).toBe(-100);
+    expect(getBand(scores.stroopEffectMs).badge).toBe('Unshakeable');
+    expect(meaningLine(scores)).toBe("Clashing words didn't slow you down. The clashing words barely slowed you down.");
+  });
+
+  it('says the words didn\'t slow you down when the effect is exactly 0', () => {
+    const scores = calculateStroopScores([r(true, 500), r(false, 500)]);
+    expect(scores.measured).toBe(true);
+    expect(scores.stroopEffectMs).toBe(0);
+    expect(meaningLine(scores)).toBe("Clashing words didn't slow you down. The clashing words barely slowed you down.");
+  });
+
+  it('shows the ms number only when the effect is above 0', () => {
+    const scores = calculateStroopScores([r(true, 500), r(false, 501)]);
+    expect(meaningLine(scores)).toBe('Clashing words slowed you down by 1 ms. The clashing words barely slowed you down.');
+  });
+
+  it('cannot measure the effect when no matching word was answered correctly', () => {
+    const scores = calculateStroopScores([r(true, 400, false), r(false, 500)]);
+    expect(scores.measured).toBe(false);
+    expect(scores.stroopEffectMs).toBe(0);
+    expect(meaningLine(scores)).toBe("We couldn't measure this one. Try again.");
+  });
+
+  it('cannot measure the effect when no clashing word was answered correctly', () => {
+    const scores = calculateStroopScores([r(true, 400), r(false, 500, false)]);
+    expect(scores.measured).toBe(false);
+    expect(meaningLine(scores)).toBe("We couldn't measure this one. Try again.");
+    expect(meaningLine(scores)).not.toMatch(/\d+ ms/);
+  });
+});
+
 describe('Stroop: band edges', () => {
   it('maps Stroop effect to correct bands at exact boundaries', () => {
     // Under 80 ms: Unshakeable (including 0 and negative)

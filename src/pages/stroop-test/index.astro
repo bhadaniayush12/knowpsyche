@@ -64,7 +64,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       <div data-st-view="idle" class="flex flex-col items-center gap-3">
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
         <p class="pointer-swap m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
-          <span class="on-mouse" set:html={ui.idleText} /><span class="on-touch" set:html={ui.idleTextTouch} />
+          <span class="on-mouse">{page.intro}</span><span class="on-touch">{page.introTouch}</span>
         </p>
         <button
           type="button"
@@ -159,7 +159,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         <div class="flex min-w-0 flex-[999_1_520px] flex-col gap-[22px]">
           <div class="flex flex-wrap items-end gap-[18px]">
             <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]">
-              <span data-r="effect">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]">ms</span>
+              <span data-r="effect">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]" data-r="effect-unit">ms</span>
             </div>
             <div class="serif pb-2.5 text-[34px] text-blue" data-r="badge">Typical</div>
           </div>
@@ -463,12 +463,15 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Headline
     $('[data-r=eyebrow]', resultEl).textContent = resultUi.eyebrow;
     const headline = $('[data-r=headline]', resultEl);
-    headline.textContent = `${band.badge} · ${scores.stroopEffectMs} ms`;
+    // No correct answer on one word type: no effect number anywhere.
+    const measured = scores.measured;
+    headline.textContent = measured ? `${band.badge} · ${scores.stroopEffectMs} ms` : copy.notMeasured;
     headline.focus({ preventScroll: true });
 
     // Scores
-    $('[data-r=effect]', resultEl).textContent = String(scores.stroopEffectMs);
-    $('[data-r=badge]', resultEl).textContent = band.badge;
+    $('[data-r=effect]', resultEl).textContent = measured ? String(scores.stroopEffectMs) : '—';
+    $('[data-r=badge]', resultEl).textContent = measured ? band.badge : '';
+    $('[data-r=effect-unit]', resultEl).hidden = !measured;
 
     // Marker
     const marker = $('[data-r=marker]', resultEl);
@@ -477,10 +480,12 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     marker.style.left = `${pct}%`;
     markerLabel.style.left = `${pct}%`;
     markerLabel.textContent = `You · ${scores.stroopEffectMs} ms`;
+    marker.hidden = !measured;
+    markerLabel.hidden = !measured;
 
     // Comparative bars
-    $('[data-r=matching-avg]', resultEl).textContent = `${scores.matchingAvgMs} ms`;
-    $('[data-r=clashing-avg]', resultEl).textContent = `${scores.clashingAvgMs} ms`;
+    $('[data-r=matching-avg]', resultEl).textContent = scores.matchingCorrectCount > 0 ? `${scores.matchingAvgMs} ms` : '—';
+    $('[data-r=clashing-avg]', resultEl).textContent = scores.clashingCorrectCount > 0 ? `${scores.clashingAvgMs} ms` : '—';
     $('[data-r=accuracy]', resultEl).textContent = `${scores.accuracy}%`;
 
     const maxMs = Math.max(scores.matchingAvgMs, scores.clashingAvgMs, 1000);
@@ -497,7 +502,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     // Your own record to compare later. Nothing is saved.
     copyText = [
-      `Stroop effect: ${scores.stroopEffectMs} ms (${band.badge})`,
+      measured ? `Stroop effect: ${scores.stroopEffectMs} ms (${band.badge})` : copy.notMeasured,
       `Matching: ${scores.matchingAvgMs} ms · Clashing: ${scores.clashingAvgMs} ms · Accuracy: ${scores.accuracy}%`,
       `knowpsyche.com/stroop-test · ${today()}`,
     ].join('\n');
@@ -505,12 +510,12 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Share card
     void share.update({
       label: resultUi.shareLabel,
-      big: String(scores.stroopEffectMs),
-      unit: 'ms',
-      badge: band.badge,
+      big: measured ? String(scores.stroopEffectMs) : '—',
+      unit: measured ? 'ms' : '',
+      badge: measured ? band.badge : '',
       tagline: resultUi.shareTagline,
       tag: 'Test / 06',
-      text: shareText(scores.stroopEffectMs),
+      text: measured ? shareText(scores.stroopEffectMs) : copy.notMeasured,
       url: 'https://knowpsyche.com/stroop-test/',
       filename: 'stroop-test-knowpsyche',
     });

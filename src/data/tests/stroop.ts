@@ -38,13 +38,11 @@ export const ui = {
   // Drafted: the doc says "4 rounds with feedback" but gives no lines. Everything from here to the end of `ui`.
   practiceCorrect: 'Correct!',
   practiceWrong: 'Oops — pick the ink colour, not what the word says.',
-  practiceMissed: 'Too slow — answer within 3 seconds.',
+  practiceMissed: "Time's up — answer within 3 seconds next time.",
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',
   practiceLabel: 'Practice round',
   practiceNote: '4 rounds with feedback · not scored',
-  idleText: 'A colour word will appear. Click the button for the <b>INK</b> colour — ignore what the word says!',
-  idleTextTouch: 'A colour word will appear. Tap the button for the <b>INK</b> colour — ignore what the word says!',
   practiceCount: (n: number, total: number) => `Practice · ${n} / ${total}`,
   practiceDoneTitle: 'Practice complete',
   practiceDoneText: 'Ready for the real test? 40 words in random order. Be fast, but accurate.',
@@ -74,7 +72,11 @@ export const resultUi = {
 export const result = {
   change: 'Reading speed, practice, tiredness and how fast you try to go.',
   // Drafted: the doc gives no "Try this" tip.
-  tip: 'Try unfocusing your eyes slightly or saying the colour out loud — it can help you see the ink before your brain reads the word.',
+  tip: 'Try again a little slower and see if the gap shrinks.',
+  // Drafted: the doc's "What does it mean?" line only covers a positive slow-down.
+  noSlowdown: "Clashing words didn't slow you down.",
+  // Drafted: shown when either word type has no correct answer, so there's no effect to report.
+  notMeasured: "We couldn't measure this one. Try again.",
   next: {
     href: '/attention-span-test/',
     name: 'Attention span',
