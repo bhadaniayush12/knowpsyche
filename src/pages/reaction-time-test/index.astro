@@ -1,0 +1,502 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import WhatItMeans from '../../components/result/WhatItMeans.astro';
+import TryThis from '../../components/result/TryThis.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
+import { TRIES } from '../../lib/tests/reaction-time';
+
+const fill = (s: string) => s.replace('{V}', 'Click').replace('{v}', 'click');
+const ticks = [100, 200, 300, 400, 500];
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/reaction-time-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+>
+  <div slot="controls" class="flex min-w-0 flex-col items-start gap-2">
+    <div role="group" aria-label="Mode" class="flex flex-wrap gap-1.5">
+      {modes.map((m, i) => (
+        <button
+          type="button"
+          data-mode={m.key}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+          class:list={['rt-mode mono min-h-11 rounded-full border border-ink px-4 py-2.5 text-[11px]', m.key === 'space' && 'rt-mode-space']}
+        >{m.label}</button>
+      ))}
+    </div>
+    <p data-mode-note class="m-0 min-h-[1.5em] text-[14px] text-ink-soft" aria-live="polite"></p>
+  </div>
+
+  <div slot="stage" class="rt" data-current="visual">
+    <button
+      type="button"
+      class="rt-arena relative flex h-[clamp(320px,46vw,460px)] w-full touch-manipulation select-none items-center justify-center rounded-[26px] border-0 text-center shadow-[0_26px_54px_rgba(36,34,56,.16)] transition-[background] duration-[120ms]"
+      style="background:var(--color-ink);color:var(--color-paper)"
+      aria-describedby="rt-status"
+    >
+      <span class="rt-count mono absolute top-4 left-[18px] text-[11px] opacity-80">Visual · try 1 / {TRIES}</span>
+      <span class="rt-tag mono absolute top-4 right-[18px] text-[11px] opacity-80">Ready</span>
+      <span class="rt-lights absolute top-[18%] left-1/2 flex -translate-x-1/2 gap-[clamp(8px,2vw,18px)]" aria-hidden="true" hidden>
+        {Array.from({ length: 5 }, () => <span class="rt-light block size-[clamp(34px,7vw,64px)] rounded-full border-2 border-paper/25 bg-[#3a3752]"></span>)}
+      </span>
+      <span class="rt-label pop flex flex-col items-center gap-2.5 px-5">
+        <span class="rt-big text-[clamp(44px,7vw,96px)] leading-none font-semibold tracking-[-.05em]">{fill(arena.idle.big)}</span>
+        <span class="rt-small max-w-[520px] text-lg opacity-90">{fill(arena.idle.small.visual)}</span>
+      </span>
+    </button>
+    <p id="rt-status" class="rt-live sr-only" aria-live="assertive"></p>
+
+    <div class="mt-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex flex-wrap gap-2" aria-label="Your tries" role="list">
+        {Array.from({ length: TRIES }, () => (
+          <span role="listitem" class="rt-slot mono min-w-[84px] rounded-full border border-ink px-3.5 py-[9px] text-center text-xs text-muted">— —</span>
+        ))}
+      </div>
+      <button type="button" class="rt-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
+    </div>
+  </div>
+
+  <Fragment slot="result">
+    <ResultHeadline />
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[999_1_520px] flex-col gap-[22px]">
+          <div class="flex flex-wrap items-end gap-[18px]">
+            <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]"><span data-r="avg">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]">ms</span></div>
+            <div class="serif pb-2.5 text-[34px] text-blue">average of {TRIES}</div>
+          </div>
+          <div class="border border-ink bg-card px-[22px] pt-[46px] pb-3.5">
+            <div class="relative flex h-10 border border-ink" aria-hidden="true">
+              <div class="flex-[2] bg-blue"></div>
+              <div class="flex-[2] border-l border-ink bg-lilac"></div>
+              <div class="flex-[4] border-l border-ink bg-paper"></div>
+              <div data-r="marker" class="absolute -top-3 -bottom-3 w-1 -translate-x-0.5 bg-coral" style="left:0%"></div>
+              <div data-r="marker-label" class="mono absolute -top-[38px] -translate-x-1/2 bg-coral-ink px-[7px] py-[3px] text-[11px] whitespace-nowrap text-white" style="left:0%"></div>
+            </div>
+            <div class="mono mt-2.5 flex justify-between text-[11px] text-muted" aria-hidden="true">
+              {ticks.map((t, i) => <span>{t}{i === ticks.length - 1 ? ' ms' : ''}</span>)}
+            </div>
+          </div>
+          <p data-r="mode-note" class="m-0 text-[15px] text-ink-soft" hidden></p>
+        </div>
+
+        <div class="flex min-w-0 flex-[1_1_280px] flex-col gap-3.5 border border-ink bg-card p-[22px]">
+          <div class="mono flex justify-between text-[11px]"><span>Your {TRIES} tries</span><span class="text-teal-ink">Best <span data-r="best"></span></span></div>
+          <div data-r="bars" class="flex h-[200px] items-end gap-3 border-b border-ink" role="list" aria-label="Your tries in order"></div>
+          <div class="mono flex justify-between text-[10px] text-muted" aria-hidden="true"><span>Try 1</span><span>Try {TRIES}</span></div>
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <WhatItMeans change={result.change} />
+
+    <TryThis>
+      <TryAgain variant="primary" class="rt-challenge" />
+    </TryThis>
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  /* Spacebar mode is hidden on phones (part-1.md). */
+  @media (hover: none) and (pointer: coarse) {
+    .rt-mode-space { display: none; }
+  }
+  .rt-mode[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); }
+  .rt-mode[aria-pressed='false'] { background: transparent; color: var(--color-ink); }
+  .rt-slot[data-filled] { background: var(--color-ink); color: var(--color-paper); }
+  .rt-light[data-on] { background: var(--color-red); border-color: #ff9d92; box-shadow: 0 0 22px rgba(201, 88, 75, .7); }
+  .rt-arena.glow { animation: rt-glow 2.6s var(--ease-house) 2; }
+  @keyframes rt-glow {
+    0%, 100% { box-shadow: 0 26px 54px rgba(36, 34, 56, .16); }
+    45% { box-shadow: 0 0 0 14px rgba(237, 202, 105, .45), 0 26px 54px rgba(36, 34, 56, .16); }
+  }
+</style>
+
+<script>
+  import { arena as copy, modes, result as resultCopy, type ReactionMode } from '../../data/tests/reaction-time';
+  import {
+    addTry,
+    f1HoldMs,
+    f1LightsOn,
+    f1Total,
+    fillPercent,
+    getBand,
+    isInconsistent,
+    meaningLine,
+    shareText,
+    summarize,
+    TRIES,
+    waitMs,
+  } from '../../lib/tests/reaction-time';
+  import { createShareCard } from '../../lib/share-card';
+
+  type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
+
+  const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)!;
+  const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
+
+  const box = $<HTMLButtonElement>('.rt-arena');
+  const label = $('.rt-label');
+  const big = $('.rt-big');
+  const small = $('.rt-small');
+  const count = $('.rt-count');
+  const tag = $('.rt-tag');
+  const lightsWrap = $('.rt-lights');
+  const lights = $$('.rt-light');
+  const live = $('.rt-live');
+  const slots = $$('.rt-slot');
+  const modeButtons = $$<HTMLButtonElement>('.rt-mode');
+  const modeNote = $('[data-mode-note]');
+  const resultEl = $('[data-result]');
+  const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
+  const share = createShareCard($('[data-share]'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // "Tap" on touch screens, "Click" with a mouse.
+  const touch = window.matchMedia('(pointer: coarse)').matches;
+  const V = touch ? 'Tap' : 'Click';
+  const say = (s: string) => s.replace('{V}', V).replace('{v}', V.toLowerCase());
+
+  let mode: ReactionMode = 'visual';
+  let phase: Phase = 'idle';
+  let tries: number[] = [];
+  let goAt = 0;
+  let seqStart = 0;
+  let shownAt = 0;
+  let last = 0;
+  let frame = 0;
+  let audio: AudioContext | null = null;
+
+  const modeInfo = (m: ReactionMode) => modes.find((x) => x.key === m)!;
+
+  // ---------- Sound ----------
+  const ensureAudio = () => {
+    if (mode !== 'sound') return;
+    const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!Ctx) return;
+    audio ??= new Ctx();
+    if (audio.state === 'suspended') void audio.resume();
+  };
+
+  const beep = () => {
+    if (!audio) return;
+    const t = audio.currentTime;
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 1000;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.35, t + 0.005);
+    gain.gain.setValueAtTime(0.35, t + 0.12);
+    gain.gain.linearRampToValueAtTime(0, t + 0.15);
+    osc.connect(gain).connect(audio.destination);
+    osc.start(t);
+    osc.stop(t + 0.16);
+  };
+
+  // ---------- Rendering ----------
+  type Look = { bg: string; fg: string; big: string; small: string; tag: string };
+  const INK = { bg: 'var(--color-ink)', fg: 'var(--color-paper)' };
+
+  const look = (): Look => {
+    // In sound and F1 mode the box stays the same at "go": only the beep / lights out count.
+    const signalHidden = mode === 'sound' || mode === 'f1';
+    const waitLook: Look = {
+      ...(signalHidden ? INK : { bg: 'var(--color-wait-red)', fg: '#FFFFFF' }),
+      big: copy.wait.big,
+      small: copy.wait.small[mode],
+      tag: 'Waiting',
+    };
+    switch (phase) {
+      case 'idle':
+        return { ...INK, big: mode === 'space' ? copy.spaceIdleBig : say(copy.idle.big), small: say(copy.idle.small[mode]), tag: 'Ready' };
+      case 'wait':
+        return waitLook;
+      case 'go':
+        if (signalHidden) return waitLook;
+        return {
+          bg: 'var(--color-mint-go)',
+          fg: 'var(--color-ink)',
+          big: mode === 'space' ? copy.go.space : touch ? copy.goTouch : copy.go.visual,
+          small: 'Now!',
+          tag: 'Go',
+        };
+      case 'early':
+        return { bg: 'var(--color-yellow)', fg: 'var(--color-ink)', big: copy.early.big, small: say(copy.early.small), tag: 'Too soon' };
+      case 'guess':
+        return { bg: 'var(--color-yellow)', fg: 'var(--color-ink)', big: copy.guess.big, small: say(copy.guess.small), tag: 'Guess' };
+      case 'shown':
+        return { bg: 'var(--color-blue)', fg: '#FFFFFF', big: `${last} ms`, small: say(copy.shown.small), tag: `Try ${tries.length} done` };
+      case 'done':
+        return { ...INK, big: `${summarize(tries).average} ms`, small: copy.done.small, tag: 'Complete' };
+    }
+  };
+
+  const restartAnim = (el: HTMLElement, cls: string) => {
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  };
+
+  const renderSlots = () => {
+    slots.forEach((s, i) => {
+      const v = tries[i];
+      s.textContent = v ? `${v} ms` : '— —';
+      s.toggleAttribute('data-filled', v !== undefined);
+    });
+  };
+
+  const renderLights = (on: number) => {
+    lights.forEach((l, i) => l.toggleAttribute('data-on', i < on));
+  };
+
+  const render = () => {
+    const p = look();
+    box.style.background = p.bg;
+    box.style.color = p.fg;
+    big.textContent = p.big;
+    small.textContent = p.small;
+    tag.textContent = p.tag;
+    const n = Math.min(tries.length + (phase === 'done' ? 0 : 1), TRIES);
+    count.textContent = `${modeInfo(mode).label} · try ${n} / ${TRIES}`;
+    lightsWrap.hidden = mode !== 'f1';
+    box.classList.toggle('glow', phase === 'done');
+    renderSlots();
+    if (!reducedMotion.matches) restartAnim(label, 'pop');
+    // Screen readers: announce state changes, but never the hidden signal in sound / F1 mode.
+    const signalHidden = phase === 'go' && (mode === 'sound' || mode === 'f1');
+    live.textContent = phase === 'wait' || signalHidden ? copy.wait.big : `${p.big} ${p.small}`;
+  };
+
+  // ---------- Timing ----------
+  // The signal moment is checked every frame against performance.now(), so it never drifts.
+  const tick = (now: number) => {
+    if (phase !== 'wait') return;
+    if (mode === 'f1') renderLights(f1LightsOn(now - seqStart));
+    if (now >= goAt) {
+      phase = 'go';
+      if (mode === 'f1') renderLights(0);
+      if (mode === 'sound') {
+        beep();
+        shownAt = performance.now();
+      } else {
+        // The change is painted at the end of this frame; `now` is this frame's start.
+        shownAt = now;
+      }
+      render();
+      return;
+    }
+    frame = requestAnimationFrame(tick);
+  };
+
+  const startTry = () => {
+    cancelAnimationFrame(frame);
+    ensureAudio();
+    phase = 'wait';
+    const now = performance.now();
+    if (mode === 'f1') {
+      seqStart = now;
+      goAt = now + f1Total(f1HoldMs());
+      renderLights(1);
+    } else {
+      goAt = now + waitMs();
+    }
+    render();
+    frame = requestAnimationFrame(tick);
+  };
+
+  const showResult = () => {
+    const s = summarize(tries);
+    const band = getBand(s.average);
+    const info = modeInfo(mode);
+    r('eyebrow').textContent = `Your result · Reaction time · ${info.label} mode`;
+    r('headline').textContent = `${s.average} ms — ${band.badge}`;
+    r('avg').textContent = String(s.average);
+    const pos = `${fillPercent(s.average).toFixed(1)}%`;
+    r('marker').style.left = pos;
+    const ml = r('marker-label');
+    ml.style.left = pos;
+    ml.textContent = `You · ${s.average}`;
+    const note = r('mode-note');
+    note.hidden = !info.resultNote;
+    note.textContent = info.resultNote ?? '';
+    r('best').textContent = String(s.fastest);
+
+    const bars = r('bars');
+    const top = Math.max(500, s.slowest);
+    bars.replaceChildren(
+      ...tries.map((ms, i) => {
+        const col = document.createElement('div');
+        col.setAttribute('role', 'listitem');
+        col.className = 'flex h-full flex-1 flex-col items-center justify-end gap-1.5';
+        col.setAttribute('aria-label', `Try ${i + 1}: ${ms} ms${ms === s.fastest ? ', fastest' : ''}`);
+        const v = document.createElement('span');
+        v.className = 'mono text-[10px]';
+        v.textContent = String(ms);
+        v.setAttribute('aria-hidden', 'true');
+        const bar = document.createElement('div');
+        bar.className = 'w-full';
+        bar.style.height = `${((ms / top) * 85).toFixed(1)}%`;
+        bar.style.background = ms === s.fastest ? 'var(--color-sage)' : 'var(--color-ink)';
+        col.append(v, bar);
+        return col;
+      }),
+    );
+
+    r('meaning').textContent = meaningLine(s);
+    const shaky = isInconsistent(s.spread);
+    r('tip').textContent = shaky ? resultCopy.spreadChallenge : resultCopy.morningNight;
+    $<HTMLButtonElement>('.rt-challenge', resultEl).hidden = !shaky;
+
+    void share.update({
+      label: 'My reaction time',
+      big: String(s.average),
+      unit: 'ms',
+      badge: band.badge,
+      tagline: 'Can you beat it?',
+      tag: 'Test / 01',
+      text: shareText(s.average),
+      url: 'https://knowpsyche.com/reaction-time-test/',
+      filename: 'knowpsyche-reaction-time',
+    });
+
+    resultEl.hidden = false;
+    const headline = r('headline');
+    headline.focus({ preventScroll: true });
+    resultEl.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  };
+
+  /** A press on the box (pointer or key). `t` = the event's high-resolution timestamp. */
+  const press = (t: number) => {
+    switch (phase) {
+      case 'wait':
+        cancelAnimationFrame(frame);
+        if (mode === 'f1') renderLights(0);
+        phase = 'early';
+        render();
+        return;
+      case 'go': {
+        last = Math.round((t >= shownAt ? t : performance.now()) - shownAt);
+        const out = addTry(tries, last);
+        tries = out.tries;
+        phase = !out.counted ? 'guess' : out.done ? 'done' : 'shown';
+        render();
+        if (phase === 'done') showResult();
+        return;
+      }
+      case 'done':
+        return;
+      default:
+        startTry();
+    }
+  };
+
+  const reset = () => {
+    cancelAnimationFrame(frame);
+    tries = [];
+    phase = 'idle';
+    renderLights(0);
+    resultEl.hidden = true;
+    render();
+  };
+
+  // ---------- Input ----------
+  const running = () => phase === 'wait' || phase === 'go';
+
+  box.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    // Spacebar mode: only the spacebar counts while a try is running.
+    if (mode === 'space' && running()) return;
+    press(e.timeStamp);
+  });
+  // Audio can only be unlocked by a full tap on touch screens, so try again on pointerup.
+  box.addEventListener('pointerup', ensureAudio);
+
+  box.addEventListener('keydown', (e) => {
+    if (e.key !== ' ' && e.key !== 'Enter') return;
+    e.preventDefault();
+    if (e.repeat) return;
+    if (mode === 'space' && e.key === ' ') return; // handled on document below
+    if (mode === 'space' && running()) return;
+    press(e.timeStamp);
+  });
+  // Stop the button's own Space activation (keyup) from doing anything.
+  box.addEventListener('keyup', (e) => {
+    if (e.key === ' ') e.preventDefault();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (mode !== 'space' || e.key !== ' ' || phase === 'done') return;
+    const t = e.target as HTMLElement;
+    const onBox = t === box || t === document.body;
+    if (!running() && !onBox) return;
+    e.preventDefault();
+    if (e.repeat) return;
+    press(e.timeStamp);
+  });
+
+  const setMode = (m: ReactionMode) => {
+    mode = m;
+    modeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
+    modeNote.textContent = modeInfo(m).note ?? '';
+    ensureAudio();
+    reset();
+  };
+  modeButtons.forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode as ReactionMode)));
+
+  const focusBox = () => {
+    box.focus({ preventScroll: true });
+    box.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+  };
+
+  $('[data-test-start]').addEventListener('click', () => {
+    if (phase === 'done') reset();
+    focusBox();
+    if (!running()) startTry();
+  });
+  $('.rt-restart').addEventListener('click', () => {
+    reset();
+    box.focus();
+  });
+  $$('[data-try-again]').forEach((b) =>
+    b.addEventListener('click', () => {
+      reset();
+      focusBox();
+    }),
+  );
+
+  // Leaving the tab mid-try would ruin the timing, so that try starts over.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && running()) {
+      cancelAnimationFrame(frame);
+      renderLights(0);
+      phase = 'idle';
+      render();
+    }
+  });
+
+  render();
+</script>

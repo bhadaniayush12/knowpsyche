@@ -1,4 +1,7 @@
-// Copy from docs/content/part-1.md, "Result bands (visual mode)". Word for word.
+// Copy from docs/content/part-1.md, "Test 1 — Reaction Time". Word for word.
+// Lines marked "drafted" were missing from the content doc and approved in the build plan.
+import type { Faq, Source } from '../shared';
+
 export interface ReactionBand {
   /** Upper bound in ms, inclusive. `Infinity` for the last band. */
   max: number;
@@ -12,4 +15,97 @@ export const reactionBands: ReactionBand[] = [
   { max: 300, badge: 'Steady', text: 'Right where most people land in browser tests.' },
   { max: 400, badge: 'Needs a coffee', text: 'Tiredness, distractions or a laggy device often explain this.' },
   { max: Infinity, badge: 'Running on empty', text: 'Try again on a computer with a mouse, after a short break.' },
+];
+
+export const page = {
+  title: 'Reaction Time Test — Free, 5 Tries, Instant Result',
+  description:
+    "How fast do you react? Click when the screen changes. Get your average in milliseconds, see what's typical, and learn what affects your speed.",
+  h1: 'Reaction time test',
+  intro: 'Wait for the box to change, then click as fast as you can. Five tries, then your average.',
+  crumb: 'Reaction time',
+  // Drafted.
+  eyebrow: 'Test / 01 · Attention · 1–2 min',
+  metaLine: 'About 1 minute · 5 tries · Nothing saved',
+};
+
+export type ReactionMode = 'visual' | 'sound' | 'f1' | 'space';
+
+export const modes: { key: ReactionMode; label: string; note?: string; resultNote?: string }[] = [
+  { key: 'visual', label: 'Visual' },
+  {
+    key: 'sound',
+    label: 'Sound',
+    note: 'Your speakers can add a small delay.',
+    // Drafted, from "Sound mode usually comes out a little faster than visual".
+    resultNote: 'Sound mode usually comes out a little faster than visual.',
+  },
+  {
+    key: 'f1',
+    label: 'F1 lights',
+    note: 'Can you match a race start?',
+    // Drafted, from "F1 mode a little slower".
+    resultNote: 'F1 mode usually comes out a little slower than visual.',
+  },
+  // Drafted note.
+  { key: 'space', label: 'Spacebar', note: 'Press the spacebar instead of clicking.' },
+];
+
+/** Box text per phase. `{v}` = Click/Tap, `{V}` = capitalised. Drafted except where the content doc gives it. */
+export const arena = {
+  idle: {
+    big: '{V} to start',
+    small: {
+      visual: 'When the box turns light teal, {v} as fast as you can.',
+      sound: 'When you hear the beep, {v} as fast as you can.',
+      f1: '{V} the moment all five lights go out.',
+      space: 'When the box turns light teal, press Space as fast as you can.',
+    } as Record<ReactionMode, string>,
+  },
+  spaceIdleBig: 'Press Space to start',
+  wait: {
+    big: 'Wait for it…',
+    small: { visual: 'Not yet.', sound: 'Listen for the beep.', f1: 'Wait for the lights to go out.', space: 'Not yet.' } as Record<ReactionMode, string>,
+  },
+  go: { visual: 'CLICK!', space: 'SPACE!' },
+  goTouch: 'TAP!',
+  early: { big: 'Too soon!', small: 'That try doesn’t count. {V} to try again.' },
+  guess: { big: 'Too quick to count', small: 'Under 100 ms is a guess, not a reaction. {V} to try again.' },
+  shown: { small: '{V} to keep going.' },
+  done: { small: 'Your average across 5 tries. Your result is below.' },
+};
+
+export const result = {
+  change:
+    'Sleep, alertness, practice and age all play a part. So does your device: screens and mice can add tens of milliseconds before your brain is even involved.',
+  next: {
+    href: '/attention-span-test/',
+    name: 'Attention span',
+    time: '2–3 min',
+    line: 'Fast hands are one thing — what about holding back? Try the Attention span test.',
+  },
+  learn: { href: '/method/', label: 'How we build our tests →' },
+  spreadChallenge: 'Fast, but a bit inconsistent. Can you get all five within 50 ms?',
+  morningNight: 'Tiredness slows reactions. Test yourself in the morning and again late at night — see the difference.',
+};
+
+export const faqs: Faq[] = [
+  { q: 'What is reaction time?', a: 'The time between noticing a signal and responding to it — here, between the box changing and your click.' },
+  { q: 'What is the average reaction time?', a: 'In browser tests, most people average between 200 and 300 ms. Your device adds part of that.' },
+  { q: 'What is a good reaction time?', a: 'Under 250 ms is quick; under 200 ms is very fast.' },
+  { q: 'Why is my reaction time so slow?', a: 'The usual reasons are tiredness, distraction, a phone touchscreen, or a slow monitor or mouse.' },
+  { q: 'How can I improve my reaction time?', a: 'Sleep well, warm up with a few tries, stay focused, and practise. For gaming, a fast mouse and a high-refresh monitor help most.' },
+  { q: 'Does being tired slow your reaction time?', a: 'Yes — lack of sleep is one of the most reliable ways to slow down.' },
+  { q: 'Does caffeine help?', a: "Some studies find a small improvement in alertness and reaction time, especially when you're tired." },
+  { q: 'At what age is reaction time fastest?', a: 'For most people, in their late teens and twenties. It slows gradually after that.' },
+  { q: "What's the difference between a reaction and a reflex?", a: "A reflex (like the knee-jerk) happens automatically without a decision. A reaction needs your brain to notice and decide, so it's slower." },
+  { q: "What's the difference between simple and choice reaction time?", a: 'Simple = one signal, one response (this test). Choice = several possible signals and responses, which takes longer.' },
+  { q: "Why don't times under 100 ms count?", a: "Humans can't really react that fast to a signal — it's a lucky guess. Sprint races use the same idea: a start under 0.1 seconds counts as a false start." },
+  { q: 'Why is sound faster than sight?', a: 'Many studies find people react slightly faster to sounds than to lights.' },
+  { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection, not a diagnosis." },
+];
+
+export const sources: Source[] = [
+  { before: 'Woods, D. L., et al. (2015). Factors influencing the latency of simple reaction time. ', title: 'Frontiers in Human Neuroscience', after: '.' },
+  { before: 'Jain, A., et al. (2015). A comparative study of visual and auditory reaction times. ', title: 'International Journal of Applied and Basic Medical Research', after: '.' },
 ];
