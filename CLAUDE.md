@@ -33,6 +33,7 @@ Reference files in `docs/reference/` — read only when the task needs them:
 - SEO work → `06_ai_seo_geo_aeo_training.md`
 - Writing any new page copy (Terms, 404, meta descriptions) → `07_humanwriting_guide.md`
 - AdSense readiness / audit (only when Dev asks) → `00_ADSENSE_INDEX.md` to `05_ADSENSE_AUDIT_PROMPT.md`
+- Research notes (background only, never copy text, never override the content docs): docs/research/cognitive-background.md and docs/research/myths.md. Read only when the task needs them.
 
 Copy text from the content docs word for word. Do not rewrite, shorten or "improve" copy. If something is missing or contradicts, stop and ask.
 
