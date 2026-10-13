@@ -41,10 +41,12 @@ interface Props {
   startLabel?: string;
   faqs: FaqItem[];
   sources: Source[];
+  /** Optional note under the sources list. */
+  sourcesNote?: string;
   ogImage?: string;
 }
 
-const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, ogImage } = Astro.props;
+const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, sourcesNote, ogImage } = Astro.props;
 
 // The design sets the last word of the H1 in the serif accent.
 const cut = h1.lastIndexOf(' ');
@@ -91,7 +93,7 @@ const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
 
     <div class="mt-14 flex max-w-[760px] flex-col gap-12">
       <Faq faqs={faqs} />
-      <Sources sources={sources} />
+      <Sources sources={sources} note={sourcesNote} />
     </div>
   </div>
 </BaseLayout>

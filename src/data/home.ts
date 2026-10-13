@@ -24,7 +24,7 @@ export const homeTests: HomeTest[] = [
   { name: 'Number memory', kind: 'Memory', cat: 'brain', time: '2 min', desc: 'How many digits you can hold in your head at once.', href: '/number-memory-test/', glyph: 'nm', color: 'var(--color-teal-dark)', tint: 'var(--color-tint-teal)' },
   { name: 'Attention span', kind: 'Focus', cat: 'brain', time: '3 min', desc: 'How well you stay focused and ignore distractions.', href: '/attention-span-test/', glyph: 'as', color: 'var(--color-blue)', tint: 'var(--color-tint-blue)' },
   { name: 'Stroop test', kind: 'Focus', cat: 'brain', time: '1 min', desc: 'How your mind copes when what you see and what you read disagree.', href: '/stroop-test/', glyph: 'st', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
-  { name: 'Emotional intelligence', kind: 'Emotions', cat: 'emotions', time: '6 min', desc: 'How well you notice and handle feelings — yours and other people’s.', href: '/emotional-intelligence-test/', glyph: 'eq', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
+  { name: 'Emotional intelligence', kind: 'Emotions', cat: 'emotions', time: '5 min', desc: 'How well you notice and handle feelings — yours and other people’s.', href: '/emotional-intelligence-test/', glyph: 'eq', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
 ];
 
 export const testFilters: { key: 'all' | TestCategory; label: string }[] = [

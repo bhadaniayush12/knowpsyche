@@ -189,7 +189,7 @@ export const result = {
   next: {
     href: '/emotional-intelligence-test/',
     name: 'Emotional intelligence',
-    time: '6 min',
+    time: '5 min',
     line: "You know what drives you. Now see how well you read feelings — yours and other people's.",
   },
   learn: { href: '/method/', label: 'How we build our tests →' },
