@@ -1,0 +1,336 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import BandScale from '../../components/result/BandScale.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import CopyScores from '../../components/result/CopyScores.astro';
+import { areas, bands, faqs, order, page, result, resultUi, scale, sources, sourcesNote, statements, ui } from '../../data/tests/emotional-intelligence';
+
+const btnSmall =
+  'mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue disabled:cursor-default disabled:opacity-40 disabled:hover:border-ink disabled:hover:text-ink';
+const segClass = ['flex-[50] bg-paper', 'flex-[20] bg-lilac', 'flex-[15] bg-lilac-bright', 'flex-[15] bg-blue'];
+const ranges = ['<50', '50–69', '70–84', '85+'];
+const first = statements[order[0] - 1];
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/emotional-intelligence-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+  sourcesNote={sourcesNote}
+>
+  <div slot="stage" class="eq-card rounded-[26px] border border-line-card bg-white p-[clamp(18px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)]">
+    <div class="flex items-center justify-between gap-3">
+      <span class="eq-count mono text-[11px] whitespace-nowrap text-muted">{ui.count(1, order.length)}</span>
+      <div class="flex flex-none gap-2">
+        <button type="button" class:list={['eq-back', btnSmall]} disabled>{ui.back}</button>
+        <button type="button" class:list={['eq-restart', btnSmall]}>{ui.restart}</button>
+      </div>
+    </div>
+    <div class="mt-4 h-2 overflow-hidden rounded-full bg-line" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax={order.length} aria-valuenow="0">
+      <div class="eq-bar h-full rounded-full bg-blue transition-[width] duration-300 ease-house" style="width:0%"></div>
+    </div>
+
+    <!-- Room for the longest statement (4 lines on phones, 2 above), so answers never move. -->
+    <p id="eq-statement" class="mt-6 mb-0 min-h-[4.8em] text-[clamp(24px,3.4vw,40px)] leading-[1.2] font-semibold tracking-[-.03em] sm:min-h-[2.4em]" aria-live="polite">
+      <span class="eq-text inline-block">{first.text}</span>
+    </p>
+    <div role="group" aria-labelledby="eq-statement" class="mt-6 grid gap-2 sm:grid-cols-5">
+      {scale.map((label, i) => (
+        <button
+          type="button"
+          data-value={i + 1}
+          aria-pressed="false"
+          aria-keyshortcuts={String(i + 1)}
+          class="eq-answer flex min-h-14 items-center gap-3 rounded-14 border border-ink bg-paper px-4 py-3 text-left text-base font-medium text-ink transition-colors duration-200 hover:border-blue sm:flex-col sm:justify-center sm:gap-1.5 sm:px-2 sm:text-center"
+        >
+          <span class="mono inline-flex size-7 flex-none items-center justify-center rounded-lg border border-current text-xs" aria-hidden="true">{i + 1}</span>
+          <span>{label}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <Fragment slot="result">
+    <div class="flex flex-col gap-3">
+      <ResultHeadline />
+      <div data-r="same" class="flex flex-wrap items-center gap-3" hidden>
+        <p class="m-0 inline-flex max-w-[640px] rounded-full bg-tint-blue px-3.5 py-1.5 text-[14.5px] text-ink">{result.sameAnswerNote}</p>
+        <TryAgain />
+      </div>
+    </div>
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[999_1_480px] flex-col gap-[22px]">
+          <div class="flex flex-wrap items-end gap-[18px]">
+            <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]">
+              <span data-r="overall">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]">/ 100</span>
+            </div>
+            <div class="flex flex-col pb-2.5">
+              <span class="mono text-[11px] text-muted">{resultUi.overall}</span>
+              <span class="serif text-[34px] leading-[1.1] text-blue" data-r="badge"></span>
+            </div>
+          </div>
+          <BandScale segments={bands.map((b, i) => ({ class: segClass[i], range: ranges[i], label: b.badge }))} />
+        </div>
+
+        <div class="flex min-w-0 flex-[1_1_320px] flex-col justify-between gap-4 border border-ink bg-card p-[22px]">
+          <div class="mono text-[11px] text-muted">{resultUi.cardTitle}</div>
+          <ul class="m-0 flex list-none flex-col gap-3 p-0">
+            {areas.map((a) => (
+              <li data-bar={a.id} class="flex flex-col gap-1">
+                <div class="flex items-baseline justify-between gap-3 text-[14.5px]">
+                  <span class="min-w-0 font-semibold">{a.name}</span>
+                  <span class="mono flex-none text-[12px]" data-f="score-band"></span>
+                </div>
+                <div class="h-2.5 overflow-hidden rounded-full bg-line" role="img" data-f="track">
+                  <div class="h-full rounded-full bg-blue" data-f="fill" style="width:1%"></div>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div class="border-t border-line-inner pt-3"><CopyScores label={ui.copyScores} /></div>
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {areas.map((a) => (
+        <article data-area={a.id} class="flex flex-col gap-3 border border-ink bg-card p-[clamp(18px,3vw,26px)]">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="m-0 text-[22px] font-semibold tracking-[-.03em]">{a.name}</h3>
+            <span class="mono text-[11px] text-blue" data-f="score-band"></span>
+          </div>
+          <p class="m-0 text-[14.5px] text-ink-soft" data-f="band-text"></p>
+          <p class="m-0 text-[16px] leading-[1.6]" data-f="line"></p>
+          <div class="mt-auto rounded-18 bg-yellow p-4 shadow-[3px_4px_0_rgba(37,34,56,.25)]">
+            <div class="mono mb-1.5 text-[11px]">{resultUi.tryThis}</div>
+            <p class="serif m-0 text-[20px] leading-[1.2]">{a.tip}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <p class="serif m-0 max-w-[760px] text-[clamp(24px,3vw,30px)] leading-[1.2]">{result.closing}</p>
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  .eq-answer[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+  .eq-answer.eq-chosen { background: var(--color-blue); color: #fff; border-color: var(--color-blue); animation: eq-pulse .2s var(--ease-house); }
+  .eq-in { animation: eq-in .28s var(--ease-house); }
+  @keyframes eq-pulse { 0% { transform: scale(1); } 45% { transform: scale(1.04); } 100% { transform: scale(1); } }
+  @keyframes eq-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+</style>
+
+<script>
+  import { order, result as copy, resultUi, statements, strongestLine, ui } from '../../data/tests/emotional-intelligence';
+  import { getResult, scalePercent, type EqResult } from '../../lib/tests/emotional-intelligence';
+  import { createShareCard } from '../../lib/share-card';
+  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
+
+  const card = $('.eq-card');
+  const count = $('.eq-count');
+  const bar = $('.eq-bar');
+  const progress = $('[role=progressbar]', card);
+  const text = $('.eq-text');
+  const answerButtons = $$<HTMLButtonElement>('.eq-answer');
+  const back = $<HTMLButtonElement>('.eq-back');
+  const resultEl = $('[data-result]');
+  const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
+  const share = createShareCard($('[data-share]'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cardVisible = onScreen(card);
+
+  const TOTAL = order.length;
+  const PULSE_MS = 200;
+
+  // Answers live only in these variables, by screen position. Nothing is stored or sent.
+  let answers: (number | null)[] = Array(TOTAL).fill(null);
+  let index = 0;
+  let locked = false;
+  let done = false;
+  let shown: EqResult | null = null;
+
+  const answeredCount = () => answers.filter((a) => a !== null).length;
+
+  const render = (animate = false) => {
+    const n = answeredCount();
+    bar.style.width = `${((n / TOTAL) * 100).toFixed(2)}%`;
+    progress.setAttribute('aria-valuenow', String(n));
+    back.disabled = index === 0;
+    count.textContent = ui.count(index + 1, TOTAL);
+    text.textContent = statements[order[index] - 1].text;
+    answerButtons.forEach((b) => {
+      b.classList.remove('eq-chosen');
+      b.setAttribute('aria-pressed', String(Number(b.dataset.value) === answers[index]));
+    });
+    if (animate && !reducedMotion.matches) {
+      text.classList.remove('eq-in');
+      void text.offsetWidth;
+      text.classList.add('eq-in');
+    }
+  };
+
+  /** Pulse the chosen button, then run `next`. Instant with reduced motion. Locks input meanwhile. */
+  const confirm = (btn: HTMLButtonElement, next: () => void) => {
+    if (reducedMotion.matches) {
+      next();
+      return;
+    }
+    locked = true;
+    answerButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    btn.classList.add('eq-chosen');
+    window.setTimeout(() => {
+      locked = false;
+      next();
+    }, PULSE_MS);
+  };
+
+  const choose = (value: number) => {
+    if (locked || done) return;
+    answers[index] = value;
+    confirm(answerButtons[value - 1], () => {
+      if (index === TOTAL - 1) {
+        finish();
+        return;
+      }
+      index += 1;
+      render(true);
+    });
+  };
+
+  const goBack = () => {
+    if (locked || done || index === 0) return;
+    index -= 1;
+    render(true);
+  };
+
+  const reset = () => {
+    answers = Array(TOTAL).fill(null);
+    index = 0;
+    locked = false;
+    done = false;
+    shown = null;
+    resultEl.hidden = true;
+    render();
+  };
+
+  // ---------- Result ----------
+  const finish = () => {
+    // Screen order → doc order for scoring.
+    const byDoc: number[] = Array(TOTAL);
+    order.forEach((n, i) => (byDoc[n - 1] = answers[i]!));
+    const res = getResult(byDoc);
+    done = true;
+    shown = res;
+    render();
+
+    const names = res.strongest.map((a) => a.name);
+    r('eyebrow').textContent = resultUi.eyebrow;
+    r('headline').textContent = strongestLine(names);
+    r('same').hidden = !res.sameAnswers;
+
+    r('overall').textContent = String(res.overall);
+    r('badge').textContent = res.overallBand.badge;
+    const pct = scalePercent(res.overall);
+    r('marker').style.left = `${pct}%`;
+    r('marker-label').style.left = `${pct}%`;
+    r('marker-label').textContent = `You · ${res.overall}`;
+
+    for (const { area, score, band, high } of res.areas) {
+      const scoreBand = `${score}/100 · ${band.badge}`;
+      const row = $(`[data-bar="${area.id}"]`, resultEl);
+      $('[data-f=score-band]', row).textContent = scoreBand;
+      $('[data-f=fill]', row).style.width = `${Math.max(score, 1)}%`;
+      $('[data-f=track]', row).setAttribute('aria-label', `${area.name}: ${score} out of 100, ${band.badge}`);
+      const box = $(`[data-area="${area.id}"]`, resultEl);
+      $('[data-f=score-band]', box).textContent = scoreBand;
+      $('[data-f=band-text]', box).textContent = band.text;
+      $('[data-f=line]', box).textContent = high ? area.high : area.lower;
+    }
+
+    // Overall and strongest area only: never the separate area scores.
+    void share.update({
+      label: resultUi.shareLabel,
+      big: String(res.overall),
+      unit: '/100',
+      badge: resultUi.shareStrongest(names),
+      tagline: resultUi.shareTagline,
+      tag: 'Test / 07',
+      text: resultUi.shareText(res.overall, names),
+      url: 'https://knowpsyche.com/emotional-intelligence-test/',
+      filename: 'knowpsyche-emotional-intelligence',
+    });
+
+    resultEl.hidden = false;
+    r('headline').focus({ preventScroll: true });
+    resultEl.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  };
+
+  // ---------- Input ----------
+  answerButtons.forEach((b) => b.addEventListener('click', () => choose(Number(b.dataset.value))));
+  back.addEventListener('click', goBack);
+  $('.eq-restart').addEventListener('click', () => {
+    reset();
+    answerButtons[0].focus();
+  });
+
+  // Your own record to compare with in a few months, since we save nothing.
+  bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
+    if (!shown) return '';
+    const lines = shown.areas.map((a) => `${a.area.name}: ${a.score}/100 (${a.band.badge})`);
+    return [`Emotional intelligence: ${shown.overall}/100 (${shown.overallBand.badge})`, ...lines, `knowpsyche.com/emotional-intelligence-test/ · ${today()}`].join('\n');
+  });
+
+  // Keys answer only while the card is on screen (or has focus), so reading the FAQ can't answer by accident.
+  document.addEventListener('keydown', (e) => {
+    if (done || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+    if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable]')) return;
+    if (!cardVisible() && !card.contains(document.activeElement)) return;
+    const v = Number(e.key);
+    if (Number.isInteger(v) && v >= 1 && v <= 5) {
+      e.preventDefault();
+      choose(v);
+    }
+  });
+
+  // A stray refresh mid-test would lose every answer.
+  guardLeave(() => !done && answeredCount() > 0, ui.leaveWarning);
+
+  const focusCard = () => {
+    card.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+    answerButtons[0].focus({ preventScroll: true });
+  };
+  $('[data-test-start]').addEventListener('click', () => {
+    if (done) reset();
+    focusCard();
+  });
+  $$('[data-try-again]').forEach((b) =>
+    b.addEventListener('click', () => {
+      reset();
+      focusCard();
+    }),
+  );
+
+  render();
+</script>
