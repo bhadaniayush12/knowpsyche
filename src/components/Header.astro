@@ -15,6 +15,8 @@ const links = [
 ];
 const current = Astro.url.pathname;
 const isCurrent = (href: string) => current === href || current.startsWith(href);
+// The homepage scrolls to its own test grid; other pages go to the full list.
+const ctaHref = variant === 'home' ? '#tests' : '/tests/';
 ---
 <header
   class:list={[
@@ -38,7 +40,7 @@ const isCurrent = (href: string) => current === href || current.startsWith(href)
         class:list={['inline-flex min-h-11 items-center', isCurrent(l.href) ? 'underline underline-offset-[6px]' : 'no-underline']}
       >{l.label}</a>
     ))}
-    <Button href="/#tests" size="md">Take a free test</Button>
+    <Button href={ctaHref} size="md">Take a free test</Button>
   </nav>
 
   <button
@@ -63,7 +65,7 @@ const isCurrent = (href: string) => current === href || current.startsWith(href)
         class="flex min-h-12 items-center rounded-12 px-4 text-[17px] font-medium no-underline hover:bg-paper"
       >{l.label}</a>
     ))}
-    <a href="/#tests" class="mt-1 flex min-h-12 items-center rounded-12 bg-ink px-4 text-[17px] font-semibold text-paper no-underline hover:text-paper">Take a free test →</a>
+    <a href={ctaHref} class="mt-1 flex min-h-12 items-center rounded-12 bg-ink px-4 text-[17px] font-semibold text-paper no-underline hover:text-paper">Take a free test →</a>
   </nav>
   <noscript><style>@media (max-width:47.99rem){header{flex-wrap:wrap}.menu-toggle{display:none!important}.mobile-menu{position:static!important;display:flex!important;width:100%;box-shadow:none!important}}</style></noscript>
 </header>
