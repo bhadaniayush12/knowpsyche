@@ -1,0 +1,560 @@
+---
+import TestPage from '../../layouts/TestPage.astro';
+import ResultHeadline from '../../components/result/ResultHeadline.astro';
+import ScoreVisual from '../../components/result/ScoreVisual.astro';
+import BandScale from '../../components/result/BandScale.astro';
+import WhatItMeans from '../../components/result/WhatItMeans.astro';
+import TryThis from '../../components/result/TryThis.astro';
+import BandsNote from '../../components/result/BandsNote.astro';
+import ShareCard from '../../components/result/ShareCard.astro';
+import TryAgain from '../../components/result/TryAgain.astro';
+import NextTest from '../../components/result/NextTest.astro';
+import CopyScores from '../../components/result/CopyScores.astro';
+import { faqs, page, result, sources, stroopBands, ui } from '../../data/tests/stroop';
+import { TOTAL_TRIALS } from '../../lib/tests/stroop';
+
+const segClass = ['flex-[80] bg-paper', 'flex-[80] bg-lilac', 'flex-[90] bg-lilac-bright', 'flex-[70] bg-blue'];
+const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
+---
+<TestPage
+  title={page.title}
+  description={page.description}
+  path="/stroop-test/"
+  crumb={page.crumb}
+  eyebrow={page.eyebrow}
+  h1={page.h1}
+  intro={page.intro}
+  metaLine={page.metaLine}
+  faqs={faqs}
+  sources={sources}
+>
+  <div
+    slot="stage"
+    tabindex="-1"
+    class="st-card rounded-[26px] outline-none border border-line-card bg-white p-[clamp(16px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)] select-none"
+  >
+    <!-- Colour-vision note and skip option -->
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3 text-xs text-muted">
+      <p class="m-0 max-w-[560px] leading-relaxed">
+        {ui.colourVisionNote}
+      </p>
+      <a href="/attention-span-test/" class="mono text-[11px] font-semibold text-blue hover:underline">
+        {ui.skipNote}
+      </a>
+    </div>
+
+    <!-- Header: counter + restart -->
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+        <span class="st-counter">{ui.practiceLabel}</span>
+        <span class="st-note text-muted">{ui.practiceNote}</span>
+      </div>
+      <button
+        type="button"
+        class="st-restart mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"
+      >{ui.restart}</button>
+    </div>
+
+    <!-- Word display arena -->
+    <div
+      class="st-arena relative mt-4 flex min-h-[220px] sm:min-h-[260px] w-full flex-col items-center justify-center rounded-[20px] border border-line-inner/40 bg-card p-6 text-center"
+    >
+      <!-- Idle view -->
+      <div data-st-view="idle" class="flex flex-col items-center gap-3">
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
+        <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
+          A colour word will appear. Click the button for the <b>INK</b> colour — ignore what the word says!
+        </p>
+        <button
+          type="button"
+          class="st-start-practice mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
+        >
+          {ui.ready}
+        </button>
+      </div>
+
+      <!-- Active Word view -->
+      <div data-st-view="active" class="flex flex-col items-center justify-center gap-2" hidden>
+        <div
+          class="st-word text-[clamp(54px,11vw,96px)] font-bold tracking-tight leading-none select-none transition-transform duration-75"
+        ></div>
+        <p class="st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium" aria-live="polite"></p>
+      </div>
+
+      <!-- Practice complete view -->
+      <div data-st-view="practice-done" class="flex flex-col items-center gap-3" hidden>
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">Practice complete</p>
+        <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
+          Ready for the real test? 40 words in random order. Be fast, but accurate.
+        </p>
+        <button
+          type="button"
+          class="st-start-main mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
+        >
+          {ui.startMain}
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 Answer buttons: 44px min height, thumb-friendly at 360px -->
+    <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Ink colour choices">
+      <button
+        type="button"
+        data-color="red"
+        class="st-btn inline-flex min-h-[52px] items-center justify-center gap-2 rounded-14 border border-ink bg-white px-4 py-3 text-base font-semibold text-ink transition-colors duration-150 hover:bg-line-row focus:outline-none focus-visible:outline-2 focus-visible:outline-blue"
+      >
+        <span class="size-3.5 rounded-full border border-ink/20" style="background-color: var(--color-red)" aria-hidden="true"></span>
+        <span>Red</span>
+        <span class="mono ml-1 text-xs text-muted" aria-hidden="true">[R]</span>
+      </button>
+
+      <button
+        type="button"
+        data-color="blue"
+        class="st-btn inline-flex min-h-[52px] items-center justify-center gap-2 rounded-14 border border-ink bg-white px-4 py-3 text-base font-semibold text-ink transition-colors duration-150 hover:bg-line-row focus:outline-none focus-visible:outline-2 focus-visible:outline-blue"
+      >
+        <span class="size-3.5 rounded-full border border-ink/20" style="background-color: var(--color-blue)" aria-hidden="true"></span>
+        <span>Blue</span>
+        <span class="mono ml-1 text-xs text-muted" aria-hidden="true">[B]</span>
+      </button>
+
+      <button
+        type="button"
+        data-color="green"
+        class="st-btn inline-flex min-h-[52px] items-center justify-center gap-2 rounded-14 border border-ink bg-white px-4 py-3 text-base font-semibold text-ink transition-colors duration-150 hover:bg-line-row focus:outline-none focus-visible:outline-2 focus-visible:outline-blue"
+      >
+        <span class="size-3.5 rounded-full border border-ink/20" style="background-color: var(--color-teal-deep)" aria-hidden="true"></span>
+        <span>Green</span>
+        <span class="mono ml-1 text-xs text-muted" aria-hidden="true">[G]</span>
+      </button>
+
+      <button
+        type="button"
+        data-color="yellow"
+        class="st-btn inline-flex min-h-[52px] items-center justify-center gap-2 rounded-14 border border-ink bg-white px-4 py-3 text-base font-semibold text-ink transition-colors duration-150 hover:bg-line-row focus:outline-none focus-visible:outline-2 focus-visible:outline-blue"
+      >
+        <span class="size-3.5 rounded-full border border-ink/20" style="background-color: var(--color-yellow)" aria-hidden="true"></span>
+        <span>Yellow</span>
+        <span class="mono ml-1 text-xs text-muted" aria-hidden="true">[Y]</span>
+      </button>
+    </div>
+  </div>
+
+  <Fragment slot="result">
+    <ResultHeadline />
+
+    <ScoreVisual>
+      <div class="flex flex-wrap items-stretch gap-[clamp(24px,4vw,40px)]">
+        <div class="flex min-w-0 flex-[999_1_520px] flex-col gap-[22px]">
+          <div class="flex flex-wrap items-end gap-[18px]">
+            <div class="text-[clamp(88px,14vw,200px)] leading-[.8] font-semibold tracking-[-.07em]">
+              <span data-r="effect">0</span><span class="ml-2 text-[.32em] tracking-[-.03em]">ms</span>
+            </div>
+            <div class="serif pb-2.5 text-[34px] text-blue" data-r="badge">Typical</div>
+          </div>
+          <BandScale segments={stroopBands.map((b, i) => ({ class: segClass[i], range: ranges[i], label: b.badge }))} />
+        </div>
+
+        <div class="flex min-w-0 flex-[1_1_320px] flex-col justify-between gap-4 border border-ink bg-card p-[22px]">
+          <div class="mono text-[11px] text-muted">Comparison & accuracy</div>
+
+          <!-- Two comparative bars for matching vs clashing -->
+          <div class="flex flex-col gap-3">
+            <div>
+              <div class="mono flex justify-between text-[11px]">
+                <span>Matching words</span>
+                <span class="font-semibold text-teal-ink" data-r="matching-avg">0 ms</span>
+              </div>
+              <div class="mt-1.5 h-3 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
+                <div class="h-full rounded-full bg-teal-dark transition-[width] duration-300" data-r="matching-bar" style="width:50%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="mono flex justify-between text-[11px]">
+                <span>Clashing words</span>
+                <span class="font-semibold text-coral-ink" data-r="clashing-avg">0 ms</span>
+              </div>
+              <div class="mt-1.5 h-3 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
+                <div class="h-full rounded-full bg-coral transition-[width] duration-300" data-r="clashing-bar" style="width:75%"></div>
+              </div>
+            </div>
+
+            <div class="mt-1 flex items-center justify-between border-t border-line-inner pt-2">
+              <span class="mono text-[11px] text-muted">Overall accuracy</span>
+              <span class="text-[18px] font-semibold text-ink" data-r="accuracy">100%</span>
+            </div>
+          </div>
+
+          <CopyScores label={ui.copyScore} class="mt-1 border-t border-line-inner pt-3" />
+        </div>
+      </div>
+    </ScoreVisual>
+
+    <WhatItMeans change={result.change} />
+
+    <TryThis />
+
+    <BandsNote />
+
+    <ShareCard>
+      <TryAgain />
+    </ShareCard>
+
+    <NextTest href={result.next.href} name={result.next.name} line={result.next.line} time={result.next.time} learn={result.learn} />
+  </Fragment>
+</TestPage>
+
+<style is:global>
+  .st-word[data-ink='red'] { color: var(--color-red); }
+  .st-word[data-ink='blue'] { color: var(--color-blue); }
+  .st-word[data-ink='green'] { color: var(--color-teal-deep); }
+  .st-word[data-ink='yellow'] { color: var(--color-yellow); }
+
+  .st-word[data-blank] {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  import { result as copy, ui } from '../../data/tests/stroop';
+  import {
+    calculateStroopScores,
+    generateStroopTrials,
+    getBand,
+    getPracticeTrials,
+    meaningLine,
+    scalePercent,
+    shareText,
+    GAP_MS,
+    TOTAL_TRIALS,
+    WORD_TIMEOUT_MS,
+    type StroopColor,
+    type StroopResponse,
+    type StroopScores,
+    type StroopTrial,
+  } from '../../lib/tests/stroop';
+  import { createShareCard } from '../../lib/share-card';
+  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
+
+  type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'done';
+
+  const card = $('.st-card');
+  const arena = $('.st-arena');
+  const counter = $('.st-counter');
+  const note = $('.st-note');
+  const restartBtn = $('.st-restart');
+  const startPracticeBtn = $('.st-start-practice');
+  const startMainBtn = $('.st-start-main');
+  const wordEl = $('.st-word');
+  const feedbackEl = $('.st-feedback');
+  const choiceBtns = $$<HTMLButtonElement>('.st-btn');
+  const resultEl = $('[data-result]');
+  const isCardOnScreen = onScreen(card);
+
+  const views = {
+    idle: $('[data-st-view="idle"]', arena),
+    active: $('[data-st-view="active"]', arena),
+    practiceDone: $('[data-st-view="practice-done"]', arena),
+  };
+
+  const share = createShareCard($('[data-share]'));
+
+  let mode: Mode = 'idle';
+  let trialList: StroopTrial[] = [];
+  let trialIndex = 0;
+  let responses: StroopResponse[] = [];
+  let stimulusPaintTime = 0;
+  let answeredThisTrial = false;
+  let timerId: number | null = null;
+  let timeoutId: number | null = null;
+  let animFrameId: number | null = null;
+
+  function setView(target: 'idle' | 'active' | 'practiceDone') {
+    views.idle.hidden = target !== 'idle';
+    views.active.hidden = target !== 'active';
+    views.practiceDone.hidden = target !== 'practiceDone';
+  }
+
+  function clearTimers() {
+    if (timerId !== null) {
+      window.clearTimeout(timerId);
+      timerId = null;
+    }
+    if (timeoutId !== null) {
+      window.clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+    if (animFrameId !== null) {
+      window.cancelAnimationFrame(animFrameId);
+      animFrameId = null;
+    }
+  }
+
+  guardLeave(() => mode === 'main' || mode === 'practice', ui.leaveWarning);
+
+  function startPractice() {
+    clearTimers();
+    mode = 'practice';
+    trialList = getPracticeTrials();
+    trialIndex = 0;
+    responses = [];
+    counter.textContent = ui.practiceLabel;
+    note.textContent = ui.practiceNote;
+    setView('active');
+    runNextTrial();
+  }
+
+  function startMainRun() {
+    clearTimers();
+    mode = 'main';
+    trialList = generateStroopTrials();
+    trialIndex = 0;
+    responses = [];
+    counter.textContent = ui.wordCount(1, TOTAL_TRIALS);
+    note.textContent = '40 words · be fast and accurate';
+    setView('active');
+    feedbackEl.textContent = '';
+    runNextTrial();
+  }
+
+  function runNextTrial() {
+    clearTimers();
+    if (trialIndex >= trialList.length) {
+      if (mode === 'practice') {
+        mode = 'practice-done';
+        counter.textContent = 'Practice complete';
+        note.textContent = 'Ready for the real test';
+        setView('practiceDone');
+      } else if (mode === 'main') {
+        finishMainTest();
+      }
+      return;
+    }
+
+    answeredThisTrial = false;
+    const currentTrial = trialList[trialIndex];
+    if (mode === 'main') {
+      counter.textContent = ui.wordCount(trialIndex + 1, TOTAL_TRIALS);
+      feedbackEl.textContent = '';
+    } else {
+      counter.textContent = `Practice · ${trialIndex + 1} / ${trialList.length}`;
+      feedbackEl.textContent = '';
+    }
+
+    // Blank gap between words (0.4 s)
+    wordEl.textContent = '';
+    wordEl.removeAttribute('data-ink');
+    wordEl.setAttribute('data-blank', '');
+
+    timerId = window.setTimeout(() => {
+      animFrameId = window.requestAnimationFrame((paintTime) => {
+        stimulusPaintTime = paintTime || performance.now();
+        wordEl.textContent = currentTrial.word.toUpperCase();
+        wordEl.setAttribute('data-ink', currentTrial.ink);
+        wordEl.removeAttribute('data-blank');
+
+        // Timeout after 3 seconds if user doesn't answer
+        timeoutId = window.setTimeout(() => {
+          if (!answeredThisTrial) {
+            answeredThisTrial = true;
+            responses.push({ trial: currentTrial, correct: false });
+            if (mode === 'practice') {
+              feedbackEl.textContent = ui.practiceMissed;
+              feedbackEl.className = 'st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-coral-ink';
+            }
+            trialIndex++;
+            timerId = window.setTimeout(runNextTrial, mode === 'practice' ? 800 : GAP_MS);
+          }
+        }, WORD_TIMEOUT_MS);
+      });
+    }, GAP_MS);
+  }
+
+  function handleAnswer(color: StroopColor) {
+    if (mode !== 'practice' && mode !== 'main') return;
+    if (answeredThisTrial) return;
+    if (!wordEl.hasAttribute('data-ink')) return;
+
+    answeredThisTrial = true;
+    if (timeoutId !== null) {
+      window.clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+
+    const now = performance.now();
+    const rt = Math.max(1, Math.round(now - stimulusPaintTime));
+    const currentTrial = trialList[trialIndex];
+    const isCorrect = color === currentTrial.ink;
+
+    responses.push({
+      trial: currentTrial,
+      picked: color,
+      correct: isCorrect,
+      reactionTimeMs: rt,
+    });
+
+    if (mode === 'practice') {
+      if (isCorrect) {
+        feedbackEl.textContent = ui.practiceCorrect;
+        feedbackEl.className = 'st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-teal-ink';
+      } else {
+        feedbackEl.textContent = ui.practiceWrong;
+        feedbackEl.className = 'st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-coral-ink';
+      }
+    }
+
+    trialIndex++;
+    timerId = window.setTimeout(runNextTrial, mode === 'practice' ? 700 : GAP_MS);
+  }
+
+  function finishMainTest() {
+    clearTimers();
+    mode = 'done';
+    const scores = calculateStroopScores(responses);
+    renderResults(scores);
+  }
+
+  function renderResults(scores: StroopScores) {
+    const band = getBand(scores.stroopEffectMs);
+    resultEl.hidden = false;
+
+    // Headline
+    const headline = $('[data-r=headline]', resultEl);
+    headline.textContent = `${band.badge} · ${scores.stroopEffectMs} ms`;
+    headline.focus();
+
+    // Scores
+    $('[data-r=effect]', resultEl).textContent = String(scores.stroopEffectMs);
+    $('[data-r=badge]', resultEl).textContent = band.badge;
+
+    // Marker
+    const marker = $('[data-r=marker]', resultEl);
+    const markerLabel = $('[data-r=marker-label]', resultEl);
+    const pct = scalePercent(scores.stroopEffectMs);
+    marker.style.left = `${pct}%`;
+    markerLabel.style.left = `${pct}%`;
+    markerLabel.textContent = `You · ${scores.stroopEffectMs} ms`;
+
+    // Comparative bars
+    $('[data-r=matching-avg]', resultEl).textContent = `${scores.matchingAvgMs} ms`;
+    $('[data-r=clashing-avg]', resultEl).textContent = `${scores.clashingAvgMs} ms`;
+    $('[data-r=accuracy]', resultEl).textContent = `${scores.accuracy}%`;
+
+    const maxMs = Math.max(scores.matchingAvgMs, scores.clashingAvgMs, 1000);
+    const matchingBar = $('[data-r=matching-bar]', resultEl);
+    const clashingBar = $('[data-r=clashing-bar]', resultEl);
+    if (matchingBar && clashingBar) {
+      matchingBar.style.width = `${Math.round((scores.matchingAvgMs / maxMs) * 100)}%`;
+      clashingBar.style.width = `${Math.round((scores.clashingAvgMs / maxMs) * 100)}%`;
+    }
+
+    // Meaning & tip
+    $('[data-r=meaning]', resultEl).textContent = meaningLine(scores);
+    $('[data-r=tip]', resultEl).textContent = copy.tip;
+
+    // Copy button
+    const copyBtn = $('[data-copy-btn]', resultEl);
+    const copyStatus = $('[data-copy-status]', resultEl);
+    if (copyBtn && copyStatus) {
+      bindCopy(copyBtn, copyStatus, () =>
+        [
+          `Stroop effect: ${scores.stroopEffectMs} ms (${band.badge})`,
+          `Matching: ${scores.matchingAvgMs} ms · Clashing: ${scores.clashingAvgMs} ms · Accuracy: ${scores.accuracy}%`,
+          `knowpsyche.com/stroop-test · ${today()}`,
+        ].join('\n')
+      );
+    }
+
+    // Share card
+    void share.update({
+      label: 'My Stroop effect',
+      big: String(scores.stroopEffectMs),
+      unit: 'ms',
+      badge: band.badge,
+      tagline: 'Can your brain ignore the word?',
+      tag: 'Test / 06',
+      text: shareText(scores.stroopEffectMs),
+      url: 'https://knowpsyche.com/stroop-test/',
+      filename: 'stroop-test-knowpsyche',
+    });
+
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function restartAll() {
+    clearTimers();
+    mode = 'idle';
+    trialIndex = 0;
+    responses = [];
+    answeredThisTrial = false;
+    counter.textContent = ui.practiceLabel;
+    note.textContent = ui.practiceNote;
+    wordEl.textContent = '';
+    wordEl.removeAttribute('data-ink');
+    wordEl.setAttribute('data-blank', '');
+    feedbackEl.textContent = '';
+    resultEl.hidden = true;
+    setView('idle');
+  }
+
+  // Answer button clicks
+  choiceBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const color = btn.dataset.color as StroopColor;
+      if (color) handleAnswer(color);
+    });
+  });
+
+  startPracticeBtn.addEventListener('click', startPractice);
+  startMainBtn.addEventListener('click', startMainRun);
+  restartBtn.addEventListener('click', restartAll);
+
+  // Top "Start the test" button in the intro header
+  const introStartBtn = $('[data-test-start]');
+  introStartBtn?.addEventListener('click', () => {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (mode === 'idle') {
+      startPractice();
+    } else if (mode === 'practice-done') {
+      startMainRun();
+    }
+  });
+
+  // Try again button
+  $$('[data-try-again]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      restartAll();
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // Keyboard navigation: R, B, G, Y
+  window.addEventListener('keydown', (e) => {
+    if (!isCardOnScreen()) return;
+    const key = e.key.toLowerCase();
+    if (mode === 'idle' && (key === ' ' || key === 'enter')) {
+      e.preventDefault();
+      startPractice();
+      return;
+    }
+    if (mode === 'practice-done' && (key === ' ' || key === 'enter')) {
+      e.preventDefault();
+      startMainRun();
+      return;
+    }
+    if (key === 'r') {
+      e.preventDefault();
+      handleAnswer('red');
+    } else if (key === 'b') {
+      e.preventDefault();
+      handleAnswer('blue');
+    } else if (key === 'g') {
+      e.preventDefault();
+      handleAnswer('green');
+    } else if (key === 'y') {
+      e.preventDefault();
+      handleAnswer('yellow');
+    }
+  });
+</script>

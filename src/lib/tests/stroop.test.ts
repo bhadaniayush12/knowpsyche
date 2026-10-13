@@ -1,0 +1,190 @@
+import { describe, expect, it } from 'vitest';
+import {
+  calculateStroopScores,
+  generateStroopTrials,
+  getBand,
+  getPracticeTrials,
+  meaningLine,
+  scalePercent,
+  shareText,
+  CONGRUENT_COUNT,
+  INCONGRUENT_COUNT,
+  TOTAL_TRIALS,
+  type StroopResponse,
+  type StroopTrial,
+} from './stroop';
+import { seeded } from './seeded';
+
+describe('Stroop: trial generation over 1,000 seeded runs', () => {
+  it('generates 40 trials: 20 matching, 20 clashing, no consecutive duplicate words', () => {
+    for (let s = 1; s <= 1000; s++) {
+      const rand = seeded(s);
+      const trials = generateStroopTrials(rand);
+
+      expect(trials).toHaveLength(TOTAL_TRIALS);
+
+      const matching = trials.filter((t) => t.congruent).length;
+      const clashing = trials.filter((t) => !t.congruent).length;
+
+      expect(matching).toBe(CONGRUENT_COUNT);
+      expect(clashing).toBe(INCONGRUENT_COUNT);
+
+      // Verify congruency rules: matching has ink === word, clashing has ink !== word
+      for (const t of trials) {
+        if (t.congruent) {
+          expect(t.ink).toBe(t.word);
+        } else {
+          expect(t.ink).not.toBe(t.word);
+        }
+      }
+
+      // Verify rule: same word never appears twice in a row
+      for (let i = 1; i < trials.length; i++) {
+        expect(trials[i].word).not.toBe(trials[i - 1].word);
+      }
+    }
+  });
+
+  it('practice trials has 4 rounds with no consecutive duplicate words', () => {
+    const practice = getPracticeTrials();
+    expect(practice).toHaveLength(4);
+    for (let i = 1; i < practice.length; i++) {
+      expect(practice[i].word).not.toBe(practice[i - 1].word);
+    }
+  });
+});
+
+describe('Stroop: scoring and effect maths', () => {
+  it('calculates Stroop effect as clashing average minus matching average', () => {
+    const responses: StroopResponse[] = [
+      // 2 matching, correct at 400ms and 500ms => avg 450ms
+      { trial: { word: 'red', ink: 'red', congruent: true }, picked: 'red', correct: true, reactionTimeMs: 400 },
+      { trial: { word: 'blue', ink: 'blue', congruent: true }, picked: 'blue', correct: true, reactionTimeMs: 500 },
+      // 2 clashing, correct at 550ms and 650ms => avg 600ms
+      { trial: { word: 'green', ink: 'red', congruent: false }, picked: 'red', correct: true, reactionTimeMs: 550 },
+      { trial: { word: 'yellow', ink: 'blue', congruent: false }, picked: 'blue', correct: true, reactionTimeMs: 650 },
+    ];
+
+    const scores = calculateStroopScores(responses);
+    expect(scores.matchingAvgMs).toBe(450);
+    expect(scores.clashingAvgMs).toBe(600);
+    expect(scores.stroopEffectMs).toBe(150); // 600 - 450 = 150
+    expect(scores.accuracy).toBe(100);
+    expect(scores.under85Note).toBe(false);
+  });
+
+  it('only counts correct answers for matching and clashing averages', () => {
+    const responses: StroopResponse[] = [
+      // Matching: 1 correct at 400ms, 1 wrong at 200ms => avg should be 400ms
+      { trial: { word: 'red', ink: 'red', congruent: true }, picked: 'red', correct: true, reactionTimeMs: 400 },
+      { trial: { word: 'blue', ink: 'blue', congruent: true }, picked: 'red', correct: false, reactionTimeMs: 200 },
+      // Clashing: 1 correct at 500ms, 1 timeout/missed => avg should be 500ms
+      { trial: { word: 'green', ink: 'red', congruent: false }, picked: 'red', correct: true, reactionTimeMs: 500 },
+      { trial: { word: 'yellow', ink: 'blue', congruent: false }, correct: false },
+    ];
+
+    const scores = calculateStroopScores(responses);
+    expect(scores.matchingAvgMs).toBe(400);
+    expect(scores.clashingAvgMs).toBe(500);
+    expect(scores.stroopEffectMs).toBe(100);
+    expect(scores.accuracy).toBe(50); // 2 of 4 = 50%
+  });
+
+  it('handles empty run gracefully', () => {
+    const scores = calculateStroopScores([]);
+    expect(scores.matchingAvgMs).toBe(0);
+    expect(scores.clashingAvgMs).toBe(0);
+    expect(scores.stroopEffectMs).toBe(0);
+    expect(scores.accuracy).toBe(0);
+    expect(scores.totalCorrect).toBe(0);
+    expect(scores.totalTrials).toBe(0);
+  });
+
+  it('handles all-wrong run (0% accuracy, 0 effect)', () => {
+    const responses: StroopResponse[] = [
+      { trial: { word: 'red', ink: 'red', congruent: true }, picked: 'blue', correct: false, reactionTimeMs: 400 },
+      { trial: { word: 'green', ink: 'red', congruent: false }, picked: 'green', correct: false, reactionTimeMs: 450 },
+    ];
+
+    const scores = calculateStroopScores(responses);
+    expect(scores.accuracy).toBe(0);
+    expect(scores.matchingAvgMs).toBe(0);
+    expect(scores.clashingAvgMs).toBe(0);
+    expect(scores.stroopEffectMs).toBe(0);
+    expect(scores.under85Note).toBe(true);
+  });
+});
+
+describe('Stroop: 85% accuracy note at 84%, 85%, and 86%', () => {
+  // Use 100 trials for exact percentage steps
+  function makeTrialsWithAccuracy(acc: number): StroopResponse[] {
+    const list: StroopResponse[] = [];
+    for (let i = 0; i < 100; i++) {
+      const isCorrect = i < acc;
+      const congruent = i % 2 === 0;
+      list.push({
+        trial: { word: 'red', ink: congruent ? 'red' : 'blue', congruent },
+        picked: isCorrect ? (congruent ? 'red' : 'blue') : 'yellow',
+        correct: isCorrect,
+        reactionTimeMs: 400,
+      });
+    }
+    return list;
+  }
+
+  it('includes under-85% note at 84% accuracy', () => {
+    const scores = calculateStroopScores(makeTrialsWithAccuracy(84));
+    expect(scores.accuracy).toBe(84);
+    expect(scores.under85Note).toBe(true);
+
+    const line = meaningLine(scores);
+    expect(line).toContain('You were fast but made several mistakes — try again a little slower for a fairer score.');
+  });
+
+  it('excludes under-85% note at 85% accuracy', () => {
+    const scores = calculateStroopScores(makeTrialsWithAccuracy(85));
+    expect(scores.accuracy).toBe(85);
+    expect(scores.under85Note).toBe(false);
+
+    const line = meaningLine(scores);
+    expect(line).not.toContain('You were fast but made several mistakes');
+  });
+
+  it('excludes under-85% note at 86% accuracy', () => {
+    const scores = calculateStroopScores(makeTrialsWithAccuracy(86));
+    expect(scores.accuracy).toBe(86);
+    expect(scores.under85Note).toBe(false);
+
+    const line = meaningLine(scores);
+    expect(line).not.toContain('You were fast but made several mistakes');
+  });
+});
+
+describe('Stroop: band edges', () => {
+  it('maps Stroop effect to correct bands at exact boundaries', () => {
+    // Under 80 ms: Unshakeable (including 0 and negative)
+    expect(getBand(-20).badge).toBe('Unshakeable');
+    expect(getBand(0).badge).toBe('Unshakeable');
+    expect(getBand(79).badge).toBe('Unshakeable');
+
+    // 80–160 ms: Typical
+    expect(getBand(80).badge).toBe('Typical');
+    expect(getBand(160).badge).toBe('Typical');
+
+    // 161–250 ms: Word-pulled
+    expect(getBand(161).badge).toBe('Word-pulled');
+    expect(getBand(250).badge).toBe('Word-pulled');
+
+    // Over 250 ms: Strongly pulled
+    expect(getBand(251).badge).toBe('Strongly pulled');
+    expect(getBand(350).badge).toBe('Strongly pulled');
+  });
+
+  it('formats scalePercent and shareText correctly', () => {
+    expect(scalePercent(0)).toBe(2);
+    expect(scalePercent(160)).toBe(50);
+    expect(scalePercent(320)).toBe(98);
+
+    expect(shareText(120)).toBe('My Stroop effect: 120 ms — Typical. Can you beat it?');
+  });
+});
