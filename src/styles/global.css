@@ -153,7 +153,7 @@ details[open] .plus {
 
 .cyc { animation: cyc 12s cubic-bezier(.65, 0, .35, 1) infinite, morph 12s linear infinite; }
 .draw { stroke-dasharray: 420; stroke-dashoffset: 420; animation: draw 1.4s .4s cubic-bezier(.6, 0, .2, 1) forwards; }
-.marq { animation: marq 46s linear infinite; }
+.marq { animation: marq 32s linear infinite; }
 .marq-wrap:hover .marq,
 .marq-wrap:focus-within .marq { animation-play-state: paused; }
 .float { animation: float 6s ease-in-out infinite; }

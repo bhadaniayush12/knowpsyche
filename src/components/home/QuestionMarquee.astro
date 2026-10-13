@@ -3,15 +3,20 @@ import Chip from '../ui/Chip.astro';
 import { marqueeQuestions } from '../../data/home';
 
 const chipClass = 'border border-line px-4 py-2.5 text-[15.5px] font-medium text-ink hover:text-ink';
+// Two identical groups; the track slides by exactly one group (-50%), so the loop has no seam.
+// Each group ends with the same right padding as the gap, so spacing stays even at the join.
+const groups = [false, true];
 ---
 <div class="marq-wrap overflow-hidden border-y border-line bg-paper py-4">
-  <div class="marq flex w-max items-center gap-3">
-    <span class="serif pr-2 pl-4 text-[22px] text-muted">People come here asking —</span>
-    {marqueeQuestions.map((q) => <Chip href="#tests" bg={q.bg} class={chipClass}>{q.t}</Chip>)}
-    {/* Second copy keeps the loop seamless. Hidden from screen readers and the tab order. */}
-    <span aria-hidden="true" class="flex items-center gap-3">
-      {marqueeQuestions.map((q) => <Chip href="#tests" bg={q.bg} class={chipClass} tabindex="-1">{q.t}</Chip>)}
-    </span>
+  <div class="marq flex w-max">
+    {groups.map((copy) => (
+      <div class="flex items-center gap-3 pr-3" aria-hidden={copy ? 'true' : undefined}>
+        <span class="serif pr-2 pl-4 text-[22px] text-muted">People come here asking —</span>
+        {marqueeQuestions.map((q) => (
+          <Chip href="#tests" bg={q.bg} class={chipClass} tabindex={copy ? '-1' : undefined}>{q.t}</Chip>
+        ))}
+      </div>
+    ))}
   </div>
 </div>
 <div class="bob pt-3.5 text-center text-[13px] text-muted" aria-hidden="true">scroll ↓</div>
