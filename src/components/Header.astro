@@ -10,6 +10,7 @@ const { variant = 'inner' } = Astro.props;
 
 const links = [
   { href: '/tests/', label: 'Tests' },
+  { href: '/learn/', label: 'Learn psychology' },
   { href: '/about/', label: 'About' },
   { href: '/method/', label: 'Method' },
   { href: '/contact/', label: 'Contact' },
@@ -29,7 +30,7 @@ const ctaHref = variant === 'home' ? '#tests' : '/tests/';
     <Logo />
   </a>
 
-  <nav aria-label="Main" class="hidden items-center gap-[clamp(14px,2.4vw,30px)] text-[15.5px] md:flex">
+  <nav aria-label="Main" class="hidden items-center gap-[clamp(14px,2.4vw,30px)] text-[15.5px] lg:flex">
     {links.map((l) => (
       <a
         href={l.href}
@@ -42,7 +43,7 @@ const ctaHref = variant === 'home' ? '#tests' : '/tests/';
 
   <button
     type="button"
-    class="menu-toggle inline-flex min-h-11 items-center gap-2 rounded-10 border-[1.5px] border-ink bg-transparent px-3.5 text-[15px] font-medium text-ink md:hidden"
+    class="menu-toggle inline-flex min-h-11 items-center gap-2 rounded-10 border-[1.5px] border-ink bg-transparent px-3.5 text-[15px] font-medium text-ink lg:hidden"
     aria-expanded="false"
     aria-controls="mobile-menu"
   >
@@ -53,7 +54,7 @@ const ctaHref = variant === 'home' ? '#tests' : '/tests/';
   <nav
     id="mobile-menu"
     aria-label="Main"
-    class="mobile-menu absolute inset-x-[clamp(16px,3vw,40px)] top-full z-20 hidden flex-col rounded-18 border border-line-card bg-white p-2 shadow-lift md:hidden"
+    class="mobile-menu absolute inset-x-[clamp(16px,3vw,40px)] top-full z-20 hidden flex-col rounded-18 border border-line-card bg-white p-2 shadow-lift lg:hidden"
   >
     {links.map((l) => (
       <a
@@ -64,7 +65,7 @@ const ctaHref = variant === 'home' ? '#tests' : '/tests/';
     ))}
     <a href={ctaHref} class="mt-1 flex min-h-12 items-center rounded-12 bg-ink px-4 text-[17px] font-semibold text-paper no-underline hover:text-paper">Take a free test →</a>
   </nav>
-  <noscript><style>@media (max-width:47.99rem){header{flex-wrap:wrap}.menu-toggle{display:none!important}.mobile-menu{position:static!important;display:flex!important;width:100%;box-shadow:none!important}}</style></noscript>
+  <noscript><style>@media (max-width:63.99rem){header{flex-wrap:wrap}.menu-toggle{display:none!important}.mobile-menu{position:static!important;display:flex!important;width:100%;box-shadow:none!important}}</style></noscript>
 </header>
 
 <script>

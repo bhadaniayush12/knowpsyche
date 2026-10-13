@@ -16,6 +16,9 @@ import AdSlot from '../components/AdSlot.astro';
 import Faq from '../components/result/Faq.astro';
 import Sources from '../components/result/Sources.astro';
 import { PRIVATE_LINE, type Faq as FaqItem, type Source } from '../data/shared';
+import { learnMoreLabel } from '../data/learn';
+import { articlesForTest } from '../lib/learn/articles';
+import { getCollection } from 'astro:content';
 
 interface Props {
   title: string;
@@ -46,6 +49,9 @@ const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLin
 const cut = h1.lastIndexOf(' ');
 const h1Lead = cut > 0 ? h1.slice(0, cut + 1) : '';
 const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
+
+// Learn articles that go with this test (relatedTest), shown near Sources. None published = no line.
+const articles = articlesForTest(await getCollection('learn'), path.replace(/\//g, ''));
 ---
 <BaseLayout title={title} description={description} path={path} crumbs={[{ name: 'Tests', href: '/tests/' }, { name: crumb }]} crumbWidth={1120} ogImage={ogImage}>
   <FontPreloads slot="head" />
@@ -84,7 +90,15 @@ const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
 
     <div class="mt-14 flex max-w-[760px] flex-col gap-12">
       <Faq faqs={faqs} />
-      <Sources sources={sources} note={sourcesNote} />
+      <div class="flex flex-col gap-6">
+        {articles.length > 0 && (
+          <p class="m-0 text-base leading-[1.6] text-ink-soft">
+            {learnMoreLabel}{' '}
+            {articles.map((a, i) => <>{i > 0 && ', '}<a href={`/learn/${a.id}/`} class="font-semibold text-ink underline underline-offset-[3px]">{a.data.title}</a></>)}
+          </p>
+        )}
+        <Sources sources={sources} note={sourcesNote} />
+      </div>
     </div>
   </div>
 </BaseLayout>
