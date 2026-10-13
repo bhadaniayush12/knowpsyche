@@ -11,9 +11,13 @@
 // - icon files missing from dist/ or the wrong size, pages without the icon links, a manifest that isn't valid JSON
 // - robots.txt that doesn't allow all or doesn't point to the sitemap
 // - a sitemap that doesn't list exactly the indexable pages (no 404, no noindex pages, no redirects)
+// - Learn articles: page + Article JSON-LD + own og:image, relatedTest page exists, ≥ 2 internal links in
+//   the body, no page for drafts, and banned wording (MBTI, "top X%", percentile, "better than",
+//   "brain age", unlock, subconscious, diagnos… except "not a diagnosis")
 // Exits 1 when anything is found.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
+import { readArticles } from './lib/articles.mjs';
 
 const DIST = new URL('../dist/', import.meta.url).pathname;
 const SITE = 'https://knowpsyche.com';
@@ -255,6 +259,57 @@ else {
   const notFound = pages.get(join(DIST, '404.html'));
   if (!notFound) problems.push('404.html missing');
   else if (!noindexPage(notFound.html)) problems.push('404.html is not noindex');
+}
+
+// Learn articles (src/content/learn/*.md). Published ones need a page with Article JSON-LD and their own
+// share card, a test page for their relatedTest, and at least 2 links to other KnowPsyche pages in the body.
+// Drafts must not have a page. The banned-word scan reads the article source (frontmatter + body).
+const BANNED = [
+  [/\bMBTI\b/i, 'MBTI'],
+  [/\btop\s*\d+\s*%/i, '"top X%"'],
+  [/percentile/i, 'percentile'],
+  [/better than/i, '"better than"'],
+  [/brain age/i, '"brain age"'],
+  [/\bunlock/i, 'unlock'],
+  [/subconscious/i, 'subconscious'],
+  [/diagnos/i, 'diagnos… (only "not a diagnosis" is allowed)'],
+];
+if (!fileFor('/learn/')) problems.push('/learn/ hub missing');
+for (const a of readArticles()) {
+  const where = `src/content/learn/${a.file}`;
+  const pageFile = join(DIST, 'learn', a.id, 'index.html');
+  if (a.data.draft) {
+    if (existsSync(pageFile)) problems.push(`${where}: draft article has a page in dist`);
+    continue;
+  }
+  const page = pages.get(pageFile);
+  if (!page) {
+    problems.push(`${where}: no page at /learn/${a.id}/`);
+    continue;
+  }
+  if (a.data.relatedTest && !fileFor(`/${a.data.relatedTest}/`)) problems.push(`${where}: relatedTest page /${a.data.relatedTest}/ doesn't exist`);
+
+  const internal = [...a.body.matchAll(/\]\(\s*((?:https:\/\/knowpsyche\.com)?\/[^)\s]*)/g)].length;
+  if (internal < 2) problems.push(`${where}: ${internal} internal link(s) in the body (min 2)`);
+
+  const lds = [...page.html.matchAll(/<script\b[^>]*type\s*=\s*"application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].flatMap((m) => {
+    try {
+      return [JSON.parse(m[1])];
+    } catch {
+      return [];
+    }
+  });
+  if (!lds.some((ld) => ld['@type'] === 'Article')) problems.push(`/learn/${a.id}/  missing Article JSON-LD`);
+  const ogTag = page.html.match(/<meta\b[^>]*property\s*=\s*"og:image"[^>]*>/i)?.[0];
+  if (ogTag && attr(ogTag, 'content') !== `${SITE}/og/learn-${a.id}.png`) problems.push(`/learn/${a.id}/  og:image is not /og/learn-${a.id}.png`);
+
+  // Comment lines in the frontmatter (writing notes) aren't published, so they're left out of the scan.
+  const text = a.frontmatter.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n') + '\n' + a.body;
+  for (const [re, label] of BANNED) {
+    const scanned = label.startsWith('diagnos') ? text.replace(/not a diagnosis/gi, '') : text;
+    const hit = scanned.match(new RegExp(`.{0,30}${re.source}.{0,30}`, re.flags));
+    if (hit) problems.push(`${where}: banned wording ${label}: "…${hit[0].trim()}…"`);
+  }
 }
 
 for (const [title, urls] of titles) if (urls.length > 1) problems.push(`duplicate title "${title}": ${urls.join(', ')}`);
