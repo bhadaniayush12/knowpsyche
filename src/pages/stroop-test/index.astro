@@ -94,6 +94,18 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
           {ui.startMain}
         </button>
       </div>
+
+      <!-- Paused view (when tab is hidden or blurred) -->
+      <div data-st-view="paused" class="flex flex-col items-center gap-3" hidden>
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-coral-ink">{ui.pausedTitle}</p>
+        <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.pausedMessage}</p>
+        <button
+          type="button"
+          class="st-paused-restart mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
+        >
+          {ui.restart}
+        </button>
+      </div>
     </div>
 
     <!-- 4 Answer buttons: 44px min height, thumb-friendly at 360px -->
@@ -235,9 +247,13 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     type StroopTrial,
   } from '../../lib/tests/stroop';
   import { createShareCard } from '../../lib/share-card';
-  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, onScreen, runFor, today } from '../../lib/test-ui';
 
-  type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'done';
+  type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
+
+  /** Practice only: how long the feedback stays up (with the word) before the 0.4 s gap. */
+  const PRACTICE_FEEDBACK_MS = 700;
+  const PRACTICE_MISSED_MS = 800;
 
   const card = $('.st-card');
   const arena = $('.st-arena');
@@ -246,6 +262,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   const restartBtn = $('.st-restart');
   const startPracticeBtn = $('.st-start-practice');
   const startMainBtn = $('.st-start-main');
+  const pausedRestartBtn = $('.st-paused-restart');
   const wordEl = $('.st-word');
   const feedbackEl = $('.st-feedback');
   const choiceBtns = $$<HTMLButtonElement>('.st-btn');
@@ -256,6 +273,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     idle: $('[data-st-view="idle"]', arena),
     active: $('[data-st-view="active"]', arena),
     practiceDone: $('[data-st-view="practice-done"]', arena),
+    paused: $('[data-st-view="paused"]', arena),
   };
 
   const share = createShareCard($('[data-share]'));
@@ -264,32 +282,43 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   let trialList: StroopTrial[] = [];
   let trialIndex = 0;
   let responses: StroopResponse[] = [];
+  // Onset of the word on screen: the timestamp of the frame that paints it.
   let stimulusPaintTime = 0;
   let answeredThisTrial = false;
-  let timerId: number | null = null;
-  let timeoutId: number | null = null;
-  let animFrameId: number | null = null;
+  let cancel: () => void = () => {};
 
-  function setView(target: 'idle' | 'active' | 'practiceDone') {
+  function setView(target: 'idle' | 'active' | 'practiceDone' | 'paused') {
     views.idle.hidden = target !== 'idle';
     views.active.hidden = target !== 'active';
     views.practiceDone.hidden = target !== 'practiceDone';
+    views.paused.hidden = target !== 'paused';
   }
 
   function clearTimers() {
-    if (timerId !== null) {
-      window.clearTimeout(timerId);
-      timerId = null;
-    }
-    if (timeoutId !== null) {
-      window.clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-    if (animFrameId !== null) {
-      window.cancelAnimationFrame(animFrameId);
-      animFrameId = null;
-    }
+    cancel();
+    cancel = () => {};
   }
+
+  function blankWord() {
+    wordEl.textContent = '';
+    wordEl.removeAttribute('data-ink');
+    wordEl.setAttribute('data-blank', '');
+  }
+
+  // A hidden tab or lost focus breaks the timing, so the run stops and is never scored.
+  function pauseBrokenRun() {
+    if (mode !== 'main' && mode !== 'practice') return;
+    clearTimers();
+    mode = 'paused';
+    blankWord();
+    feedbackEl.textContent = '';
+    setView('paused');
+  }
+
+  window.addEventListener('blur', pauseBrokenRun);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pauseBrokenRun();
+  });
 
   guardLeave(() => mode === 'main' || mode === 'practice', ui.leaveWarning);
 
@@ -301,6 +330,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     responses = [];
     counter.textContent = ui.practiceLabel;
     note.textContent = ui.practiceNote;
+    feedbackEl.textContent = '';
     setView('active');
     runNextTrial();
   }
@@ -310,6 +340,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     mode = 'main';
     trialList = generateStroopTrials();
     trialIndex = 0;
+    // Practice answers are thrown away here: only the 40 main words are scored.
     responses = [];
     counter.textContent = ui.wordCount(1, TOTAL_TRIALS);
     note.textContent = '40 words · be fast and accurate';
@@ -318,7 +349,15 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     runNextTrial();
   }
 
-  function runNextTrial() {
+  function setFeedback(text: string, good: boolean) {
+    feedbackEl.textContent = text;
+    feedbackEl.className = `st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium ${good ? 'text-teal-ink' : 'text-coral-ink'}`;
+  }
+
+  // 0.4 s blank gap → word until answered (max 3 s, then missed) → next gap. Every step is checked
+  // per frame against performance.now() (runFor), so nothing drifts the way chained setTimeouts do.
+  /** `from` = the frame the previous word ended in, so the gap is timed from what was painted. */
+  function runNextTrial(from?: number) {
     clearTimers();
     if (trialIndex >= trialList.length) {
       if (mode === 'practice') {
@@ -336,54 +375,50 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     const currentTrial = trialList[trialIndex];
     if (mode === 'main') {
       counter.textContent = ui.wordCount(trialIndex + 1, TOTAL_TRIALS);
-      feedbackEl.textContent = '';
     } else {
       counter.textContent = `Practice · ${trialIndex + 1} / ${trialList.length}`;
-      feedbackEl.textContent = '';
     }
+    feedbackEl.textContent = '';
+    blankWord();
 
-    // Blank gap between words (0.4 s)
-    wordEl.textContent = '';
-    wordEl.removeAttribute('data-ink');
-    wordEl.setAttribute('data-blank', '');
+    cancel = runFor(GAP_MS, (shownAt) => {
+      // Painted at the end of this frame, so this frame's timestamp is the onset.
+      stimulusPaintTime = shownAt;
+      wordEl.textContent = currentTrial.word.toUpperCase();
+      wordEl.setAttribute('data-ink', currentTrial.ink);
+      wordEl.removeAttribute('data-blank');
 
-    timerId = window.setTimeout(() => {
-      animFrameId = window.requestAnimationFrame((paintTime) => {
-        stimulusPaintTime = paintTime || performance.now();
-        wordEl.textContent = currentTrial.word.toUpperCase();
-        wordEl.setAttribute('data-ink', currentTrial.ink);
-        wordEl.removeAttribute('data-blank');
-
-        // Timeout after 3 seconds if user doesn't answer
-        timeoutId = window.setTimeout(() => {
-          if (!answeredThisTrial) {
-            answeredThisTrial = true;
-            responses.push({ trial: currentTrial, correct: false });
-            if (mode === 'practice') {
-              feedbackEl.textContent = ui.practiceMissed;
-              feedbackEl.className = 'st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-coral-ink';
-            }
-            trialIndex++;
-            timerId = window.setTimeout(runNextTrial, mode === 'practice' ? 800 : GAP_MS);
-          }
-        }, WORD_TIMEOUT_MS);
-      });
-    }, GAP_MS);
+      // No answer within 3 s counts as missed.
+      cancel = runFor(WORD_TIMEOUT_MS, (missedAt) => {
+        if (answeredThisTrial) return;
+        answeredThisTrial = true;
+        responses.push({ trial: currentTrial, correct: false });
+        if (mode === 'practice') setFeedback(ui.practiceMissed, false);
+        next(missedAt, PRACTICE_MISSED_MS);
+      }, undefined, shownAt);
+    }, undefined, from);
   }
 
-  function handleAnswer(color: StroopColor) {
+  /** Main run: the word goes and the 0.4 s gap starts now. Practice: feedback stays up first. */
+  function next(at: number, practiceHoldMs: number) {
+    trialIndex++;
+    if (mode === 'practice') {
+      cancel = runFor(practiceHoldMs, (t) => runNextTrial(t), undefined, at);
+    } else {
+      runNextTrial(at);
+    }
+  }
+
+  /** `t` = the input event's high-resolution timestamp. */
+  function handleAnswer(color: StroopColor, t: number) {
     if (mode !== 'practice' && mode !== 'main') return;
     if (answeredThisTrial) return;
     if (!wordEl.hasAttribute('data-ink')) return;
 
     answeredThisTrial = true;
-    if (timeoutId !== null) {
-      window.clearTimeout(timeoutId);
-      timeoutId = null;
-    }
+    clearTimers();
 
-    const now = performance.now();
-    const rt = Math.max(1, Math.round(now - stimulusPaintTime));
+    const rt = Math.max(1, Math.round((t >= stimulusPaintTime ? t : performance.now()) - stimulusPaintTime));
     const currentTrial = trialList[trialIndex];
     const isCorrect = color === currentTrial.ink;
 
@@ -395,17 +430,12 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     });
 
     if (mode === 'practice') {
-      if (isCorrect) {
-        feedbackEl.textContent = ui.practiceCorrect;
-        feedbackEl.className = 'st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-teal-ink';
-      } else {
-        feedbackEl.textContent = ui.practiceWrong;
-        feedbackEl.className = 'st-feedback mono m-0 min-h-[1.5em] text-[15px] font-medium text-coral-ink';
-      }
+      if (isCorrect) setFeedback(ui.practiceCorrect, true);
+      else setFeedback(ui.practiceWrong, false);
     }
 
-    trialIndex++;
-    timerId = window.setTimeout(runNextTrial, mode === 'practice' ? 700 : GAP_MS);
+    // The gap is timed from the input event, which is when the answer was given.
+    next(Math.min(t, performance.now()), PRACTICE_FEEDBACK_MS);
   }
 
   function finishMainTest() {
@@ -490,25 +520,29 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     answeredThisTrial = false;
     counter.textContent = ui.practiceLabel;
     note.textContent = ui.practiceNote;
-    wordEl.textContent = '';
-    wordEl.removeAttribute('data-ink');
-    wordEl.setAttribute('data-blank', '');
+    blankWord();
     feedbackEl.textContent = '';
     resultEl.hidden = true;
     setView('idle');
   }
 
-  // Answer button clicks
+  // Answer buttons. Pointers answer on pointerdown: "click" only fires once the finger lifts, which
+  // would add the length of the tap to every time. Click still answers for keyboard activation.
   choiceBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const color = btn.dataset.color as StroopColor;
-      if (color) handleAnswer(color);
+    const color = btn.dataset.color as StroopColor;
+    btn.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      handleAnswer(color, e.timeStamp);
+    });
+    btn.addEventListener('click', (e) => {
+      if (e.detail === 0) handleAnswer(color, e.timeStamp);
     });
   });
 
   startPracticeBtn.addEventListener('click', startPractice);
   startMainBtn.addEventListener('click', startMainRun);
   restartBtn.addEventListener('click', restartAll);
+  pausedRestartBtn.addEventListener('click', restartAll);
 
   // Top "Start the test" button in the intro header
   const introStartBtn = $('[data-test-start]');
@@ -545,16 +579,16 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     }
     if (key === 'r') {
       e.preventDefault();
-      handleAnswer('red');
+      handleAnswer('red', e.timeStamp);
     } else if (key === 'b') {
       e.preventDefault();
-      handleAnswer('blue');
+      handleAnswer('blue', e.timeStamp);
     } else if (key === 'g') {
       e.preventDefault();
-      handleAnswer('green');
+      handleAnswer('green', e.timeStamp);
     } else if (key === 'y') {
       e.preventDefault();
-      handleAnswer('yellow');
+      handleAnswer('yellow', e.timeStamp);
     }
   });
 </script>

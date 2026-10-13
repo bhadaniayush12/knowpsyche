@@ -43,6 +43,9 @@ export const ui = {
   practiceFinished: 'Practice finished. Ready for the real test?',
   startMain: 'Start the test',
   wordCount: (n: number, total: number) => `Word ${n} / ${total}`,
+  // Drafted (same as the attention span test).
+  pausedTitle: 'Test paused',
+  pausedMessage: 'The window lost focus or was hidden. To keep scores accurate, please restart the test.',
   restart: 'Restart ↺',
   leaveWarning: 'Your progress will be lost if you leave this page.',
   copyScore: 'Copy my score',
