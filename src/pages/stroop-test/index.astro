@@ -10,7 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
-import { faqs, page, result, sources, stroopBands, ui } from '../../data/tests/stroop';
+import { faqs, page, result, resultUi, sources, stroopBands, ui } from '../../data/tests/stroop';
 import { TOTAL_TRIALS } from '../../lib/tests/stroop';
 
 const segClass = ['flex-[80] bg-paper', 'flex-[80] bg-lilac', 'flex-[90] bg-lilac-bright', 'flex-[70] bg-blue'];
@@ -63,8 +63,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       <!-- Idle view -->
       <div data-st-view="idle" class="flex flex-col items-center gap-3">
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
-        <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
-          A colour word will appear. Click the button for the <b>INK</b> colour — ignore what the word says!
+        <p class="pointer-swap m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
+          <span class="on-mouse" set:html={ui.idleText} /><span class="on-touch" set:html={ui.idleTextTouch} />
         </p>
         <button
           type="button"
@@ -84,10 +84,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
       <!-- Practice complete view -->
       <div data-st-view="practice-done" class="flex flex-col items-center gap-3" hidden>
-        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">Practice complete</p>
-        <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
-          Ready for the real test? 40 words in random order. Be fast, but accurate.
-        </p>
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceDoneTitle}</p>
+        <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.practiceDoneText}</p>
         <button
           type="button"
           class="st-start-main mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
@@ -110,7 +108,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     </div>
 
     <!-- 4 Answer buttons: 44px min height, thumb-friendly at 360px -->
-    <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Ink colour choices">
+    <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label={ui.choicesLabel}>
       <button
         type="button"
         data-color="red"
@@ -169,13 +167,13 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         </div>
 
         <div class="flex min-w-0 flex-[1_1_320px] flex-col justify-between gap-4 border border-ink bg-card p-[22px]">
-          <div class="mono text-[11px] text-muted">Comparison & accuracy</div>
+          <div class="mono text-[11px] text-muted">{resultUi.cardTitle}</div>
 
           <!-- Two comparative bars for matching vs clashing -->
           <div class="flex flex-col gap-3">
             <div>
               <div class="mono flex justify-between text-[11px]">
-                <span>Matching words</span>
+                <span>{resultUi.matching}</span>
                 <span class="font-semibold text-teal-ink" data-r="matching-avg">0 ms</span>
               </div>
               <div class="mt-1.5 h-3 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
@@ -185,7 +183,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
             <div>
               <div class="mono flex justify-between text-[11px]">
-                <span>Clashing words</span>
+                <span>{resultUi.clashing}</span>
                 <span class="font-semibold text-coral-ink" data-r="clashing-avg">0 ms</span>
               </div>
               <div class="mt-1.5 h-3 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
@@ -194,7 +192,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
             </div>
 
             <div class="mt-1 flex items-center justify-between border-t border-line-inner pt-2">
-              <span class="mono text-[11px] text-muted">Overall accuracy</span>
+              <span class="mono text-[11px] text-muted">{resultUi.accuracy}</span>
               <span class="text-[18px] font-semibold text-ink" data-r="accuracy">100%</span>
             </div>
           </div>
@@ -231,7 +229,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 </style>
 
 <script>
-  import { result as copy, ui } from '../../data/tests/stroop';
+  import { result as copy, resultUi, ui } from '../../data/tests/stroop';
   import {
     calculateStroopScores,
     generateStroopTrials,
@@ -346,7 +344,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Practice answers are thrown away here: only the 40 main words are scored.
     responses = [];
     counter.textContent = ui.wordCount(1, TOTAL_TRIALS);
-    note.textContent = '40 words · be fast and accurate';
+    note.textContent = ui.mainNote;
     setView('active');
     feedbackEl.textContent = '';
     runNextTrial();
@@ -365,8 +363,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     if (trialIndex >= trialList.length) {
       if (mode === 'practice') {
         mode = 'practice-done';
-        counter.textContent = 'Practice complete';
-        note.textContent = 'Ready for the real test';
+        counter.textContent = ui.practiceDoneTitle;
+        note.textContent = ui.practiceDoneNote;
         setView('practiceDone');
       } else if (mode === 'main') {
         finishMainTest();
@@ -379,7 +377,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     if (mode === 'main') {
       counter.textContent = ui.wordCount(trialIndex + 1, TOTAL_TRIALS);
     } else {
-      counter.textContent = `Practice · ${trialIndex + 1} / ${trialList.length}`;
+      counter.textContent = ui.practiceCount(trialIndex + 1, trialList.length);
     }
     feedbackEl.textContent = '';
     blankWord();
@@ -453,7 +451,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     resultEl.hidden = false;
 
     // Headline
-    $('[data-r=eyebrow]', resultEl).textContent = 'Your result · Stroop test';
+    $('[data-r=eyebrow]', resultEl).textContent = resultUi.eyebrow;
     const headline = $('[data-r=headline]', resultEl);
     headline.textContent = `${band.badge} · ${scores.stroopEffectMs} ms`;
     headline.focus({ preventScroll: true });
@@ -502,11 +500,11 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     // Share card
     void share.update({
-      label: 'My Stroop effect',
+      label: resultUi.shareLabel,
       big: String(scores.stroopEffectMs),
       unit: 'ms',
       badge: band.badge,
-      tagline: 'Can your brain ignore the word?',
+      tagline: resultUi.shareTagline,
       tag: 'Test / 06',
       text: shareText(scores.stroopEffectMs),
       url: 'https://knowpsyche.com/stroop-test/',

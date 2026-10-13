@@ -1,5 +1,5 @@
 // Copy from docs/content/part-2.md, "Test 5 — Attention Span". Word for word.
-// Lines marked "drafted" were missing from the content doc and approved in the build plan.
+// Lines marked "Drafted" are not in the content doc: written for the build, waiting for Dev's review.
 import type { Faq, Source } from '../shared';
 
 export interface AttentionBand {
@@ -25,7 +25,7 @@ export const page = {
   // Touch screens: same line with "tap" (shared rule).
   introTouch: "Circles will appear one at a time. Tap when you see green. Do nothing when you see red. Stay with it — it's longer than it feels.",
   crumb: 'Attention span',
-  // Drafted.
+  // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 05 · Attention · 2–3 min',
   metaLine: 'About 2–3 minutes · 80 circles · Nothing saved',
 };
@@ -34,17 +34,22 @@ export const ui = {
   // Practice feedback from doc.
   nice: 'Nice!',
   oopsRed: 'Oops — that was red',
-  // Drafted practice feedback for remaining practice outcomes.
+  // Drafted: practice feedback for the other two outcomes.
   niceIgnored: 'Nice — you held back!',
   oopsGreen: 'Missed — click on green',
   // Drafted: touch version of the line above.
   oopsGreenTouch: 'Missed — tap on green',
-  // Drafted UI lines.
+  // Drafted: everything from here to the end of `ui`.
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',
   practiceLabel: 'Practice round',
   practiceNote: '6 rounds with feedback · not scored',
-  practiceFinished: 'Practice finished. Ready for the real test?',
+  practiceCount: (n: number, total: number) => `Practice · ${n} / ${total}`,
+  practiceDoneTitle: 'Practice complete',
+  practiceDoneText: 'Ready for the real test? 80 circles with no feedback so you stay in flow.',
+  practiceDoneNote: 'Ready for the real test',
+  mainNote: 'No feedback · stay focused',
+  arenaLabel: 'Attention span stimulus area',
   startMain: 'Start the test',
   circleCount: (n: number, total: number) => `Circle ${n} / ${total}`,
   pausedTitle: 'Test paused',
@@ -54,9 +59,25 @@ export const ui = {
   copyScore: 'Copy my scores',
 };
 
+/** Drafted: labels on the result's score breakdown, the share card and the copied text. */
+export const resultUi = {
+  eyebrow: 'Your result · Attention span',
+  breakdownTitle: 'Test breakdown · 80 circles',
+  focusDetail: 'greens caught',
+  selfControlDetail: 'reds held back',
+  speedDetail: 'avg reaction time',
+  steady: 'Steady',
+  steadyDetail: 'consistent across halves',
+  dipped: 'Dipped',
+  dippedDetail: (diff: number) => `second half −${diff} pts`,
+  copyDipped: 'Dipped in 2nd half',
+  shareLabel: 'My attention score',
+  shareTagline: 'How well do you stay focused?',
+};
+
 export const result = {
   change: 'Sleep, phone notifications, noise and how interested you are in the task.',
-  // Try this = FAQ 4's answer (drafted per pattern).
+  // Drafted: "Try this" reuses FAQ 4's answer word for word (the doc gives no tip).
   tip: "Remove notifications, work in focused blocks (for example 25 minutes), sleep well, and take short breaks before you're exhausted.",
   dippedNote: "Your focus dipped in the second half — that's normal; attention tires with time.",
   next: {

@@ -1,5 +1,5 @@
 // Copy from docs/content/part-2.md, "Test 6 — Stroop Test". Word for word.
-// Lines marked "drafted" were missing from the content doc and approved in the build plan.
+// Lines marked "Drafted" are not in the content doc: written for the build, waiting for Dev's review.
 import type { Faq, Source } from '../shared';
 
 export interface StroopBand {
@@ -25,28 +25,34 @@ export const page = {
   // Drafted: touch screens get the same line with "Tap" (shared rule).
   introTouch: 'A colour word will appear in coloured ink. Tap the button for the INK colour — ignore what the word says. Be fast, but accurate.',
   crumb: 'Stroop test',
-  // Drafted.
+  // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 06 · Focus · 1 min',
   metaLine: 'About 1 minute · 40 words · Nothing saved',
 };
 
 export const ui = {
   colourVisionNote: 'This test relies on telling colours apart, so it may not work well for people with colour-vision differences.',
+  // Drafted: the doc says the note "allows a skip" but gives no link text.
   skipNote: 'Skip to the attention span test →',
   lowAccuracyNote: 'You were fast but made several mistakes — try again a little slower for a fairer score.',
-  // Practice feedback (part-2.md).
+  // Drafted: the doc says "4 rounds with feedback" but gives no lines. Everything from here to the end of `ui`.
   practiceCorrect: 'Correct!',
   practiceWrong: 'Oops — pick the ink colour, not what the word says.',
   practiceMissed: 'Too slow — answer within 3 seconds.',
-  // Drafted UI lines.
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',
   practiceLabel: 'Practice round',
   practiceNote: '4 rounds with feedback · not scored',
-  practiceFinished: 'Practice finished. Ready for the real test?',
+  idleText: 'A colour word will appear. Click the button for the <b>INK</b> colour — ignore what the word says!',
+  idleTextTouch: 'A colour word will appear. Tap the button for the <b>INK</b> colour — ignore what the word says!',
+  practiceCount: (n: number, total: number) => `Practice · ${n} / ${total}`,
+  practiceDoneTitle: 'Practice complete',
+  practiceDoneText: 'Ready for the real test? 40 words in random order. Be fast, but accurate.',
+  practiceDoneNote: 'Ready for the real test',
+  mainNote: '40 words · be fast and accurate',
+  choicesLabel: 'Ink colour choices',
   startMain: 'Start the test',
   wordCount: (n: number, total: number) => `Word ${n} / ${total}`,
-  // Drafted (same as the attention span test).
   pausedTitle: 'Test paused',
   pausedMessage: 'The window lost focus or was hidden. To keep scores accurate, please restart the test.',
   restart: 'Restart ↺',
@@ -54,9 +60,20 @@ export const ui = {
   copyScore: 'Copy my score',
 };
 
+/** Drafted: labels on the result's comparison card and the share card. */
+export const resultUi = {
+  eyebrow: 'Your result · Stroop test',
+  cardTitle: 'Comparison & accuracy',
+  matching: 'Matching words',
+  clashing: 'Clashing words',
+  accuracy: 'Overall accuracy',
+  shareLabel: 'My Stroop effect',
+  shareTagline: 'Can your brain ignore the word?',
+};
+
 export const result = {
   change: 'Reading speed, practice, tiredness and how fast you try to go.',
-  // Try this tip (drafted per pattern).
+  // Drafted: the doc gives no "Try this" tip.
   tip: 'Try unfocusing your eyes slightly or saying the colour out loud — it can help you see the ink before your brain reads the word.',
   next: {
     href: '/attention-span-test/',

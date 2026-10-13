@@ -10,7 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
-import { attentionBands, faqs, page, result, sources, ui } from '../../data/tests/attention-span';
+import { attentionBands, faqs, page, result, resultUi, sources, ui } from '../../data/tests/attention-span';
 import { TOTAL_TRIALS } from '../../lib/tests/attention-span';
 
 const segClass = ['flex-[70] bg-paper', 'flex-[15] bg-lilac', 'flex-[10] bg-lilac-bright', 'flex-[5] bg-blue'];
@@ -53,13 +53,14 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     <!-- Stage arena: clickable everywhere -->
     <div
       role="region"
-      aria-label="Attention span stimulus area"
+      aria-label={ui.arenaLabel}
       class="as-arena relative mt-4 flex h-[clamp(320px,46vw,440px)] w-full touch-manipulation select-none items-center justify-center rounded-[20px] border border-line-inner/40 bg-card text-center cursor-pointer transition-colors duration-150"
     >
       <!-- Idle view (before practice starts) -->
       <div data-as-view="idle" class="flex flex-col items-center gap-3 px-4">
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
         <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
+          <!-- From the doc intro. -->
           Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.
         </p>
         <button
@@ -78,10 +79,8 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
       <!-- Practice complete view -->
       <div data-as-view="practice-done" class="flex flex-col items-center gap-3 px-4" hidden>
-        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">Practice complete</p>
-        <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
-          Ready for the real test? 80 circles with no feedback so you stay in flow.
-        </p>
+        <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceDoneTitle}</p>
+        <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.practiceDoneText}</p>
         <button
           type="button"
           class="as-start-main mono mt-2 inline-flex min-h-12 items-center justify-center rounded-12 border-0 bg-ink px-6 py-3 text-xs font-semibold text-paper transition-colors duration-200 hover:bg-blue"
@@ -120,27 +119,27 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         </div>
 
         <div class="flex min-w-0 flex-[1_1_320px] flex-col justify-between gap-4 border border-ink bg-card p-[22px]">
-          <div class="mono text-[11px] text-muted">Test breakdown · 80 circles</div>
+          <div class="mono text-[11px] text-muted">{resultUi.breakdownTitle}</div>
           <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
               <span class="mono text-[10.5px] text-muted">Focus</span>
               <span class="text-[28px] font-semibold tracking-[-.03em] text-teal-ink" data-r="focus">0%</span>
-              <span class="text-[12px] text-ink-soft">greens caught</span>
+              <span class="text-[12px] text-ink-soft">{resultUi.focusDetail}</span>
             </div>
             <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
               <span class="mono text-[10.5px] text-muted">Self-control</span>
               <span class="text-[28px] font-semibold tracking-[-.03em] text-teal-ink" data-r="self-control">0%</span>
-              <span class="text-[12px] text-ink-soft">reds held back</span>
+              <span class="text-[12px] text-ink-soft">{resultUi.selfControlDetail}</span>
             </div>
             <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
               <span class="mono text-[10.5px] text-muted">Speed</span>
               <span class="text-[28px] font-semibold tracking-[-.03em] text-ink" data-r="speed">0 ms</span>
-              <span class="text-[12px] text-ink-soft">avg reaction time</span>
+              <span class="text-[12px] text-ink-soft">{resultUi.speedDetail}</span>
             </div>
             <div class="flex flex-col gap-1 border-t border-line-inner pt-2">
               <span class="mono text-[10.5px] text-muted">Steadiness</span>
-              <span class="text-[28px] font-semibold tracking-[-.03em] text-ink" data-r="steadiness">Steady</span>
-              <span class="text-[12px] text-ink-soft" data-r="steadiness-detail">across both halves</span>
+              <span class="text-[28px] font-semibold tracking-[-.03em] text-ink" data-r="steadiness">{resultUi.steady}</span>
+              <span class="text-[12px] text-ink-soft" data-r="steadiness-detail">{resultUi.steadyDetail}</span>
             </div>
           </div>
           <CopyScores label={ui.copyScore} class="mt-1 border-t border-line-inner pt-3" />
@@ -183,7 +182,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 </style>
 
 <script>
-  import { result as copy, ui } from '../../data/tests/attention-span';
+  import { result as copy, resultUi, ui } from '../../data/tests/attention-span';
   import {
     calculateAttentionScores,
     generateAttentionTrials,
@@ -296,7 +295,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     // Practice answers are thrown away here: only the 80 main circles are scored.
     trialResults = [];
     counter.textContent = ui.circleCount(1, TOTAL_TRIALS);
-    note.textContent = 'No feedback · stay focused';
+    note.textContent = ui.mainNote;
     bar.style.width = '0%';
     setView('active');
     feedbackEl.textContent = '';
@@ -315,8 +314,8 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     if (trialIndex >= trialList.length) {
       if (mode === 'practice') {
         mode = 'practice-done';
-        counter.textContent = 'Practice complete';
-        note.textContent = 'Ready for the real test';
+        counter.textContent = ui.practiceDoneTitle;
+        note.textContent = ui.practiceDoneNote;
         bar.style.width = '100%';
         setView('practiceDone');
       } else if (mode === 'main') {
@@ -331,7 +330,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       counter.textContent = ui.circleCount(trialIndex + 1, TOTAL_TRIALS);
       bar.style.width = `${Math.round((trialIndex / TOTAL_TRIALS) * 100)}%`;
     } else {
-      counter.textContent = `Practice · ${trialIndex + 1} / ${trialList.length}`;
+      counter.textContent = ui.practiceCount(trialIndex + 1, trialList.length);
     }
 
     blankCircle();
@@ -388,7 +387,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     resultEl.hidden = false;
 
     // Headline
-    $('[data-r=eyebrow]', resultEl).textContent = 'Your result · Attention span';
+    $('[data-r=eyebrow]', resultEl).textContent = resultUi.eyebrow;
     const headline = $('[data-r=headline]', resultEl);
     headline.textContent = `${band.badge} · ${scores.overall} / 100`;
     headline.focus({ preventScroll: true });
@@ -413,13 +412,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     const steadinessEl = $('[data-r=steadiness]', resultEl);
     const steadinessDetailEl = $('[data-r=steadiness-detail]', resultEl);
     if (scores.steadiness.dipped) {
-      steadinessEl.textContent = 'Dipped';
+      steadinessEl.textContent = resultUi.dipped;
       steadinessEl.className = 'text-[28px] font-semibold tracking-[-.03em] text-coral-ink';
-      steadinessDetailEl.textContent = `second half −${scores.steadiness.diff} pts`;
+      steadinessDetailEl.textContent = resultUi.dippedDetail(scores.steadiness.diff);
     } else {
-      steadinessEl.textContent = 'Steady';
+      steadinessEl.textContent = resultUi.steady;
       steadinessEl.className = 'text-[28px] font-semibold tracking-[-.03em] text-teal-ink';
-      steadinessDetailEl.textContent = 'consistent across halves';
+      steadinessDetailEl.textContent = resultUi.steadyDetail;
     }
 
     // Meaning & tip
@@ -434,7 +433,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         [
           `Attention span: ${scores.overall}/100 (${band.badge})`,
           `Focus: ${scores.focus}% · Self-control: ${scores.selfControl}% · Speed: ${scores.speed} ms`,
-          `Steadiness: ${scores.steadiness.dipped ? 'Dipped in 2nd half' : 'Steady'}`,
+          `Steadiness: ${scores.steadiness.dipped ? resultUi.copyDipped : resultUi.steady}`,
           `knowpsyche.com/attention-span-test · ${today()}`,
         ].join('\n')
       );
@@ -442,11 +441,11 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
     // Share card
     void share.update({
-      label: 'My attention score',
+      label: resultUi.shareLabel,
       big: String(scores.overall),
       unit: '/ 100',
       badge: band.badge,
-      tagline: 'How well do you stay focused?',
+      tagline: resultUi.shareTagline,
       tag: 'Test / 05',
       text: shareText(scores.overall),
       url: 'https://knowpsyche.com/attention-span-test/',
