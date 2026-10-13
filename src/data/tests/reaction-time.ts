@@ -10,7 +10,8 @@ export interface ReactionBand {
 }
 
 export const reactionBands: ReactionBand[] = [
-  { max: 199, badge: 'Lightning', text: 'Quicker than most people. Great focus — or a very fast screen.' },
+  // Drafted.
+  { max: 199, badge: 'Lightning', text: 'Quicker than typical. Great focus — or a very fast screen.' },
   { max: 250, badge: 'Quick', text: 'A little quicker than typical.' },
   { max: 300, badge: 'Steady', text: 'Right where most people land in browser tests.' },
   { max: 400, badge: 'Needs a coffee', text: 'Tiredness, distractions or a laggy device often explain this.' },
