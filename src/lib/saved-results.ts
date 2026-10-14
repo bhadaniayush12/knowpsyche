@@ -120,10 +120,22 @@ export function readReport(): SavedReport | null {
   }
 }
 
+/** Fired on window after a save, clear or name change, so the progress trail can update. Carries no data. */
+export const CHANGE_EVENT = 'kp:saved-change';
+
+function notify() {
+  try {
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') window.dispatchEvent(new Event(CHANGE_EVENT));
+  } catch {
+    // Nothing to tell.
+  }
+}
+
 function write(report: SavedReport): boolean {
   const storage = getStorage();
   if (!storage) return false;
   storage.setItem(STORAGE_KEY, JSON.stringify(report));
+  notify();
   return true;
 }
 
@@ -157,6 +169,7 @@ export function clearResults(): boolean {
     const storage = getStorage();
     if (!storage) return false;
     storage.removeItem(STORAGE_KEY);
+    notify();
     return true;
   } catch {
     return false;

@@ -10,6 +10,7 @@ import {
   saveResult,
   setName,
   STORAGE_KEY,
+  CHANGE_EVENT,
   type SavedTestResult,
 } from '../saved-results';
 
@@ -251,5 +252,30 @@ describe('saved-results storage layer', () => {
       expect(saveResult(rt())).toBe(true);
       expect(readReport()).toEqual({ version: 1, results: { 'reaction-time': rt() } });
     });
+  });
+});
+
+describe('change event', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('fires on save and clear, carrying no data', () => {
+    const storage = new MockLocalStorage();
+    const dispatchEvent = vi.fn();
+    vi.stubGlobal('window', { localStorage: storage, dispatchEvent });
+    vi.stubGlobal('localStorage', storage);
+    saveResult(rt());
+    clearResults();
+    expect(dispatchEvent).toHaveBeenCalledTimes(2);
+    expect(dispatchEvent.mock.calls[0][0].type).toBe(CHANGE_EVENT);
+    expect('detail' in dispatchEvent.mock.calls[0][0]).toBe(false);
+  });
+
+  it('does not fire when a save fails', () => {
+    const storage = new MockLocalStorage();
+    vi.spyOn(storage, 'setItem').mockImplementation(() => { throw new Error('blocked'); });
+    const dispatchEvent = vi.fn();
+    vi.stubGlobal('window', { localStorage: storage, dispatchEvent });
+    expect(saveResult(rt())).toBe(false);
+    expect(dispatchEvent).not.toHaveBeenCalled();
   });
 });
