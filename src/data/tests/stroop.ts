@@ -70,7 +70,8 @@ export const ui = {
 /** Drafted: labels on the result's comparison card and the share card. */
 export const resultUi = {
   eyebrow: 'Your result · Stroop test',
-  cardTitle: 'Comparison & accuracy',
+  // Drafted.
+  cardTitle: 'Matching vs clashing',
   matching: 'Matching words',
   clashing: 'Clashing words',
   accuracy: 'Overall accuracy',
