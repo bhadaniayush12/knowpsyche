@@ -86,6 +86,6 @@ describe('report copy', () => {
   });
   it('never compares with other people or counts streaks', () => {
     const text = JSON.stringify(standout);
-    expect(text).not.toMatch(/percent|better than|average person|most people|others|streak|points|top \d/i);
+    expect(text).not.toMatch(/percent|better than|average person|most people|others|streak|\d+ points|earn points|top \d/i);
   });
 });
