@@ -110,6 +110,39 @@ describe('saved-results storage layer', () => {
     it('formats a date as the ISO day', () => {
       expect(getIsoDay(new Date('2026-10-14T12:00:00Z'))).toBe('2026-10-14');
     });
+
+    describe("uses the person's local day, not UTC", () => {
+      const tz = process.env.TZ;
+      afterEach(() => {
+        vi.useRealTimers();
+        if (tz === undefined) delete process.env.TZ;
+        else process.env.TZ = tz;
+      });
+
+      it('America/Los_Angeles, 19:00 on 14 October (already 15 October in UTC)', () => {
+        process.env.TZ = 'America/Los_Angeles';
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2026-10-14T19:00:00-07:00'));
+        expect(new Date().toISOString().slice(0, 10)).toBe('2026-10-15');
+        expect(getIsoDay()).toBe('2026-10-14');
+        saveResult(rt({ date: getIsoDay() }));
+        expect(getSavedResult('reaction-time')?.date).toBe('2026-10-14');
+      });
+
+      it('Asia/Kolkata, 01:30 on 15 October (still 14 October in UTC)', () => {
+        process.env.TZ = 'Asia/Kolkata';
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2026-10-15T01:30:00+05:30'));
+        expect(new Date().toISOString().slice(0, 10)).toBe('2026-10-14');
+        expect(getIsoDay()).toBe('2026-10-15');
+        saveResult(rt({ date: getIsoDay() }));
+        expect(getSavedResult('reaction-time')?.date).toBe('2026-10-15');
+      });
+    });
+
+    it('returns an empty string for an invalid date', () => {
+      expect(getIsoDay(new Date('nope'))).toBe('');
+    });
   });
 
   describe('save and read', () => {

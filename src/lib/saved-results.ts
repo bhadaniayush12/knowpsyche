@@ -91,10 +91,11 @@ export function isStorageAvailable(): boolean {
   }
 }
 
-/** The ISO day, e.g. "2026-10-14". */
+/** The person's local day as an ISO day, e.g. "2026-10-14". Local, not UTC, so it matches their calendar. */
 export function getIsoDay(d = new Date()): string {
   try {
-    return d.toISOString().slice(0, 10);
+    if (Number.isNaN(d.getTime())) return '';
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   } catch {
     return '';
   }
