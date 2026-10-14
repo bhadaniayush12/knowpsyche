@@ -607,7 +607,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       startPractice();
     } else if (mode === 'practice-done') {
       startMainRun();
-    } else if (mode === 'paused') {
+    } else if (mode === 'paused' || mode === 'done') {
+      // A broken or finished run: clear it and begin a new one, like the other tests.
       restartAll();
       startPractice();
     }

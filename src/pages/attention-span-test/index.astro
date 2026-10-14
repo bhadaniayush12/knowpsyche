@@ -549,7 +549,8 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       startPractice();
     } else if (mode === 'practice-done') {
       startMainRun();
-    } else if (mode === 'paused') {
+    } else if (mode === 'paused' || mode === 'done') {
+      // A broken or finished run: clear it and begin a new one, like the other tests.
       restartAll();
       startPractice();
     }
