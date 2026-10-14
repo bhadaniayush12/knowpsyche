@@ -78,7 +78,7 @@ export function getStorage(): Storage | null {
 /**
  * True when localStorage can be read. This only reads, so nothing is written before someone opts in.
  * If a later write still fails (quota, strict privacy modes), `saveResult` returns false and the
- * opt-in hides itself.
+ * opt-in says it couldn't save.
  */
 export function isStorageAvailable(): boolean {
   try {
@@ -223,6 +223,8 @@ export const saveCopy = {
   update: 'Update saved result',
   previous: 'A previous result is saved on this device. Save to overwrite it.',
   cleared: 'Saved results cleared from this device.',
+  // Given by Dev (Q1-06).
+  saveFailed: "Couldn't save on this device. Your browser may be blocking storage.",
 };
 
 export interface SaveBoxView {
@@ -242,7 +244,8 @@ export function saveBoxView(existing: Omit<SavedTestResult, 'date'> | null, curr
 
 /**
  * Wires the opt-in on a result page (see SaveResult.astro). Nothing is saved until the Save button is pressed.
- * If storage is blocked, the box stays hidden; if a save or clear fails later, it hides itself.
+ * If storage is blocked, the box stays hidden. If a save fails later, the box stays and says so in its status
+ * line; if a clear fails, it hides itself.
  */
 export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
   const off: SaveOptInHandle = { show() {}, reset() {} };
@@ -284,7 +287,8 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
 
   saveBtn?.addEventListener('click', () => {
     if (!current) return;
-    if (!saveResult({ ...current, date: getIsoDay() })) return giveUp();
+    // A failed write (quota, strict privacy modes) keeps the box and the Save button, and says why.
+    if (!saveResult({ ...current, date: getIsoDay() })) return status(saveCopy.saveFailed);
     render();
     // The Save button is gone now; keep focus in the box, on the next step.
     reportLink?.focus();

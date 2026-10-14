@@ -194,4 +194,22 @@ describe('save box on a result page', () => {
     expect(box['[data-save-btn]'].hidden).toBe(false);
     expect(box['[data-report-link]'].hidden).toBe(true);
   });
+
+  it('a save that fails keeps the box and the Save button, and says why in the status line (Q1-06)', () => {
+    const storage = memoryStorage();
+    storage.setItem = () => {
+      throw new DOMException('Quota exceeded', 'QuotaExceededError');
+    };
+    vi.stubGlobal('localStorage', storage);
+    vi.stubGlobal('window', fakeWindow(storage));
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    box['[data-save-btn]'].click();
+    expect(box.container.hidden).toBe(false);
+    expect(box['[data-save-btn]'].hidden).toBe(false);
+    expect(box['[data-save-btn]'].textContent).toBe(saveCopy.save);
+    expect(box['[data-report-link]'].hidden).toBe(true);
+    expect(box['[data-save-status]'].textContent).toBe("Couldn't save on this device. Your browser may be blocking storage.");
+    expect(storage.getItem('knowpsyche_saved_results')).toBeNull();
+  });
 });
