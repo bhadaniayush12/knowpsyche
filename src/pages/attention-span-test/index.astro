@@ -498,6 +498,10 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     setView('idle');
   }
 
+  // The mode when the arena's last pointerdown happened. A press on the last practice circle can
+  // still be down when "Practice complete" shows; its click must not start the scored run.
+  let pressMode: Mode | null = null;
+
   // Interactive events: Arena click / tap
   arena.addEventListener('click', (e) => {
     // If clicking on a button inside arena (e.g. start buttons), let button handle it
@@ -506,13 +510,14 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
     if (mode === 'idle') {
       startPractice();
-    } else if (mode === 'practice-done') {
+    } else if (mode === 'practice-done' && pressMode === 'practice-done') {
       startMainRun();
     }
   });
   // Responses are taken on pointerdown: "click" only fires once the finger lifts, which would add
   // the length of the tap to every reaction time (same as the reaction time test).
   arena.addEventListener('pointerdown', (e) => {
+    pressMode = mode;
     if (mode !== 'practice' && mode !== 'main') return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     if ((e.target as HTMLElement).closest('button')) return;
