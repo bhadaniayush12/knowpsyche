@@ -4,7 +4,7 @@
 /** The parts of a `learn` entry these helpers read. */
 export interface ArticleLike {
   id: string;
-  data: { draft: boolean; dateModified: Date; category: string; relatedTest?: string };
+  data: { draft: boolean; dateModified: Date; category: string; relatedTest?: string; scene?: string };
 }
 
 /** Published articles only (no drafts), most recently updated first. Ties keep a stable order by id. */

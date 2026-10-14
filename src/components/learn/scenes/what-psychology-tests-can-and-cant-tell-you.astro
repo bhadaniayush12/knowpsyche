@@ -1,0 +1,113 @@
+---
+/**
+ * Scene 1: What psychology tests can and can't tell you
+ * Thinking character holding a magnifier over a card showing a "?".
+ * Motion: magnifier drifts slightly, character blinks.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+---
+<div class:list={['scene-tests relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'short', color: 'ink' }}
+    shirt="blue"
+    expression="thinking"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Left arm holding the card */}
+    <g stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path
+        style="fill:var(--color-blue)"
+        d="M76 316 C74 292 68 270 56 256 L34 264 C38 280 40 298 40 316 Z"
+      />
+      <circle cx="48" cy="250" r="11" fill="#E3B48C" />
+    </g>
+
+    {/* The card showing "?" */}
+    <g class="scene-card" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="translate(108, 226) rotate(-6)">
+        {/* Card ink shadow */}
+        <rect x="-26" y="-34" width="52" height="68" rx="4" fill="var(--color-ink)" stroke="none" />
+        {/* Card face */}
+        <rect x="-29" y="-37" width="52" height="68" rx="4" fill="var(--color-card)" />
+        {/* Card lines */}
+        <line x1="-18" y1="-26" x2="4" y2="-26" stroke="var(--color-line-card)" stroke-width="2" />
+        <line x1="-18" y1="-20" x2="-4" y2="-20" stroke="var(--color-line-card)" stroke-width="2" />
+        {/* The question mark */}
+        <path
+          d="M-8 -6 Q-8 -18 2 -18 Q12 -18 12 -8 Q12 0 3 3 L3 7"
+          fill="none"
+          stroke="var(--color-ink)"
+          stroke-width="3.5"
+        />
+        <circle cx="3" cy="15" r="2.5" fill="var(--color-ink)" stroke="none" />
+      </g>
+      {/* Left thumb over the card */}
+      <path
+        d="M66 238 Q76 234 80 242 Q78 250 68 250"
+        fill="#E3B48C"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+    </g>
+
+    {/* Right arm & drifting magnifier */}
+    <g class="scene-drift-mag" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path
+        style="fill:var(--color-blue)"
+        d="M164 316 C166 292 172 270 184 256 L206 264 C202 280 200 298 200 316 Z"
+      />
+      {/* Handle */}
+      <path d="M128 221 L174 246" stroke="var(--color-ink)" stroke-width="7" stroke-linecap="round" />
+      <path d="M132 223 L170 244" stroke="var(--color-ochre)" stroke-width="3" stroke-linecap="round" />
+      {/* Magnifier lens and rim positioned over the card's "?" */}
+      <circle cx="110" cy="213" r="23" fill="var(--color-tint-blue)" fill-opacity="0.75" stroke="var(--color-ink)" stroke-width="3" />
+      <path d="M96 205 Q102 196 114 195" fill="none" stroke="var(--color-white)" stroke-width="2.5" stroke-linecap="round" />
+      {/* Hand holding handle */}
+      <circle cx="178" cy="248" r="11" fill="#E3B48C" stroke="var(--color-ink)" stroke-width="3" />
+      <path d="M172 242 Q180 244 182 238" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linecap="round" />
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable body float so there are at most two animated parts: magnifier drift and blink. */
+  :global(.scene-tests .ch-float) {
+    animation: none !important;
+  }
+  .scene-drift-mag {
+    transform-box: fill-box;
+    transform-origin: 85% 85%;
+    animation: mag-drift 4.2s var(--ease-house) infinite paused;
+  }
+  :global(.ch-panel[data-on]) .scene-drift-mag {
+    animation-play-state: running;
+  }
+  :global([data-motion='paused']) .scene-drift-mag {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scene-drift-mag,
+    :global(.scene-tests .ch-eyes) {
+      animation: none !important;
+    }
+  }
+  @keyframes mag-drift {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate(-4px, -3px) rotate(-3deg);
+    }
+  }
+</style>

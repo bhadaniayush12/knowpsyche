@@ -6,6 +6,7 @@ datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "Personality"
 relatedTest: enneagram-test
+scene: what-is-the-enneagram
 related:
   - what-psychology-tests-can-and-cant-tell-you
   - what-is-emotional-intelligence

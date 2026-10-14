@@ -1,0 +1,27 @@
+---
+/**
+ * Dynamic dispatcher for Learn article illustration scenes.
+ * Given an article's scene slug, renders the matching illustration component.
+ */
+import WhatPsychologyTestsCanAndCantTellYou from './what-psychology-tests-can-and-cant-tell-you.astro';
+import WhatAReactionTimeTestMeasures from './what-a-reaction-time-test-measures.astro';
+import WhatIsTheEnneagram from './what-is-the-enneagram.astro';
+
+export const scenes: Record<string, any> = {
+  'what-psychology-tests-can-and-cant-tell-you': WhatPsychologyTestsCanAndCantTellYou,
+  'what-a-reaction-time-test-measures': WhatAReactionTimeTestMeasures,
+  'what-is-the-enneagram': WhatIsTheEnneagram,
+};
+
+export type SceneSlug = keyof typeof scenes;
+
+interface Props {
+  slug: string;
+  size?: number;
+  class?: string;
+}
+
+const { slug, size, class: className } = Astro.props;
+const Component = scenes[slug];
+---
+{Component && <Component size={size} class={className} />}

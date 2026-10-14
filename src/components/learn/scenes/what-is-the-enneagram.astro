@@ -1,0 +1,195 @@
+---
+/**
+ * Scene 3: What is the Enneagram, really?
+ * Character in the middle of a nine-point circle (points unlabelled except as dots),
+ * hand on chin, three dots glow in turn.
+ * Motion: dot glow, blink.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+
+// 9 points on a circle centered at (120, 140) with radius 88, starting from -90 deg (top).
+const points = [
+  { id: 9, cx: 120, cy: 52, glow: 1 },
+  { id: 1, cx: 177, cy: 73 },
+  { id: 2, cx: 207, cy: 125 },
+  { id: 3, cx: 196, cy: 184, glow: 2 },
+  { id: 4, cx: 150, cy: 223 },
+  { id: 5, cx: 90, cy: 223 },
+  { id: 6, cx: 44, cy: 184, glow: 3 },
+  { id: 7, cx: 33, cy: 125 },
+  { id: 8, cx: 63, cy: 73 },
+];
+---
+<div class:list={['scene-enneagram relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'bun', color: 'ink' }}
+    shirt="violet"
+    expression="thinking"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Nine-point circle */}
+    <g class="ennea-orbit" stroke-linecap="round" stroke-linejoin="round">
+      {/* Circumference line */}
+      <circle
+        cx="120"
+        cy="140"
+        r="88"
+        fill="none"
+        stroke="var(--color-ink)"
+        stroke-width="2"
+        stroke-dasharray="4 6"
+        opacity="0.45"
+      />
+
+      {/* Subtle interior triad connecting lines (9 - 3 - 6) */}
+      <path
+        d="M120 52 L196 184 L44 184 Z"
+        fill="none"
+        stroke="var(--color-violet)"
+        stroke-width="1.5"
+        stroke-dasharray="3 5"
+        opacity="0.35"
+      />
+
+      {/* 9 dots (unlabelled except as dots) */}
+      {points.map((p) => {
+        if (p.glow) {
+          return (
+            <g class:list={['ennea-dot-group', `glow-step-${p.glow}`]}>
+              <circle
+                cx={p.cx}
+                cy={p.cy}
+                r="11"
+                class="ennea-halo"
+                fill="var(--color-yellow)"
+                stroke="none"
+              />
+              <circle
+                cx={p.cx}
+                cy={p.cy}
+                r="4.5"
+                class="ennea-dot ennea-dot-glow"
+                stroke="var(--color-ink)"
+                stroke-width="2"
+              />
+            </g>
+          );
+        }
+        return (
+          <circle
+            cx={p.cx}
+            cy={p.cy}
+            r="4"
+            class="ennea-dot"
+            fill="var(--color-ink)"
+            stroke="none"
+          />
+        );
+      })}
+    </g>
+
+    {/* Hand on chin: right arm coming up, hand resting under chin */}
+    <g class="scene-hand-on-chin" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      {/* Sleeve */}
+      <path
+        style="fill:var(--color-violet)"
+        d="M164 316 C166 280 160 250 146 230 L126 238 C140 256 144 286 142 316 Z"
+      />
+      {/* Hand at chin (chin is at 120, 196) */}
+      <circle cx="126" cy="198" r="10" fill="#E3B48C" />
+      {/* Fingers resting against chin */}
+      <path d="M120 190 Q122 198 126 200" fill="none" stroke-width="2.5" />
+      <path d="M116 193 Q119 200 124 204" fill="none" stroke-width="2.5" />
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable body float so there are at most two animated parts: dot glow and blink. */
+  :global(.scene-enneagram .ch-float) {
+    animation: none !important;
+  }
+
+  /* Three dots glow in turn (3.6s cycle: 1.2s each) */
+  .ennea-dot-glow {
+    fill: var(--color-ink);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ennea-dot-pulse 3.6s ease-in-out infinite paused;
+  }
+
+  .ennea-halo {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: ennea-halo-pulse 3.6s ease-in-out infinite paused;
+  }
+
+  /* Stagger the three glowing dots: 9 (step 1), 3 (step 2), 6 (step 3) */
+  .glow-step-1 :is(.ennea-dot-glow, .ennea-halo) {
+    animation-delay: 0s;
+  }
+  .glow-step-2 :is(.ennea-dot-glow, .ennea-halo) {
+    animation-delay: 1.2s;
+  }
+  .glow-step-3 :is(.ennea-dot-glow, .ennea-halo) {
+    animation-delay: 2.4s;
+  }
+
+  /* Run animation only while character panel is in view */
+  :global(.ch-panel[data-on]) :is(.ennea-dot-glow, .ennea-halo) {
+    animation-play-state: running;
+  }
+
+  :global([data-motion='paused']) :is(.ennea-dot-glow, .ennea-halo) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ennea-dot-glow,
+    .ennea-halo,
+    :global(.scene-enneagram .ch-eyes) {
+      animation: none !important;
+    }
+    .ennea-dot-glow {
+      fill: var(--color-yellow) !important;
+    }
+  }
+
+  @keyframes ennea-dot-pulse {
+    0%, 34%, 100% {
+      fill: var(--color-ink);
+      transform: scale(1);
+    }
+    12%, 22% {
+      fill: var(--color-yellow);
+      transform: scale(1.4);
+    }
+  }
+
+  @keyframes ennea-halo-pulse {
+    0%, 34%, 100% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    12% {
+      opacity: 0.65;
+      transform: scale(1.2);
+    }
+    24% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+</style>

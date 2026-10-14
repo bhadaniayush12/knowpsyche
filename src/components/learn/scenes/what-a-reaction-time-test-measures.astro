@@ -1,0 +1,199 @@
+---
+/**
+ * Scene 2: What a reaction time test really measures
+ * Alert, wide-eyed character with a finger over a big round button
+ * and a small box that flips from red to green once on scroll into view.
+ * Motion: the box, a quick lean-in.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+---
+<div class:list={['scene-reaction relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'short', color: 'ink' }}
+    shirt="teal"
+    expression="surprised"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Small stimulus box in upper-left corner that flips from red to green */}
+    <g class="scene-stimulus" stroke-linecap="round" stroke-linejoin="round">
+      {/* Box ink shadow */}
+      <rect x="35" y="61" width="46" height="32" rx="6" fill="var(--color-ink)" stroke="none" />
+      {/* Box screen */}
+      <rect
+        class="scene-box-screen"
+        x="32"
+        y="58"
+        width="46"
+        height="32"
+        rx="6"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+      {/* Indicator light */}
+      <circle class="scene-box-light" cx="55" cy="74" r="5" stroke="none" />
+      <path
+        d="M40 66 Q44 62 52 62"
+        fill="none"
+        stroke="var(--color-white)"
+        stroke-width="2"
+        opacity="0.8"
+      />
+    </g>
+
+    {/* Big round button and hovering finger */}
+    <g class="scene-button-unit" stroke-linecap="round" stroke-linejoin="round">
+      {/* Base shadow */}
+      <rect x="151" y="261" width="62" height="20" rx="6" fill="var(--color-ink)" stroke="none" />
+      {/* Base housing */}
+      <rect
+        x="148"
+        y="258"
+        width="62"
+        height="20"
+        rx="6"
+        fill="var(--color-ink-soft)"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+      {/* Big round dome button */}
+      <path
+        d="M156 258 C156 234 202 234 202 258 Z"
+        fill="var(--color-red)"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+      {/* Dome shine */}
+      <path
+        d="M166 246 Q174 240 186 241"
+        fill="none"
+        stroke="var(--color-white)"
+        stroke-width="2.5"
+      />
+    </g>
+
+    {/* Right arm reaching down with index finger poised right over the dome */}
+    <g class="scene-arm-finger" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      {/* Sleeve */}
+      <path
+        style="fill:var(--color-teal)"
+        d="M164 316 C166 288 174 266 186 250 L208 258 C204 276 200 296 200 316 Z"
+      />
+      {/* Hand */}
+      <circle cx="180" cy="242" r="10" fill="#E3B48C" />
+      {/* Extended index finger pointing down towards dome (dome top is at y=234) */}
+      <path
+        d="M174 238 L174 229 C174 226 180 226 180 229 L180 240"
+        fill="#E3B48C"
+      />
+      {/* Curled fingers */}
+      <path d="M184 238 Q189 240 189 244 M183 244 Q188 246 188 250" fill="none" stroke-width="2.5" />
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable built-in eyes blink; only two animated parts: box flip and quick lean-in. */
+  :global(.scene-reaction .ch-eyes) {
+    animation: none !important;
+  }
+
+  /* Quick lean-in replaces default float on .ch-float */
+  :global(.scene-reaction .ch-float) {
+    transform-origin: 120px 240px;
+    animation: char-quick-lean 2.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards paused;
+  }
+
+  /* Box flip animation */
+  .scene-stimulus {
+    transform-origin: 55px 74px;
+  }
+  .scene-box-screen {
+    fill: var(--color-wait-red);
+    transform-origin: 55px 74px;
+    animation: box-screen-flip 2.4s ease-out forwards paused;
+  }
+  .scene-box-light {
+    fill: var(--color-paper);
+    opacity: 0.5;
+    animation: box-light-snap 2.4s ease-out forwards paused;
+  }
+
+  /* Play once when scrolled into view */
+  :global(.ch-panel[data-on]) :is(.scene-box-screen, .scene-box-light),
+  :global(.scene-reaction .ch-panel[data-on] .ch-float) {
+    animation-play-state: running;
+  }
+
+  :global([data-motion='paused']) :is(.scene-box-screen, .scene-box-light),
+  :global([data-motion='paused']) :global(.scene-reaction .ch-float) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-box-screen {
+      animation: none !important;
+      fill: var(--color-mint-go) !important;
+    }
+    .scene-box-light {
+      animation: none !important;
+      fill: var(--color-white) !important;
+      opacity: 1 !important;
+    }
+    :global(.scene-reaction .ch-float) {
+      animation: none !important;
+    }
+  }
+
+  @keyframes box-screen-flip {
+    0%, 48% {
+      fill: var(--color-wait-red);
+      transform: scaleY(1);
+    }
+    50% {
+      fill: var(--color-wait-red);
+      transform: scaleY(0.12);
+    }
+    52% {
+      fill: var(--color-mint-go);
+      transform: scaleY(1);
+    }
+    100% {
+      fill: var(--color-mint-go);
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes box-light-snap {
+    0%, 48% {
+      fill: var(--color-paper);
+      opacity: 0.45;
+    }
+    52%, 100% {
+      fill: var(--color-white);
+      opacity: 1;
+    }
+  }
+
+  @keyframes char-quick-lean {
+    0%, 48% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    54% {
+      transform: translate(5px, 4px) rotate(2deg);
+    }
+    62%, 100% {
+      transform: translate(4px, 3px) rotate(1.5deg);
+    }
+  }
+</style>

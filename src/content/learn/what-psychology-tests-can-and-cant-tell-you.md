@@ -5,6 +5,7 @@ description: "A plain guide to reading any online psychology test: what a result
 datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "The basics"
+scene: what-psychology-tests-can-and-cant-tell-you
 related:
   - what-is-the-enneagram
   - what-a-reaction-time-test-measures

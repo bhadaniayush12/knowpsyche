@@ -148,4 +148,8 @@ describe('articlesForTest', () => {
   it('finds none for a test without articles', () => {
     expect(articlesForTest(list, 'enneagram-test')).toEqual([]);
   });
+  it('preserves scene property on article data', () => {
+    const item = a('four', { scene: 'what-is-the-enneagram' });
+    expect(item.data.scene).toBe('what-is-the-enneagram');
+  });
 });

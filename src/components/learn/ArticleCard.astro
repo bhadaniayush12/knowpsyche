@@ -1,6 +1,7 @@
 ---
 import { readingTime } from '../../lib/learn/articles';
 import { testFor, type Article } from '../../lib/learn/collection';
+import Scene from './scenes/Scene.astro';
 
 /** Article card for /learn/ and "Keep reading". Same card style as the test cards (ui/Card.astro),
  *  in the colours of the article's test; ink for the pillar article. */
@@ -16,7 +17,7 @@ const dark = !test || test.dark;
 ---
 <a
   href={`/learn/${article.id}/`}
-  class:list={['card flex flex-col gap-3.5 rounded-20 p-[22px] no-underline', featured ? 'min-h-[300px] md:min-h-[400px] md:p-8' : 'min-h-[230px]', dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink', className]}
+  class:list={['card relative flex flex-col gap-3.5 rounded-20 p-[22px] no-underline overflow-hidden', featured ? 'min-h-[300px] md:min-h-[400px] md:p-8' : 'min-h-[230px]', dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink', className]}
   style={dark ? undefined : { background: test.tint }}
 >
   <div class="flex items-center justify-between gap-2">
@@ -26,6 +27,11 @@ const dark = !test || test.dark;
     >{article.data.category}</span>
     <span class="text-[13.5px] opacity-75">{readingTime(article.body ?? '')}</span>
   </div>
+  {article.data.scene && (
+    <div class:list={['pointer-events-none', featured ? 'my-2 sm:self-end md:absolute md:right-8 md:bottom-8 md:my-0' : 'self-end -my-1 sm:-my-2']}>
+      <Scene slug={article.data.scene} size={featured ? 120 : 68} />
+    </div>
+  )}
   <div class:list={[featured && 'md:mt-auto']}>
     <h3 class:list={['m-0 mb-1.5 font-semibold', featured ? 'max-w-[18ch] text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]' : 'text-[24px] leading-[1.15] tracking-[-.035em]']}>{article.data.title}</h3>
     <p class:list={['m-0 leading-[1.55] opacity-[.88]', featured ? 'max-w-[52ch] text-[17px]' : 'text-[15.5px]']}>{article.data.deck ?? article.data.description}</p>

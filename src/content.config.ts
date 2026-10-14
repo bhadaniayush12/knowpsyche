@@ -25,6 +25,8 @@ const learn = defineCollection({
       category: z.string().min(1).max(30),
       /** The test this article goes with. Optional for the pillar article. */
       relatedTest: z.enum(testSlugs).optional(),
+      /** Optional slug of an illustration component in src/components/learn/scenes/. */
+      scene: z.string().min(1).optional(),
       related: z.array(reference('learn')).max(2).default([]),
       /** A citation string (*italic* allowed, as on the test pages) or a linked { title, url }. */
       sources: z.array(z.union([z.string().min(1), z.object({ title: z.string().min(1), url: z.url() })])).min(1),

@@ -13,6 +13,7 @@ import Sources from '../../components/result/Sources.astro';
 import TestGlyph from '../../components/home/TestGlyph.astro';
 import Logo from '../../components/Logo.astro';
 import ArticleCard from '../../components/learn/ArticleCard.astro';
+import Scene from '../../components/learn/scenes/Scene.astro';
 import { dropTrailingLine, enhanceArticleHtml, readingTime, splitAtH2, tocFromHeadings } from '../../lib/learn/articles';
 import { formatDate, getArticles, testFor, type Article } from '../../lib/learn/collection';
 import { AUTHOR, articleFootnote, keepReadingLabel, tocLabel, tryTestLabel } from '../../data/learn';
@@ -95,7 +96,13 @@ const articleLd = {
       class:list={['flex aspect-[360/220] min-w-0 max-w-[420px] flex-[1_1_300px] items-center justify-center overflow-hidden rounded-[26px] p-5', (!test || test.dark) && 'bg-ink']}
       style={test && !test.dark ? { background: test.tint } : undefined}
     >
-      {test ? <div class="scale-[2.2]"><TestGlyph glyph={test.glyph} /></div> : <div class="scale-[3]"><Logo wordmark={false} /></div>}
+      {data.scene ? (
+        <Scene slug={data.scene} size={150} />
+      ) : test ? (
+        <div class="scale-[2.2]"><TestGlyph glyph={test.glyph} /></div>
+      ) : (
+        <div class="scale-[3]"><Logo wordmark={false} /></div>
+      )}
     </div>
   </section>
 
