@@ -10,11 +10,22 @@ import { title, description, h1, intro } from '../../data/tests-index';
 <BaseLayout title={title} description={description} path="/tests/" ogImage="/og/tests.png" crumbs={[{ name: 'Tests' }]}>
   <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
-    <section class="max-w-[720px]">
+    <section>
       <!-- Drafted eyebrow. -->
       <div class="mono mb-[18px] text-[11px] text-muted">Tests · 07 free</div>
-      <h1 class="m-0 text-[clamp(44px,6vw,88px)] leading-[.92] font-semibold tracking-[-.055em]">{h1[0]}<br /><span class="serif text-violet">{h1[1]}</span></h1>
-      <p class="mt-4 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{intro}</p>
+      <h1 class="m-0 text-[clamp(48px,9vw,124px)] leading-[.9] font-semibold tracking-[-.055em]">{h1[0]}<br /><span class="serif text-violet">{h1[1]}</span></h1>
+      <!-- The seven card motifs, small, settling in once on load. Decorative: the cards below carry the names. -->
+      <div aria-hidden="true" class="mt-6 flex flex-wrap gap-2">
+        {homeTests.map((t, i) => (
+          <span
+            class:list={['settle-in flex h-11 w-[84px] items-center justify-center overflow-hidden rounded-full', t.dark ? 'bg-ink' : '']}
+            style={{ '--i': i, background: t.dark ? undefined : t.tint }}
+          >
+            <span class="flex shrink-0 scale-[.42] items-center"><TestGlyph glyph={t.glyph} /></span>
+          </span>
+        ))}
+      </div>
+      <p class="mt-6 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{intro}</p>
       <p class="mt-3 mb-0 text-[13.5px] text-ink-soft">{PRIVATE_LINE}</p>
     </section>
 
@@ -22,7 +33,7 @@ import { title, description, h1, intro } from '../../data/tests-index';
       <h2 id="all-tests" class="sr-only">All tests</h2>
       <div class="grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
       {homeTests.map((t) => (
-        <Card test={t} details>
+        <Card test={t} details class="card-lift">
           <TestGlyph glyph={t.glyph} />
         </Card>
       ))}

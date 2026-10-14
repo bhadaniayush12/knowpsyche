@@ -2,8 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FontPreloads from '../../components/FontPreloads.astro';
 import ArticleCard from '../../components/learn/ArticleCard.astro';
+import Chip from '../../components/ui/Chip.astro';
 import { byCategory } from '../../lib/learn/articles';
-import { getArticles } from '../../lib/learn/collection';
+import { getArticles, testFor } from '../../lib/learn/collection';
 import { hubDescription, hubEmpty, hubEyebrow, hubH1, hubIntro, hubTitle } from '../../data/learn';
 
 const groups = byCategory(await getArticles());
@@ -12,10 +13,30 @@ const id = (category: string) => `cat-${category.toLowerCase().replace(/[^a-z0-9
 <BaseLayout title={hubTitle} description={hubDescription} path="/learn/" ogImage="/og/learn.png" crumbs={[{ name: 'Learn' }]}>
   <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
-    <section class="max-w-[720px]">
+    <section>
       <div class="mono mb-[18px] text-[11px] text-muted">{hubEyebrow}</div>
-      <h1 class="m-0 text-[clamp(44px,6vw,88px)] leading-[.92] font-semibold tracking-[-.055em]">{hubH1[0]}<br /><span class="serif text-blue">{hubH1[1]}</span></h1>
-      <p class="mt-4 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{hubIntro}</p>
+      <h1 class="m-0 text-[clamp(44px,9vw,124px)] leading-[.9] font-semibold tracking-[-.055em]">{hubH1[0]}<br /><span class="serif text-blue">{hubH1[1]}</span></h1>
+      {groups.length > 0 && (
+        <nav aria-label="Categories" class="mt-6">
+          <ul class="m-0 flex list-none flex-wrap gap-2 p-0">
+            {groups.map((g, i) => {
+              const t = testFor(g.items[0]);
+              const dark = !t || t.dark;
+              return (
+                <li class="settle-in" style={{ '--i': i }}>
+                  <Chip
+                    href={`#${id(g.category)}`}
+                    bg={dark ? 'var(--color-ink)' : 'var(--color-white)'}
+                    color={dark ? 'var(--color-paper)' : 'var(--color-ink)'}
+                    class="min-h-11 gap-2 border border-line-pill px-4 text-[14.5px] font-semibold"
+                  ><span aria-hidden="true" class="size-2 rounded-full" style={{ background: dark ? 'var(--color-yellow)' : t.color }}></span>{g.category}</Chip>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
+      <p class="mt-6 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{hubIntro}</p>
     </section>
 
     {groups.length === 0 && (
@@ -23,10 +44,10 @@ const id = (category: string) => `cat-${category.toLowerCase().replace(/[^a-z0-9
     )}
 
     {groups.map((g) => (
-      <section aria-labelledby={id(g.category)}>
+      <section aria-labelledby={id(g.category)} class="scroll-mt-4">
         <h2 id={id(g.category)} class="m-0 mb-4 text-[clamp(28px,3.4vw,34px)] font-semibold tracking-[-.04em]">{g.category}</h2>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
-          {g.items.map((a) => <ArticleCard article={a} />)}
+          {g.items.map((a) => <ArticleCard article={a} class="card-lift" />)}
         </div>
       </section>
     ))}

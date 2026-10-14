@@ -310,7 +310,7 @@ details[open] .plus {
 }
 
 @media print {
-  .reveal, .late, .reveal-once, .how-text, .rx-row { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .reveal, .late, .reveal-once, .settle-in, .how-text, .rx-row { animation: none !important; opacity: 1 !important; transform: none !important; }
   .draw, .strike { animation: none !important; stroke-dashoffset: 0; }
   .motion-toggle { display: none !important; }
 }
@@ -390,11 +390,18 @@ details[open] .plus {
 .card.card-lift { transition: transform .45s var(--ease-house), box-shadow .45s var(--ease-house); }
 .card.card-lift:is(:hover, :focus-visible) { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--color-ink); }
 .card.card-lift:focus-visible .glyph { transform: scale(1.08) rotate(-3deg); }
+/* The card's "→" slides a few pixels toward where the link goes. */
+.card-arrow { display: inline-block; }
+.card.card-lift .card-arrow { transition: transform .45s var(--ease-house); }
+.card.card-lift:is(:hover, :focus-visible) .card-arrow { transform: translateX(5px); }
 
 /* Reveal once, with a short stagger (--i). backwards fill only, so hover can move the card afterwards. */
 @keyframes kp-in { from { opacity: 0; transform: translateY(18px); } }
 .js .reveal-once:not(.is-in, .is-shown) { opacity: 0; }
 .reveal-once.is-in { animation: kp-in .5s var(--ease-house) calc(var(--i, 0) * 70ms) backwards; }
+/* Hub heroes (/tests/, /learn/): a row of small motifs or chips settles in once on page load, in order (--i).
+   CSS only, so it also plays without JS; the boxes have fixed sizes, so nothing around them moves. */
+.settle-in { animation: kp-in .5s var(--ease-house) calc(200ms + var(--i, 0) * 60ms) backwards; }
 
 /* Card motifs, on hover or focus only: the digits flip in one by one, the colour words swap ink. */
 @keyframes kp-flip { from { opacity: 0; transform: rotateX(90deg) translateY(-6px); } }

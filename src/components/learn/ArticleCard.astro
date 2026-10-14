@@ -30,5 +30,5 @@ const dark = !test || test.dark;
     <h3 class:list={['m-0 mb-1.5 font-semibold', featured ? 'max-w-[18ch] text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]' : 'text-[24px] leading-[1.15] tracking-[-.035em]']}>{article.data.title}</h3>
     <p class:list={['m-0 leading-[1.55] opacity-[.88]', featured ? 'max-w-[52ch] text-[17px]' : 'text-[15.5px]']}>{article.data.deck ?? article.data.description}</p>
   </div>
-  <span class:list={['text-[15.5px] font-semibold', featured ? 'mt-auto md:mt-2' : 'mt-auto']}>Read →</span>
+  <span class:list={['text-[15.5px] font-semibold', featured ? 'mt-auto md:mt-2' : 'mt-auto']}>Read <span class="card-arrow">→</span></span>
 </a>
