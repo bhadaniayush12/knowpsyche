@@ -576,6 +576,11 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     btn.addEventListener('click', (e) => {
       if (e.detail === 0) handleAnswer(color, e.timeStamp);
     });
+    // A held Enter repeats, and each repeat clicks the button again: it would answer the next words
+    // too. Only the first press counts (Space clicks once, on release).
+    btn.addEventListener('keydown', (e) => {
+      if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault();
+    });
   });
 
   startPracticeBtn.addEventListener('click', startPractice);
