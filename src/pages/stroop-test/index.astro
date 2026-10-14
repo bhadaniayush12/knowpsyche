@@ -333,7 +333,10 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     mode = 'paused';
     blankWord();
     feedbackEl.textContent = '';
+    // A broken scored run has no result, so its reserved space goes too (no empty gap below).
+    resultEl.hidden = true;
     setView('paused');
+    pausedRestartBtn.focus({ preventScroll: true });
   }
 
   window.addEventListener('blur', pauseBrokenRun);
@@ -586,12 +589,15 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   startPracticeBtn.addEventListener('click', startPractice);
   startMainBtn.addEventListener('click', startMainRun);
   // After a restart, Space or Enter on the focused button starts practice again.
-  for (const btn of [restartBtn, pausedRestartBtn]) {
-    btn.addEventListener('click', () => {
-      restartAll();
-      startPracticeBtn.focus({ preventScroll: true });
-    });
-  }
+  restartBtn.addEventListener('click', () => {
+    restartAll();
+    startPracticeBtn.focus({ preventScroll: true });
+  });
+  // A paused run has focus here, so Space or Enter restarts straight into practice.
+  pausedRestartBtn.addEventListener('click', () => {
+    restartAll();
+    startPractice();
+  });
 
   // Top "Start the test" button in the intro header
   const introStartBtn = $('[data-test-start]');
@@ -601,6 +607,9 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       startPractice();
     } else if (mode === 'practice-done') {
       startMainRun();
+    } else if (mode === 'paused') {
+      restartAll();
+      startPractice();
     }
   });
 
@@ -622,13 +631,16 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     if (!isCardOnScreen()) return;
     const key = e.key.toLowerCase();
     if (key === ' ' || key === 'enter') {
-      if (mode !== 'idle' && mode !== 'practice-done') return;
+      if (mode !== 'idle' && mode !== 'practice-done' && mode !== 'paused') return;
       // The answer buttons do nothing between runs, so Space/Enter on them still starts.
       const control = (e.target as HTMLElement).closest('a, button');
       if (control && !control.classList.contains('st-btn')) return;
       e.preventDefault();
       if (mode === 'idle') startPractice();
-      else startMainRun();
+      else if (mode === 'paused') {
+        restartAll();
+        startPractice();
+      } else startMainRun();
       return;
     }
     const color = keyColors[key];
