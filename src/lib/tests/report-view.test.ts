@@ -90,3 +90,11 @@ describe('"What it means" on the EQ sheet (Q1-04)', () => {
     expect(lines.join(' ')).not.toContain(eqCopy.closing);
   });
 });
+
+describe('"What it means" on the Stroop sheet (Q1-10)', () => {
+  it('ends with the full "What can change your result" sentence from the Stroop page', () => {
+    const lines = meaningFor('stroop', saved('stroop', 'Mild pull', 120));
+    expect(lines.at(-1)).toBe('What can change your result: reading speed, practice, tiredness and how fast you try to go. Colour-vision differences can affect it too.');
+    expect(lines.at(-1)).toMatch(/\.$/);
+  });
+});

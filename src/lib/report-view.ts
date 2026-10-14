@@ -4,7 +4,7 @@ import { reactionBands, result as reactionCopy } from '../data/tests/reaction-ti
 import { numberBands, result as numberCopy } from '../data/tests/number-memory';
 import { photoBands, result as photoCopy } from '../data/tests/photographic-memory';
 import { attentionBands, result as attentionCopy } from '../data/tests/attention-span';
-import { stroopBands, result as stroopCopy } from '../data/tests/stroop';
+import { happening as stroopHappening, stroopBands, result as stroopCopy } from '../data/tests/stroop';
 import { types as enneagramTypes_, result as enneagramCopy } from '../data/tests/enneagram';
 import { areas, bands as eqBands } from '../data/tests/emotional-intelligence';
 import { reportSheet, scoreUnit, standout, tryThis } from '../data/report';
@@ -18,7 +18,9 @@ const single: Partial<Record<TestId, { bands: readonly Band[]; change: string }>
   'number-memory': { bands: numberBands, change: numberCopy.change },
   'photographic-memory': { bands: photoBands, change: photoCopy.change },
   'attention-span': { bands: attentionBands, change: attentionCopy.change },
-  stroop: { bands: stroopBands, change: stroopCopy.change },
+  // The result page's line is a fragment under its own heading; on the sheet it needs to read as a sentence,
+  // so this is the full line from the Stroop page's "What's happening in this test?", word for word.
+  stroop: { bands: stroopBands, change: `What can change your result: ${stroopHappening.change}` },
 };
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text?: string): HTMLElementTagNameMap[K] {
