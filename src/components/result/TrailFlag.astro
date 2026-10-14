@@ -3,24 +3,37 @@
  * Goes in <head> on test pages and /report/. Before the first paint it marks <html data-kp-saved> when at
  * least one result is saved (C1), and lists the saved test ids in <html data-kp-report="…">, so the trail
  * strip and the report's pages are laid out from the start and never shift the page.
+ * It counts an entry only if clean() in saved-results.ts would keep it (same day, length and DATA_RULES
+ * checks), so bad data never flashes a page the script then takes away. trail-flag.test.ts keeps them in step.
  * Only reads; never writes, never sends. ProgressTrail.astro and /report/ keep both up to date afterwards.
  */
-import { STORAGE_KEY, TEST_IDS } from '../../lib/saved-results';
+import { DATA_RULES, MAX_TEXT, STORAGE_KEY, TEST_IDS } from '../../lib/saved-results';
 const ids = [...TEST_IDS];
 ---
-<script is:inline define:vars={{ key: STORAGE_KEY, ids }}>
+<script is:inline define:vars={{ key: STORAGE_KEY, ids, rules: DATA_RULES, max: MAX_TEXT }}>
   try {
+    var obj = function (v) { return !!v && typeof v === 'object' && !Array.isArray(v); };
+    var num = function (v, u) { return typeof v === 'number' && isFinite(v) && v >= u.min && v <= u.max && (!u.int || v % 1 === 0); };
+    var ok = function (e) {
+      if (!obj(e) || ids.indexOf(e.testId) < 0) return false;
+      var u = rules[e.testId], d = e.data, m = typeof e.date === 'string' && /^(\d{4})-(\d{2})-(\d{2})$/.exec(e.date), i;
+      if (!m || m[2] < 1 || m[2] > 12 || m[3] < 1 || m[3] > new Date(Date.UTC(+m[1], +m[2], 0)).getUTCDate()) return false;
+      if (typeof e.badge !== 'string' || e.badge.length > max || typeof e.headline !== 'string' || e.headline.length > max) return false;
+      if (d === null) return !!u.nullable;
+      if (!u.keys) return num(d, u);
+      if (!obj(d) || Object.keys(d).length !== u.keys.length) return false;
+      for (i = 0; i < u.keys.length; i++) if (!Object.prototype.hasOwnProperty.call(d, u.keys[i]) || !num(d[u.keys[i]], u)) return false;
+      return true;
+    };
     var r = JSON.parse(localStorage.getItem(key) || 'null');
-    var res = r && typeof r === 'object' ? r.results : null;
-    if (res && typeof res === 'object' && !Array.isArray(res)) {
-      var found = [];
-      for (var k in res) {
-        if (res[k] && ids.indexOf(res[k].testId) > -1 && found.indexOf(res[k].testId) < 0) found.push(res[k].testId);
-      }
-      if (found.length) {
-        document.documentElement.setAttribute('data-kp-saved', '');
-        document.documentElement.setAttribute('data-kp-report', found.join(' '));
-      }
+    var res = obj(r) && obj(r.results) ? r.results : {};
+    var found = ids.filter(function (id) {
+      for (var k in res) if (ok(res[k]) && res[k].testId === id) return true;
+      return false;
+    });
+    if (found.length) {
+      document.documentElement.setAttribute('data-kp-saved', '');
+      document.documentElement.setAttribute('data-kp-report', found.join(' '));
     }
   } catch (e) {}
 </script>
