@@ -86,13 +86,14 @@ const breadcrumbLd = trail.length > 0 && {
     {breadcrumbLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />}
     <slot name="head" />
   </head>
-  <body id="top">
+  <!-- Flex column at full screen height, so the footer sits at the bottom of short pages. -->
+  <body id="top" class="flex min-h-dvh flex-col">
     <a
       href="#main"
       class="sr-only z-50 rounded-10 bg-ink px-4 py-3 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:inline-flex focus:min-h-11 focus:items-center focus:text-paper"
     >Skip to content</a>
     <Header variant={variant} />
-    <main id="main">
+    <main id="main" class="flex-1">
       {trail.length > 0 && (
         <nav aria-label="Breadcrumb" class="mono mx-auto px-[clamp(16px,3vw,40px)] pt-7 text-[11px] text-muted" style={{ maxWidth: `${crumbWidth}px` }}>
           {trail.map((c, i) => i < trail.length - 1
