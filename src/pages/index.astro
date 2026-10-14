@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FontPreloads from '../components/FontPreloads.astro';
 import Hero from '../components/home/Hero.astro';
 import QuestionMarquee from '../components/home/QuestionMarquee.astro';
 import TestGrid from '../components/home/TestGrid.astro';
@@ -45,6 +46,7 @@ const jsonLd = [
 ---
 <BaseLayout title={title} description={description} path="/" variant="home">
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+  <FontPreloads slot="head" />
   <Hero />
   <QuestionMarquee />
   <TestGrid />
