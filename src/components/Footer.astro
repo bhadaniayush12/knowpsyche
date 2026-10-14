@@ -1,6 +1,8 @@
 ---
 import SectionLabel from './ui/SectionLabel.astro';
-import { DISCLAIMER, footerModes } from '../data/home';
+import { getCollection } from 'astro:content';
+import { DISCLAIMER, footerModes, homeTests } from '../data/home';
+import { published } from '../lib/learn/articles';
 
 interface Props {
   /** `full` = Main design (homepage). `compact` = About/Method design (inner pages). */
@@ -8,28 +10,20 @@ interface Props {
 }
 const { variant = 'compact' } = Astro.props;
 
+// Link groups for the full footer: all 7 tests, Learn (hub + the 3 most recently updated articles), the site.
+const articles = published(await getCollection('learn')).slice(0, 3);
 const columns = [
   {
-    label: '01 — Tests',
-    links: [
-      { href: '/reaction-time-test/', label: 'Reaction time' },
-      { href: '/enneagram-test/', label: 'Enneagram' },
-      { href: '/photographic-memory-test/', label: 'Photographic memory' },
-      { href: '/number-memory-test/', label: 'Number memory' },
-    ],
+    label: 'Tests',
+    links: homeTests.map((t) => ({ href: t.href, label: t.name })),
   },
   {
-    label: '02 — More tests',
-    links: [
-      { href: '/attention-span-test/', label: 'Attention span' },
-      { href: '/stroop-test/', label: 'Stroop test' },
-      { href: '/emotional-intelligence-test/', label: 'Emotional intelligence' },
-    ],
+    label: 'Learn',
+    links: [{ href: '/learn/', label: 'Learn psychology' }, ...articles.map((a) => ({ href: `/learn/${a.id}/`, label: a.data.title }))],
   },
   {
-    label: '03 — KnowPsyche',
+    label: 'KnowPsyche',
     links: [
-      { href: '/learn/', label: 'Learn psychology' },
       { href: '/about/', label: 'About' },
       { href: '/method/', label: 'How we build tests' },
       { href: '/privacy/', label: 'Privacy & disclaimer' },
