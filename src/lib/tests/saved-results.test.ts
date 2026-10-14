@@ -444,3 +444,85 @@ describe('what clean() keeps (Q1-13)', () => {
     expect(storage.getItem(STORAGE_KEY)).toBeNull();
   });
 });
+
+describe('two tabs saving at the same time (Q1-15)', () => {
+  // Two tabs share one localStorage. Each tab is its own copy of the module with its own window, and only
+  // the *other* tab's window gets a storage event, as in a browser.
+  type Tab = { mod: typeof import('../saved-results'); fire: (newValue: string | null, key?: string | null) => void };
+  let shared: MockLocalStorage;
+
+  const openTab = async (): Promise<Tab> => {
+    vi.resetModules();
+    const listeners: ((e: Partial<StorageEvent>) => void)[] = [];
+    vi.stubGlobal('localStorage', shared);
+    vi.stubGlobal('window', {
+      localStorage: shared,
+      addEventListener: (type: string, fn: (e: Partial<StorageEvent>) => void) => type === 'storage' && listeners.push(fn),
+      dispatchEvent: () => true,
+    });
+    const mod = await import('../saved-results');
+    return { mod, fire: (newValue, key = STORAGE_KEY) => listeners.forEach((fn) => fn({ key, newValue })) };
+  };
+  const nm = rt({ testId: 'number-memory', badge: 'Steady', headline: '7 digits · Steady', data: 7 });
+  const stroop = rt({ testId: 'stroop', badge: 'Mild pull', headline: '120 ms · Mild pull', data: 120 });
+  const ids = () => Object.keys(JSON.parse(shared.getItem(STORAGE_KEY)!).results).sort();
+
+  beforeEach(() => {
+    shared = new MockLocalStorage();
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('each write reads storage again first, so a save from another tab since load is kept', async () => {
+    const a = await openTab();
+    const b = await openTab();
+    b.mod.saveResult(stroop);
+    a.mod.saveResult(nm);
+    expect(ids()).toEqual(['number-memory', 'stroop']);
+    a.mod.setName('Sam');
+    expect(ids()).toEqual(['number-memory', 'stroop']);
+  });
+
+  it('both read before either writes: the tab whose result was dropped puts it back', async () => {
+    const a = await openTab();
+    // Another tab read an empty store at the same moment A did, so its write leaves A's result out.
+    a.mod.saveResult(nm);
+    shared.setItem(STORAGE_KEY, JSON.stringify({ version: 1, results: { stroop } }));
+    a.fire(shared.getItem(STORAGE_KEY));
+    expect(ids()).toEqual(['number-memory', 'stroop']);
+  });
+
+  it('a clear in another tab wins: nothing is put back', async () => {
+    const a = await openTab();
+    a.mod.saveResult(nm);
+    shared.removeItem(STORAGE_KEY);
+    a.fire(null);
+    expect(shared.getItem(STORAGE_KEY)).toBeNull();
+    // Nor after a later save from that tab.
+    shared.setItem(STORAGE_KEY, JSON.stringify({ version: 1, results: { stroop } }));
+    a.fire(shared.getItem(STORAGE_KEY));
+    expect(ids()).toEqual(['stroop']);
+  });
+
+  it('only for a short while after the save', async () => {
+    vi.useFakeTimers();
+    try {
+      const a = await openTab();
+      a.mod.saveResult(nm);
+      vi.advanceTimersByTime(2500);
+      shared.setItem(STORAGE_KEY, JSON.stringify({ version: 1, results: { stroop } }));
+      a.fire(shared.getItem(STORAGE_KEY));
+      expect(ids()).toEqual(['stroop']);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('another tab updating the same test keeps its newer value', async () => {
+    const a = await openTab();
+    a.mod.saveResult(nm);
+    const newer = { ...nm, data: 9, headline: '9 digits · Strong', badge: 'Strong' };
+    shared.setItem(STORAGE_KEY, JSON.stringify({ version: 1, results: { 'number-memory': newer } }));
+    a.fire(shared.getItem(STORAGE_KEY));
+    expect(JSON.parse(shared.getItem(STORAGE_KEY)!).results['number-memory'].data).toBe(9);
+  });
+});

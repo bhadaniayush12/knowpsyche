@@ -193,12 +193,50 @@ function notify() {
   }
 }
 
-function write(report: SavedReport): boolean {
+/**
+ * Every write goes through here: the stored report is read again right before setItem, then changed, so a
+ * save made in another tab since this page loaded is never written over.
+ */
+function update(change: (report: SavedReport) => void): boolean {
   const storage = getStorage();
   if (!storage) return false;
+  const report = readReport() ?? { version: 1, results: {} };
+  change(report);
   storage.setItem(STORAGE_KEY, JSON.stringify(report));
   notify();
   return true;
+}
+
+/**
+ * Two tabs saving different tests in the same instant can still both read before either writes. For a short
+ * while after a save, if another tab's write leaves this tab's result out, it is put back (merged with what is
+ * there now). A clear from another tab always wins.
+ */
+const RACE_MS = 2000;
+let justSaved: { entry: SavedTestResult; until: number } | null = null;
+let watching = false;
+function guardAgainstOtherTabs(entry: SavedTestResult) {
+  justSaved = { entry, until: Date.now() + RACE_MS };
+  if (watching) return;
+  try {
+    window.addEventListener('storage', (e: StorageEvent) => {
+      if (e.key !== null && e.key !== STORAGE_KEY) return;
+      const mine = justSaved;
+      if (!mine || e.newValue === null || Date.now() > mine.until) {
+        justSaved = null;
+        return;
+      }
+      if (readReport()?.results[mine.entry.testId]) return;
+      try {
+        update((report) => void (report.results[mine.entry.testId] = mine.entry));
+      } catch {
+        // Nothing more to do; the other tab's result stays.
+      }
+    });
+    watching = true;
+  } catch {
+    // No window events: nothing to guard.
+  }
 }
 
 /**
@@ -217,9 +255,9 @@ export function saveResult(entry: SavedTestResult): boolean {
   try {
     const safe = clean(entry);
     if (!safe || !isSaveable(safe)) return false;
-    const report = readReport() ?? { version: 1, results: {} };
-    report.results[safe.testId] = safe;
-    return write(report);
+    if (!update((report) => void (report.results[safe.testId] = safe))) return false;
+    guardAgainstOtherTabs(safe);
+    return true;
   } catch {
     return false;
   }
@@ -242,6 +280,7 @@ export function clearResults(): boolean {
     const storage = getStorage();
     if (!storage) return false;
     storage.removeItem(STORAGE_KEY);
+    justSaved = null;
     notify();
     return true;
   } catch {
@@ -254,10 +293,10 @@ export function setName(name: string): boolean {
   try {
     const trimmed = name.trim();
     if (trimmed.length > MAX_NAME) return false;
-    const report = readReport() ?? { version: 1, results: {} };
-    if (trimmed) report.name = trimmed;
-    else delete report.name;
-    return write(report);
+    return update((report) => {
+      if (trimmed) report.name = trimmed;
+      else delete report.name;
+    });
   } catch {
     return false;
   }
