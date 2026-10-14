@@ -271,7 +271,10 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
   @media print {
     html, body { background: var(--color-paper) !important; }
     body { display: block !important; min-height: 0 !important; }
-    body > :not(main), main > nav, .rp-intro, .rp-pdf, .rp-controls, .rp-empty { display: none !important; }
+    body > :not(main), main > nav, .rp-intro, .rp-pdf, .rp-controls, html[data-kp-saved] .rp-empty { display: none !important; }
+    /* Nothing saved: print the empty-state title and text (not the links), so the page is never blank. */
+    .rp-empty { padding: 20mm; }
+    .rp-empty > :not(:first-child) { display: none !important; }
     .rp-screen { max-width: none !important; margin: 0 !important; padding: 0 !important; }
     .rp-doc { display: block; }
     .rp-sheet {
