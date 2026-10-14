@@ -1,30 +1,73 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Character from '../../components/Character.astro';
 
-// Copy word for word from docs/design/About.dc.html.
+// Copy word for word from docs/design/About.dc.html, except where Dev changed it: the eyebrow,
+// the "Our rule" card label, and the four sections after "Six promises" (Drafted).
+
+// Icons: Lucide (https://lucide.dev), ISC licence, paths copied inline.
+const icons = {
+  gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>',
+  lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  lightbulb: '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+  pencil: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
+  ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  checkCheck: '<path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/>',
+  flask: '<path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/>',
+  listChecks: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+  calculator: '<rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>',
+  bookOpen: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+};
 const title = 'About KnowPsyche';
 const description =
   'Why KnowPsyche exists: free psychology tests scored in your browser and explained in plain words. Who builds it, and how the site pays for itself.';
 
 const promises = [
-  { n: '01', color: 'text-blue', title: 'Free, no email gate', text: 'Every result is shown in full, straight away. No sign-up, no paywall.' },
-  { n: '02', color: 'text-gold-ink', title: 'Your answers stay with you', text: "Tests are scored inside your browser. We don't store your answers or scores." },
-  { n: '03', color: 'text-coral-ink', title: "Explain, don't label", text: "Each result comes with what it means, what it doesn't, and how context changes it." },
-  { n: '04', color: 'text-teal-ink', title: 'Original questions', text: 'Written by us or adapted from public-domain sources, never copied from paid tests.' },
-  { n: '05', color: 'text-violet-ink', title: 'Never a diagnosis', text: "We don't test for clinical conditions or hand out “certified IQ” scores." },
-  { n: '06', color: 'text-blue', title: 'Cite and correct', text: 'Sources are listed on each page. Spot a mistake? We fix it and say so.' },
+  { n: '01', icon: icons.gift, color: 'text-blue', title: 'Free, no email gate', text: 'Every result is shown in full, straight away. No sign-up, no paywall.' },
+  { n: '02', icon: icons.lock, color: 'text-gold-ink', title: 'Your answers stay with you', text: "Tests are scored inside your browser. We don't store your answers or scores." },
+  { n: '03', icon: icons.lightbulb, color: 'text-coral-ink', title: "Explain, don't label", text: "Each result comes with what it means, what it doesn't, and how context changes it." },
+  { n: '04', icon: icons.pencil, color: 'text-teal-ink', title: 'Original questions', text: 'Written by us or adapted from public-domain sources, never copied from paid tests.' },
+  { n: '05', icon: icons.ban, color: 'text-violet-ink', title: 'Never a diagnosis', text: "We don't test for clinical conditions or hand out “certified IQ” scores." },
+  { n: '06', icon: icons.checkCheck, color: 'text-blue', title: 'Cite and correct', text: 'Sources are listed on each page. Spot a mistake? We fix it and say so.' },
+];
+
+// Drafted.
+const beliefs = [
+  { color: 'text-blue', title: 'A result is a starting point.', text: "A short test shows how you did on one day. It can open a good question about yourself. It can't settle it." },
+  { color: 'text-coral-ink', title: 'Plain words beat labels.', text: "If a result needs a glossary, it hasn't done its job. We explain what it means, what it doesn't, and what could change it." },
+  { color: 'text-teal-ink', title: 'You stay in control.', text: 'No account, no email, no tricks. Your answers stay in your browser, and you can leave any time.' },
+];
+
+// Drafted.
+const steps = [
+  { n: '01', icon: icons.flask, title: 'Start from published research.', text: 'We pick an idea psychologists have studied for a long time, like reaction time or the Stroop effect.' },
+  { n: '02', icon: icons.listChecks, title: 'Write original questions.', text: 'Tasks and statements are our own, or adapted from public-domain sources. Nothing is copied from paid tests.' },
+  { n: '03', icon: icons.calculator, title: 'Score it in your browser.', text: 'The maths runs on your device, so there is nothing to send and nothing to store.' },
+  { n: '04', icon: icons.bookOpen, title: 'Explain it, and cite it.', text: "Every result says what it means and what it doesn't, and every page lists its sources." },
+];
+
+// Drafted.
+const wontDo = [
+  'Sell your data, or ask for your email to see a result.',
+  'Call anything a diagnosis, or hand out a certified IQ.',
+  'Rank you against other people with made-up percentages.',
+  'Use streaks, fake timers or pressure to keep you here.',
 ];
 ---
 <BaseLayout title={title} description={description} path="/about/" ogImage="/og/about.png" crumbs={[{ name: 'About' }]}>
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section class="flex flex-wrap items-end gap-10">
       <div class="min-w-0 flex-[999_1_600px]">
-        <div class="mono mb-[18px] text-[11px] text-muted">About · Fig. 00 · Why this exists</div>
+        <div class="mono mb-[18px] text-[11px] text-muted">About · Why this exists</div>
         <h1 class="m-0 text-[clamp(48px,6.6vw,104px)] leading-[.92] font-semibold tracking-[-.055em]">Psychology you can <span class="serif text-blue">try,</span><br />not just read.</h1>
       </div>
-      <div class="min-w-0 flex-[1_1_300px] -rotate-2 bg-yellow px-5 py-[18px] shadow-[3px_4px_0_rgba(36,34,56,.25)]">
-        <div class="mono mb-1.5 text-[10px]">Field rule / 00</div>
-        <div class="serif text-[25px] leading-[1.1]">A result is a clue, not a conclusion.</div>
+      <div class="flex min-w-0 flex-[1_1_300px] flex-col items-center gap-6">
+        <Character skin="deep" hair={{ style: 'curly', color: 'ink-soft' }} shirt="teal" expression="thinking" prop="magnifier" size={190} class="rotate-[1.5deg]" />
+        <div class="w-full max-w-[460px] -rotate-2 bg-yellow px-5 py-[18px] shadow-[3px_4px_0_rgba(36,34,56,.25)]">
+          <div class="mono mb-1.5 text-[10px]">Our rule</div>
+          <div class="serif text-[25px] leading-[1.1]">A result is a clue, not a conclusion.</div>
+        </div>
       </div>
     </section>
 
@@ -45,12 +88,63 @@ const promises = [
       <div class="promises grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] overflow-hidden border border-ink">
         {promises.map((p) => (
           <div class="promise bg-card p-[26px]">
-            <div class:list={['mono text-[11px]', p.color]}>{p.n}</div>
+            <div class="flex items-center justify-between">
+              <div class:list={['mono text-[11px]', p.color]}>{p.n}</div>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={p.icon} />
+            </div>
             <h3 class="m-0 mt-3 mb-2 text-[23px] font-bold tracking-[-.03em]">{p.title}</h3>
             <p class="m-0 text-[15.5px] leading-[1.6] text-ink-soft">{p.text}</p>
           </div>
         ))}
       </div>
+    </section>
+
+    <section>
+      <div class="mono mb-3 text-[11px] text-muted">What we believe</div>
+      <h2 class="m-0 mb-7 text-[clamp(38px,4.6vw,64px)] leading-[.95] font-semibold tracking-[-.05em]">Three things <span class="serif text-teal-ink">we believe.</span></h2>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] gap-5">
+        {beliefs.map((b, i) => (
+          <div class="border border-ink bg-card p-[26px]">
+            <div class:list={['mono text-[11px]', b.color]}>{String(i + 1).padStart(2, '0')}</div>
+            <h3 class="m-0 mt-3 mb-2 text-[23px] font-bold tracking-[-.03em]">{b.title}</h3>
+            <p class="m-0 text-[15.5px] leading-[1.6] text-ink-soft">{b.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <div class="mono mb-3 text-[11px] text-muted">How we make a test</div>
+      <h2 class="m-0 mb-7 text-[clamp(38px,4.6vw,64px)] leading-[.95] font-semibold tracking-[-.05em]">From research <span class="serif text-blue">to result.</span></h2>
+      <ol class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(min(240px,100%),1fr))] gap-x-8 gap-y-10 border-t border-ink p-0 pt-8">
+        {steps.map((st) => (
+          <li class="min-w-0">
+            <div class="flex items-center gap-3">
+              <span class="mono text-[11px] text-muted">{st.n}</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={st.icon} />
+            </div>
+            <h3 class="m-0 mt-3 mb-2 text-[23px] font-bold tracking-[-.03em]">{st.title}</h3>
+            <p class="m-0 text-[15.5px] leading-[1.6] text-ink-soft">{st.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section>
+      <h2 class="mono m-0 mb-3 text-[11px] font-normal text-coral-ink">What we won't do</h2>
+      <ul class="m-0 list-none border-t border-ink p-0">
+        {wontDo.map((line) => (
+          <li class="flex items-start gap-4 border-b border-line-inner py-5">
+            <svg class="icon mt-0.5 shrink-0" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.x} />
+            <span class="text-xl leading-[1.45]">{line}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="border-t border-ink pt-8">
+      <h2 class="mono m-0 mb-3 text-[11px] font-normal text-violet-ink">What's next</h2>
+      <p class="m-0 max-w-[760px] text-xl leading-[1.55]">More tests and more plain-English guides are on the way. If there is a test you would like to see, or something here looks wrong, <a href="/contact/" class="underline underline-offset-4">tell us</a>.</p>
     </section>
 
     <section class="flex flex-wrap items-stretch gap-10">
@@ -100,6 +194,15 @@ const promises = [
 </BaseLayout>
 
 <style>
+  .icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
   .illus {
     background-image: linear-gradient(var(--color-grid) 1px, transparent 1px), linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
     background-size: 30px 30px;
