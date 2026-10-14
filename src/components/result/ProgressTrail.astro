@@ -1,0 +1,195 @@
+---
+/**
+ * Progress trail: seven small markers in the linear next-test order, filled for tests with a saved result
+ * (C1, src/lib/saved-results.ts), the current test outlined. Only for people who saved at least one result:
+ * everyone else never sees it.
+ *
+ * - variant "strip": a slim row near the top of each test page (TestPage.astro), outside the test stage.
+ * - variant "card": on result pages, below the "Challenge a friend" share section.
+ *
+ * Shown when <html> has [data-kp-saved]. TrailFlag.astro sets that in <head> before first paint (so the strip
+ * never shifts the page); the script below keeps it and the markers in step after Save or Clear.
+ * Reads the browser only; nothing is sent.
+ */
+import { page as reactionTime } from '../../data/tests/reaction-time';
+import { page as enneagram } from '../../data/tests/enneagram';
+import { page as photographicMemory } from '../../data/tests/photographic-memory';
+import { page as numberMemory } from '../../data/tests/number-memory';
+import { page as attentionSpan } from '../../data/tests/attention-span';
+import { page as stroop } from '../../data/tests/stroop';
+import { page as emotionalIntelligence } from '../../data/tests/emotional-intelligence';
+import type { TestId } from '../../lib/saved-results';
+import { TRAIL_ORDER, testHref, trailCopy, trailState } from '../../lib/progress-trail';
+
+interface Props {
+  variant: 'strip' | 'card';
+  current: TestId;
+  class?: string;
+}
+const { variant, current, class: className } = Astro.props;
+
+const names: Record<TestId, string> = {
+  'reaction-time': reactionTime.crumb,
+  enneagram: enneagram.crumb,
+  'photographic-memory': photographicMemory.crumb,
+  'number-memory': numberMemory.crumb,
+  'attention-span': attentionSpan.crumb,
+  stroop: stroop.crumb,
+  'emotional-intelligence': emotionalIntelligence.crumb,
+};
+
+// The report page arrives in a later task. Until it exists, no link points to it.
+const reportExists = Object.keys(import.meta.glob('/src/pages/report/index.astro')).length > 0;
+
+const card = variant === 'card';
+// Server default for the Next link (nothing saved yet); the script corrects it from what is saved.
+const firstNext = trailState([], current).next!;
+const labelId = `kp-trail-label-${variant}`;
+const maskId = `kp-trail-mask-${variant}`;
+// A slightly uneven line, so the connector feels drawn by hand rather than ruled.
+const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2, 400 7 S 470 10, 500 5 S 560 3, 600 6';
+---
+<section
+  data-kp-trail
+  data-variant={variant}
+  data-current={current}
+  aria-labelledby={labelId}
+  class:list={[
+    'kp-trail border border-ink bg-card',
+    card ? 'kp-card p-[clamp(18px,3vw,28px)]' : 'kp-strip mb-[18px] px-[clamp(12px,2vw,18px)] py-2',
+    className,
+  ]}
+>
+  <div class:list={[card ? 'flex flex-col gap-4' : 'grid items-center gap-x-6 gap-y-1 md:grid-cols-[minmax(0,1fr)_auto]']}>
+    <div class:list={['flex min-w-0 flex-col', card ? 'gap-2' : 'md:col-start-1 md:row-start-1']}>
+      {card ? (
+        <h2 id={labelId} data-trail-heading class="m-0 text-[clamp(22px,2.6vw,28px)] leading-[1.15] font-semibold tracking-[-.03em]">&nbsp;</h2>
+      ) : (
+        <p id={labelId} data-trail-heading class="mono m-0 truncate text-[11px] leading-[22px] text-muted">&nbsp;</p>
+      )}
+    </div>
+
+    <nav aria-labelledby={labelId} class:list={[card ? '' : 'md:col-start-2 md:row-span-2 md:row-start-1']}>
+      <ol class:list={['kp-row relative m-0 flex list-none justify-between p-0', card ? 'max-w-[460px]' : 'max-w-[360px] md:w-[340px]']}>
+        <svg class="kp-line pointer-events-none absolute top-[22px] right-[22px] left-[22px] h-3 w-[calc(100%-44px)] -translate-y-1/2" viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <mask id={maskId}><path d={wobble} class="kp-draw" pathLength="1200" stroke-dasharray="1200" fill="none" stroke="#fff" stroke-width="10" vector-effect="non-scaling-stroke"></path></mask>
+          <path d={wobble} mask={`url(#${maskId})`} fill="none" stroke="var(--color-ink)" stroke-width="1.25" stroke-dasharray="3 5" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+        </svg>
+        {TRAIL_ORDER.map((id, i) => (
+          <li class="relative">
+            <a
+              href={testHref(id)}
+              data-trail-link
+              data-name={names[id]}
+              aria-current={id === current ? 'page' : undefined}
+              class="kp-link flex w-11 flex-col items-center no-underline"
+            >
+              <span class="flex h-11 items-center justify-center" aria-hidden="true"><span class="kp-mark" style={`--i:${i}`}></span></span>
+              {card && <span class="kp-num mono text-[10px] leading-none text-muted" style={`--i:${i}`} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>}
+              <span class="sr-only" data-trail-label>{names[id]}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class:list={['flex min-h-[22px] flex-wrap items-center gap-x-5 gap-y-1', card ? 'text-[16px]' : 'text-[14px] md:col-start-1 md:row-start-2']}>
+      <a data-trail-next href={testHref(firstNext)} class="hit-44 font-semibold whitespace-nowrap text-ink underline underline-offset-[3px]">{trailCopy.next(names[firstNext])}</a>
+      {reportExists ? (
+        <a data-trail-done href="/report/" class="hit-44 font-semibold text-ink underline underline-offset-[3px]" hidden>{trailCopy.allDone}</a>
+      ) : (
+        <span data-trail-done class="font-semibold" hidden>{trailCopy.allDone}</span>
+      )}
+      {reportExists && <a data-trail-sofar href="/report/" class="hit-44 whitespace-nowrap text-ink-soft underline underline-offset-[3px]">{trailCopy.soFar}</a>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .kp-trail { display: none; }
+  :global(html[data-kp-saved]) .kp-trail { display: block; }
+
+  .kp-mark {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-card);
+  }
+  .kp-card .kp-mark { width: 18px; height: 18px; }
+  .kp-link[data-saved] .kp-mark { background: var(--color-ink); }
+  /* The test you're on: a thin ring around its marker. */
+  .kp-link[aria-current] .kp-mark { box-shadow: 0 0 0 3px var(--color-card), 0 0 0 4.5px var(--color-ink); }
+  .kp-link[aria-current] .kp-num { color: var(--color-ink); }
+  .kp-link:hover .kp-mark { border-color: var(--color-blue); }
+
+  /* One settle-in: the markers drop into place in order while the line draws. Transform and opacity only,
+     so nothing around it moves. Under reduced motion the global rule turns this off and it is simply there. */
+  @keyframes kp-settle { from { opacity: 0; transform: translateY(5px) scale(.7); } }
+  @keyframes kp-line { from { stroke-dashoffset: 1200; } to { stroke-dashoffset: 0; } }
+  .kp-draw { stroke-dashoffset: 0; }
+
+  /* Strip: plays once when the page loads (it sits at the top, so that is when it is seen). */
+  .kp-strip .kp-mark { animation: kp-settle .45s var(--ease-house) calc(120ms + var(--i) * 55ms) backwards; }
+  .kp-strip .kp-draw { animation: kp-line .7s var(--ease-house) 80ms backwards; }
+
+  /* Card: waits until it first scrolls into view ([data-in], set once by the script). */
+  @media (prefers-reduced-motion: no-preference) {
+    .kp-card[data-armed]:not([data-in]) :is(.kp-mark, .kp-num) { opacity: 0; }
+    .kp-card[data-armed]:not([data-in]) .kp-draw { stroke-dashoffset: 1200; }
+  }
+  .kp-card[data-in] :is(.kp-mark, .kp-num) { animation: kp-settle .45s var(--ease-house) calc(var(--i) * 55ms) backwards; }
+  .kp-card[data-in] .kp-draw { animation: kp-line .7s var(--ease-house) backwards; }
+</style>
+
+<script>
+  import { CHANGE_EVENT, isStorageAvailable, readReport, type TestId } from '../../lib/saved-results';
+  import { testHref, trailCopy, trailState } from '../../lib/progress-trail';
+
+  const trails = [...document.querySelectorAll<HTMLElement>('[data-kp-trail]')];
+  const root = document.documentElement;
+
+  const update = () => {
+    const ids = isStorageAvailable() ? Object.keys(readReport()?.results ?? {}) : [];
+    root.toggleAttribute('data-kp-saved', ids.length > 0);
+    for (const el of trails) {
+      const s = trailState(ids, (el.dataset.current as TestId) ?? null);
+      const links = [...el.querySelectorAll<HTMLAnchorElement>('[data-trail-link]')];
+      el.querySelector('[data-trail-heading]')!.textContent = trailCopy.heading(s.count, s.total);
+      links.forEach((a, i) => {
+        a.toggleAttribute('data-saved', s.saved[i]);
+        a.querySelector('[data-trail-label]')!.textContent = trailCopy.marker(a.dataset.name ?? '', s.saved[i]);
+      });
+      const next = el.querySelector<HTMLAnchorElement>('[data-trail-next]')!;
+      const nextLink = s.next ? links.find((a) => a.getAttribute('href') === testHref(s.next!)) : undefined;
+      next.hidden = s.allDone || !nextLink;
+      if (nextLink) {
+        next.href = nextLink.getAttribute('href')!;
+        next.textContent = trailCopy.next(nextLink.dataset.name ?? '');
+      }
+      el.querySelector<HTMLElement>('[data-trail-done]')!.hidden = !s.allDone;
+      const soFar = el.querySelector<HTMLElement>('[data-trail-sofar]');
+      if (soFar) soFar.hidden = s.count === 0 || s.allDone;
+    }
+  };
+
+  // The card settles in once, the first time it is on screen. Nothing moves under reduced motion.
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!still && 'IntersectionObserver' in window) {
+    for (const el of trails.filter((t) => t.dataset.variant === 'card')) {
+      el.toggleAttribute('data-armed', true);
+      const io = new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        el.toggleAttribute('data-in', true);
+        io.disconnect();
+      }, { threshold: 0.4 });
+      io.observe(el);
+    }
+  }
+
+  update();
+  window.addEventListener(CHANGE_EVENT, update);
+  // Another tab saved or cleared.
+  window.addEventListener('storage', update);
+</script>

@@ -15,10 +15,13 @@ import FontPreloads from '../components/FontPreloads.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Faq from '../components/result/Faq.astro';
 import Sources from '../components/result/Sources.astro';
+import ProgressTrail from '../components/result/ProgressTrail.astro';
+import TrailFlag from '../components/result/TrailFlag.astro';
 import { PRIVATE_LINE, type Faq as FaqItem, type Source } from '../data/shared';
 import { learnMoreLabel } from '../data/learn';
 import { articlesForTest } from '../lib/learn/articles';
 import { getCollection } from 'astro:content';
+import type { TestId } from '../lib/saved-results';
 
 interface Props {
   title: string;
@@ -53,11 +56,18 @@ const h1Lead = cut > 0 ? h1.slice(0, cut + 1) : '';
 const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
 
 // Learn articles that go with this test (relatedTest), shown near Sources. None published = no line.
+// "/reaction-time-test/" → "reaction-time", for the progress trail.
+const testId = path.replace(/^\/|-test\/$/g, '') as TestId;
+
 const articles = articlesForTest(await getCollection('learn'), path.replace(/\//g, ''));
 ---
 <BaseLayout title={title} description={description} path={path} crumbs={[{ name: 'Tests', href: '/tests/' }, { name: crumb }]} crumbWidth={1120} ogImage={ogImage}>
   <FontPreloads slot="head" bold={preloadBold} />
+  <TrailFlag slot="head" />
   <div class="mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-[18px] pb-20">
+
+    <!-- Only for people who saved a result (C1). Above the intro, never inside the running test. -->
+    <ProgressTrail variant="strip" current={testId} />
 
     <section class="mb-[22px] flex flex-wrap items-end justify-between gap-5" aria-labelledby="test-title">
       <div class="min-w-0 max-w-[620px]">

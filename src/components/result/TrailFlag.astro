@@ -1,0 +1,23 @@
+---
+/**
+ * Goes in <head> on test pages. Before the first paint it marks <html data-kp-saved> when at least one
+ * result is saved (C1), so the progress trail strip is laid out from the start and never shifts the page.
+ * Only reads; never writes, never sends. ProgressTrail.astro keeps the flag up to date afterwards.
+ */
+import { STORAGE_KEY, TEST_IDS } from '../../lib/saved-results';
+const ids = [...TEST_IDS];
+---
+<script is:inline define:vars={{ key: STORAGE_KEY, ids }}>
+  try {
+    var r = JSON.parse(localStorage.getItem(key) || 'null');
+    var res = r && typeof r === 'object' ? r.results : null;
+    if (res && typeof res === 'object' && !Array.isArray(res)) {
+      for (var k in res) {
+        if (res[k] && ids.indexOf(res[k].testId) > -1) {
+          document.documentElement.setAttribute('data-kp-saved', '');
+          break;
+        }
+      }
+    }
+  } catch (e) {}
+</script>
