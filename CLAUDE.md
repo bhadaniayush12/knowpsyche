@@ -10,7 +10,7 @@ Every score is calculated in the browser. Nothing is stored, sent or sold.
 - Interactivity = plain TypeScript in Astro `<script>` tags. Keep JS per page small.
 - Fonts self-hosted with `@fontsource` packages (Space Grotesk, Instrument Serif, DM Mono). No Google Fonts requests.
 - `@astrojs/sitemap` for the sitemap. Vitest for scoring logic tests.
-- Hosting: Cloudflare Pages (static). Deploy with `npm run deploy`.
+- Hosting: Cloudflare Workers with static assets only (no Worker script), config in `wrangler.jsonc`, serving `dist/`. Deploy with `npm run deploy`. Staging lives at https://knowpsyche.fix-the-speaker.workers.dev (noindex).
 - Use the Astro docs MCP (`astro-docs`) whenever you are unsure how Astro does something.
 
 ## Commands
@@ -19,7 +19,7 @@ Every score is calculated in the browser. Nothing is stored, sent or sold.
 - `npm run build` — production build into `dist/`
 - `npm run preview` — serve the build (sitemap and 404 only work here)
 - `npm run test` — Vitest scoring tests
-- `npm run deploy` — build + deploy to Cloudflare Pages (added in the deploy step)
+- `npm run deploy` — `npm run build && wrangler deploy` to Cloudflare Workers (needs `npx wrangler login` once)
 
 ## Sources of truth — read before building anything
 
@@ -73,8 +73,16 @@ Set `trailingSlash: 'always'` and `site: 'https://knowpsyche.com'` in `astro.con
 - `BaseLayout` takes title, description, canonical, ogImage. Canonical always `https://knowpsyche.com/...`.
 - Open Graph + Twitter card tags on every page.
 - JSON-LD: `WebSite` + `Organization` on home; `BreadcrumbList` on all inner pages; `FAQPage` on every page that shows FAQs (same questions as visible on the page). No `aggregateRating`, no reviews.
-- `public/_headers`: `X-Robots-Tag: noindex` for `https://:project.pages.dev/*` so the preview domain never gets indexed.
+- `public/_headers`: `X-Robots-Tag: noindex` for `https://:worker.:account.workers.dev/*` so the staging address never gets indexed (the older `pages.dev` rules are kept but unused). The rule is host-specific, so knowpsyche.com is never noindex.
 - `robots.txt` allows all and points to `/sitemap-index.xml`.
+
+## Launch-day checklist (knowpsyche.com)
+
+1. Cloudflare dashboard → Workers & Pages → knowpsyche → Settings → Domains & Routes: add `knowpsyche.com` (and `www`) as a Custom Domain.
+2. Remove the staging noindex rule: delete the `https://:worker.:account.workers.dev/*` block (and the unused `pages.dev` blocks) from `public/_headers`. Check `curl -sI https://knowpsyche.com/` has no `X-Robots-Tag`.
+3. Set `PUBLIC_GA_ID` for the production build (only once analytics is approved).
+4. Disable workers.dev: set `"workers_dev": false` in `wrangler.jsonc` (and `"preview_urls": false`), then `npm run deploy`.
+5. Update the staging URL line under Stack, and re-run the live checks (status codes, headers, sitemap, robots.txt).
 
 ## Performance + accessibility targets
 
