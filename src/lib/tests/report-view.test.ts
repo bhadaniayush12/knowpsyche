@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { boxCopy, fillBoxes } from '../report-view';
+import { boxCopy, fillBoxes, meaningFor } from '../report-view';
 import { standout, tryThis } from '../../data/report';
 import { result as enneagramCopy, types as enneagramTypes } from '../../data/tests/enneagram';
+import { bands as eqBands, result as eqCopy } from '../../data/tests/emotional-intelligence';
 import type { SavedTestResult, TestId } from '../saved-results';
 
 const saved = (testId: TestId, badge: string, data: SavedTestResult['data'] = 7): SavedTestResult => ({ testId, date: '2026-10-14', badge, headline: `${badge} result`, data });
@@ -78,5 +79,14 @@ describe('the Enneagram keeps its own copy', () => {
   });
   it('"Even" uses the even tip', () => {
     expect(boxCopy(saved('enneagram', 'Even', scores))?.tip).toBe(enneagramCopy.evenTip);
+  });
+});
+
+describe('"What it means" on the EQ sheet (Q1-04)', () => {
+  it.each(eqBands.map((b) => b.badge))('overall %s: no per-area band text, so the box has no lines and is hidden', (badge) => {
+    const lines = meaningFor('emotional-intelligence', saved('emotional-intelligence', badge, { knowing: 50, managing: 50, reading: 50, relationships: 50 }));
+    expect(lines).toEqual([]);
+    for (const b of eqBands) expect(lines.join(' ')).not.toContain(b.text);
+    expect(lines.join(' ')).not.toContain(eqCopy.closing);
   });
 });

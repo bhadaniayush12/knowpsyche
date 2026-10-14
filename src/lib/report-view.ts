@@ -6,7 +6,7 @@ import { photoBands, result as photoCopy } from '../data/tests/photographic-memo
 import { attentionBands, result as attentionCopy } from '../data/tests/attention-span';
 import { stroopBands, result as stroopCopy } from '../data/tests/stroop';
 import { types as enneagramTypes_, result as enneagramCopy } from '../data/tests/enneagram';
-import { areas, bands as eqBands, result as eqCopy } from '../data/tests/emotional-intelligence';
+import { areas, bands as eqBands } from '../data/tests/emotional-intelligence';
 import { reportSheet, scoreUnit, standout, tryThis } from '../data/report';
 import { bandFor, enneagramTypes, fitSize, formatDay, nameParts } from './report';
 import type { SavedTestResult, TestId } from './saved-results';
@@ -80,7 +80,8 @@ function visualFor(id: TestId, r: SavedTestResult): HTMLElement {
   return box;
 }
 
-function meaningFor(id: TestId, r: SavedTestResult): string[] {
+/** "What it means" lines for a saved result. Empty when the result page has nothing to repeat here. */
+export function meaningFor(id: TestId, r: SavedTestResult): string[] {
   const s = single[id];
   if (s) {
     const band = s.bands.find((b) => b.badge === r.badge);
@@ -93,8 +94,9 @@ function meaningFor(id: TestId, r: SavedTestResult): string[] {
     const lines = e.types.map((n) => enneagramTypes_.find((t) => t.n === n)).filter(Boolean).map((t) => `Type ${t!.n}, ${t!.name}: ${t!.drive}`);
     return [...lines, enneagramCopy.change];
   }
-  const overall = eqBands.find((b) => b.badge === r.badge);
-  return [overall?.text, eqCopy.closing].filter((x): x is string => Boolean(x));
+  // EQ: the band texts describe one area each, and the result page has no paragraph for the overall
+  // badge, so there is nothing right to say here and the box is hidden.
+  return [];
 }
 
 /**
@@ -138,7 +140,10 @@ export function fillSheet(sheet: HTMLElement, r: SavedTestResult) {
   f('badge').hidden = !r.badge;
   f('visual').replaceChildren(visualFor(id, r));
   fillBoxes(sheet, r);
-  f('means').replaceChildren(...meaningFor(id, r).map((t) => el('p', '', t)));
+  const means = meaningFor(id, r);
+  f('means').replaceChildren(...means.map((t) => el('p', '', t)));
+  const meansBox = sheet.querySelector<HTMLElement>('.rp-means');
+  if (meansBox) meansBox.hidden = means.length === 0;
 }
 
 /** Writes the cover title and fits it: as big as possible, at most two lines, never wider than the cover. */
