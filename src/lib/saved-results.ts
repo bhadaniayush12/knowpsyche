@@ -276,6 +276,14 @@ export interface SaveOptInHandle {
 const sameResult = (a: Omit<SavedTestResult, 'date'>, b: Omit<SavedTestResult, 'date'>) =>
   a.badge === b.badge && a.headline === b.headline && JSON.stringify(a.data) === JSON.stringify(b.data);
 
+/**
+ * True when the result on screen is the one already saved, but saved on an earlier day. The person chose to
+ * save this result before; only its day moves forward, so the report shows when it was last seen. Pure.
+ */
+export function needsDayRefresh(existing: SavedTestResult | null, current: Omit<SavedTestResult, 'date'>, today: string): boolean {
+  return Boolean(existing && sameResult(existing, current) && isIsoDay(today) && existing.date < today);
+}
+
 /** Copy for the save box (SaveResult.astro). Drafted, except `savedText` and `openReport` (given by Dev, G1). */
 export const saveCopy = {
   intro: 'Save this result on this device to build your report. It stays in your browser. We never receive it.',
@@ -388,6 +396,9 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
         return;
       }
       current = res;
+      // The same result again on a later day: update the stored day quietly; the box shows "Saved" as before.
+      const today = getIsoDay();
+      if (needsDayRefresh(getSavedResult(res.testId), res, today)) saveResult({ ...res, date: today });
       container.hidden = false;
       render();
     },

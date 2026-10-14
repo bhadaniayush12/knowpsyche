@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearResults, initSaveOptIn, saveBoxView, saveCopy, type SavedTestResult } from '../saved-results';
+import { clearResults, getIsoDay, initSaveOptIn, needsDayRefresh, saveBoxView, saveCopy, type SavedTestResult } from '../saved-results';
 
 const current: Omit<SavedTestResult, 'date'> = { testId: 'number-memory', badge: 'Steady', headline: '7 digits held', data: 7 };
 
@@ -80,6 +80,16 @@ describe('saveBoxView', () => {
   it('copy has no em dashes', () => {
     for (const s of Object.values(saveCopy)) expect(s).not.toMatch(/—/);
   });
+});
+
+describe('needsDayRefresh (Q1-11)', () => {
+  const saved = (over: Partial<SavedTestResult> = {}): SavedTestResult => ({ ...current, date: '2026-10-10', ...over });
+  it('same result, later day: yes', () => expect(needsDayRefresh(saved(), current, '2026-10-14')).toBe(true));
+  it('same result, same day: no', () => expect(needsDayRefresh(saved({ date: '2026-10-14' }), current, '2026-10-14')).toBe(false));
+  it('same result, earlier day (clock moved back): no', () => expect(needsDayRefresh(saved({ date: '2026-10-20' }), current, '2026-10-14')).toBe(false));
+  it('different result: no', () => expect(needsDayRefresh(saved({ data: 5 }), current, '2026-10-14')).toBe(false));
+  it('nothing saved: no', () => expect(needsDayRefresh(null, current, '2026-10-14')).toBe(false));
+  it('no usable day: no', () => expect(needsDayRefresh(saved(), current, '')).toBe(false));
 });
 
 describe('save box on a result page', () => {
@@ -211,5 +221,24 @@ describe('save box on a result page', () => {
     expect(box['[data-report-link]'].hidden).toBe(true);
     expect(box['[data-save-status]'].textContent).toBe("Couldn't save on this device. Your browser may be blocking storage.");
     expect(storage.getItem('knowpsyche_saved_results')).toBeNull();
+  });
+
+  it('the same result shown on a later day updates the stored day silently and shows "Saved" (Q1-11)', () => {
+    localStorage.setItem('knowpsyche_saved_results', JSON.stringify({ version: 1, results: { 'number-memory': { ...current, date: '2020-01-01' } } }));
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    const stored = JSON.parse(localStorage.getItem('knowpsyche_saved_results')!);
+    expect(stored.results['number-memory'].date).toBe(getIsoDay());
+    expect(box['[data-save-btn]'].hidden).toBe(true);
+    expect(box['[data-report-link]'].hidden).toBe(false);
+    expect(box['[data-save-text]'].textContent).toBe(saveCopy.savedText);
+    expect(box['[data-save-status]'].textContent).toBe('');
+  });
+
+  it('a different result on a later day is not written until Save (Q1-11)', () => {
+    const before = JSON.stringify({ version: 1, results: { 'number-memory': { ...current, data: 5, headline: '5 digits held', date: '2020-01-01' } } });
+    localStorage.setItem('knowpsyche_saved_results', before);
+    initSaveOptIn(makeBox().container as unknown as HTMLElement).show(current);
+    expect(localStorage.getItem('knowpsyche_saved_results')).toBe(before);
   });
 });
