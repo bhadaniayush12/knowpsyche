@@ -6,14 +6,17 @@ import { testFor, type Article } from '../../lib/learn/collection';
  *  in the colours of the article's test; ink for the pillar article. */
 interface Props {
   article: Article;
+  /** Homepage lead card: taller, with a bigger title. */
+  featured?: boolean;
+  class?: string;
 }
-const { article } = Astro.props;
+const { article, featured = false, class: className } = Astro.props;
 const test = testFor(article);
 const dark = !test || test.dark;
 ---
 <a
   href={`/learn/${article.id}/`}
-  class:list={['card flex min-h-[230px] flex-col gap-3.5 rounded-20 p-[22px] no-underline', dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink']}
+  class:list={['card flex flex-col gap-3.5 rounded-20 p-[22px] no-underline', featured ? 'min-h-[300px] md:min-h-[400px] md:p-8' : 'min-h-[230px]', dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink', className]}
   style={dark ? undefined : { background: test.tint }}
 >
   <div class="flex items-center justify-between gap-2">
@@ -23,9 +26,9 @@ const dark = !test || test.dark;
     >{article.data.category}</span>
     <span class="text-[13.5px] opacity-75">{readingTime(article.body ?? '')}</span>
   </div>
-  <div>
-    <h3 class="m-0 mb-1.5 text-[24px] leading-[1.15] font-semibold tracking-[-.035em]">{article.data.title}</h3>
-    <p class="m-0 text-[15.5px] leading-[1.55] opacity-[.88]">{article.data.deck ?? article.data.description}</p>
+  <div class:list={[featured && 'md:mt-auto']}>
+    <h3 class:list={['m-0 mb-1.5 font-semibold', featured ? 'max-w-[18ch] text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]' : 'text-[24px] leading-[1.15] tracking-[-.035em]']}>{article.data.title}</h3>
+    <p class:list={['m-0 leading-[1.55] opacity-[.88]', featured ? 'max-w-[52ch] text-[17px]' : 'text-[15.5px]']}>{article.data.deck ?? article.data.description}</p>
   </div>
-  <span class="mt-auto text-[15.5px] font-semibold">Read →</span>
+  <span class:list={['text-[15.5px] font-semibold', featured ? 'mt-auto md:mt-2' : 'mt-auto']}>Read →</span>
 </a>

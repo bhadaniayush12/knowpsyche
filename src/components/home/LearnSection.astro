@@ -1,0 +1,63 @@
+---
+/**
+ * Homepage "Learn psychology" section: big header with a faint ψ behind it, the pillar article as the lead
+ * card, the two most recently updated other articles beside it, and a link to /learn/.
+ */
+import ArticleCard from '../learn/ArticleCard.astro';
+import Button from '../ui/Button.astro';
+import { getArticles } from '../../lib/learn/collection';
+import { PSI_BOWL, PSI_STEM } from '../../lib/brand/mark.js';
+
+const PILLAR = 'what-psychology-tests-can-and-cant-tell-you';
+const articles = await getArticles();
+const lead = articles.find((a) => a.id === PILLAR) ?? articles[0];
+const recent = articles.filter((a) => a !== lead).slice(0, 2);
+// Drafted.
+const intro = 'Short, sourced guides to what the tests measure and what the research actually says.';
+---
+{lead && (
+  <section aria-labelledby="learn-title" class="learn-home relative overflow-hidden">
+    <div class="wrap relative py-[clamp(56px,7vw,100px)]">
+      <svg
+        aria-hidden="true"
+        viewBox="7 5 22 26"
+        class="learn-psi pointer-events-none absolute top-[clamp(12px,3vw,36px)] right-[clamp(0px,3vw,40px)] h-[clamp(190px,30vw,360px)] w-auto text-ink opacity-[.07]"
+      >
+        <g fill="none" stroke="currentColor" stroke-linecap="round">
+          <path stroke-width="2.4" d={PSI_STEM}></path>
+          <path stroke-width="1.8" d={PSI_BOWL}></path>
+        </g>
+      </svg>
+
+      <div class="relative mb-[clamp(28px,4vw,44px)] max-w-[760px]">
+        <div class="mono mb-3 text-[11px] text-blue">Learn</div>
+        <h2 id="learn-title" class="m-0 text-[clamp(40px,5.4vw,76px)] leading-[.95] font-semibold tracking-[-.05em]">Learn psychology,<br /><span class="serif text-blue">in plain English.</span></h2>
+        <p class="mt-4 mb-0 max-w-[520px] text-[17px] leading-[1.6] text-ink-soft">{intro}</p>
+      </div>
+
+      <div class="learn-cards relative grid gap-4 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <ArticleCard article={lead} featured class="reveal-once card-lift" />
+        <div class="grid gap-4">
+          {recent.map((a) => <ArticleCard article={a} class="reveal-once card-lift" />)}
+        </div>
+      </div>
+
+      <div class="relative mt-7">
+        <Button href="/learn/" variant="outline">All guides →</Button>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  import { onceInView } from '../../lib/once-in-view';
+
+  // Cards rise in with a short stagger the first time they come on screen.
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.learn-cards .reveal-once'));
+  onceInView(cards, (entered) => {
+    entered.forEach((c, i) => {
+      (c as HTMLElement).style.setProperty('--i', String(i));
+      c.classList.add('is-in');
+    });
+  });
+</script>
