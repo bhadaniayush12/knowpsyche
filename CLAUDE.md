@@ -42,7 +42,7 @@ Copy text from the content docs word for word. Do not rewrite, shorten or "impro
 1. No clinical tests, no diagnosis language. Never say "MBTI", "IQ score", "brain age", "diagnosis" as something we give.
 2. No percentiles, "top X%", "better than X% of people". We have no population data.
 3. Every result shows the line: "These bands are our own guide to help you read your result. They're not compared with a population, and they're not a diagnosis."
-4. No storage of answers or scores: no localStorage/sessionStorage/cookies/IndexedDB for test data, no network calls with answers.
+4. Test data is never sent anywhere: no network call ever carries answers, scores or saved results. It is stored only in the user's own browser (localStorage, key `knowpsyche_saved_results`, via `src/lib/saved-results.ts`) and only after an explicit opt-in (the "Save result" button, off by default, never automatic). Stored fields are exactly: test id, ISO day, band badge, headline, and the data the result already shows (Enneagram nine type scores, EQ four area scores, every other test its main number), plus an optional name. Never answers, never per-try timings. Every storage call sits in try/catch; if storage is blocked, the opt-in is not shown. Retaking a test overwrites its entry. A "Clear saved results" control must always be available while anything is saved. No sessionStorage, cookies or IndexedDB for test data.
 5. No email gate, no sign-up, no "unlock your result".
 6. No ads inside a running test or between questions. Ad slots only: below the intro, below the result, inside the FAQ area. Build `AdSlot.astro` that renders nothing until `PUBLIC_ADS_ENABLED=true`.
 7. Plain English. No brain-region names or neurotransmitters on test/result pages.
