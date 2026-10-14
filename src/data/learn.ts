@@ -37,3 +37,10 @@ export const articleFootnote = 'For learning and self-reflection, not medical ad
 // From docs/design/Article.dc.html.
 export const tryTestLabel = 'Try a related test';
 export const tocLabel = 'In this guide';
+
+/** Drafted: what screen readers hear after a guide filter chip is picked, e.g. "Showing 2 memory guides". */
+export const guideFilterStatus = (n: number, label?: string | null): string => {
+  if (!label || label === 'All') return `Showing all ${n} ${n === 1 ? 'guide' : 'guides'}`;
+  const l = label.toLowerCase().replace(/^the\s+/, '');
+  return `Showing ${n} ${l} ${n === 1 ? 'guide' : 'guides'}`;
+};

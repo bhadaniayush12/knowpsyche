@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { guideFilterStatus } from '../../data/learn';
 import { articlesForTest, byCategory, dropTrailingLine, enhanceArticleHtml, published, readingTime, splitAtH2, tocFromHeadings, type ArticleLike } from './articles';
 
 const a = (id: string, o: Partial<ArticleLike['data']> = {}): ArticleLike => ({
@@ -151,5 +152,22 @@ describe('articlesForTest', () => {
   it('preserves scene property on article data', () => {
     const item = a('four', { scene: 'what-is-the-enneagram' });
     expect(item.data.scene).toBe('what-is-the-enneagram');
+  });
+});
+
+describe('guideFilterStatus', () => {
+  it('reports all guides when label is absent or All', () => {
+    expect(guideFilterStatus(9)).toBe('Showing all 9 guides');
+    expect(guideFilterStatus(9, null)).toBe('Showing all 9 guides');
+    expect(guideFilterStatus(9, 'All')).toBe('Showing all 9 guides');
+    expect(guideFilterStatus(1, null)).toBe('Showing all 1 guide');
+  });
+
+  it('reports specific category guides with proper singular/plural grammar', () => {
+    expect(guideFilterStatus(2, 'Memory')).toBe('Showing 2 memory guides');
+    expect(guideFilterStatus(1, 'Memory')).toBe('Showing 1 memory guide');
+    expect(guideFilterStatus(1, 'The basics')).toBe('Showing 1 basics guide');
+    expect(guideFilterStatus(2, 'Attention')).toBe('Showing 2 attention guides');
+    expect(guideFilterStatus(1, 'Focus')).toBe('Showing 1 focus guide');
   });
 });

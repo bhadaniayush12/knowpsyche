@@ -2,13 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FontPreloads from '../../components/FontPreloads.astro';
 import ArticleCard from '../../components/learn/ArticleCard.astro';
-import Chip from '../../components/ui/Chip.astro';
-import { byCategory } from '../../lib/learn/articles';
-import { getArticles, testFor } from '../../lib/learn/collection';
+import { getArticles } from '../../lib/learn/collection';
 import { hubDescription, hubEmpty, hubEyebrow, hubH1, hubIntro, hubTitle } from '../../data/learn';
 
-const groups = byCategory(await getArticles());
-const id = (category: string) => `cat-${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const articles = await getArticles();
+const PILLAR_ID = 'what-psychology-tests-can-and-cant-tell-you';
+const pillar = articles.find((a) => a.id === PILLAR_ID);
+const otherArticles = articles.filter((a) => a.id !== PILLAR_ID);
+const categories = ['All', ...new Set(articles.map((a) => a.data.category))];
 ---
 <BaseLayout title={hubTitle} description={hubDescription} path="/learn/" ogImage="/og/learn.png" crumbs={[{ name: 'Learn' }]}>
   <FontPreloads slot="head" />
@@ -16,40 +17,116 @@ const id = (category: string) => `cat-${category.toLowerCase().replace(/[^a-z0-9
     <section>
       <div class="mono mb-[18px] text-[11px] text-muted">{hubEyebrow}</div>
       <h1 class="m-0 text-[clamp(44px,9vw,124px)] leading-[.9] font-semibold tracking-[-.055em]">{hubH1[0]}<br /><span class="serif text-blue">{hubH1[1]}</span></h1>
-      {groups.length > 0 && (
-        <nav aria-label="Categories" class="mt-6">
-          <ul class="m-0 flex list-none flex-wrap gap-2 p-0">
-            {groups.map((g, i) => {
-              const t = testFor(g.items[0]);
-              const dark = !t || t.dark;
-              return (
-                <li class="settle-in" style={{ '--i': i }}>
-                  <Chip
-                    href={`#${id(g.category)}`}
-                    bg={dark ? 'var(--color-ink)' : 'var(--color-white)'}
-                    color={dark ? 'var(--color-paper)' : 'var(--color-ink)'}
-                    class="min-h-11 gap-2 border border-line-pill px-4 text-[14.5px] font-semibold"
-                  ><span aria-hidden="true" class="size-2 rounded-full" style={{ background: dark ? 'var(--color-yellow)' : t.color }}></span>{g.category}</Chip>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      {categories.length > 1 && (
+        <div role="group" aria-label="Filter guides" class="guide-filters mt-6 flex flex-wrap gap-2">
+          {categories.map((cat, i) => (
+            <button
+              type="button"
+              data-filter={cat === 'All' ? 'all' : cat}
+              data-label={cat === 'All' ? undefined : cat}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              class="min-h-11 rounded-full border border-line-pill bg-white px-4 py-2.5 text-[14.5px] font-medium text-ink aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper cursor-pointer transition-colors"
+            >{cat}</button>
+          ))}
+        </div>
       )}
+      <p class="guide-filter-status sr-only" aria-live="polite"></p>
       <p class="mt-6 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{hubIntro}</p>
     </section>
 
-    {groups.length === 0 && (
+    {articles.length === 0 && (
       <p class="m-0 text-[17px] leading-[1.55] text-ink-soft">{hubEmpty} <a href="/tests/" class="font-semibold">All tests →</a></p>
     )}
 
-    {groups.map((g) => (
-      <section aria-labelledby={id(g.category)} class="scroll-mt-4">
-        <h2 id={id(g.category)} class="m-0 mb-4 text-[clamp(28px,3.4vw,34px)] font-semibold tracking-[-.04em]">{g.category}</h2>
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
-          {g.items.map((a) => <ArticleCard article={a} class="card-lift" />)}
+    {articles.length > 0 && (
+      <section aria-label="Guides" class="guides-section flex flex-col gap-5">
+        {pillar && (
+          <ArticleCard article={pillar} wide class="card-lift" />
+        )}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {otherArticles.map((a) => (
+            <ArticleCard article={a} class="card-lift" />
+          ))}
         </div>
       </section>
-    ))}
+    )}
   </div>
 </BaseLayout>
+
+<script>
+  import { guideFilterStatus } from '../../data/learn';
+
+  // Filter chips. Without JS nothing is hidden, so every card shows. Cards leaving fade out, then the
+  // grid changes in one step (within the click's 500 ms, so it doesn't count as layout shift): new cards
+  // fade and slide in, cards that stay glide from where they were. Instant with reduced motion.
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.guide-filters [data-filter]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-guide-card]'));
+  const group = document.querySelector<HTMLElement>('.guide-filters');
+  const status = document.querySelector<HTMLElement>('.guide-filter-status');
+  const ease = getComputedStyle(document.documentElement).getPropertyValue('--ease-house').trim() || 'cubic-bezier(.45, .05, .25, 1)';
+  const OUT_MS = 160;
+  const IN_MS = 280;
+  let current = 'all';
+  let pending = 0;
+  /** Only the filter's own animations, so the cards' hover and focus are never touched. */
+  let running: Animation[] = [];
+  const run = (el: HTMLElement, k: Keyframe[] | PropertyIndexedKeyframes, o: KeyframeAnimationOptions) => running.push(el.animate(k, o));
+  const settle = () => {
+    running.forEach((a) => a.cancel());
+    running = [];
+  };
+
+  const apply = (key: string, animate: boolean) => {
+    const show = (c: HTMLElement) => key === 'all' || c.dataset.category === key;
+    const leaving = cards.filter((c) => !c.hidden && !show(c));
+    const staying = cards.filter((c) => !c.hidden && show(c));
+    const arriving = cards.filter((c) => c.hidden && show(c));
+
+    const swap = () => {
+      // Keep the chips where they are on screen, so the section stays in view as the grid changes height.
+      const before = group?.getBoundingClientRect().top ?? 0;
+      const from = new Map(staying.map((c) => [c, c.getBoundingClientRect()]));
+      for (const c of leaving) c.hidden = true;
+      for (const c of arriving) c.hidden = false;
+      const moved = (group?.getBoundingClientRect().top ?? 0) - before;
+      if (moved) window.scrollBy({ top: moved, behavior: 'instant' });
+      if (!animate) return;
+      for (const c of arriving) {
+        run(c, { opacity: [0, 1], transform: ['translateY(14px)', 'none'] }, { duration: IN_MS, easing: ease, fill: 'backwards' });
+      }
+      for (const c of staying) {
+        const a = from.get(c)!;
+        const b = c.getBoundingClientRect();
+        const dx = a.left - b.left;
+        const dy = a.top - b.top;
+        if (dx || dy) run(c, { transform: [`translate(${dx}px, ${dy}px)`, 'none'] }, { duration: IN_MS, easing: ease });
+      }
+    };
+
+    if (!animate || leaving.length === 0) {
+      swap();
+      return;
+    }
+    for (const c of leaving) run(c, { opacity: [1, 0], transform: ['none', 'translateY(8px)'] }, { duration: OUT_MS, easing: ease, fill: 'forwards' });
+    const token = ++pending;
+    window.setTimeout(() => {
+      if (token !== pending) return;
+      settle();
+      swap();
+    }, OUT_MS);
+  };
+
+  for (const btn of buttons) {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.filter ?? 'all';
+      if (key === current) return;
+      current = key;
+      for (const b of buttons) b.setAttribute('aria-pressed', String(b === btn));
+      pending++;
+      settle();
+      apply(key, !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      const n = cards.filter((c) => key === 'all' || c.dataset.category === key).length;
+      if (status) status.textContent = guideFilterStatus(n, btn.dataset.label ?? null);
+    });
+  }
+</script>

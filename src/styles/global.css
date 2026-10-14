@@ -108,6 +108,9 @@
   details summary::-webkit-details-marker {
     display: none;
   }
+  [hidden] {
+    display: none !important;
+  }
 }
 
 @layer components {
@@ -130,6 +133,18 @@
     max-width: 1200px;
     margin-inline: auto;
     padding-inline: clamp(16px, 3vw, 40px);
+  }
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
   }
 }
 
