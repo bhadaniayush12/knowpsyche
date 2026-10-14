@@ -1,7 +1,7 @@
 ---
 // Fonts above the fold, preloaded so they swap in before first paint and headings don't re-wrap
 // (layout shift). Same hashed files as the @fontsource CSS. Weight 500 isn't above the fold on test
-// pages, but without a preload it would load mid-test. Use with slot="head" on BaseLayout.
+// pages, but without a preload it would load mid-test. BaseLayout renders it on every page (props preloadFonts, preloadBold).
 import grotesk400 from '@fontsource/space-grotesk/files/space-grotesk-latin-400-normal.woff2?url';
 import grotesk500 from '@fontsource/space-grotesk/files/space-grotesk-latin-500-normal.woff2?url';
 import grotesk600 from '@fontsource/space-grotesk/files/space-grotesk-latin-600-normal.woff2?url';

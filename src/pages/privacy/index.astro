@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FontPreloads from '../../components/FontPreloads.astro';
 import PolicyPage from '../../components/policy/PolicyPage.astro';
 import PolicySection from '../../components/policy/PolicySection.astro';
 
@@ -29,7 +28,6 @@ const toc = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/privacy/" crumbs={[{ name: 'Privacy & disclaimer' }]}>
-  <FontPreloads slot="head" />
   <PolicyPage eyebrow="Privacy · disclaimer · terms · Last updated 17 October 2026" summary={summary} toc={toc}>
     <Fragment slot="title">Your mind is yours.<br /><span class="serif text-blue">So is your data.</span></Fragment>
 

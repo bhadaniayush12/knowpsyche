@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FontPreloads from '../../components/FontPreloads.astro';
 
 // Copy word for word from docs/design/Method.dc.html. Placeholders filled as Dev decided:
 // "every six months", last reviewed 17 October 2026.
@@ -104,7 +103,6 @@ const notes = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/method/" crumbs={[{ name: 'Our method' }]}>
-  <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section>
       <div class="mono mb-[18px] text-[11px] text-muted">Our method · Evidence before certainty</div>

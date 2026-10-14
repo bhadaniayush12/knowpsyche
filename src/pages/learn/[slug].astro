@@ -6,7 +6,6 @@
  */
 import { getEntries } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FontPreloads from '../../components/FontPreloads.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import Faq from '../../components/result/Faq.astro';
 import Sources from '../../components/result/Sources.astro';
@@ -74,7 +73,6 @@ const articleLd = {
 };
 ---
 <BaseLayout title={`${data.title} | KnowPsyche`} description={data.description} path={path} ogImage={ogImage} crumbs={[{ name: 'Learn', href: '/learn/' }, { name: data.title }]}>
-  <FontPreloads slot="head" />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleLd)} />
 
   <div class="read-progress" aria-hidden="true"><span></span></div>

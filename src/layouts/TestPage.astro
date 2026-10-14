@@ -11,7 +11,6 @@
  * The Start button has `data-test-start`; the page script decides what it does.
  */
 import BaseLayout from './BaseLayout.astro';
-import FontPreloads from '../components/FontPreloads.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Faq from '../components/result/Faq.astro';
 import Sources from '../components/result/Sources.astro';
@@ -64,8 +63,7 @@ const testId = path.replace(/^\/|-test\/$/g, '') as TestId;
 
 const articles = articlesForTest(await getCollection('learn'), path.replace(/\//g, ''));
 ---
-<BaseLayout title={title} description={description} path={path} crumbs={[{ name: 'Tests', href: '/tests/' }, { name: crumb }]} crumbWidth={1120} ogImage={ogImage}>
-  <FontPreloads slot="head" bold={preloadBold} />
+<BaseLayout title={title} description={description} path={path} crumbs={[{ name: 'Tests', href: '/tests/' }, { name: crumb }]} crumbWidth={1120} ogImage={ogImage} preloadBold={preloadBold}>
   <TrailFlag slot="head" />
   <div class="mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-[18px] pb-20">
 

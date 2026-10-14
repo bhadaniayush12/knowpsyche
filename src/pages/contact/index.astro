@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FontPreloads from '../../components/FontPreloads.astro';
 import Character from '../../components/Character.astro';
 
 // Copy word for word from docs/design/Contact.dc.html. Placeholders filled: the real address, "3 working days".
@@ -24,7 +23,6 @@ const reasons = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/contact/" crumbs={[{ name: 'Contact' }]}>
-  <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-14 px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section class="flex flex-wrap items-end gap-10">
       <div class="min-w-0 flex-[999_1_560px]">

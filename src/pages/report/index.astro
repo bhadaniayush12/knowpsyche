@@ -9,7 +9,6 @@
  * Everything is read from this browser only. Nothing is sent anywhere.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FontPreloads from '../../components/FontPreloads.astro';
 import TrailFlag from '../../components/result/TrailFlag.astro';
 import Character from '../../components/Character.astro';
 import { BANDS_NOTE } from '../../data/shared';
@@ -35,8 +34,7 @@ const visibility = [
 
 const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-base transition-colors duration-300 ease-house';
 ---
-<BaseLayout title={reportPage.title} description={reportPage.description} path="/report/" noindex crumbs={[{ name: reportPage.h1 }]} crumbWidth={1120}>
-  <FontPreloads slot="head" bold />
+<BaseLayout title={reportPage.title} description={reportPage.description} path="/report/" noindex crumbs={[{ name: reportPage.h1 }]} crumbWidth={1120} preloadBold>
   <TrailFlag slot="head" />
   <style is:inline slot="head" set:html={visibility}></style>
 

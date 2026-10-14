@@ -11,6 +11,7 @@ import '../styles/global.css';
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FontPreloads from '../components/FontPreloads.astro';
 
 interface Props {
   title: string;
@@ -29,9 +30,13 @@ interface Props {
   crumbWidth?: number;
   /** `home` = Main design header + full footer. `inner` = About/Method design header + compact footer. */
   variant?: 'home' | 'inner';
+  /** Preload the above-the-fold fonts so they swap in before first paint (no layout shift). On by default. */
+  preloadFonts?: boolean;
+  /** Also preload weight 700, for a page whose test uses it (the Stroop word, the report). */
+  preloadBold?: boolean;
 }
 
-const { title, description, path, ogImage = '/og/site.png', noindex = false, crumbs, crumbWidth = 1200, variant = 'inner' } = Astro.props;
+const { title, description, path, ogImage = '/og/site.png', noindex = false, crumbs, crumbWidth = 1200, variant = 'inner', preloadFonts = true, preloadBold = false } = Astro.props;
 const site = Astro.site ?? new URL('https://knowpsyche.com');
 const canonical = new URL(path, site).href;
 const image = new URL(ogImage, site).href;
@@ -83,6 +88,7 @@ const breadcrumbLd = trail.length > 0 && {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
 
+    {preloadFonts && <FontPreloads bold={preloadBold} />}
     {breadcrumbLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />}
     <slot name="head" />
   </head>

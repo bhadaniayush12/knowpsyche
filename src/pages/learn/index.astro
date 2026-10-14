@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import FontPreloads from '../../components/FontPreloads.astro';
 import ArticleCard from '../../components/learn/ArticleCard.astro';
 import { getArticles } from '../../lib/learn/collection';
 import { hubDescription, hubEmpty, hubEyebrow, hubH1, hubIntro, hubTitle } from '../../data/learn';
@@ -12,7 +11,6 @@ const otherArticles = articles.filter((a) => a.id !== PILLAR_ID);
 const categories = ['All', ...new Set(articles.map((a) => a.data.category))];
 ---
 <BaseLayout title={hubTitle} description={hubDescription} path="/learn/" ogImage="/og/learn.png" crumbs={[{ name: 'Learn' }]}>
-  <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
     <section>
       <div class="mono mb-[18px] text-[11px] text-muted">{hubEyebrow}</div>
