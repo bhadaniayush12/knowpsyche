@@ -1,10 +1,9 @@
 ---
 import OffsetFrame from '../ui/OffsetFrame.astro';
-import Chip from '../ui/Chip.astro';
 import { homeFaqs } from '../../data/home';
 
 const rows = [
-  { icon: '?', bg: 'var(--color-tint-blue)', fg: 'var(--color-blue)', q: 'What does it mean?', a: 'You react about as fast as most people.' },
+  { icon: '?', bg: 'var(--color-tint-blue)', fg: 'var(--color-blue)', q: 'What does it mean?', a: 'How quickly you responded on this device, on this try.' },
   { icon: '↻', bg: 'var(--color-tint-ochre)', fg: 'var(--color-ochre)', q: 'What can change it?', a: 'Sleep, focus, practice, and your screen.' },
   { icon: '→', bg: 'var(--color-tint-teal)', fg: 'var(--color-teal-dark)', q: 'What next?', a: 'Try the attention test to see how well you ignore distractions.' },
 ];
@@ -15,11 +14,11 @@ const rows = [
       <h2 id="results-title" class="m-0 text-[clamp(36px,4.4vw,58px)] leading-none font-semibold tracking-[-.045em]">Results you can <span class="serif text-blue">actually read.</span></h2>
       <p class="m-0 max-w-[480px] text-[17.5px] leading-[1.6] text-ink-soft">No confusing labels. Every result answers three questions:</p>
       <OffsetFrame rotate={-0.6} class="flex flex-col gap-4 rounded-22 bg-white p-6 shadow-panel">
-        <div class="flex flex-wrap items-baseline justify-between gap-2.5">
-          <span class="text-sm font-medium text-muted">Example · Reaction time</span>
-          <Chip bg="var(--color-mint)" color="var(--color-teal-deep)" class="px-2.5 py-1 text-[13px] font-semibold">Typical range</Chip>
+        <span class="text-sm font-medium text-muted">Example · Reaction time</span>
+        <div class="flex flex-wrap items-baseline gap-x-3">
+          <span class="text-[17px] font-semibold">Your time</span>
+          <span class="text-[72px] leading-[.9] font-semibold tracking-[-.06em]">247<span class="ml-1.5 text-2xl tracking-[-.02em]">ms</span></span>
         </div>
-        <div class="text-[72px] leading-[.9] font-semibold tracking-[-.06em]">247<span class="ml-1.5 text-2xl tracking-[-.02em]">ms</span></div>
         <div aria-hidden="true" class="relative h-3 rounded-full bg-[linear-gradient(90deg,var(--color-blue)_0_25%,var(--color-trail)_25%_50%,#EDE7DA_50%_100%)]">
           <span class="slide absolute -top-[5px] h-[22px] w-1 rounded-sm bg-coral"></span>
         </div>
