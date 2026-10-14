@@ -566,7 +566,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     });
   });
 
-  // Keyboard: Space starts and answers. On a focused button or link, Space does that control's own
+  // Keyboard: Space starts, answers, and starts again after a finished run. On a focused button or link, Space does that control's own
   // job, except during a run, when it always answers (bar Restart, so keyboard users can still restart).
   window.addEventListener('keydown', (e) => {
     if (e.key !== ' ' || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -575,13 +575,16 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     const target = e.target as HTMLElement;
     const running = mode === 'practice' || mode === 'main';
     if (running ? target === restartBtn || target === pausedRestartBtn : !!target.closest('a, button')) return;
-    if (!running && mode !== 'idle' && mode !== 'practice-done' && mode !== 'paused') return;
+    if (!running && mode !== 'idle' && mode !== 'practice-done' && mode !== 'paused' && mode !== 'done') return;
+    // After a finished run, Space starts again only when no control has focus (FAQ, fields).
+    if (mode === 'done' && target.closest('input, select, textarea, summary, [contenteditable]')) return;
     e.preventDefault();
     // A held key repeats; only the first press counts.
     if (e.repeat) return;
     if (mode === 'idle') startPractice();
     else if (mode === 'practice-done') startMainRun();
-    else if (mode === 'paused') {
+    else if (mode === 'paused' || mode === 'done') {
+      if (mode === 'done') card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
       restartAll();
       startPractice();
     } else handleResponse(e.timeStamp);

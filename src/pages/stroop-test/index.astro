@@ -624,7 +624,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     });
   });
 
-  // Keyboard: Space or Enter starts, R / B / G / Y answer. Shortcuts with Cmd/Ctrl/Alt (Cmd+R reload)
+  // Keyboard: Space or Enter starts (Space alone after a finished run), R / B / G / Y answer. Shortcuts with Cmd/Ctrl/Alt (Cmd+R reload)
   // are left alone, and Space/Enter on a focused button or link does that control's own job.
   const keyColors: Record<string, StroopColor> = { r: 'red', b: 'blue', g: 'green', y: 'yellow' };
   window.addEventListener('keydown', (e) => {
@@ -632,13 +632,17 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     if (!isCardOnScreen()) return;
     const key = e.key.toLowerCase();
     if (key === ' ' || key === 'enter') {
-      if (mode !== 'idle' && mode !== 'practice-done' && mode !== 'paused') return;
+      if (mode !== 'idle' && mode !== 'practice-done' && mode !== 'paused' && mode !== 'done') return;
+      // After a finished run only Space starts again (held keys don't), and only when no control
+      // has focus (FAQ, fields).
+      if (mode === 'done' && (key !== ' ' || e.repeat || (e.target as HTMLElement).closest('input, select, textarea, summary, [contenteditable]'))) return;
       // The answer buttons do nothing between runs, so Space/Enter on them still starts.
       const control = (e.target as HTMLElement).closest('a, button');
       if (control && !control.classList.contains('st-btn')) return;
       e.preventDefault();
       if (mode === 'idle') startPractice();
-      else if (mode === 'paused') {
+      else if (mode === 'paused' || mode === 'done') {
+        if (mode === 'done') card.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
         restartAll();
         startPractice();
       } else startMainRun();
