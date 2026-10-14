@@ -11,6 +11,7 @@ import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
+import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, page, photoBands, result, sources, ui } from '../../data/tests/photographic-memory';
 import { LIVES } from '../../lib/tests/photographic-memory';
@@ -83,6 +84,8 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     <ShareCard>
       <TryAgain />
     </ShareCard>
+
+    <ProgressTrail variant="card" current="photographic-memory" />
 
     <NextTest from="/photographic-memory-test/" line={result.nextLine} learn={result.learn} />
   </Fragment>

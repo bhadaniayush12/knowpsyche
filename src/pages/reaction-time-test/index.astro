@@ -11,6 +11,7 @@ import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import BandScale from '../../components/result/BandScale.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
+import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
 import { TRIES } from '../../lib/tests/reaction-time';
@@ -117,6 +118,8 @@ const ticks = [100, 200, 300, 400, 500];
     <ShareCard>
       <TryAgain />
     </ShareCard>
+
+    <ProgressTrail variant="card" current="reaction-time" />
 
     <NextTest from="/reaction-time-test/" line={result.nextLine} learn={result.learn} />
   </Fragment>

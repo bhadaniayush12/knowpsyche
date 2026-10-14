@@ -11,6 +11,7 @@ import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
+import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, page, result, resultUi, sources, stroopBands, ui } from '../../data/tests/stroop';
 import { TOTAL_TRIALS } from '../../lib/tests/stroop';
@@ -220,6 +221,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     <ShareCard>
       <TryAgain />
     </ShareCard>
+
+    <ProgressTrail variant="card" current="stroop" />
 
     <NextTest from="/stroop-test/" line={result.nextLine} learn={result.learn} />
   </Fragment>

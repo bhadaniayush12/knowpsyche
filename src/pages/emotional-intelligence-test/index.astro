@@ -9,6 +9,7 @@ import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
+import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import { areas, bands, faqs, order, page, result, resultUi, scale, sources, sourcesNote, statements, ui } from '../../data/tests/emotional-intelligence';
 
 const btnSmall =
@@ -132,6 +133,8 @@ const first = statements[order[0] - 1];
     <ShareCard>
       <TryAgain />
     </ShareCard>
+
+    <ProgressTrail variant="card" current="emotional-intelligence" />
 
     <NextTest from="/emotional-intelligence-test/" line={result.nextLine} learn={result.learn} />
   </Fragment>

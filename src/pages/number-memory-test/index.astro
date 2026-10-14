@@ -11,6 +11,7 @@ import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
+import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, numberBands, page, result, sources, ui } from '../../data/tests/number-memory';
 import { LIVES, START_DIGITS } from '../../lib/tests/number-memory';
@@ -144,6 +145,8 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     <ShareCard>
       <TryAgain />
     </ShareCard>
+
+    <ProgressTrail variant="card" current="number-memory" />
 
     <NextTest from="/number-memory-test/" line={result.nextLine} learn={result.learn} />
   </Fragment>
