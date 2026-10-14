@@ -33,7 +33,7 @@ export const page = {
   crumb: 'Attention span',
   // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 05 · Attention · 2–3 min',
-  metaLine: 'About 2–3 minutes · 80 circles · Nothing saved',
+  metaLine: 'About 2–3 minutes · 80 circles · Saved only if you choose',
 };
 
 export const ui = {

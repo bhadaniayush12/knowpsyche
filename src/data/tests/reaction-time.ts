@@ -33,7 +33,7 @@ export const page = {
   crumb: 'Reaction time',
   // Drafted.
   eyebrow: 'Test / 01 · Attention · 1–2 min',
-  metaLine: 'About 1 minute · 5 tries · Nothing saved',
+  metaLine: 'About 1 minute · 5 tries · Saved only if you choose',
 };
 
 export type ReactionMode = 'visual' | 'sound' | 'f1' | 'space';

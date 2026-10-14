@@ -33,7 +33,7 @@ export const page = {
   crumb: 'Stroop test',
   // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 06 · Focus · 1 min',
-  metaLine: 'About 1 minute · 40 words · Nothing saved',
+  metaLine: 'About 1 minute · 40 words · Saved only if you choose',
 };
 
 export const ui = {

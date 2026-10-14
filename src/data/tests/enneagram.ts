@@ -16,7 +16,7 @@ export const page = {
   crumb: 'Enneagram',
   // Drafted.
   eyebrow: 'Test / 02 · Personality · 8 min',
-  metaLine: 'About 8 minutes · 45 statements · Nothing saved',
+  metaLine: 'About 8 minutes · 45 statements · Saved only if you choose',
 };
 
 /** Answer scale, values 1–5. */

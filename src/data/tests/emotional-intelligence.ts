@@ -8,14 +8,14 @@ export const page = {
   // Drafted: title and description shortened to fit 60 / 155 characters.
   title: 'Emotional Intelligence Test: Free, 28 Questions | KnowPsyche',
   description:
-    'A free, private emotional intelligence test. 28 quick statements on how you notice, manage and read feelings. Results in about 5 minutes, never stored.',
+    'A free, private emotional intelligence test. 28 quick statements on how you notice, manage and read feelings. About 5 minutes, nothing sent.',
   h1: 'How do you handle feelings?',
   intro:
     "Emotional intelligence is how well you notice feelings, yours and other people's, and what you do with them. Rate 28 statements about how you usually act. There are no right answers, only honest ones. Your result shows four areas, so you can see where you're already strong and what's worth practising.",
   crumb: 'Emotional intelligence',
   // Drafted (eyebrow, and metaLine in the same format as the other tests).
   eyebrow: 'Test / 07 · Emotions · 5 min',
-  metaLine: 'About 5 minutes · 28 statements · Nothing saved',
+  metaLine: 'About 5 minutes · 28 statements · Saved only if you choose',
 };
 
 /** Answer scale, values 1–5. */

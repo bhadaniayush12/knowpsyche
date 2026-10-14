@@ -31,7 +31,7 @@ export const page = {
   crumb: 'Photographic memory',
   // Drafted.
   eyebrow: 'Test / 03 · Memory · 2–3 min',
-  metaLine: 'About 2–3 minutes · 3 lives · Nothing saved',
+  metaLine: 'About 2–3 minutes · 3 lives · Saved only if you choose',
 };
 
 export const ui = {
