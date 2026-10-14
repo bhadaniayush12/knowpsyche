@@ -68,12 +68,11 @@ export const scoreUnit: Partial<Record<TestId, { before?: string; after?: string
 
 /**
  * "What stood out", band by band, keyed by each test's band badge (Dev's copy, Drafted).
- * `all` is the fallback when no band matches: the Enneagram (one line for every type), and a Stroop run
- * that couldn't be measured (no badge). The other `all` lines are the earlier placeholders, kept only as that fallback.
+ * `all` is used when no band matches: the Enneagram (one line for every type) and a Stroop run that
+ * couldn't be measured (it has no band).
  */
-export const standout: Record<TestId, { all: string; byBand?: Record<string, string> }> = {
+export const standout: Record<TestId, { all?: string; byBand?: Record<string, string> }> = {
   'reaction-time': {
-    all: 'Your average speed is the headline here. Your five tries together say more than any single one.',
     byBand: {
       // Drafted.
       Lightning: 'Your average came out very fast. Part of that is your screen and device, and part is how ready you were.',
@@ -90,7 +89,6 @@ export const standout: Record<TestId, { all: string; byBand?: Record<string, str
   // Drafted.
   enneagram: { all: 'Your top scores show the patterns you recognised most. A type is a place to start reading, not a label.' },
   'photographic-memory': {
-    all: 'How many tiles you could hold from a quick look before the pattern slipped.',
     byBand: {
       // Drafted.
       'Warming up': 'Visual memory fills up fast, and a first go is often the hardest. This is a starting point.',
@@ -103,7 +101,6 @@ export const standout: Record<TestId, { all: string; byBand?: Record<string, str
     },
   },
   'number-memory': {
-    all: 'How many digits you held in mind at once before losing track.',
     byBand: {
       // Drafted.
       'Warming up': 'You held a short run of digits before they slipped. This is a starting point, not a ceiling.',
@@ -116,7 +113,6 @@ export const standout: Record<TestId, { all: string; byBand?: Record<string, str
     },
   },
   'attention-span': {
-    all: 'How well you kept your focus over 80 circles, catching greens and holding back on reds.',
     byBand: {
       // Drafted.
       Drifting: 'Your focus wandered at times, or a few reds got a click. That happens when we are tired or distracted.',
@@ -129,7 +125,8 @@ export const standout: Record<TestId, { all: string; byBand?: Record<string, str
     },
   },
   stroop: {
-    all: 'How much the written word pulled on you when it clashed with the ink colour.',
+    // Drafted: a run that couldn't be measured has no band.
+    all: "This run couldn't be measured, so there is no result to show for it.",
     byBand: {
       // Drafted.
       Unshakeable: "The clashing words hardly slowed you down. Going carefully can do that, so it doesn't mean the effect is missing in you.",
@@ -142,7 +139,6 @@ export const standout: Record<TestId, { all: string; byBand?: Record<string, str
     },
   },
   'emotional-intelligence': {
-    all: 'Your strongest area is where you already handle feelings with the most ease.',
     // Keyed by the overall band.
     byBand: {
       // Drafted.
@@ -158,10 +154,10 @@ export const standout: Record<TestId, { all: string; byBand?: Record<string, str
 };
 
 /**
- * "One thing to try", band by band (Dev's copy, Drafted). No match (the Enneagram, or a Stroop run with no
- * badge) falls back to the test's own "Try this" tip; for the Enneagram that is the type's tip from enneagram.ts.
+ * "One thing to try", band by band (Dev's copy, Drafted). `all` covers a Stroop run with no band.
+ * The Enneagram has no entries here: it uses the type's own tip from enneagram.ts.
  */
-export const tryThis: Record<TestId, { byBand?: Record<string, string> }> = {
+export const tryThis: Record<TestId, { all?: string; byBand?: Record<string, string> }> = {
   'reaction-time': {
     byBand: {
       // Drafted.
@@ -214,6 +210,8 @@ export const tryThis: Record<TestId, { byBand?: Record<string, string> }> = {
     },
   },
   stroop: {
+    // Drafted: a run that couldn't be measured has no band.
+    all: 'Take the test again and save the new result.',
     byBand: {
       // Drafted.
       Unshakeable: 'Try again at a quicker pace and see what changes. Speed and accuracy trade off.',

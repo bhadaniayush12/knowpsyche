@@ -8,17 +8,17 @@ import { stroopBands, result as stroopCopy } from '../data/tests/stroop';
 import { types as enneagramTypes_, result as enneagramCopy } from '../data/tests/enneagram';
 import { areas, bands as eqBands, result as eqCopy } from '../data/tests/emotional-intelligence';
 import { reportSheet, scoreUnit, standout, tryThis } from '../data/report';
-import { bandFor, enneagramTypes, fitSize, formatDay, lowestOf, nameParts } from './report';
+import { bandFor, enneagramTypes, fitSize, formatDay, nameParts } from './report';
 import type { SavedTestResult, TestId } from './saved-results';
 
 type Band = { badge: string; text: string };
 
-const single: Partial<Record<TestId, { bands: readonly Band[]; change: string; tip: string }>> = {
-  'reaction-time': { bands: reactionBands, change: reactionCopy.change, tip: reactionCopy.morningNight },
-  'number-memory': { bands: numberBands, change: numberCopy.change, tip: numberCopy.tip },
-  'photographic-memory': { bands: photoBands, change: photoCopy.change, tip: photoCopy.tip },
-  'attention-span': { bands: attentionBands, change: attentionCopy.change, tip: attentionCopy.tip },
-  stroop: { bands: stroopBands, change: stroopCopy.change, tip: stroopCopy.tip },
+const single: Partial<Record<TestId, { bands: readonly Band[]; change: string }>> = {
+  'reaction-time': { bands: reactionBands, change: reactionCopy.change },
+  'number-memory': { bands: numberBands, change: numberCopy.change },
+  'photographic-memory': { bands: photoBands, change: photoCopy.change },
+  'attention-span': { bands: attentionBands, change: attentionCopy.change },
+  stroop: { bands: stroopBands, change: stroopCopy.change },
 };
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text?: string): HTMLElementTagNameMap[K] {
@@ -98,17 +98,12 @@ function meaningFor(id: TestId, r: SavedTestResult): string[] {
 }
 
 function tipFor(id: TestId, r: SavedTestResult): string {
-  const own = tryThis[id].byBand?.[r.badge];
+  const own = tryThis[id].byBand?.[r.badge] ?? tryThis[id].all;
   if (own) return own;
-  const s = single[id];
-  if (s) return s.tip;
-  if (id === 'enneagram') {
-    const e = enneagramTypes(r.badge, r.data && typeof r.data === 'object' ? r.data : null);
-    if (e.kind === 'even') return enneagramCopy.evenTip;
-    return enneagramTypes_.find((t) => t.n === e.types[0])?.tip ?? enneagramCopy.evenTip;
-  }
-  const low = r.data && typeof r.data === 'object' ? lowestOf(r.data, areas.map((a) => a.id)) : null;
-  return areas.find((a) => a.id === low)?.tip ?? areas[0].tip;
+  // The Enneagram: the main type's own tip, or the "even" tip.
+  const e = enneagramTypes(r.badge, r.data && typeof r.data === 'object' ? r.data : null);
+  if (e.kind === 'even') return enneagramCopy.evenTip;
+  return enneagramTypes_.find((t) => t.n === e.types[0])?.tip ?? enneagramCopy.evenTip;
 }
 
 /** Fills one test sheet. */
@@ -120,7 +115,7 @@ export function fillSheet(sheet: HTMLElement, r: SavedTestResult) {
   f('badge').textContent = r.badge;
   f('badge').hidden = !r.badge;
   f('visual').replaceChildren(visualFor(id, r));
-  f('standout').textContent = standout[id].byBand?.[r.badge] ?? standout[id].all;
+  f('standout').textContent = standout[id].byBand?.[r.badge] ?? standout[id].all ?? '';
   f('try').textContent = tipFor(id, r);
   f('means').replaceChildren(...meaningFor(id, r).map((t) => el('p', '', t)));
 }

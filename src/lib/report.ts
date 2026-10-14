@@ -43,26 +43,6 @@ export function bandFor<T extends { min: number }>(score: number, bands: readonl
   return pick;
 }
 
-/** The id with the lowest score; ties go to the first in `order`. */
-export function lowestOf(scores: Record<string, number>, order: readonly string[]): string | null {
-  let best: string | null = null;
-  for (const id of order) {
-    if (typeof scores[id] !== 'number') continue;
-    if (best === null || scores[id] < scores[best]) best = id;
-  }
-  return best;
-}
-
-/** The id with the highest score; ties go to the first in `order`. */
-export function highestOf(scores: Record<string, number>, order: readonly string[]): string | null {
-  let best: string | null = null;
-  for (const id of order) {
-    if (typeof scores[id] !== 'number') continue;
-    if (best === null || scores[id] > scores[best]) best = id;
-  }
-  return best;
-}
-
 /**
  * Biggest font size (stepping down from `max` to `min`) at which the text fits: at most `maxLines` lines
  * and no word wider than the box. `measure(size)` lays the text out at that size and reports back.

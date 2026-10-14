@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { bandFor, enneagramTypes, fitSize, formatDay, highestOf, lowestOf, nameParts } from '../report';
+import { bandFor, enneagramTypes, fitSize, formatDay, nameParts } from '../report';
+import { reactionBands } from '../../data/tests/reaction-time';
+import { numberBands } from '../../data/tests/number-memory';
+import { photoBands } from '../../data/tests/photographic-memory';
+import { attentionBands } from '../../data/tests/attention-span';
+import { stroopBands } from '../../data/tests/stroop';
+import { bands as eqBands } from '../../data/tests/emotional-intelligence';
 import { standout, tryThis } from '../../data/report';
-import { TEST_IDS } from '../saved-results';
 
 describe('nameParts', () => {
   it('no name: "Your report"', () => {
@@ -44,20 +49,13 @@ describe('enneagramTypes', () => {
   });
 });
 
-describe('bandFor / lowestOf / highestOf', () => {
+describe('bandFor', () => {
   const bands = [{ min: 0, b: 'a' }, { min: 50, b: 'b' }, { min: 70, b: 'c' }];
   it('picks the band by its lower bound', () => {
     expect(bandFor(0, bands).b).toBe('a');
     expect(bandFor(49, bands).b).toBe('a');
     expect(bandFor(50, bands).b).toBe('b');
     expect(bandFor(100, bands).b).toBe('c');
-  });
-  it('ties go to the first in order', () => {
-    const s = { knowing: 60, managing: 40, reading: 40, relationships: 80 };
-    const order = ['knowing', 'managing', 'reading', 'relationships'];
-    expect(lowestOf(s, order)).toBe('managing');
-    expect(highestOf(s, order)).toBe('relationships');
-    expect(lowestOf({}, order)).toBeNull();
   });
 });
 
@@ -78,12 +76,32 @@ describe('fitSize', () => {
 });
 
 describe('report copy', () => {
-  it('has a placeholder and a slot for every test', () => {
-    for (const id of TEST_IDS) {
-      expect(standout[id].all.length).toBeGreaterThan(10);
-      expect(tryThis[id]).toBeDefined();
+  it('every band of every test has its own "What stood out" and "One thing to try" line', () => {
+    const banded = {
+      'reaction-time': reactionBands,
+      'number-memory': numberBands,
+      'photographic-memory': photoBands,
+      'attention-span': attentionBands,
+      stroop: stroopBands,
+      'emotional-intelligence': eqBands,
+    } as const;
+    for (const [id, bands] of Object.entries(banded) as [keyof typeof banded, readonly { badge: string }[]][]) {
+      const badges = bands.map((b) => b.badge).sort();
+      expect(Object.keys(standout[id].byBand ?? {}).sort()).toEqual(badges);
+      expect(Object.keys(tryThis[id].byBand ?? {}).sort()).toEqual(badges);
     }
   });
+
+  it('fallbacks exist only where a result can have no band', () => {
+    expect(standout.enneagram.all).toBeTruthy();
+    expect(standout.stroop.all).toBe("This run couldn't be measured, so there is no result to show for it.");
+    expect(tryThis.stroop.all).toBe('Take the test again and save the new result.');
+    for (const id of ['reaction-time', 'number-memory', 'photographic-memory', 'attention-span', 'emotional-intelligence'] as const) {
+      expect(standout[id].all).toBeUndefined();
+      expect(tryThis[id].all).toBeUndefined();
+    }
+  });
+
   it('never compares with other people or counts streaks', () => {
     const text = JSON.stringify(standout);
     expect(text).not.toMatch(/percent|better than|average person|most people|others|streak|\d+ points|earn points|top \d/i);
