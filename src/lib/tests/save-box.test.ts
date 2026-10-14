@@ -100,6 +100,35 @@ describe('save box on a result page', () => {
     expect(box['[data-clear-btn]'].hidden).toBe(true);
   });
 
+  it('an unmeasured Stroop run gets no box, so no Save or Update button, and the measured result stays', () => {
+    const measured = { testId: 'stroop' as const, badge: 'Mild pull', headline: 'Mild pull · 120 ms', data: 120 };
+    const unmeasured = { testId: 'stroop' as const, badge: '', headline: "We couldn't measure this one. Try again.", data: null };
+    const box = makeBox();
+    const handle = initSaveOptIn(box.container as unknown as HTMLElement);
+    handle.show(measured);
+    box['[data-save-btn]'].click();
+    const before = localStorage.getItem('knowpsyche_saved_results');
+
+    handle.show(unmeasured);
+    expect(box.container.hidden).toBe(true);
+    // Even a click that slips through (a stale button) saves nothing.
+    box['[data-save-btn]'].click();
+    expect(localStorage.getItem('knowpsyche_saved_results')).toBe(before);
+    expect(JSON.parse(before!).results.stroop.data).toBe(120);
+
+    // A measured retake shows the box again.
+    handle.show({ ...measured, data: 90, headline: 'Mild pull · 90 ms' });
+    expect(box.container.hidden).toBe(false);
+    expect(box['[data-save-btn]'].textContent).toBe('Update saved result');
+  });
+
+  it('an unmeasured Stroop run with nothing saved also gets no box', () => {
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show({ testId: 'stroop', badge: '', headline: 'x', data: null });
+    expect(box.container.hidden).toBe(true);
+    expect(localStorage.getItem('knowpsyche_saved_results')).toBeNull();
+  });
+
   it('stays hidden when storage is blocked', () => {
     vi.stubGlobal('window', {
       get localStorage(): Storage {

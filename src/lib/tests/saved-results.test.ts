@@ -162,8 +162,23 @@ describe('saved-results storage layer', () => {
       expect(getSavedResult('emotional-intelligence')?.data).toEqual(four);
     });
 
-    it('stores null when the result has no number (Stroop not measured)', () => {
-      saveResult({ testId: 'stroop', date: '2026-10-14', badge: '', headline: 'Not measured', data: null });
+    it('never saves an unmeasured Stroop run (no number)', () => {
+      expect(saveResult({ testId: 'stroop', date: '2026-10-14', badge: '', headline: 'Not measured', data: null })).toBe(false);
+      expect(getSavedResult('stroop')).toBeNull();
+      expect(mockStorage.getItem(STORAGE_KEY)).toBeNull();
+    });
+
+    it('never replaces a measured Stroop result with an unmeasured one', () => {
+      const measured: SavedTestResult = { testId: 'stroop', date: '2026-10-14', badge: 'Mild pull', headline: 'Mild pull · 120 ms', data: 120 };
+      expect(saveResult(measured)).toBe(true);
+      const before = mockStorage.getItem(STORAGE_KEY);
+      expect(saveResult({ testId: 'stroop', date: '2026-10-15', badge: '', headline: 'Not measured', data: null })).toBe(false);
+      expect(getSavedResult('stroop')).toEqual(measured);
+      expect(mockStorage.getItem(STORAGE_KEY)).toBe(before);
+    });
+
+    it('still reads an unmeasured Stroop entry saved before this rule', () => {
+      mockStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, results: { stroop: { testId: 'stroop', date: '2026-10-14', badge: '', headline: 'Not measured', data: null } } }));
       expect(getSavedResult('stroop')?.data).toBeNull();
     });
 

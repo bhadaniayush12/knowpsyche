@@ -140,11 +140,22 @@ function write(report: SavedReport): boolean {
   return true;
 }
 
-/** Saves a result, replacing any earlier one for the same test. False if storage is blocked or the entry is not valid. */
+/**
+ * True when a result has something to save. An unmeasured Stroop run has no effect number (data null),
+ * so it is never saved and can never replace a measured one.
+ */
+export function isSaveable(entry: Pick<SavedTestResult, 'testId' | 'data'>): boolean {
+  return !(entry.testId === 'stroop' && entry.data === null);
+}
+
+/**
+ * Saves a result, replacing any earlier one for the same test. False if storage is blocked, the entry is
+ * not valid, or it is not saveable (see isSaveable).
+ */
 export function saveResult(entry: SavedTestResult): boolean {
   try {
     const safe = clean(entry);
-    if (!safe) return false;
+    if (!safe || !isSaveable(safe)) return false;
     const report = readReport() ?? { version: 1, results: {} };
     report.results[safe.testId] = safe;
     return write(report);
@@ -289,6 +300,13 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
   return {
     show(res) {
       if (broken) return;
+      // Nothing to save (an unmeasured Stroop run): no box at all, so there is no Save or Update button.
+      if (!isSaveable(res)) {
+        current = null;
+        container.hidden = true;
+        status('');
+        return;
+      }
       current = res;
       container.hidden = false;
       render();
