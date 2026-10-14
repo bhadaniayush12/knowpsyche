@@ -18,7 +18,7 @@ import { page as numberMemory } from '../../data/tests/number-memory';
 import { page as attentionSpan } from '../../data/tests/attention-span';
 import { page as stroop } from '../../data/tests/stroop';
 import { page as emotionalIntelligence } from '../../data/tests/emotional-intelligence';
-import type { TestId } from '../../lib/saved-results';
+import { saveCopy, type TestId } from '../../lib/saved-results';
 import { TRAIL_ORDER, testHref, trailCopy, trailState } from '../../lib/progress-trail';
 
 interface Props {
@@ -95,12 +95,20 @@ const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2
 
     <div class:list={['flex min-h-[22px] flex-wrap items-center gap-x-5 gap-y-1', card ? 'text-[16px]' : 'text-[14px] md:col-start-1 md:row-start-2']}>
       <a data-trail-next href={testHref(firstNext)} class="hit-44 font-semibold whitespace-nowrap text-ink underline underline-offset-[3px]">{trailCopy.next(names[firstNext])}</a>
-      {reportExists ? (
+      {reportExists && !card ? (
         <a data-trail-done href="/report/" class="hit-44 font-semibold text-ink underline underline-offset-[3px]" hidden>{trailCopy.allDone}</a>
       ) : (
         <span data-trail-done class="font-semibold" hidden>{trailCopy.allDone}</span>
       )}
-      {reportExists && <a data-trail-sofar href="/report/" class="hit-44 whitespace-nowrap text-ink-soft underline underline-offset-[3px]">{trailCopy.soFar}</a>}
+      {reportExists && !card && <a data-trail-sofar href="/report/" class="hit-44 whitespace-nowrap text-ink-soft underline underline-offset-[3px]">{trailCopy.soFar}</a>}
+      {/* The card only shows once something is saved, so its link to the report is always there (same as the save box). */}
+      {reportExists && card && (
+        <a
+          data-trail-open
+          href="/report/"
+          class="inline-flex min-h-[44px] items-center border border-ink bg-ink px-4 py-2.5 text-[15px] font-semibold text-paper no-underline transition-colors duration-300 ease-house hover:border-blue hover:bg-blue hover:text-paper"
+        >{saveCopy.openReport}</a>
+      )}
     </div>
   </div>
 </section>
