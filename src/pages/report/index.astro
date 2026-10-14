@@ -78,8 +78,16 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
           <p id="rp-name-hint" class="m-0 text-[14px] text-ink-soft">{reportPage.nameHint}</p>
           <input id="rp-name" type="text" autocomplete="name" maxlength="60" spellcheck="false" aria-describedby="rp-name-hint" class="min-h-12 w-full border border-ink bg-paper px-4 text-[17px] text-ink" />
         </div>
-        <div class="flex flex-wrap gap-2.5">
+        <div class="flex flex-wrap items-center gap-2.5">
           <button type="button" data-rp-clear class:list={[btn, 'border border-ink bg-transparent text-ink hover:border-coral-ink hover:text-coral-ink']}>{reportPage.clear}</button>
+          <!-- Two-step clear: the first press swaps the button for this question. Keep or Escape cancels. -->
+          <div data-rp-confirm role="group" aria-labelledby="rp-confirm-q" class="flex flex-wrap items-center gap-x-4 gap-y-2.5" hidden>
+            <p id="rp-confirm-q" class="m-0 text-[16px] font-semibold">{reportPage.clearConfirm}</p>
+            <div class="flex flex-wrap gap-2.5">
+              <button type="button" data-rp-clear-yes class:list={[btn, 'border border-coral-ink bg-transparent font-semibold text-coral-ink hover:bg-coral-ink hover:text-paper']}>{reportPage.clearYes}</button>
+              <button type="button" data-rp-clear-keep class:list={[btn, 'border-0 bg-ink font-semibold text-paper hover:bg-blue']}>{reportPage.clearKeep}</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -314,6 +322,8 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
     const report = isStorageAvailable() ? readReport() : null;
     const ids = TEST_IDS.filter((id) => report?.results[id]);
     root.toggleAttribute('data-kp-saved', ids.length > 0);
+    // Cleared somewhere else while the question was open: put the control back for next time.
+    if (!ids.length) askClear(false, false);
     if (ids.length) root.setAttribute('data-kp-report', ids.join(' '));
     else root.removeAttribute('data-kp-report');
     for (const id of ids) fillSheet($(`.rp-test[data-id="${id}"]`), report!.results[id]!);
@@ -342,8 +352,25 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
   });
   window.addEventListener('beforeprint', () => fitName(nameEl));
 
-  $('[data-rp-clear]').addEventListener('click', () => {
-    if (!clearResults()) return;
+  // Clear is two steps, inline (no browser dialog): Clear → "Clear everything saved on this device?" Yes / Keep.
+  const clearBtn = $<HTMLButtonElement>('[data-rp-clear]');
+  const confirmBox = $('[data-rp-confirm]');
+  const keepBtn = $<HTMLButtonElement>('[data-rp-clear-keep]');
+  const askClear = (open: boolean, moveFocus = true) => {
+    clearBtn.hidden = open;
+    confirmBox.hidden = !open;
+    if (moveFocus) (open ? keepBtn : clearBtn).focus();
+  };
+  clearBtn.addEventListener('click', () => askClear(true));
+  keepBtn.addEventListener('click', () => askClear(false));
+  confirmBox.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    e.preventDefault();
+    askClear(false);
+  });
+  $('[data-rp-clear-yes]').addEventListener('click', () => {
+    if (!clearResults()) return askClear(false);
+    askClear(false, false);
     input.value = '';
     render();
     status.textContent = reportPage.cleared;

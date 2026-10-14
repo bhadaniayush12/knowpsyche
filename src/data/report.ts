@@ -22,6 +22,10 @@ export const reportPage = {
   // Given by Dev (G1).
   pdfHint: 'On iPhone: tap Share, then Print, then pinch the preview to get a PDF.',
   clear: 'Clear saved results',
+  // Given by Dev (Q1-16): the inline confirm after the first press.
+  clearConfirm: 'Clear everything saved on this device?',
+  clearYes: 'Yes, clear',
+  clearKeep: 'Keep',
   // Drafted: same wording as the result pages' clear status.
   cleared: 'Saved results cleared from this device.',
   // Drafted.
