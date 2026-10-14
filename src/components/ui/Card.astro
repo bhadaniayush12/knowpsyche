@@ -12,7 +12,7 @@ const { test, class: className, details = false } = Astro.props;
 ---
 <a
   href={test.href}
-  data-cat={test.cat}
+  data-topic={test.topic}
   class:list={[
     'card flex min-h-[270px] flex-col gap-3.5 rounded-20 p-[22px] no-underline',
     test.dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink',

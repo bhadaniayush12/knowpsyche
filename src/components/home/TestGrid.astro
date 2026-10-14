@@ -19,11 +19,13 @@ import { homeTests, testFilters } from '../../data/home';
         <button
           type="button"
           data-filter={f.key}
+          data-label={f.key === 'all' ? undefined : f.label}
           aria-pressed={i === 0 ? 'true' : 'false'}
           class="min-h-11 rounded-full border border-line-pill bg-white px-4 py-2.5 text-[14.5px] font-medium text-ink aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper"
         >{f.label}</button>
       ))}
     </div>
+    <p class="test-filter-status sr-only" aria-live="polite"></p>
   </div>
   <div class="test-grid grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
     {homeTests.map((t) => (
@@ -35,13 +37,80 @@ import { homeTests, testFilters } from '../../data/home';
 </section>
 
 <script>
+  import { filterStatus } from '../../data/home';
+
+  // Filter chips. Without JS nothing is hidden, so every card shows. Cards leaving fade out, then the
+  // grid changes in one step (within the click's 500 ms, so it doesn't count as layout shift): new cards
+  // fade and slide in, cards that stay glide from where they were. Instant with reduced motion.
   const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.test-filters [data-filter]'));
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.test-grid [data-cat]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.test-grid [data-topic]'));
+  const group = document.querySelector<HTMLElement>('.test-filters');
+  const status = document.querySelector<HTMLElement>('.test-filter-status');
+  const ease = getComputedStyle(document.documentElement).getPropertyValue('--ease-house').trim() || 'ease';
+  const OUT_MS = 160;
+  const IN_MS = 280;
+  let current = 'all';
+  let pending = 0;
+  /** Only the filter's own animations, so the cards' scroll reveal and hover are never touched. */
+  let running: Animation[] = [];
+  const run = (el: HTMLElement, k: Keyframe[] | PropertyIndexedKeyframes, o: KeyframeAnimationOptions) => running.push(el.animate(k, o));
+  const settle = () => {
+    running.forEach((a) => a.cancel());
+    running = [];
+  };
+
+  const apply = (key: string, animate: boolean) => {
+    const show = (c: HTMLElement) => key === 'all' || c.dataset.topic === key;
+    const leaving = cards.filter((c) => !c.hidden && !show(c));
+    const staying = cards.filter((c) => !c.hidden && show(c));
+    const arriving = cards.filter((c) => c.hidden && show(c));
+
+    const swap = () => {
+      // Keep the chips where they are on screen, so the section stays in view as the grid changes height.
+      const before = group?.getBoundingClientRect().top ?? 0;
+      const from = new Map(staying.map((c) => [c, c.getBoundingClientRect()]));
+      for (const c of leaving) c.hidden = true;
+      for (const c of arriving) c.hidden = false;
+      const moved = (group?.getBoundingClientRect().top ?? 0) - before;
+      if (moved) window.scrollBy({ top: moved, behavior: 'instant' });
+      if (!animate) return;
+      for (const c of arriving) {
+        run(c, { opacity: [0, 1], transform: ['translateY(14px)', 'none'] }, { duration: IN_MS, easing: ease, fill: 'backwards' });
+      }
+      for (const c of staying) {
+        const a = from.get(c)!;
+        const b = c.getBoundingClientRect();
+        const dx = a.left - b.left;
+        const dy = a.top - b.top;
+        if (dx || dy) run(c, { transform: [`translate(${dx}px, ${dy}px)`, 'none'] }, { duration: IN_MS, easing: ease });
+      }
+    };
+
+    if (!animate || leaving.length === 0) {
+      swap();
+      return;
+    }
+    for (const c of leaving) run(c, { opacity: [1, 0], transform: ['none', 'translateY(8px)'] }, { duration: OUT_MS, easing: ease, fill: 'forwards' });
+    const token = ++pending;
+    window.setTimeout(() => {
+      if (token !== pending) return;
+      settle();
+      swap();
+    }, OUT_MS);
+  };
+
   for (const btn of buttons) {
     btn.addEventListener('click', () => {
-      const key = btn.dataset.filter;
+      const key = btn.dataset.filter ?? 'all';
+      if (key === current) return;
+      current = key;
       for (const b of buttons) b.setAttribute('aria-pressed', String(b === btn));
-      for (const c of cards) c.hidden = key !== 'all' && c.dataset.cat !== key;
+      // A quick second click cancels the first one's pending step; settle any half-faded cards first.
+      pending++;
+      settle();
+      apply(key, !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      const n = cards.filter((c) => key === 'all' || c.dataset.topic === key).length;
+      if (status) status.textContent = filterStatus(n, btn.dataset.label ?? null);
     });
   }
 </script>

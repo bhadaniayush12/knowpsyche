@@ -1,12 +1,13 @@
 // Homepage copy, word for word from docs/design/Main.dc.html. Test times follow the content docs.
 
-export type TestCategory = 'brain' | 'personality' | 'emotions';
+/** What the homepage filter chips sort by. */
+export type TestTopic = 'memory' | 'focus' | 'feelings' | 'personality';
 export type GlyphKey = 'rt' | 'en' | 'pm' | 'nm' | 'as' | 'st' | 'eq';
 
 export interface HomeTest {
   name: string;
   kind: string;
-  cat: TestCategory;
+  topic: TestTopic;
   time: string;
   desc: string;
   href: string;
@@ -23,25 +24,31 @@ export interface HomeTest {
 
 export const homeTests: HomeTest[] = [
   // Drafted. desc: Dev's wording (no comparison with others).
-  { name: 'Reaction time', kind: 'Most popular', cat: 'brain', time: '1 min', desc: 'How fast you respond when something changes on screen.', href: '/reaction-time-test/', count: '5 tries', looksAt: 'How fast you respond when something changes', glyph: 'rt', dark: true },
-  { name: 'Enneagram', kind: 'Personality', cat: 'personality', time: '8 min', desc: 'Which of 9 personality types drives your choices, fears and habits.', href: '/enneagram-test/', count: '45 statements', looksAt: 'The motives behind your choices', glyph: 'en', color: 'var(--color-violet)', tint: 'var(--color-tint-violet)' },
-  { name: 'Photographic memory', kind: 'Memory', cat: 'brain', time: '2–3 min', desc: 'How much you remember from a quick look at a picture.', href: '/photographic-memory-test/', count: '3 lives', looksAt: 'Memory for what you see', glyph: 'pm', color: 'var(--color-ochre)', tint: 'var(--color-tint-ochre)' },
-  { name: 'Number memory', kind: 'Memory', cat: 'brain', time: '1–2 min', desc: 'How many digits you can hold in your head at once.', href: '/number-memory-test/', count: '2 lives', looksAt: 'Memory for numbers', glyph: 'nm', color: 'var(--color-teal-dark)', tint: 'var(--color-tint-teal)' },
-  { name: 'Attention span', kind: 'Focus', cat: 'brain', time: '2–3 min', desc: 'How well you stay focused and ignore distractions.', href: '/attention-span-test/', count: '80 circles', looksAt: 'Focus and self-control', glyph: 'as', color: 'var(--color-blue)', tint: 'var(--color-tint-blue)' },
-  { name: 'Stroop test', kind: 'Focus', cat: 'brain', time: '1 min', desc: 'How your mind copes when what you see and what you read disagree.', href: '/stroop-test/', count: '40 words', looksAt: 'Ignoring an automatic habit', glyph: 'st', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
+  { name: 'Reaction time', kind: 'Most popular', topic: 'focus', time: '1 min', desc: 'How fast you respond when something changes on screen.', href: '/reaction-time-test/', count: '5 tries', looksAt: 'How fast you respond when something changes', glyph: 'rt', dark: true },
+  { name: 'Enneagram', kind: 'Personality', topic: 'personality', time: '8 min', desc: 'Which of 9 personality types drives your choices, fears and habits.', href: '/enneagram-test/', count: '45 statements', looksAt: 'The motives behind your choices', glyph: 'en', color: 'var(--color-violet)', tint: 'var(--color-tint-violet)' },
+  { name: 'Photographic memory', kind: 'Memory', topic: 'memory', time: '2–3 min', desc: 'How much you remember from a quick look at a picture.', href: '/photographic-memory-test/', count: '3 lives', looksAt: 'Memory for what you see', glyph: 'pm', color: 'var(--color-ochre)', tint: 'var(--color-tint-ochre)' },
+  { name: 'Number memory', kind: 'Memory', topic: 'memory', time: '1–2 min', desc: 'How many digits you can hold in your head at once.', href: '/number-memory-test/', count: '2 lives', looksAt: 'Memory for numbers', glyph: 'nm', color: 'var(--color-teal-dark)', tint: 'var(--color-tint-teal)' },
+  { name: 'Attention span', kind: 'Focus', topic: 'focus', time: '2–3 min', desc: 'How well you stay focused and ignore distractions.', href: '/attention-span-test/', count: '80 circles', looksAt: 'Focus and self-control', glyph: 'as', color: 'var(--color-blue)', tint: 'var(--color-tint-blue)' },
+  { name: 'Stroop test', kind: 'Focus', topic: 'focus', time: '1 min', desc: 'How your mind copes when what you see and what you read disagree.', href: '/stroop-test/', count: '40 words', looksAt: 'Ignoring an automatic habit', glyph: 'st', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
   // Drafted: em dash removed.
-  { name: 'Emotional intelligence', kind: 'Emotions', cat: 'emotions', time: '5 min', desc: 'How well you notice and handle feelings, yours and other people’s.', href: '/emotional-intelligence-test/', count: '28 statements', looksAt: 'Noticing and handling feelings', glyph: 'eq', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
+  { name: 'Emotional intelligence', kind: 'Emotions', topic: 'feelings', time: '5 min', desc: 'How well you notice and handle feelings, yours and other people’s.', href: '/emotional-intelligence-test/', count: '28 statements', looksAt: 'Noticing and handling feelings', glyph: 'eq', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
 ];
 
 /** The next test in doc order (Test 1 to 7), or null after the last one. */
 export const nextAfter = (href: string): HomeTest | null => homeTests[homeTests.findIndex((t) => t.href === href) + 1] ?? null;
 
-export const testFilters: { key: 'all' | TestCategory; label: string }[] = [
-  { key: 'all', label: 'All tests' },
-  { key: 'brain', label: 'Memory & focus' },
+/** Homepage filter chips. Labels from the homepage ("Memory", "Focus", "Feelings") plus "All" and "Personality". */
+export const testFilters: { key: 'all' | TestTopic; label: string }[] = [
+  { key: 'all', label: 'All' },
+  { key: 'memory', label: 'Memory' },
+  { key: 'focus', label: 'Focus' },
+  { key: 'feelings', label: 'Feelings' },
   { key: 'personality', label: 'Personality' },
-  { key: 'emotions', label: 'Emotions' },
 ];
+
+/** Drafted: what screen readers hear after a chip is picked, e.g. "Showing 2 memory tests". */
+export const filterStatus = (n: number, label: string | null) =>
+  label ? `Showing ${n} ${label.toLowerCase()} ${n === 1 ? 'test' : 'tests'}` : `Showing all ${n} tests`;
 
 export const marqueeQuestions: { t: string; bg: string }[] = [
   { t: 'Am I a good listener?', bg: 'var(--color-lilac)' },
