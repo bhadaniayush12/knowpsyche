@@ -193,5 +193,5 @@ export function scalePercent(overall: number): number {
 }
 
 export function shareText(overall: number): string {
-  return `My attention score: ${overall}/100 — ${getBand(overall).badge}. Can you beat it?`;
+  return `My attention score: ${overall}/100, ${getBand(overall).badge}. Can you beat it?`;
 }

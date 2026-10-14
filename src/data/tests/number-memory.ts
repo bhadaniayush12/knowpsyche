@@ -12,8 +12,10 @@ export const numberBands: MemoryBand[] = [
 ];
 
 export const page = {
-  title: 'Number Memory Test — How Many Digits Can You Hold?',
-  description: 'Remember a number, then type it back. It grows by one digit each round. Free, instant, no sign-up — find your digit span.',
+  // Drafted: em dash removed.
+  title: 'Number Memory Test: How Many Digits Can You Hold?',
+  // Drafted: em dash removed.
+  description: 'Remember a number, then type it back. It grows by one digit each round. Free, instant, no sign-up. Find your digit span.',
   h1: 'Number memory test',
   intro: 'A number will appear for a few seconds. When it disappears, type it in. Each round adds one digit.',
   crumb: 'Number memory',

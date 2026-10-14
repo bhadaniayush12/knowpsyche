@@ -13,17 +13,21 @@ export const stroopBands: StroopBand[] = [
   { min: -Infinity, badge: 'Unshakeable', text: 'The clashing words barely slowed you down.' },
   { min: 80, badge: 'Typical', text: "Your brain read the word anyway, like almost everyone's does." },
   { min: 161, badge: 'Word-pulled', text: 'The words pulled hard on your attention.' },
-  { min: 251, badge: 'Strongly pulled', text: 'Reading is very automatic for you — the words won the tug-of-war.' },
+  // Drafted: em dash removed.
+  { min: 251, badge: 'Strongly pulled', text: 'Reading is very automatic for you: the words won the tug-of-war.' },
 ];
 
 export const page = {
-  title: 'Stroop Test — Can Your Brain Ignore the Word?',
+  // Drafted: em dash removed.
+  title: 'Stroop Test: Can Your Brain Ignore the Word?',
   description:
-    'Name the ink colour, not the word. A 1-minute version of a famous 1935 experiment. See how much clashing words slow you down — free, instant.',
+    // Drafted: em dash removed.
+    'Name the ink colour, not the word. A 1-minute version of a famous 1935 experiment. See how much clashing words slow you down. Free, instant.',
   h1: 'Stroop test',
-  intro: 'A colour word will appear in coloured ink. Click the button for the INK colour — ignore what the word says. Be fast, but accurate.',
-  // Drafted: touch screens get the same line with "Tap" (shared rule).
-  introTouch: 'A colour word will appear in coloured ink. Tap the button for the INK colour — ignore what the word says. Be fast, but accurate.',
+  // Drafted: em dash removed.
+  intro: 'A colour word will appear in coloured ink. Click the button for the INK colour and ignore what the word says. Be fast, but accurate.',
+  // Drafted: touch screens get the same line with "Tap" (shared rule); em dash removed.
+  introTouch: 'A colour word will appear in coloured ink. Tap the button for the INK colour and ignore what the word says. Be fast, but accurate.',
   crumb: 'Stroop test',
   // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 06 · Focus · 1 min',
@@ -34,11 +38,14 @@ export const ui = {
   colourVisionNote: 'This test relies on telling colours apart, so it may not work well for people with colour-vision differences.',
   // Drafted: the doc says the note "allows a skip" but gives no link text.
   skipNote: 'Skip to the attention span test →',
-  lowAccuracyNote: 'You were fast but made several mistakes — try again a little slower for a fairer score.',
+  // Drafted: em dash removed.
+  lowAccuracyNote: 'You were fast but made several mistakes. Try again a little slower for a fairer score.',
   // Drafted: the doc says "4 rounds with feedback" but gives no lines. Everything from here to the end of `ui`.
   practiceCorrect: 'Correct!',
-  practiceWrong: 'Oops — pick the ink colour, not what the word says.',
-  practiceMissed: "Time's up — answer within 3 seconds next time.",
+  // Drafted: em dash removed.
+  practiceWrong: 'Oops, pick the ink colour, not what the word says.',
+  // Drafted: em dash removed.
+  practiceMissed: "Time's up. Answer within 3 seconds next time.",
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',
   practiceLabel: 'Practice round',
@@ -98,7 +105,8 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Is a bigger Stroop effect bad?',
-    a: "Not really — it mostly shows how automatic your reading is. It's a fun look at how your attention works, not a grade.",
+    // Drafted: em dash removed.
+    a: "Not really. It mostly shows how automatic your reading is. It's a fun look at how your attention works, not a grade.",
   },
   {
     q: 'Is this a medical test?',

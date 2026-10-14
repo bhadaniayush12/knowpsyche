@@ -137,8 +137,8 @@ describe('meaningLine', () => {
 
 describe('shareText', () => {
   it('matches the content doc format', () => {
-    expect(shareText(247)).toBe('My reaction time: 247 ms — Quick. Can you beat it?');
-    expect(shareText(180)).toBe('My reaction time: 180 ms — Lightning. Can you beat it?');
+    expect(shareText(247)).toBe('My reaction time: 247 ms, Quick. Can you beat it?');
+    expect(shareText(180)).toBe('My reaction time: 180 ms, Lightning. Can you beat it?');
   });
 });
 

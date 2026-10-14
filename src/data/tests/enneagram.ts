@@ -5,12 +5,14 @@ import type { Faq, Source } from '../shared';
 export type TypeNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export const page = {
-  title: 'Free Enneagram Test — All 9 Scores, No Email Needed',
+  // Drafted: em dash removed.
+  title: 'Free Enneagram Test: All 9 Scores, No Email Needed',
   description:
     'Find your Enneagram type in about 8 minutes. 45 questions, every score shown free, plus your wing and what your type means in plain English.',
   h1: 'Free Enneagram test',
   intro:
-    "Rate how true each statement is for you. Go with your first instinct — think about how you usually are, not how you'd like to be.",
+    // Drafted: em dash removed.
+    "Rate how true each statement is for you. Go with your first instinct. Think about how you usually are, not how you'd like to be.",
   crumb: 'Enneagram',
   // Drafted.
   eyebrow: 'Test / 02 · Personality · 8 min',
@@ -24,7 +26,8 @@ export const scale = ['Not like me', 'A little', 'Somewhat', 'Mostly', 'Very muc
 export const milestones: { at: number; text: string }[] = [
   { at: 15, text: 'A third done. Your answers are starting to form a pattern.' },
   { at: 30, text: 'Two thirds done. Your top types are taking shape.' },
-  { at: 40, text: 'Almost there — 5 to go.' },
+  // Drafted: em dash removed.
+  { at: 40, text: 'Almost there, 5 to go.' },
 ];
 
 /** The 45 statements, in the order shown. `type` is hidden from users and used only for scoring. */
@@ -185,7 +188,8 @@ export const result = {
   // Drafted.
   evenMeaning: 'Three or more types scored within a point of each other, so no single type stands out this time.',
   evenTip:
-    'Read your top three descriptions above. The one that feels most true about your motives — not just your behaviour — is usually your type.',
+    // Drafted: em dash removed.
+    'Read your top three descriptions above. The one that feels most true about your motives, not just your behaviour, is usually your type.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: part-1.md has no next-test line for the Enneagram.
   nextLine: 'You know what drives you. Now see how much you remember from a quick look.',
@@ -237,12 +241,16 @@ export const ui = {
 };
 
 export const faqs: Faq[] = [
-  { q: 'What is the Enneagram?', a: 'A model that describes nine patterns of motivation — what drives people, what they fear and how they react under stress.' },
-  { q: 'What does "Enneagram" mean?', a: 'It comes from Greek: ennea means nine, and gramma means something drawn — a nine-pointed figure.' },
+  // Drafted: em dash removed.
+  { q: 'What is the Enneagram?', a: 'A model that describes nine patterns of motivation: what drives people, what they fear and how they react under stress.' },
+  // Drafted: em dash removed.
+  { q: 'What does "Enneagram" mean?', a: 'It comes from Greek: ennea means nine, and gramma means something drawn, so it names a nine-pointed figure.' },
   { q: 'What are the 9 Enneagram types?', a: '1 Ethical Architect, 2 Intuitive Caregiver, 3 Driven Achiever, 4 Authentic Depth-Seeker, 5 Analytical Observer, 6 Vigilant Guardian, 7 Visionary Explorer, 8 Assertive Protector, 9 Harmonious Mediator.' },
-  { q: 'How do I find my Enneagram type?', a: 'Take the test above, then read your top two or three type descriptions. The one that feels most true about your motives — not just your behaviour — is usually your type.' },
+  // Drafted: em dash removed.
+  { q: 'How do I find my Enneagram type?', a: 'Take the test above, then read your top two or three type descriptions. The one that feels most true about your motives, not just your behaviour, is usually your type.' },
   { q: 'What is an Enneagram number?', a: 'Simply your type, from 1 to 9. "I\'m a 6" means Type 6.' },
-  { q: 'What is a wing?', a: 'One of the two types next to yours on the circle, which adds flavour to your main type — written like 4w5.' },
+  // Drafted: em dash removed.
+  { q: 'What is a wing?', a: "One of the two types next to yours on the circle, which adds flavour to your main type. It's written like 4w5." },
   { q: 'Is the Enneagram scientific?', a: "Research on it is limited and mixed. It's best used for self-reflection, not as a fixed label." },
   { q: 'Can my type change?', a: 'Many people find their result shifts a little with mood and life stage. Retake it in a few months and compare.' },
   { q: 'Do I need to sign up?', a: 'No. Every score is shown free, and your answers never leave your device.' },

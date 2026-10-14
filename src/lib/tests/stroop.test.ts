@@ -138,7 +138,7 @@ describe('Stroop: 85% accuracy note at 84%, 85%, and 86%', () => {
     expect(scores.under85Note).toBe(true);
 
     const line = meaningLine(scores);
-    expect(line).toContain('You were fast but made several mistakes — try again a little slower for a fairer score.');
+    expect(line).toContain('You were fast but made several mistakes. Try again a little slower for a fairer score.');
   });
 
   it('excludes under-85% note at 85% accuracy', () => {
@@ -228,6 +228,6 @@ describe('Stroop: band edges', () => {
     expect(scalePercent(160)).toBe(50);
     expect(scalePercent(320)).toBe(98);
 
-    expect(shareText(120)).toBe('My Stroop effect: 120 ms — Typical. Can you beat it?');
+    expect(shareText(120)).toBe('My Stroop effect: 120 ms, Typical. Can you beat it?');
   });
 });

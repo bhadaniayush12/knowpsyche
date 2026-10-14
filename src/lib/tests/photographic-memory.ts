@@ -95,5 +95,5 @@ export function scalePercent(score: number): number {
 }
 
 export function shareText(score: number): string {
-  return `My photographic memory: level ${score} — ${getBand(score).badge}. Can you beat it?`;
+  return `My photographic memory: level ${score}, ${getBand(score).badge}. Can you beat it?`;
 }

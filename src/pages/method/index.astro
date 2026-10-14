@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Copy word for word from docs/design/Method.dc.html. Placeholders filled as Dev decided:
 // "every six months", last reviewed 17 October 2026.
-const title = 'Our method — KnowPsyche';
+const title = 'Our method | KnowPsyche';
 const description =
   "How KnowPsyche builds its tests: where the questions come from, how scoring works, what each result can and can't tell you, and what we never do.";
 
@@ -24,7 +24,7 @@ const cards = [
     label: '03 · What a result means',
     border: 'border-t-coral',
     color: 'text-coral-ink',
-    text: 'A result describes how you did on one task, on one day, on one device. We show ranges, not verdicts — and never claim to measure clinical conditions or certify IQ.',
+    text: 'A result describes how you did on one task, on one day, on one device. We show ranges, not verdicts, and never claim to measure clinical conditions or certify IQ.',
   },
 ];
 
@@ -33,7 +33,7 @@ const columns = ['Test', 'What it measures', 'Based on', 'Keep in mind'];
 const flex = ['lg:flex-[1_1_180px]', 'lg:flex-[2_1_240px]', 'lg:flex-[2_1_220px]', 'lg:flex-[2_1_240px]'];
 const rows = [
   ['Reaction time', 'Time from a visual change to your click', 'Simple reaction-time tasks', "Screens and mice add delay you can't see"],
-  ['Enneagram', 'Which of nine motivation patterns fits you best', 'Original statements based on the Enneagram model', 'The model has limited research support — use it for reflection'],
+  ['Enneagram', 'Which of nine motivation patterns fits you best', 'Original statements based on the Enneagram model', 'The model has limited research support, so use it for reflection'],
   ['Photographic memory', 'How much of a visual layout you can rebuild', 'Visual short-term memory tasks', '“Photographic memory” is a popular name; true eidetic memory is rare and debated'],
   ['Number memory', 'The longest number you can hold in mind', 'Digit-span tasks', 'Practice and chunking strategies raise scores'],
   ['Attention span', 'Responding to targets while holding back on the rest', 'Go / No-Go tasks', 'A few minutes of one session, not your attention in daily life'],
@@ -45,7 +45,7 @@ const rows = [
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section>
       <div class="mono mb-[18px] text-[11px] text-muted">Our method · Fig. 00.2 · Evidence before certainty</div>
-      <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">How our tests work —<br /><span class="serif text-red">and where they stop.</span></h1>
+      <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">How our tests work,<br /><span class="serif text-red">and where they stop.</span></h1>
       <p class="m-0 mt-6 max-w-[680px] text-[19px] leading-[1.6] text-ink-soft">Short version: honest tasks, transparent scoring, every limit written down. Here is the long version.</p>
     </section>
 

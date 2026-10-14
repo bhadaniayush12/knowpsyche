@@ -426,7 +426,7 @@ const choiceBtn =
     const t = typeInfo(n);
     const box = el('article', 'flex flex-col gap-4 border border-ink bg-card p-[clamp(18px,3vw,26px)]');
     const head = el('div', 'flex flex-wrap items-baseline justify-between gap-2');
-    head.append(el('h3', 'm-0 text-[22px] font-semibold tracking-[-.03em]', `Type ${n} — ${t.name}`), el('span', 'mono text-[11px] text-blue', wingLabel(n, wings)));
+    head.append(el('h3', 'm-0 text-[22px] font-semibold tracking-[-.03em]', `Type ${n}: ${t.name}`), el('span', 'mono text-[11px] text-blue', wingLabel(n, wings)));
     box.append(head);
     if (opts.template) box.append(el('p', 'm-0 text-[16px] leading-[1.6]', `${t.drive} At your best you're ${t.best}. Watch for ${lower(t.stress)}.`));
     if (opts.why) box.append(whyBlock(n));
@@ -451,7 +451,7 @@ const choiceBtn =
   const runnerUp = (n: TypeNumber, wings: TypeNumber[]) => {
     const d = el('details', 'border border-ink bg-paper');
     const s = el('summary', 'flex min-h-12 items-center justify-between gap-3 px-4 py-3 text-[17px] font-semibold');
-    s.append(el('span', '', `${ui.runnerUp(n)} — ${typeInfo(n).name}`), el('span', 'plus mono text-xs', '+'));
+    s.append(el('span', '', `${ui.runnerUp(n)}: ${typeInfo(n).name}`), el('span', 'plus mono text-xs', '+'));
     s.lastElementChild!.setAttribute('aria-hidden', 'true');
     const inner = el('div', 'border-t border-ink');
     const c = detailCard(n, wings, { template: true, why: true });
@@ -465,7 +465,7 @@ const choiceBtn =
   const shortCard = (n: TypeNumber) => {
     const t = typeInfo(n);
     const box = el('article', 'flex flex-col gap-1.5 border border-ink bg-card p-5');
-    box.append(el('h3', 'm-0 text-[19px] font-semibold tracking-[-.02em]', `Type ${n} — ${t.name}`));
+    box.append(el('h3', 'm-0 text-[19px] font-semibold tracking-[-.02em]', `Type ${n}: ${t.name}`));
     box.append(el('p', 'm-0 text-[15px] text-ink-soft', `Core desire: ${t.desire}. Core fear: ${lower(t.fear)}.`));
     return box;
   };
@@ -498,10 +498,10 @@ const choiceBtn =
     if (res.kind === 'clear') {
       const s = resultStrength(res);
       r('eyebrow').textContent = `Your result · Enneagram · ${wingLabel(first, w1)}`;
-      r('headline').textContent = `You're most likely a Type ${first} — ${t1.name}`;
+      r('headline').textContent = `You're most likely a Type ${first}: ${t1.name}`;
       r('badge').textContent = w1.length === 1 ? wingLabel(first, w1) : `Type ${first}`;
       r('badge-name').textContent = t1.name;
-      meaning.append("You're most likely a ", el('b', 'font-semibold', `Type ${first} — ${t1.name}`), ` ${wingWords(w1)}. ${t1.drive} At your best you're ${t1.best}. Watch for ${lower(t1.stress)}.`);
+      meaning.append("You're most likely a ", el('b', 'font-semibold', `Type ${first}: ${t1.name}`), ` ${wingWords(w1)}. ${t1.drive} At your best you're ${t1.best}. Watch for ${lower(t1.stress)}.`);
       strength.textContent = s.label === 'clear' ? ui.clearLead(s.gap, s.next) : s.label === 'close' ? ui.closeCall(s.gap, s.next) : ui.settled(s.next);
       strength.hidden = false;
       const blocks: HTMLElement[] = [detailCard(first, w1, { template: false, why: true })];
@@ -515,8 +515,8 @@ const choiceBtn =
       r('badge').textContent = `${first} or ${second}`;
       r('badge-name').textContent = `${short(first)} or ${short(second)}`;
       meaning.append(`You may be ${an(first)} ${first} or ${an(second)} ${second}. `);
-      meaning.append(el('b', 'font-semibold', `Type ${first} — ${t1.name}`), ` ${wingWords(w1)}, or `);
-      meaning.append(el('b', 'font-semibold', `Type ${second} — ${t2.name}`), ` ${wingWords(w2)}. Both are described below.`);
+      meaning.append(el('b', 'font-semibold', `Type ${first}: ${t1.name}`), ` ${wingWords(w1)}, or `);
+      meaning.append(el('b', 'font-semibold', `Type ${second}: ${t2.name}`), ` ${wingWords(w2)}. Both are described below.`);
       details.replaceChildren(detailCard(first, w1, { template: true, why: true }), detailCard(second, w2, { template: true, why: true }));
     } else {
       r('eyebrow').textContent = 'Your result · Enneagram';
@@ -540,7 +540,7 @@ const choiceBtn =
     if (res.kind === 'clear') {
       const big = w1.length === 1 ? wingLabel(first, w1) : `Type ${first}`;
       const a = big.startsWith('8') ? 'an' : 'a';
-      void share.update({ ...shareBase, label: `I'm ${a}`, big, badge: t1.name, tagline: t1.desire, text: `I'm ${a} ${big} — ${t1.name}` });
+      void share.update({ ...shareBase, label: `I'm ${a}`, big, badge: t1.name, tagline: t1.desire, text: `I'm ${a} ${big}, ${t1.name}` });
     } else if (res.kind === 'tie') {
       void share.update({ ...shareBase, label: `I may be ${an(first)}`, big: `${first} or ${second}`, badge: 'Two close types', tagline: "What's your type?", text: `I may be ${an(first)} ${first} or ${an(second)} ${second} on the Enneagram. What's your type?` });
     } else {

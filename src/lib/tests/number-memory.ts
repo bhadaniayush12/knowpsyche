@@ -92,5 +92,5 @@ export function scalePercent(digits: number): number {
 }
 
 export function shareText(digits: number): string {
-  return `My digit span: ${digits} digits — ${getBand(digits).badge}. Can you beat it?`;
+  return `My digit span: ${digits} digits, ${getBand(digits).badge}. Can you beat it?`;
 }

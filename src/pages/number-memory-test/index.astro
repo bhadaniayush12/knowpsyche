@@ -126,7 +126,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
         </div>
         <div class="flex min-w-0 flex-[1_1_280px] flex-col justify-between gap-3.5 border border-ink bg-card p-[22px]">
           <div class="mono text-[11px]">Your longest number</div>
-          <div class="mono text-[clamp(22px,2.4vw,28px)] leading-[1.15] font-medium tracking-[.04em] break-all text-teal-ink" data-r="longest">—</div>
+          <div class="mono text-[clamp(22px,2.4vw,28px)] leading-[1.15] font-medium tracking-[.04em] break-all text-teal-ink" data-r="longest">None</div>
           <CopyScores label={ui.copyScore} class="mt-1 border-t border-line-inner pt-3" />
         </div>
       </div>
@@ -317,9 +317,9 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     const n = game.best;
     const band = getBand(n);
     r('eyebrow').textContent = 'Your result · Number memory';
-    r('headline').textContent = `${n} digits — ${band.badge}`;
+    r('headline').textContent = `${n} digits · ${band.badge}`;
     r('span').textContent = String(n);
-    r('longest').textContent = longest || '—';
+    r('longest').textContent = longest || 'None';
     const pos = `${scalePercent(n).toFixed(1)}%`;
     r('marker').style.left = pos;
     const ml = r('marker-label');
@@ -400,7 +400,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   // Your own record to compare with later, since we save nothing.
   bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
     if (view !== 'done') return '';
-    return `My digit span: ${game.best} digits — ${getBand(game.best).badge} (${today()}, knowpsyche.com/number-memory-test/)`;
+    return `My digit span: ${game.best} digits, ${getBand(game.best).badge} (${today()}, knowpsyche.com/number-memory-test/)`;
   });
 
   guardLeave(() => view !== 'idle' && view !== 'done', ui.leaveWarning);

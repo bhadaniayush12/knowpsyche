@@ -155,7 +155,7 @@ describe('Attention span: steadiness comparison', () => {
     expect(scores.steadiness.dipped).toBe(true);
 
     const line = meaningLine(scores);
-    expect(line).toContain("Your focus dipped in the second half — that's normal; attention tires with time.");
+    expect(line).toContain("Your focus dipped in the second half. That's normal; attention tires with time.");
   });
 
   it('does not flag dip when second half is worse by only 4 points', () => {
@@ -216,7 +216,7 @@ describe('Attention span: band edges', () => {
   });
 
   it('formats shareText correctly', () => {
-    expect(shareText(95)).toBe('My attention score: 95/100 — Laser. Can you beat it?');
+    expect(shareText(95)).toBe('My attention score: 95/100, Laser. Can you beat it?');
   });
 
   it('says "tapped" instead of "clicked" on touch screens', () => {

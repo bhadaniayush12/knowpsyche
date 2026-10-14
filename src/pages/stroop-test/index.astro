@@ -477,7 +477,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     headline.focus({ preventScroll: true });
 
     // Scores
-    $('[data-r=effect]', resultEl).textContent = measured ? String(scores.stroopEffectMs) : '—';
+    $('[data-r=effect]', resultEl).textContent = measured ? String(scores.stroopEffectMs) : 'None';
     $('[data-r=badge]', resultEl).textContent = measured ? band.badge : '';
     $('[data-r=effect-unit]', resultEl).hidden = !measured;
 
@@ -492,8 +492,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     markerLabel.hidden = !measured;
 
     // Comparative bars
-    $('[data-r=matching-avg]', resultEl).textContent = scores.matchingCorrectCount > 0 ? `${scores.matchingAvgMs} ms` : '—';
-    $('[data-r=clashing-avg]', resultEl).textContent = scores.clashingCorrectCount > 0 ? `${scores.clashingAvgMs} ms` : '—';
+    $('[data-r=matching-avg]', resultEl).textContent = scores.matchingCorrectCount > 0 ? `${scores.matchingAvgMs} ms` : 'None';
+    $('[data-r=clashing-avg]', resultEl).textContent = scores.clashingCorrectCount > 0 ? `${scores.clashingAvgMs} ms` : 'None';
     $('[data-r=accuracy]', resultEl).textContent = `${scores.accuracy}%`;
 
     const maxMs = Math.max(scores.matchingAvgMs, scores.clashingAvgMs, 1000);
@@ -518,7 +518,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Share card
     void share.update({
       label: resultUi.shareLabel,
-      big: measured ? String(scores.stroopEffectMs) : '—',
+      big: measured ? String(scores.stroopEffectMs) : 'None',
       unit: measured ? 'ms' : '',
       badge: measured ? band.badge : '',
       tagline: resultUi.shareTagline,

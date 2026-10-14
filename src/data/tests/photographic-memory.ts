@@ -11,16 +11,19 @@ export interface MemoryBand {
 
 /** Levels 1–4, 5–8, 9–12, 13+. A score of 0 reads as the first band. */
 export const photoBands: MemoryBand[] = [
-  { min: 0, badge: 'Warming up', text: 'Short-term visual memory has limits for everyone. Try again — it often improves on the second go.' },
+  // Drafted: em dash removed.
+  { min: 0, badge: 'Warming up', text: 'Short-term visual memory has limits for everyone. Try again. It often improves on the second go.' },
   { min: 5, badge: 'Solid', text: 'You hold a fair amount of detail from a quick look.' },
   { min: 9, badge: 'Sharp', text: 'You keep a lot of visual detail in mind at once.' },
   { min: 13, badge: 'Exceptional', text: 'Very few patterns get past you.' },
 ];
 
 export const page = {
-  title: 'Photographic Memory Test — How Much Can You Remember?',
+  // Drafted: em dash removed.
+  title: 'Photographic Memory Test: How Much Can You Remember?',
   description:
-    'Study a grid for a second, then rebuild it. Each level adds a tile. Free, instant, no sign-up — see how sharp your visual memory really is.',
+    // Drafted: em dash removed.
+    'Study a grid for a second, then rebuild it. Each level adds a tile. Free, instant, no sign-up. See how sharp your visual memory really is.',
   h1: 'Photographic memory test',
   intro: 'Some tiles will light up for a moment. Click the same tiles once they disappear. Each level adds one more.',
   // Touch screens: same line with "tap" (shared rule).
@@ -61,7 +64,8 @@ export const result = {
 
 export const faqs: Faq[] = [
   { q: 'Is photographic memory real?', a: 'A perfect, camera-like memory in adults has little solid evidence. Some children show vivid "eidetic" images, but this is rare and fades with age.' },
-  { q: 'What does this test actually measure?', a: 'Visual short-term memory — how many locations you can hold in mind for a few seconds.' },
+  // Drafted: em dash removed.
+  { q: 'What does this test actually measure?', a: 'Visual short-term memory: how many locations you can hold in mind for a few seconds.' },
   { q: 'How many things can we remember at once?', a: 'Classic research suggests visual short-term memory holds only a handful of items at a time, often around four.' },
   { q: 'Can I improve my visual memory?', a: 'Practice helps, and so does grouping tiles into shapes or patterns.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection." },

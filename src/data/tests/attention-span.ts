@@ -20,13 +20,16 @@ export const attentionBands: AttentionBand[] = [
 ];
 
 export const page = {
-  title: 'Attention Span Test — How Well Do You Stay Focused?',
+  // Drafted: em dash removed.
+  title: 'Attention Span Test: How Well Do You Stay Focused?',
   description:
     'Click for green, hold back for red. A 2-minute focus test based on a classic psychology task. Free, instant results for focus and self-control.',
   h1: 'Attention span test',
-  intro: "Circles will appear one at a time. Click (or tap) when you see green. Do nothing when you see red. Stay with it — it's longer than it feels.",
+  // Drafted: em dash removed.
+  intro: "Circles will appear one at a time. Click (or tap) when you see green. Do nothing when you see red. Stay with it: it's longer than it feels.",
   // Touch screens: same line with "tap" (shared rule).
-  introTouch: "Circles will appear one at a time. Tap when you see green. Do nothing when you see red. Stay with it — it's longer than it feels.",
+  // Drafted: em dash removed.
+  introTouch: "Circles will appear one at a time. Tap when you see green. Do nothing when you see red. Stay with it: it's longer than it feels.",
   crumb: 'Attention span',
   // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 05 · Attention · 2–3 min',
@@ -36,12 +39,14 @@ export const page = {
 export const ui = {
   // Practice feedback from doc.
   nice: 'Nice!',
-  oopsRed: 'Oops — that was red',
-  // Drafted: practice feedback for the other two outcomes.
-  niceIgnored: 'Nice — you held back!',
-  oopsGreen: 'Missed — click on green',
-  // Drafted: touch version of the line above.
-  oopsGreenTouch: 'Missed — tap on green',
+  // Drafted: em dash removed.
+  oopsRed: 'Oops, that was red',
+  // Drafted: practice feedback for the other two outcomes; em dash removed.
+  niceIgnored: 'Nice, you held back!',
+  // Drafted: em dash removed.
+  oopsGreen: 'Missed: click on green',
+  // Drafted: touch version of the line above; em dash removed.
+  oopsGreenTouch: 'Missed: tap on green',
   // Drafted: touch version of the stage line (the doc intro's first instruction, with "Tap").
   stageLineTouch: 'Tap when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.',
   // Drafted: everything from here to the end of `ui`.
@@ -84,16 +89,19 @@ export const result = {
   change: 'Sleep, phone notifications, noise and how interested you are in the task.',
   // Drafted: "Try this" reuses FAQ 4's answer word for word (the doc gives no tip).
   tip: "Remove notifications, work in focused blocks (for example 25 minutes), sleep well, and take short breaks before you're exhausted.",
-  dippedNote: "Your focus dipped in the second half — that's normal; attention tires with time.",
+  // Drafted: em dash removed.
+  dippedNote: "Your focus dipped in the second half. That's normal; attention tires with time.",
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
-  nextLine: 'Try the Stroop test — it puts your focus up against your reading habit.',
+  // Drafted: em dash removed.
+  nextLine: 'Try the Stroop test. It puts your focus up against your reading habit.',
   learn: { href: '/method/', label: 'How we build our tests →' },
 };
 
 export const faqs: Faq[] = [
   {
     q: 'What is attention span?',
-    a: "How long you can keep your focus on one task. It isn't one fixed number — it changes with the task, your mood and how tired you are.",
+    // Drafted: em dash removed.
+    a: "How long you can keep your focus on one task. It isn't one fixed number: it changes with the task, your mood and how tired you are.",
   },
   {
     q: 'Is the average attention span really 8 seconds, shorter than a goldfish?',

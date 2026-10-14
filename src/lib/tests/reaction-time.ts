@@ -63,9 +63,9 @@ export function meaningLine(s: Summary): string {
   return `${band}. Your fastest try was ${s.fastest} ms, and your tries were ${s.spread} ms apart.`;
 }
 
-/** Share text, e.g. "My reaction time: 247 ms — Quick. Can you beat it?" */
+/** Share text, e.g. "My reaction time: 247 ms, Quick. Can you beat it?" */
 export function shareText(average: number): string {
-  return `My reaction time: ${average} ms — ${getBand(average).badge}. Can you beat it?`;
+  return `My reaction time: ${average} ms, ${getBand(average).badge}. Can you beat it?`;
 }
 
 /** Random wait before the signal: 1.5–4 s. `rand` returns [0, 1). */

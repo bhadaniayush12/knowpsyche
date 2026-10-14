@@ -10,8 +10,8 @@ export interface ReactionBand {
 }
 
 export const reactionBands: ReactionBand[] = [
-  // Drafted.
-  { max: 199, badge: 'Lightning', text: 'Quicker than typical. Great focus — or a very fast screen.' },
+  // Drafted; em dash removed.
+  { max: 199, badge: 'Lightning', text: 'Quicker than typical. Great focus, or a very fast screen.' },
   { max: 250, badge: 'Quick', text: 'A little quicker than typical.' },
   { max: 300, badge: 'Steady', text: 'Right where most people land in browser tests.' },
   { max: 400, badge: 'Needs a coffee', text: 'Tiredness, distractions or a laggy device often explain this.' },
@@ -19,7 +19,8 @@ export const reactionBands: ReactionBand[] = [
 ];
 
 export const page = {
-  title: 'Reaction Time Test — Free, 5 Tries, Instant Result',
+  // Drafted: em dash removed.
+  title: 'Reaction Time Test: Free, 5 Tries, Instant Result',
   description:
     "How fast do you react? Click when the screen changes. Get your average in milliseconds, see what's typical, and learn what affects your speed.",
   h1: 'Reaction time test',
@@ -86,21 +87,25 @@ export const result = {
   nextLine: 'Speed is one side of you. See what drives your choices in the Enneagram test.',
   learn: { href: '/method/', label: 'How we build our tests →' },
   spreadChallenge: 'Fast, but a bit inconsistent. Can you get all five within 50 ms?',
-  morningNight: 'Tiredness slows reactions. Test yourself in the morning and again late at night — see the difference.',
+  // Drafted: em dash removed.
+  morningNight: 'Tiredness slows reactions. Test yourself in the morning and again late at night, and see the difference.',
 };
 
 export const faqs: Faq[] = [
-  { q: 'What is reaction time?', a: 'The time between noticing a signal and responding to it — here, between the box changing and your click.' },
+  // Drafted: em dash removed.
+  { q: 'What is reaction time?', a: 'The time between noticing a signal and responding to it: here, between the box changing and your click.' },
   { q: 'What is the average reaction time?', a: 'In browser tests, most people average between 200 and 300 ms. Your device adds part of that.' },
   { q: 'What is a good reaction time?', a: 'Under 250 ms is quick; under 200 ms is very fast.' },
   { q: 'Why is my reaction time so slow?', a: 'The usual reasons are tiredness, distraction, a phone touchscreen, or a slow monitor or mouse.' },
   { q: 'How can I improve my reaction time?', a: 'Sleep well, warm up with a few tries, stay focused, and practise. For gaming, a fast mouse and a high-refresh monitor help most.' },
-  { q: 'Does being tired slow your reaction time?', a: 'Yes — lack of sleep is one of the most reliable ways to slow down.' },
+  // Drafted: em dash removed.
+  { q: 'Does being tired slow your reaction time?', a: 'Yes. Lack of sleep is one of the most reliable ways to slow down.' },
   { q: 'Does caffeine help?', a: "Some studies find a small improvement in alertness and reaction time, especially when you're tired." },
   { q: 'At what age is reaction time fastest?', a: 'For most people, in their late teens and twenties. It slows gradually after that.' },
   { q: "What's the difference between a reaction and a reflex?", a: "A reflex (like the knee-jerk) happens automatically without a decision. A reaction needs your brain to notice and decide, so it's slower." },
   { q: "What's the difference between simple and choice reaction time?", a: 'Simple = one signal, one response (this test). Choice = several possible signals and responses, which takes longer.' },
-  { q: "Why don't times under 100 ms count?", a: "Humans can't really react that fast to a signal — it's a lucky guess. Sprint races use the same idea: a start under 0.1 seconds counts as a false start." },
+  // Drafted: em dash removed.
+  { q: "Why don't times under 100 ms count?", a: "Humans can't really react that fast to a signal, so it's a lucky guess. Sprint races use the same idea: a start under 0.1 seconds counts as a false start." },
   { q: 'Why is sound faster than sight?', a: 'Many studies find people react slightly faster to sounds than to lights.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection, not a diagnosis." },
 ];

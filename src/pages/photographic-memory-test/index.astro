@@ -289,7 +289,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     const tilesN = game.tilesRemembered;
     const band = getBand(score);
     r('eyebrow').textContent = 'Your result · Photographic memory';
-    r('headline').textContent = `Level ${score} — ${band.badge}`;
+    r('headline').textContent = `Level ${score} · ${band.badge}`;
     r('level').textContent = String(score);
     r('tiles').textContent = String(tilesN);
     const pos = `${scalePercent(score).toFixed(1)}%`;
@@ -388,7 +388,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
   bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
     if (!game || phase !== 'done') return '';
     const s = game.completed;
-    return `My photographic memory: level ${s} — ${getBand(s).badge} (${today()}, knowpsyche.com/photographic-memory-test/)\nTiles remembered: ${game.tilesRemembered}`;
+    return `My photographic memory: level ${s}, ${getBand(s).badge} (${today()}, knowpsyche.com/photographic-memory-test/)\nTiles remembered: ${game.tilesRemembered}`;
   });
 
   guardLeave(() => phase !== 'idle' && phase !== 'done', ui.leaveWarning);

@@ -67,7 +67,7 @@ const ticks = [100, 200, 300, 400, 500];
     <div class="mt-3.5 flex flex-wrap items-center justify-between gap-4">
       <div class="flex flex-wrap gap-2" aria-label="Your tries" role="list">
         {Array.from({ length: TRIES }, () => (
-          <span role="listitem" class="rt-slot mono min-w-[84px] rounded-full border border-ink px-3.5 py-[9px] text-center text-xs text-muted">— —</span>
+          <span role="listitem" class="rt-slot mono min-w-[84px] rounded-full border border-ink px-3.5 py-[9px] text-center text-xs text-muted">· ·</span>
         ))}
       </div>
       <div class="flex gap-2">
@@ -263,7 +263,7 @@ const ticks = [100, 200, 300, 400, 500];
   const renderSlots = () => {
     slots.forEach((s, i) => {
       const v = tries[i];
-      s.textContent = v ? `${v} ms` : '— —';
+      s.textContent = v ? `${v} ms` : '· ·';
       s.toggleAttribute('data-filled', v !== undefined);
     });
   };
@@ -332,7 +332,7 @@ const ticks = [100, 200, 300, 400, 500];
     const band = getBand(s.average);
     const info = modeInfo(mode);
     r('eyebrow').textContent = `Your result · Reaction time · ${info.label} mode`;
-    r('headline').textContent = `${s.average} ms — ${band.badge}`;
+    r('headline').textContent = `${s.average} ms · ${band.badge}`;
     r('avg').textContent = String(s.average);
     const pos = `${fillPercent(s.average).toFixed(1)}%`;
     r('marker').style.left = pos;
@@ -428,7 +428,7 @@ const ticks = [100, 200, 300, 400, 500];
   bindCopy($('[data-copy-scores]', resultEl), $('[data-copy-status]', resultEl), () => {
     if (tries.length < TRIES) return '';
     const s = summarize(tries);
-    return `My reaction time: ${s.average} ms — ${getBand(s.average).badge} (${modeInfo(mode).label} mode, ${today()}, knowpsyche.com/reaction-time-test/)\nTries: ${tries.join(', ')} ms · fastest ${s.fastest} ms`;
+    return `My reaction time: ${s.average} ms, ${getBand(s.average).badge} (${modeInfo(mode).label} mode, ${today()}, knowpsyche.com/reaction-time-test/)\nTries: ${tries.join(', ')} ms · fastest ${s.fastest} ms`;
   });
 
   // ---------- Input ----------

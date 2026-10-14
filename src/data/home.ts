@@ -29,7 +29,8 @@ export const homeTests: HomeTest[] = [
   { name: 'Number memory', kind: 'Memory', cat: 'brain', time: '1–2 min', desc: 'How many digits you can hold in your head at once.', href: '/number-memory-test/', count: '2 lives', looksAt: 'Memory for numbers', glyph: 'nm', color: 'var(--color-teal-dark)', tint: 'var(--color-tint-teal)' },
   { name: 'Attention span', kind: 'Focus', cat: 'brain', time: '2–3 min', desc: 'How well you stay focused and ignore distractions.', href: '/attention-span-test/', count: '80 circles', looksAt: 'Focus and self-control', glyph: 'as', color: 'var(--color-blue)', tint: 'var(--color-tint-blue)' },
   { name: 'Stroop test', kind: 'Focus', cat: 'brain', time: '1 min', desc: 'How your mind copes when what you see and what you read disagree.', href: '/stroop-test/', count: '40 words', looksAt: 'Ignoring an automatic habit', glyph: 'st', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
-  { name: 'Emotional intelligence', kind: 'Emotions', cat: 'emotions', time: '5 min', desc: 'How well you notice and handle feelings — yours and other people’s.', href: '/emotional-intelligence-test/', count: '28 statements', looksAt: 'Noticing and handling feelings', glyph: 'eq', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
+  // Drafted: em dash removed.
+  { name: 'Emotional intelligence', kind: 'Emotions', cat: 'emotions', time: '5 min', desc: 'How well you notice and handle feelings, yours and other people’s.', href: '/emotional-intelligence-test/', count: '28 statements', looksAt: 'Noticing and handling feelings', glyph: 'eq', color: 'var(--color-red)', tint: 'var(--color-tint-red)' },
 ];
 
 /** The next test in doc order (Test 1 to 7), or null after the last one. */
@@ -54,9 +55,11 @@ export const marqueeQuestions: { t: string; bg: string }[] = [
 
 export const homeFaqs: { q: string; a: string }[] = [
   { q: 'Is it really free?', a: 'Yes. Every test and every result is free, with no sign-up. The site is supported by ads.' },
-  { q: 'How accurate are these tests?', a: "They're based on well-known psychology experiments and questionnaires. Great for learning about yourself — but one result is a snapshot, not a final answer." },
+  // Drafted: em dash removed.
+  { q: 'How accurate are these tests?', a: "They're based on well-known psychology experiments and questionnaires. Great for learning about yourself, but one result is a snapshot, not a final answer." },
   { q: 'Do you save my answers?', a: 'No. Your answers are scored on your own device and never sent to us.' },
-  { q: 'Is this a medical or mental-health test?', a: "No. KnowPsyche is for learning and self-reflection. It can't diagnose anything — for that, please talk to a professional." },
+  // Drafted: em dash removed.
+  { q: 'Is this a medical or mental-health test?', a: "No. KnowPsyche is for learning and self-reflection. It can't diagnose anything. For that, please talk to a professional." },
 ];
 
 export interface FooterMode {
@@ -73,7 +76,8 @@ export interface FooterMode {
 // Calm and Reflect CTAs link to articles that don't exist yet, so they're left out for now.
 export const footerModes: FooterMode[] = [
   { key: 'calm', label: 'Calm', title: 'Breathe with the circle.', note: 'In as it grows, out as it shrinks. Three rounds is enough.', col: '#8FD0C2', anim: 'breathe', speed: '60s' },
-  { key: 'focus', label: 'Focus', title: 'One thing at a time.', note: 'See how well you ignore distractions — it takes three minutes.', cta: { label: 'Attention span test', href: '/attention-span-test/' }, col: '#7d8cf0', anim: 'pulse-loop', speed: '26s' },
+  // Drafted: em dash removed.
+  { key: 'focus', label: 'Focus', title: 'One thing at a time.', note: 'See how well you ignore distractions. It takes three minutes.', cta: { label: 'Attention span test', href: '/attention-span-test/' }, col: '#7d8cf0', anim: 'pulse-loop', speed: '26s' },
   { key: 'reflect', label: 'Reflect', title: 'What did you notice today?', note: 'A thought that kept coming back is worth a closer look.', col: '#EDCA69', anim: 'breathe', speed: '90s' },
 ];
 

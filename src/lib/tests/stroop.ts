@@ -204,5 +204,5 @@ export function scalePercent(effectMs: number): number {
 }
 
 export function shareText(effectMs: number): string {
-  return `My Stroop effect: ${effectMs} ms — ${getBand(effectMs).badge}. Can you beat it?`;
+  return `My Stroop effect: ${effectMs} ms, ${getBand(effectMs).badge}. Can you beat it?`;
 }

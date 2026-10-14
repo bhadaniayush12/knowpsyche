@@ -424,7 +424,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     // Breakdown
     $('[data-r=focus]', resultEl).textContent = `${scores.focus}%`;
     $('[data-r=self-control]', resultEl).textContent = `${scores.selfControl}%`;
-    $('[data-r=speed]', resultEl).textContent = scores.speed > 0 ? `${scores.speed} ms` : '—';
+    $('[data-r=speed]', resultEl).textContent = scores.speed > 0 ? `${scores.speed} ms` : 'None';
 
     const steadinessEl = $('[data-r=steadiness]', resultEl);
     const steadinessDetailEl = $('[data-r=steadiness-detail]', resultEl);

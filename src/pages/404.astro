@@ -6,7 +6,7 @@ import TestGlyph from '../components/home/TestGlyph.astro';
 import { homeTests } from '../data/home';
 
 // Cloudflare Pages serves this for every unknown path, with a 404 status.
-const title = 'Page not found — KnowPsyche';
+const title = 'Page not found | KnowPsyche';
 const description =
   "This page doesn't exist. Head back to the KnowPsyche homepage or pick one of our free psychology tests.";
 
@@ -22,7 +22,7 @@ const pages = [
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(56px,9vw,120px)] pb-20">
     <section class="flex flex-col items-start gap-6">
       <div class="mono text-[11px] text-muted">Error 404</div>
-      <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">Nothing to find here — <span class="serif text-blue">but plenty to try.</span></h1>
+      <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">Nothing to find here, <span class="serif text-blue">but plenty to try.</span></h1>
       <!-- Filled in by the script below when the URL looks like a typo of a real page. Space is reserved so nothing jumps. -->
       <p id="suggest" class="m-0 min-h-[58px] text-lg sm:min-h-[29px] leading-[1.6] text-ink-soft"></p>
       <div class="flex flex-wrap gap-2.5">
