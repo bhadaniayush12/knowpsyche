@@ -29,7 +29,7 @@ import { homeTests, testFilters } from '../../data/home';
   </div>
   <div class="test-grid grid grid-cols-[repeat(auto-fill,minmax(min(270px,100%),1fr))] gap-4">
     {homeTests.map((t) => (
-      <Card test={t} class="reveal">
+      <Card test={t} class="reveal-once card-lift">
         <TestGlyph glyph={t.glyph} />
       </Card>
     ))}
@@ -38,6 +38,7 @@ import { homeTests, testFilters } from '../../data/home';
 
 <script>
   import { filterStatus } from '../../data/home';
+  import { onceInView } from '../../lib/once-in-view';
 
   // Filter chips. Without JS nothing is hidden, so every card shows. Cards leaving fade out, then the
   // grid changes in one step (within the click's 500 ms, so it doesn't count as layout shift): new cards
@@ -70,7 +71,13 @@ import { homeTests, testFilters } from '../../data/home';
       const before = group?.getBoundingClientRect().top ?? 0;
       const from = new Map(staying.map((c) => [c, c.getBoundingClientRect()]));
       for (const c of leaving) c.hidden = true;
-      for (const c of arriving) c.hidden = false;
+      // Cards the filter brings back are shown by the filter's own fade, not the first-view reveal
+      // (a CSS animation restarts when an element is shown again, so the reveal class comes off).
+      for (const c of arriving) {
+        c.classList.remove('is-in');
+        c.classList.add('is-shown');
+        c.hidden = false;
+      }
       const moved = (group?.getBoundingClientRect().top ?? 0) - before;
       if (moved) window.scrollBy({ top: moved, behavior: 'instant' });
       if (!animate) return;
@@ -113,4 +120,12 @@ import { homeTests, testFilters } from '../../data/home';
       if (status) status.textContent = filterStatus(n, btn.dataset.label ?? null);
     });
   }
+
+  // First time the cards come on screen: they rise in with a short stagger, then never again.
+  onceInView(cards, (entered) => {
+    entered.filter((c) => !c.classList.contains('is-shown')).forEach((c, i) => {
+      (c as HTMLElement).style.setProperty('--i', String(i));
+      c.classList.add('is-in');
+    });
+  });
 </script>
