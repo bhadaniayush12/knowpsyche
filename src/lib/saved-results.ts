@@ -360,8 +360,9 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
     // A failed write (quota, strict privacy modes) keeps the box and the Save button, and says why.
     if (!saveResult({ ...current, date: getIsoDay() })) return status(saveCopy.saveFailed);
     render();
-    // The Save button is gone now; keep focus in the box, on the next step.
-    reportLink?.focus();
+    // The Save button is gone now; keep focus in the box, on the next step, with its focus ring showing
+    // (focusVisible where supported; SaveResult.astro also styles :focus on this link for WebKit).
+    reportLink?.focus({ focusVisible: true } as FocusOptions);
   });
 
   clearBtn?.addEventListener('click', () => {

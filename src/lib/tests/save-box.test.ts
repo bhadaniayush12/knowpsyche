@@ -12,9 +12,10 @@ class FakeEl {
   setAttribute(k: string, v: string) { this.attrs[k] = v; }
   addEventListener(_type: string, fn: () => void) { this.handlers.push(fn); }
   click() { this.handlers.forEach((fn) => fn()); }
-  focus() { focused = this; }
+  focus(opts?: FocusOptions) { focused = this; focusOpts = opts; }
 }
 let focused: FakeEl | null = null;
+let focusOpts: FocusOptions | undefined;
 
 const makeBox = () => {
   const parts = {
@@ -240,5 +241,13 @@ describe('save box on a result page', () => {
     localStorage.setItem('knowpsyche_saved_results', before);
     initSaveOptIn(makeBox().container as unknown as HTMLElement).show(current);
     expect(localStorage.getItem('knowpsyche_saved_results')).toBe(before);
+  });
+
+  it('after Save, "Open your report" gets focus with the ring forced visible (Q1-14)', () => {
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    box['[data-save-btn]'].click();
+    expect(focused).toBe(box['[data-report-link]']);
+    expect(focusOpts).toEqual({ focusVisible: true });
   });
 });

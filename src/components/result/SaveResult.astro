@@ -62,3 +62,9 @@ const { testId, class: className } = Astro.props;
     ></span>
   </div>
 </section>
+
+<style>
+  /* Focus moves here by script after Save. WebKit doesn't show :focus-visible for that, so this link (only)
+     also gets the house focus ring on plain :focus. */
+  [data-report-link]:focus { outline: 2px solid var(--color-blue); outline-offset: 3px; }
+</style>
