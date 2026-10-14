@@ -1,5 +1,8 @@
 ---
 import { PRIVATE_LINE } from '../../data/home';
+
+// Drafted: the one line under "Your time". No comparison with other people, no verdict.
+const kindLine = 'One try on this device. Sleep, focus and your screen all change it.';
 ---
 <div class="mini-rt relative ml-auto w-full min-w-0 max-w-[480px] flex-[1_1_380px]">
   <div aria-hidden="true" class="absolute -top-[58px] left-[18px] hidden rotate-[-4deg] items-end gap-1.5 lg:flex">
@@ -19,29 +22,31 @@ import { PRIVATE_LINE } from '../../data/home';
 
     <button
       type="button"
-      class="rt-box flex h-[220px] w-full touch-manipulation items-center justify-center rounded-18 border-0 text-center transition-[background] duration-[120ms]"
+      class="rt-box relative flex h-[220px] w-full touch-manipulation items-center justify-center overflow-hidden rounded-18 border-0 text-center transition-[background] duration-[120ms]"
       style="background:var(--color-ink);color:var(--color-paper)"
     >
-      <span class="rt-label pop flex flex-col items-center gap-1.5 px-4" aria-live="polite">
-        <span class="rt-big inline-block text-[clamp(34px,4.6vw,52px)] leading-[1.05] font-semibold tracking-[-.04em]">Tap to start</span>
-        <span class="rt-small text-base opacity-[.92]">Then tap again the moment it turns green.</span>
+      <!-- Full width, so changing text never moves the label sideways (no layout shift). -->
+      <span class="rt-label pop relative flex w-full flex-col items-center gap-1.5 px-4" aria-live="polite">
+        <span class="rt-big block w-full text-[clamp(34px,4.6vw,52px)] leading-[1.05] font-semibold tracking-[-.04em]">Tap to start</span>
+        <span class="rt-small block w-full text-base opacity-[.92]">Then tap again the moment it turns green.</span>
       </span>
     </button>
 
-    <div class="rt-result fade flex flex-col gap-2.5 rounded-14 bg-paper p-3.5" hidden>
-      <div class="h-2 overflow-hidden rounded-full bg-line"><div class="rt-fill fill h-full rounded-full"></div></div>
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <span class="text-[15px]"><b class="rt-badge"></b> <span class="rt-text"></span></span>
-        <a href="/reaction-time-test/" class="inline-flex min-h-11 items-center whitespace-nowrap font-semibold">Full test →</a>
+    <!-- After a try: your time, one kind line, and where to go next. One try only; nothing is kept. -->
+    <div class="rt-result fade flex flex-col gap-2 rounded-14 bg-paper p-3.5" hidden>
+      <p class="m-0 text-[17px] font-semibold">Your time: <span class="rt-ms"></span> ms</p>
+      <p class="m-0 text-[15px] leading-[1.5] text-ink-soft">{kindLine}</p>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <button type="button" class="rt-again inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-[15px] font-semibold text-ink hover:border-blue hover:text-blue">Try again</button>
+        <a href="/reaction-time-test/" class="inline-flex min-h-11 items-center whitespace-nowrap font-semibold">Take the full test →</a>
       </div>
     </div>
-
   </div>
   <p class="mt-3 mb-0 text-center text-[13.5px] text-ink-soft">{PRIVATE_LINE}</p>
 </div>
 
 <script>
-  import { fillPercent, getBand, isGuess } from '../../lib/tests/reaction-time';
+  import { isGuess } from '../../lib/tests/reaction-time';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'done';
 
@@ -52,19 +57,20 @@ import { PRIVATE_LINE } from '../../data/home';
     const big = root.querySelector<HTMLElement>('.rt-big')!;
     const small = root.querySelector<HTMLElement>('.rt-small')!;
     const result = root.querySelector<HTMLElement>('.rt-result')!;
-    const fill = root.querySelector<HTMLElement>('.rt-fill')!;
-    const badge = root.querySelector<HTMLElement>('.rt-badge')!;
-    const text = root.querySelector<HTMLElement>('.rt-text')!;
+    const msEl = root.querySelector<HTMLElement>('.rt-ms')!;
+    const again = root.querySelector<HTMLButtonElement>('.rt-again')!;
+    const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // "Tap" on touch screens, "Click" with a mouse.
     const verb = window.matchMedia('(pointer: coarse)').matches ? 'Tap' : 'Click';
     const verbLower = verb.toLowerCase();
 
+    // Plain labels for every state. "Wait for green." is Drafted.
     const look: Record<Phase, { bg: string; fg: string; big: string; small: string }> = {
       idle: { bg: 'var(--color-ink)', fg: 'var(--color-paper)', big: `${verb} to start`, small: `Then ${verbLower} again the moment it turns green.` },
-      wait: { bg: 'var(--color-wait-red)', fg: '#FFFFFF', big: 'Wait…', small: 'Not yet.' },
-      go: { bg: 'var(--color-mint-go)', fg: 'var(--color-ink)', big: `${verb}!`, small: 'Now!' },
-      early: { bg: 'var(--color-yellow)', fg: 'var(--color-ink)', big: 'Too soon!', small: `${verb} to try again.` },
+      wait: { bg: 'var(--color-wait-red)', fg: '#FFFFFF', big: 'Wait...', small: 'Not yet.' },
+      go: { bg: 'var(--color-mint-go)', fg: 'var(--color-ink)', big: 'Go!', small: 'Now!' },
+      early: { bg: 'var(--color-yellow)', fg: 'var(--color-ink)', big: 'Too early, try again', small: 'Wait for green.' },
       done: { bg: 'var(--color-blue)', fg: '#FFFFFF', big: '', small: `${verb} to try again.` },
     };
 
@@ -73,30 +79,32 @@ import { PRIVATE_LINE } from '../../data/home';
     let shownAt = 0;
     let frame = 0;
 
-    const restart = (el: HTMLElement, cls: string) => {
-      el.classList.remove(cls);
-      void el.offsetWidth;
-      el.classList.add(cls);
-    };
-
     const render = (ms = 0) => {
       const p = look[phase];
       box.style.background = p.bg;
       box.style.color = p.fg;
       big.textContent = phase === 'done' ? `${ms} ms` : p.big;
       small.textContent = p.small;
-      restart(label, 'pop');
-      big.classList.toggle('pulse', phase === 'done');
-      result.hidden = phase !== 'done';
-      if (phase === 'done') {
-        const band = getBand(ms);
-        badge.textContent = band.badge;
-        text.textContent = band.text;
-        fill.style.width = `${fillPercent(ms).toFixed(1)}%`;
-        fill.style.background = ms <= 300 ? 'var(--color-teal)' : 'var(--color-coral)';
-        restart(fill, 'fill');
-        restart(result, 'fade');
+      if (!reduced()) {
+        label.classList.remove('pop');
+        void label.offsetWidth;
+        label.classList.add('pop');
       }
+      result.hidden = phase !== 'done';
+      if (phase === 'done') msEl.textContent = String(ms);
+    };
+
+    /** One ripple from where the box was pressed (the centre for keys). Nothing with reduced motion. */
+    const ripple = (x?: number, y?: number) => {
+      if (reduced()) return;
+      const r = box.getBoundingClientRect();
+      const dot = document.createElement('span');
+      dot.className = 'mrt-ripple';
+      dot.setAttribute('aria-hidden', 'true');
+      dot.style.left = `${(x ?? r.left + r.width / 2) - r.left}px`;
+      dot.style.top = `${(y ?? r.top + r.height / 2) - r.top}px`;
+      dot.addEventListener('animationend', () => dot.remove());
+      box.prepend(dot);
     };
 
     // The go moment is checked every frame against performance.now(), so it doesn't drift.
@@ -105,7 +113,7 @@ import { PRIVATE_LINE } from '../../data/home';
       if (now >= goAt) {
         phase = 'go';
         render();
-        shownAt = performance.now();
+        shownAt = now;
         return;
       }
       frame = requestAnimationFrame(tick);
@@ -119,14 +127,14 @@ import { PRIVATE_LINE } from '../../data/home';
       frame = requestAnimationFrame(tick);
     };
 
-    const press = () => {
-      const now = performance.now();
+    /** `t` = the input event's timestamp, so the time doesn't include our own work. */
+    const press = (t: number) => {
       if (phase === 'wait') {
         cancelAnimationFrame(frame);
         phase = 'early';
         render();
       } else if (phase === 'go') {
-        const ms = Math.round(now - shownAt);
+        const ms = Math.round((t >= shownAt ? t : performance.now()) - shownAt);
         phase = isGuess(ms) ? 'early' : 'done';
         render(ms);
       } else {
@@ -135,14 +143,22 @@ import { PRIVATE_LINE } from '../../data/home';
     };
 
     box.addEventListener('pointerdown', (e) => {
-      if (e.button !== 0) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
       e.preventDefault();
-      press();
+      ripple(e.clientX, e.clientY);
+      press(e.timeStamp);
     });
     box.addEventListener('keydown', (e) => {
       if (e.key !== ' ' && e.key !== 'Enter') return;
       e.preventDefault();
-      if (!e.repeat) press();
+      if (e.repeat) return;
+      ripple();
+      press(e.timeStamp);
+    });
+    // Try again: back to the box, waiting for green straight away.
+    again.addEventListener('click', () => {
+      box.focus({ preventScroll: true });
+      startWait();
     });
 
     render();
