@@ -1,0 +1,225 @@
+---
+/**
+ * Scene 8: What is emotional intelligence?
+ * Calm, happy character with a hand on chest and four small face icons in a row (four feelings).
+ * Motion: one face at a time lights up, blink.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+---
+<div class:list={['scene-ei relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'short', color: 'ink' }}
+    shirt="coral"
+    expression="happy"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Four small face icons in a row across the top (four feelings: happy, calm, sad, surprised) */}
+    <g class="scene-faces-row" stroke-linecap="round" stroke-linejoin="round">
+      {/* Connecting dashed baseline linking the four feeling badges */}
+      <line
+        x1="45"
+        y1="38"
+        x2="195"
+        y2="38"
+        stroke="var(--color-ink)"
+        stroke-width="1.8"
+        stroke-dasharray="3 4"
+        opacity="0.3"
+      />
+
+      {/* Face 1: Happy / Joy (x=45, y=38) */}
+      <g class="scene-face scene-face-1">
+        <circle cx="47" cy="40" r="13" fill="var(--color-ink)" stroke="none" />
+        <circle class="scene-face-bg scene-face-bg-1" cx="45" cy="38" r="13" stroke="var(--color-ink)" stroke-width="2.5" />
+        {/* Smiling crescent eyes */}
+        <path d="M39 36 Q42 33 45 36 M47 36 Q50 33 53 36" fill="none" stroke="var(--color-ink)" stroke-width="2" />
+        {/* Open smile */}
+        <path d="M40 41 Q46 47 52 41" fill="none" stroke="var(--color-ink)" stroke-width="2" />
+      </g>
+
+      {/* Face 2: Calm / Serene (x=95, y=38) */}
+      <g class="scene-face scene-face-2">
+        <circle cx="97" cy="40" r="13" fill="var(--color-ink)" stroke="none" />
+        <circle class="scene-face-bg scene-face-bg-2" cx="95" cy="38" r="13" stroke="var(--color-ink)" stroke-width="2.5" />
+        {/* Gentle closed straight eyes */}
+        <line x1="90" y1="36" x2="94" y2="36" stroke="var(--color-ink)" stroke-width="2" />
+        <line x1="98" y1="36" x2="102" y2="36" stroke="var(--color-ink)" stroke-width="2" />
+        {/* Soft calm smile */}
+        <path d="M91 41 Q96 44 101 41" fill="none" stroke="var(--color-ink)" stroke-width="2" />
+      </g>
+
+      {/* Face 3: Sad / Vulnerable (x=145, y=38) */}
+      <g class="scene-face scene-face-3">
+        <circle cx="147" cy="40" r="13" fill="var(--color-ink)" stroke="none" />
+        <circle class="scene-face-bg scene-face-bg-3" cx="145" cy="38" r="13" stroke="var(--color-ink)" stroke-width="2.5" />
+        {/* Soft sad brows and dot eyes */}
+        <path d="M139 34 L143 32.5 M151 34 L147 32.5" fill="none" stroke="var(--color-ink)" stroke-width="1.8" />
+        <circle cx="142" cy="37" r="1.5" fill="var(--color-ink)" stroke="none" />
+        <circle cx="148" cy="37" r="1.5" fill="var(--color-ink)" stroke="none" />
+        {/* Downturned mouth */}
+        <path d="M141 43 Q145 40 149 43" fill="none" stroke="var(--color-ink)" stroke-width="2" />
+      </g>
+
+      {/* Face 4: Surprised / Wonder (x=195, y=38) */}
+      <g class="scene-face scene-face-4">
+        <circle cx="197" cy="40" r="13" fill="var(--color-ink)" stroke="none" />
+        <circle class="scene-face-bg scene-face-bg-4" cx="195" cy="38" r="13" stroke="var(--color-ink)" stroke-width="2.5" />
+        {/* Wide curious eyes */}
+        <circle cx="191" cy="35" r="2" fill="var(--color-ink)" stroke="none" />
+        <circle cx="199" cy="35" r="2" fill="var(--color-ink)" stroke="none" />
+        {/* Small round 'o' mouth */}
+        <ellipse cx="195" cy="42" rx="2.5" ry="3.5" fill="var(--color-ink)" stroke="none" />
+      </g>
+    </g>
+
+    {/* Hand resting on chest (over heart) */}
+    <g class="scene-hand-chest" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      {/* Right forearm/sleeve reaching across body to center chest */}
+      <path
+        style="fill:var(--color-coral)"
+        d="M164 316 C168 284 158 262 136 250 L146 238 C172 250 182 278 184 316 Z"
+      />
+      {/* Hand resting on chest */}
+      <ellipse cx="124" cy="246" rx="9" ry="8" fill="#E3B48C" />
+      {/* Curled fingers resting against chest */}
+      <path
+        d="M117 241 Q113 245 111 250 M119 246 Q116 250 114 254 M123 249 Q120 253 118 257"
+        fill="none"
+        stroke-width="2.5"
+      />
+      {/* Thumb resting upward */}
+      <path
+        d="M128 240 Q126 236 122 237"
+        fill="none"
+        stroke-width="2.5"
+      />
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable body float so only two parts animate: face lights cycle and eyes blink. */
+  :global(.scene-ei .ch-float) {
+    animation: none !important;
+  }
+
+  /* Default face badge background */
+  .scene-face-bg {
+    fill: var(--color-card);
+  }
+
+  /* Animated part 1: each face icon lights up in sequence */
+  .scene-face-1 {
+    transform-origin: 45px 38px;
+    animation: face-light-1 4.8s ease-in-out infinite paused;
+  }
+  .scene-face-bg-1 {
+    animation: face-bg-1 4.8s ease-in-out infinite paused;
+  }
+
+  .scene-face-2 {
+    transform-origin: 95px 38px;
+    animation: face-light-2 4.8s ease-in-out infinite paused;
+  }
+  .scene-face-bg-2 {
+    animation: face-bg-2 4.8s ease-in-out infinite paused;
+  }
+
+  .scene-face-3 {
+    transform-origin: 145px 38px;
+    animation: face-light-3 4.8s ease-in-out infinite paused;
+  }
+  .scene-face-bg-3 {
+    animation: face-bg-3 4.8s ease-in-out infinite paused;
+  }
+
+  .scene-face-4 {
+    transform-origin: 195px 38px;
+    animation: face-light-4 4.8s ease-in-out infinite paused;
+  }
+  .scene-face-bg-4 {
+    animation: face-bg-4 4.8s ease-in-out infinite paused;
+  }
+
+  /* Run animation only when in view */
+  :global(.ch-panel[data-on]) :is(.scene-face-1, .scene-face-2, .scene-face-3, .scene-face-4),
+  :global(.ch-panel[data-on]) :is(.scene-face-bg-1, .scene-face-bg-2, .scene-face-bg-3, .scene-face-bg-4),
+  :global(.scene-ei .ch-panel[data-on] .ch-eyes) {
+    animation-play-state: running;
+  }
+
+  :global([data-motion='paused']) :is(.scene-face-1, .scene-face-2, .scene-face-3, .scene-face-4),
+  :global([data-motion='paused']) :is(.scene-face-bg-1, .scene-face-bg-2, .scene-face-bg-3, .scene-face-bg-4),
+  :global([data-motion='paused']) :global(.scene-ei .ch-eyes) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-face-1,
+    .scene-face-2,
+    .scene-face-3,
+    .scene-face-4,
+    .scene-face-bg-1,
+    .scene-face-bg-2,
+    .scene-face-bg-3,
+    .scene-face-bg-4,
+    :global(.scene-ei .ch-eyes) {
+      animation: none !important;
+    }
+  }
+
+  /* Face 1 (Happy) lights up in 0%..25% */
+  @keyframes face-light-1 {
+    0%, 25% { transform: scale(1.12); }
+    28%, 97%, 100% { transform: scale(1); }
+  }
+  @keyframes face-bg-1 {
+    0%, 25% { fill: var(--color-yellow); }
+    28%, 97%, 100% { fill: var(--color-card); }
+  }
+
+  /* Face 2 (Calm) lights up in 25%..50% */
+  @keyframes face-light-2 {
+    0%, 22% { transform: scale(1); }
+    25%, 50% { transform: scale(1.12); }
+    53%, 100% { transform: scale(1); }
+  }
+  @keyframes face-bg-2 {
+    0%, 22% { fill: var(--color-card); }
+    25%, 50% { fill: var(--color-mint-go); }
+    53%, 100% { fill: var(--color-card); }
+  }
+
+  /* Face 3 (Sad) lights up in 50%..75% */
+  @keyframes face-light-3 {
+    0%, 47% { transform: scale(1); }
+    50%, 75% { transform: scale(1.12); }
+    78%, 100% { transform: scale(1); }
+  }
+  @keyframes face-bg-3 {
+    0%, 47% { fill: var(--color-card); }
+    50%, 75% { fill: var(--color-tint-blue); }
+    78%, 100% { fill: var(--color-card); }
+  }
+
+  /* Face 4 (Surprised) lights up in 75%..100% */
+  @keyframes face-light-4 {
+    0%, 72% { transform: scale(1); }
+    75%, 100% { transform: scale(1.12); }
+  }
+  @keyframes face-bg-4 {
+    0%, 72% { fill: var(--color-card); }
+    75%, 100% { fill: var(--color-coral); }
+  }
+</style>

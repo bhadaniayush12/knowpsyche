@@ -5,3 +5,6 @@ export { default as WhatIsTheEnneagram } from './what-is-the-enneagram.astro';
 export { default as IsPhotographicMemoryReal } from './is-photographic-memory-real.astro';
 export { default as ShortTermMemoryCapacity } from './short-term-memory-capacity.astro';
 export { default as AttentionSpanMythsAndWhatHelps } from './attention-span-myths-and-what-helps.astro';
+export { default as TheStroopEffectExplained } from './the-stroop-effect-explained.astro';
+export { default as WhatIsEmotionalIntelligence } from './what-is-emotional-intelligence.astro';
+export { default as WhyDoWeOverthinkAtNight } from './why-do-we-overthink-at-night.astro';

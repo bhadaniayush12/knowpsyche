@@ -5,6 +5,7 @@ description: "Quiet rooms, tired minds and unfinished business. Here is what's g
 datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "Psychology in real life"
+scene: why-do-we-overthink-at-night
 relatedTest: emotional-intelligence-test
 related:
   - what-is-emotional-intelligence

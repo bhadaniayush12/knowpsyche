@@ -5,6 +5,7 @@ description: "Why is it hard to name the ink colour when the word spells a diffe
 datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "Focus"
+scene: the-stroop-effect-explained
 relatedTest: stroop-test
 related:
   - attention-span-myths-and-what-helps

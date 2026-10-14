@@ -1,0 +1,157 @@
+---
+/**
+ * Scene 7: The Stroop effect, explained
+ * Puzzled character squinting at a card where a word is printed in a different ink colour.
+ * Use token colours only.
+ * Motion: the card tilts slightly, blink.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+---
+<div class:list={['scene-stroop relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'curly', color: 'ink' }}
+    shirt="teal"
+    expression="puzzled"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Left arm reaching up to hold the card */}
+    <g class="scene-arm-left" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path
+        style="fill:var(--color-teal)"
+        d="M76 316 C76 280 88 258 122 232 L132 244 C104 266 96 288 94 316 Z"
+      />
+      {/* Hand knuckle under card */}
+      <circle cx="126" cy="234" r="8" fill="#E3B48C" />
+    </g>
+
+    {/* Right arm reaching up to hold the other side of the card */}
+    <g class="scene-arm-right" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path
+        style="fill:var(--color-teal)"
+        d="M164 316 C168 280 180 258 206 238 L216 248 C194 268 184 290 182 316 Z"
+      />
+      {/* Hand knuckle under card */}
+      <circle cx="204" cy="234" r="8" fill="#E3B48C" />
+    </g>
+
+    {/* The stimulus card that tilts */}
+    <g class="scene-stroop-card" stroke-linecap="round" stroke-linejoin="round">
+      {/* Card ink shadow */}
+      <rect x="131" y="187" width="76" height="52" rx="6" fill="var(--color-ink)" stroke="none" />
+      {/* Card body */}
+      <rect
+        x="128"
+        y="184"
+        width="76"
+        height="52"
+        rx="6"
+        fill="var(--color-card)"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+      {/* Inner subtle border */}
+      <rect
+        x="132"
+        y="188"
+        width="68"
+        height="44"
+        rx="4"
+        fill="none"
+        stroke="var(--color-line-card)"
+        stroke-width="1.5"
+        stroke-dasharray="3 3"
+      />
+      {/* Word BLUE printed in RED ink (tokens only) */}
+      <text
+        x="166"
+        y="212"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        font-family="var(--font-sans)"
+        font-weight="800"
+        font-size="16"
+        letter-spacing="1.5"
+        fill="var(--color-red)"
+        stroke="none"
+      >
+        BLUE
+      </text>
+      {/* Small baseline indicator */}
+      <line x1="146" y1="223" x2="186" y2="223" stroke="var(--color-ink)" stroke-width="2" opacity="0.3" />
+
+      {/* Thumbs holding the card on top */}
+      <ellipse
+        cx="130"
+        cy="216"
+        rx="4.5"
+        ry="8"
+        fill="#E3B48C"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+      <ellipse
+        cx="202"
+        cy="216"
+        rx="4.5"
+        ry="8"
+        fill="#E3B48C"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable body float so only two parts animate: card tilt and eyes blink. */
+  :global(.scene-stroop .ch-float) {
+    animation: none !important;
+  }
+
+  /* Animated part 1: card tilts slightly */
+  .scene-stroop-card {
+    transform-origin: 166px 210px;
+    animation: card-tilt 4s ease-in-out infinite paused;
+  }
+
+  /* Animated part 2: eyes blink (built into Character) */
+  :global(.ch-panel[data-on]) .scene-stroop-card,
+  :global(.scene-stroop .ch-panel[data-on] .ch-eyes) {
+    animation-play-state: running;
+  }
+
+  :global([data-motion='paused']) .scene-stroop-card,
+  :global([data-motion='paused']) :global(.scene-stroop .ch-eyes) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-stroop-card,
+    :global(.scene-stroop .ch-eyes) {
+      animation: none !important;
+    }
+  }
+
+  @keyframes card-tilt {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    30% {
+      transform: rotate(-6deg);
+    }
+    70% {
+      transform: rotate(4deg);
+    }
+  }
+</style>

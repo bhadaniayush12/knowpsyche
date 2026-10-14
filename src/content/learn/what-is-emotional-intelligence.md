@@ -5,6 +5,7 @@ description: "Emotional intelligence is about noticing, understanding and handli
 datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "Emotions"
+scene: what-is-emotional-intelligence
 relatedTest: emotional-intelligence-test
 related:
   - what-is-the-enneagram
