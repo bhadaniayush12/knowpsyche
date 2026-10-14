@@ -10,6 +10,9 @@ const icons = {
   gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
   listChecks: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
   ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  // Lucide "pencil" and "refresh-cw", for the sections added after Test by test.
+  pencil: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
   bookOpen: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
 };
 const title = 'Our method | KnowPsyche';
@@ -51,6 +54,52 @@ const rows = [
   ['Attention span', 'Responding to targets while holding back on the rest', 'Go / No-Go tasks', 'A few minutes of one session, not your attention in daily life'],
   ['Stroop effect', 'The slowdown when a word and its ink colour clash', "J. R. Stroop's 1935 experiments", 'Reading speed and colour vision both affect it'],
   ['Emotional intelligence', 'How you see your own emotional awareness and responses', 'Original items informed by emotional-intelligence models', 'Self-report shows how you see yourself, not how others see you'],
+];
+
+// Drafted (M1): one line per test, checked against src/lib/tests/*.ts.
+const maths = [
+  ['Reaction time', 'The average of five timed tries, in milliseconds. A press under 100 ms counts as a guess, and that try is repeated.'],
+  ['Enneagram', 'You rate 45 statements from 1 to 5, five for each of the nine types, so each type scores 5 to 25. If two or three types end up within a point of the top score, a short tie-break round asks which motives fit you better.'],
+  ['Photographic memory', 'Level 1 lights 3 tiles for 1.2 seconds, and each level adds one. A wrong tile costs one of your three lives. Your score is the highest level you fully completed.'],
+  ['Number memory', 'The number starts at 3 digits and grows by one each time you type it back correctly. A wrong answer costs one of your two lives. Your score is the longest number you got right.'],
+  ['Attention span', 'Of 80 circles, 60 are green and 20 are red. Your score out of 100 is the average of two percentages: greens you caught in time and reds you held back on. Your speed is shown but does not change the score.'],
+  ['Stroop test', 'Of 40 words, half match their ink colour and half clash. Your Stroop effect is your average time on clashing words minus your average time on matching words, counting correct answers only.'],
+  ['Emotional intelligence', 'You rate 28 statements from 1 to 5, seven in each of four areas, and some are scored in reverse. Each area becomes a score from 0 to 100, and your overall score is the average of the four.'],
+];
+
+// Drafted (M1): the three short sections after "The maths". Body text b and c given by Dev; c and d reworded
+// to match the site (test pages show no "last reviewed" date; articles show "Updated").
+const notes = [
+  {
+    label: 'Why bands, not rankings',
+    icon: icons.gauge,
+    border: 'border-t-coral',
+    color: 'text-coral-ink',
+    lead: 'Your own number, ',
+    accent: 'not a league table.',
+    accentColor: 'text-coral-ink',
+    text: 'A band is a label for your own number: what that range usually looks like, and what could change it. We never rank you against other people, because a ranking needs a fair, representative sample we don’t have, and results from different devices can’t be compared fairly.',
+  },
+  {
+    label: 'When we get something wrong',
+    icon: icons.pencil,
+    border: 'border-t-teal',
+    color: 'text-teal-ink',
+    lead: 'Tell us, ',
+    accent: 'and we fix it.',
+    accentColor: 'text-teal-ink',
+    text: 'If you find a mistake, tell us on the {contact page}. We check it, fix it, and update the date on that page. We would rather correct something in public than leave it.',
+  },
+  {
+    label: 'How often we review',
+    icon: icons.refresh,
+    border: 'border-t-gold',
+    color: 'text-gold-ink',
+    lead: 'Every six months, ',
+    accent: 'or sooner.',
+    accentColor: 'text-gold-ink',
+    text: 'Each test page lists its sources, and every article shows the date we last updated it. We re-read every test and article about every six months, and sooner if new research changes something.',
+  },
 ];
 ---
 <BaseLayout title={title} description={description} path="/method/" crumbs={[{ name: 'Our method' }]}>
@@ -101,6 +150,39 @@ const rows = [
         </div>
       </div>
     </section>
+
+    <!-- Drafted (M1): how each score is worked out. -->
+    <section aria-labelledby="maths-title">
+      <div class="mb-3 flex items-center gap-3">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.calculator} />
+        <span class="mono text-[11px] text-muted">How each score is worked out</span>
+      </div>
+      <h2 id="maths-title" class="m-0 mb-[26px] text-[clamp(36px,4.4vw,60px)] leading-[.95] font-semibold tracking-[-.05em]">The maths, <span class="serif text-blue">in plain words.</span></h2>
+      <dl class="m-0 border-t border-ink">
+        {maths.map(([name, line], i) => (
+          <div class:list={['flex flex-col gap-1.5 border-b py-[18px] text-[15.5px] leading-[1.55] lg:flex-row lg:gap-4', i === maths.length - 1 ? 'border-ink' : 'border-line-inner']}>
+            <dt class="font-bold lg:flex-[1_1_180px]">{name}</dt>
+            <dd class="m-0 lg:flex-[6_1_720px]">{line}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <!-- Drafted (M1): bands, corrections, reviews. -->
+    {notes.map((n, i) => (
+      <section aria-labelledby={`note-${i}`}>
+        <div class="mb-3 flex items-center gap-3">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={n.icon} />
+          <span class="mono text-[11px] text-muted">{n.label}</span>
+        </div>
+        <h2 id={`note-${i}`} class="m-0 mb-[22px] text-[clamp(36px,4.4vw,60px)] leading-[.95] font-semibold tracking-[-.05em]">{n.lead}<span class:list={['serif', n.accentColor]}>{n.accent}</span></h2>
+        <div class:list={['max-w-[820px] border border-t-[5px] border-ink bg-card p-[26px]', n.border]}>
+          <p class="m-0 text-[17px] leading-[1.65]">
+            {n.text.split(/\{|\}/).map((part, j) => (j % 2 ? <a href="/contact/" class="font-semibold underline underline-offset-[3px]">{part}</a> : part))}
+          </p>
+        </div>
+      </section>
+    ))}
 
     <section class="flex flex-wrap gap-6">
       <div class="min-w-0 flex-[1_1_360px] border border-ink bg-lilac p-[clamp(22px,3vw,36px)] shadow-[8px_8px_0_var(--color-ink)]">
