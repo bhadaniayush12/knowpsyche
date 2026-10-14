@@ -3,6 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Copy word for word from docs/design/Method.dc.html. Placeholders filled as Dev decided:
 // "every six months", last reviewed 17 October 2026.
+// Icons: Lucide (https://lucide.dev), ISC licence, paths copied inline.
+const icons = {
+  flask: '<path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/>',
+  calculator: '<rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>',
+  gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+  listChecks: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+  ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  bookOpen: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+};
 const title = 'Our method | KnowPsyche';
 const description =
   "How KnowPsyche builds its tests: where the questions come from, how scoring works, what each result can and can't tell you, and what we never do.";
@@ -10,18 +19,21 @@ const description =
 const cards = [
   {
     label: '01 · Where questions come from',
+    icon: icons.flask,
     border: 'border-t-blue',
     color: 'text-blue',
     text: 'Cognitive tasks are rebuilt from classic experiments described in research. Personality items are written by us or adapted from public-domain pools such as the International Personality Item Pool (IPIP). We never copy commercial tests or use their trademarked names.',
   },
   {
     label: '02 · How scoring works',
+    icon: icons.calculator,
     border: 'border-t-gold',
     color: 'text-gold-ink',
     text: 'Scoring runs in your browser, and each test page shows its formula. Reaction time, for example, is the average of five timed tries. Nothing you answer is sent to us.',
   },
   {
     label: '03 · What a result means',
+    icon: icons.gauge,
     border: 'border-t-coral',
     color: 'text-coral-ink',
     text: 'A result describes how you did on one task, on one day, on one device. We show ranges, not verdicts, and never claim to measure clinical conditions or certify IQ.',
@@ -44,7 +56,7 @@ const rows = [
 <BaseLayout title={title} description={description} path="/method/" crumbs={[{ name: 'Our method' }]}>
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section>
-      <div class="mono mb-[18px] text-[11px] text-muted">Our method · Fig. 00.2 · Evidence before certainty</div>
+      <div class="mono mb-[18px] text-[11px] text-muted">Our method · Evidence before certainty</div>
       <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">How our tests work,<br /><span class="serif text-red">and where they stop.</span></h1>
       <p class="m-0 mt-6 max-w-[680px] text-[19px] leading-[1.6] text-ink-soft">Short version: honest tasks, transparent scoring, every limit written down. Here is the long version.</p>
     </section>
@@ -52,14 +64,20 @@ const rows = [
     <section class="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] gap-5">
       {cards.map((c) => (
         <div class:list={['flex flex-col gap-3 border border-t-[5px] border-ink bg-card p-[26px]', c.border]}>
-          <div class:list={['mono text-[11px]', c.color]}>{c.label}</div>
+          <div class="flex items-center justify-between gap-3">
+            <div class:list={['mono text-[11px]', c.color]}>{c.label}</div>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={c.icon} />
+          </div>
           <p class="m-0 text-base leading-[1.65]">{c.text}</p>
         </div>
       ))}
     </section>
 
     <section>
-      <div class="mono mb-3 text-[11px] text-muted">Test by test</div>
+      <div class="mb-3 flex items-center gap-3">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.listChecks} />
+        <span class="mono text-[11px] text-muted">Test by test</span>
+      </div>
       <h2 class="m-0 mb-[26px] text-[clamp(36px,4.4vw,60px)] leading-[.95] font-semibold tracking-[-.05em]">What each test does, <span class="serif text-violet">and doesn't.</span></h2>
       <!-- Flex rows (as designed) with ARIA table roles: Safari drops native table semantics on display:flex.
            Below lg the rows stack, so the heading row is visually hidden and each cell shows its own label. -->
@@ -86,7 +104,10 @@ const rows = [
 
     <section class="flex flex-wrap gap-6">
       <div class="min-w-0 flex-[1_1_360px] border border-ink bg-lilac p-[clamp(22px,3vw,36px)] shadow-[8px_8px_0_var(--color-ink)]">
-        <div class="mono mb-3 text-[11px] text-muted">What we never do</div>
+        <div class="mb-3 flex items-center gap-3">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.ban} />
+          <span class="mono text-[11px] text-muted">What we never do</span>
+        </div>
         <ul class="m-0 pl-5 text-[17px] leading-[1.85]">
           <li>Test for depression, anxiety, ADHD or any clinical condition</li>
           <li>Sell “certified” IQ scores</li>
@@ -95,7 +116,10 @@ const rows = [
         </ul>
       </div>
       <div class="flex min-w-0 flex-[1_1_360px] flex-col gap-3.5 border border-ink bg-card p-[clamp(22px,3vw,36px)]">
-        <div class="mono text-[11px] text-teal-ink">Sources &amp; corrections</div>
+        <div class="flex items-center gap-3">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.bookOpen} />
+          <span class="mono text-[11px] text-teal-ink">Sources &amp; corrections</span>
+        </div>
         <p class="m-0 text-[17px] leading-[1.65]">Each test page lists the research it draws on. We review our pages every six months and whenever someone reports a problem.</p>
         <a href="/contact/" class="inline-flex min-h-11 items-center self-start font-semibold underline">Report an error →</a>
         <div class="mono border-t border-dashed border-line-inner pt-3 text-[10.5px] text-muted">Last reviewed: 17 October 2026</div>
@@ -103,3 +127,16 @@ const rows = [
     </section>
   </div>
 </BaseLayout>
+
+<style>
+  .icon {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Character from '../../components/Character.astro';
 
 // Copy word for word from docs/design/Contact.dc.html. Placeholders filled: the real address, "3 working days".
+// Dev changed the eyebrow and added "Good reasons to write" (Drafted).
 const title = 'Contact KnowPsyche';
 const description =
   'Email hello@knowpsyche.com to report an error, suggest a new test or ask about press and partnerships. We reply within 3 working days.';
@@ -11,12 +13,20 @@ const cards = [
   { label: '02 · Ideas', border: 'border-t-blue', color: 'text-blue', title: 'Want a new test?', text: "Suggest an experiment or a question about the mind you'd like us to explain next." },
   { label: '03 · Everything else', border: 'border-t-sage', color: 'text-teal-ink', title: 'Press & partnerships', text: 'Teachers, researchers and writers are welcome to get in touch.' },
 ];
+
+// Drafted.
+const reasons = [
+  'Something on a page looks wrong.',
+  'You have an idea for a test.',
+  'A question about privacy.',
+  'Something did not work on your phone or browser.',
+];
 ---
 <BaseLayout title={title} description={description} path="/contact/" crumbs={[{ name: 'Contact' }]}>
   <div class="mx-auto flex max-w-[1200px] flex-col gap-14 px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section class="flex flex-wrap items-end gap-10">
       <div class="min-w-0 flex-[999_1_560px]">
-        <div class="mono mb-[18px] text-[11px] text-muted">Contact · Fig. 00.4</div>
+        <div class="mono mb-[18px] text-[11px] text-muted">Contact</div>
         <h1 class="m-0 text-[clamp(46px,6.2vw,96px)] leading-[.92] font-semibold tracking-[-.055em]">Say hello.<br /><span class="serif text-red">Or tell us we got it wrong.</span></h1>
       </div>
       <a
@@ -37,6 +47,17 @@ const cards = [
           <p class="m-0 text-[15.5px] leading-[1.6] text-ink-soft">{c.text}</p>
         </div>
       ))}
+    </section>
+
+    <section class="flex flex-wrap items-center gap-[clamp(28px,4vw,56px)]">
+      <Character skin="light" hair={{ style: 'bun', color: 'ochre' }} shirt="coral" expression="happy" prop="envelope" size={220} class="-rotate-[1.5deg]" />
+      <div class="min-w-0 flex-[1_1_320px]">
+        <h2 class="m-0 mb-5 text-[clamp(30px,3.4vw,44px)] leading-none font-semibold tracking-[-.04em]">Good reasons to write</h2>
+        <ul class="m-0 border-t border-ink p-0 text-[17px] leading-[1.6]">
+          {reasons.map((r) => <li class="list-none border-b border-line-inner py-3">{r}</li>)}
+        </ul>
+        <p class="m-0 mt-5 text-[16.5px] leading-[1.6] text-ink-soft">We read every message and reply when we can.</p>
+      </div>
     </section>
 
     <section class="flex flex-wrap gap-7 border border-ink bg-lilac p-[clamp(22px,3vw,36px)]">
