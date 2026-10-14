@@ -1,8 +1,14 @@
-# Cloudflare Pages response headers.
+# Response headers (Cloudflare Workers static assets; the same _headers format as Pages).
 
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+
+# Staging: every *.workers.dev address of this Worker (knowpsyche.<account>.workers.dev and its preview
+# URLs) must never be indexed. Host-specific, so knowpsyche.com is not affected. Remove on launch day
+# (CLAUDE.md, launch checklist).
+https://:worker.:account.workers.dev/*
+  X-Robots-Tag: noindex
 
 # The project.pages.dev domain must never be indexed.
 https://:project.pages.dev/*
