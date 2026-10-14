@@ -13,7 +13,7 @@ import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
 import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
-import { attentionBands, faqs, page, result, resultUi, sources, ui } from '../../data/tests/attention-span';
+import { attentionBands, faqs, page, result, resultUi, sources, ui, happening } from '../../data/tests/attention-span';
 import { TOTAL_TRIALS } from '../../lib/tests/attention-span';
 
 const segClass = ['flex-[70] bg-paper', 'flex-[15] bg-lilac', 'flex-[10] bg-lilac-bright', 'flex-[5] bg-blue'];
@@ -31,6 +31,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   metaLine={page.metaLine}
   faqs={faqs}
   sources={sources}
+  happening={happening}
 >
   <div
     slot="stage"

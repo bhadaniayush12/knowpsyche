@@ -1,6 +1,6 @@
 // Copy from docs/content/part-2.md, "Test 4 — Number Memory". Word for word.
 // Lines marked "drafted" were missing from the content doc and approved in the build plan.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 import type { MemoryBand } from './photographic-memory';
 
 /** Digits 3–5, 6–7, 8–9, 10+. A score under 3 reads as the first band. */
@@ -71,3 +71,20 @@ export const sources: Source[] = [
   { before: 'Miller, G. A. (1956). The magical number seven, plus or minus two. ', title: 'Psychological Review', after: '.' },
   { before: 'Cowan, N. (2001). The magical number 4 in short-term memory. ', title: 'Behavioral and Brain Sciences', after: '.' },
 ];
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/number-memory.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted.
+    { title: 'Look.', text: 'A number appears for 1 second plus 0.6 seconds for each digit, then disappears.' },
+    // Drafted.
+    { title: 'Type it back.', text: 'Type the number from memory and submit it.' },
+    // Drafted.
+    { title: 'One digit longer.', text: 'It starts at 3 digits. Each right answer adds a digit. A wrong answer costs one of your two lives, and you get a new number of the same length.' },
+    // Drafted.
+    { title: 'Your score.', text: 'Your score is the longest number you typed back correctly.' },
+  ],
+  // Drafted.
+  change: 'strategy most of all, like reading the digits in pairs or threes, plus tiredness and distractions.',
+  article: 'short-term-memory-capacity',
+};

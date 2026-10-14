@@ -1,6 +1,6 @@
 // Copy from docs/content/part-2.md, "Test 5 — Attention Span". Word for word.
 // Lines marked "Drafted" are not in the content doc: written for the build, waiting for Dev's review.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 
 export interface AttentionBand {
   min: number;
@@ -133,3 +133,22 @@ export const sources: Source[] = [
     after: ', 30, 412–431. (Original work published 1868; the first go/no-go style reaction task.)',
   },
 ];
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/attention-span.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted.
+    { title: 'Practise first.', text: "Six practice circles with feedback come first. They don't count." },
+    // Drafted.
+    { title: 'Green or red.', text: 'Circles appear one at a time for half a second each. Click or tap for green, and do nothing for red. A press only counts while the circle is on screen.' },
+    // Drafted.
+    { title: 'Stay with it.', text: 'The real run is 80 circles, 60 green and 20 red, with no feedback.' },
+    // Drafted.
+    { title: 'Keep this tab in front.', text: 'If you switch tabs or the window loses focus, the run stops and you start again, so the timing stays fair.' },
+    // Drafted.
+    { title: 'Your score.', text: "Your score out of 100 is the average of two numbers: the share of greens you caught and the share of reds you held back on. Your speed is shown but doesn't change the score." },
+  ],
+  // Drafted.
+  change: 'sleep, phone notifications, noise and how interested you are in the task.',
+  article: 'attention-span-myths-and-what-helps',
+};

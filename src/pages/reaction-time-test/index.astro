@@ -13,7 +13,7 @@ import BandScale from '../../components/result/BandScale.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
 import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
-import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
+import { arena, faqs, modes, page, result, sources, happening } from '../../data/tests/reaction-time';
 import { TRIES } from '../../lib/tests/reaction-time';
 
 const fill = (s: string) => s.replace('{V}', 'Click').replace('{v}', 'click');
@@ -31,6 +31,7 @@ const ticks = [100, 200, 300, 400, 500];
   metaLine={page.metaLine}
   faqs={faqs}
   sources={sources}
+  happening={happening}
 >
   <div slot="controls" class="flex min-w-0 flex-col items-start gap-2">
     <div role="group" aria-label="Mode" class="flex flex-wrap gap-1.5">

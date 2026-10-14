@@ -11,7 +11,7 @@ import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
 import ProgressTrail from '../../components/result/ProgressTrail.astro';
-import { faqs, page, result, scale, sources, statements, tieBreak, types, ui } from '../../data/tests/enneagram';
+import { faqs, page, result, scale, sources, statements, tieBreak, types, ui, happening } from '../../data/tests/enneagram';
 
 const btnSmall =
   'mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue disabled:cursor-default disabled:opacity-40 disabled:hover:border-ink disabled:hover:text-ink';
@@ -29,6 +29,7 @@ const choiceBtn =
   metaLine={page.metaLine}
   faqs={faqs}
   sources={sources}
+  happening={happening}
 >
   <div slot="stage" class="en-card rounded-[26px] border border-line-card bg-white p-[clamp(18px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)]">
     <!-- On phones the count gets its own row, so its wrapping never changes the card height. -->

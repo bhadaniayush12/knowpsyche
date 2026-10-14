@@ -15,3 +15,12 @@ export interface Source {
   title: string;
   after?: string;
 }
+
+/** "What's happening in this test?": 3 to 5 short steps, one "What can change your result" line, one Learn article. */
+export interface Happening {
+  steps: { title: string; text: string }[];
+  /** The text after "What can change your result:". */
+  change: string;
+  /** Learn article slug (src/content/learn/<slug>.md). */
+  article: string;
+}

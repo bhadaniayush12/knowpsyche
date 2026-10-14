@@ -1,6 +1,6 @@
 // Copy from docs/content/part-2.md, "Test 7 — Emotional Intelligence". Word for word.
 // Lines marked "Drafted" are not in the content doc: written for the build, waiting for Dev's review.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 
 export type AreaId = 'knowing' | 'managing' | 'reading' | 'relationships';
 
@@ -221,3 +221,20 @@ export const sources: Source[] = [
 
 export const sourcesNote =
   'The four areas follow the common self-awareness / self-management / social awareness / relationship skills grouping. All 28 statements are our own writing; we do not use any published, copyrighted EQ questionnaire.';
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/emotional-intelligence.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted.
+    { title: 'Read each statement.', text: "There are 28, about how you usually notice and handle feelings, yours and other people's." },
+    // Drafted.
+    { title: 'Rate it.', text: 'Pick 1 to 5 for how much it sounds like you. There are no right answers, and you can go back to change one.' },
+    // Drafted.
+    { title: 'Four areas.', text: "Seven statements belong to each area. Some are worded the other way round, so they're scored in reverse." },
+    // Drafted.
+    { title: 'Your scores.', text: 'Each area becomes a score from 0 to 100, and your overall score is the average of the four.' },
+  ],
+  // Drafted.
+  change: 'your mood, recent events, and how honestly you answer. It shows how you see yourself, not how others see you.',
+  article: 'what-is-emotional-intelligence',
+};

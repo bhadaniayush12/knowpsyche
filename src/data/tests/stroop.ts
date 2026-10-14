@@ -1,6 +1,6 @@
 // Copy from docs/content/part-2.md, "Test 6 — Stroop Test". Word for word.
 // Lines marked "Drafted" are not in the content doc: written for the build, waiting for Dev's review.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 
 export interface StroopBand {
   min: number;
@@ -129,3 +129,20 @@ export const sources: Source[] = [
     after: '.',
   },
 ];
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/stroop.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted.
+    { title: 'Practise first.', text: "Four practice words with feedback come first. They don't count." },
+    // Drafted.
+    { title: 'Name the ink.', text: 'Each word is a colour name printed in a colour. Pick the ink colour, not the word, with the buttons or the R, B, G and Y keys.' },
+    // Drafted.
+    { title: 'Forty words.', text: 'Half the words match their ink and half clash. You have 3 seconds for each word, and no answer counts as a miss.' },
+    // Drafted.
+    { title: 'The gap.', text: 'Your Stroop effect is your average time on clashing words minus your average time on matching words, using correct answers only.' },
+  ],
+  // Drafted.
+  change: 'reading speed, practice, tiredness and how fast you try to go. Colour-vision differences can affect it too.',
+  article: 'the-stroop-effect-explained',
+};

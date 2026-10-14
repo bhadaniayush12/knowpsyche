@@ -15,9 +15,10 @@ import FontPreloads from '../components/FontPreloads.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Faq from '../components/result/Faq.astro';
 import Sources from '../components/result/Sources.astro';
+import WhatsHappening from '../components/result/WhatsHappening.astro';
 import ProgressTrail from '../components/result/ProgressTrail.astro';
 import TrailFlag from '../components/result/TrailFlag.astro';
-import { PRIVATE_LINE, type Faq as FaqItem, type Source } from '../data/shared';
+import { PRIVATE_LINE, type Faq as FaqItem, type Happening, type Source } from '../data/shared';
 import { learnMoreLabel } from '../data/learn';
 import { articlesForTest } from '../lib/learn/articles';
 import { getCollection } from 'astro:content';
@@ -40,6 +41,8 @@ interface Props {
   startLabel?: string;
   faqs: FaqItem[];
   sources: Source[];
+  /** "What's happening in this test?", shown below the test and above the FAQ and Sources. */
+  happening: Happening;
   /** Optional note under the sources list. */
   sourcesNote?: string;
   /** Defaults to the card scripts/og.mjs makes for this slug: /og/<slug>.png. */
@@ -48,7 +51,7 @@ interface Props {
   preloadBold?: boolean;
 }
 
-const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, sourcesNote, ogImage = `/og/${path.replace(/\//g, '')}.png`, preloadBold = false } = Astro.props;
+const { title, description, path, crumb, eyebrow, h1, intro, introTouch, metaLine, startLabel = 'Start the test', faqs, sources, happening, sourcesNote, ogImage = `/og/${path.replace(/\//g, '')}.png`, preloadBold = false } = Astro.props;
 
 // The design sets the last word of the H1 in the serif accent.
 const cut = h1.lastIndexOf(' ');
@@ -101,6 +104,7 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
     <AdSlot class="my-10" />
 
     <div class="mt-14 flex max-w-[760px] flex-col gap-12">
+      <WhatsHappening happening={happening} />
       <Faq faqs={faqs} />
       <div class="flex flex-col gap-6">
         {articles.length > 0 && (

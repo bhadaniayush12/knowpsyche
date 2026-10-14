@@ -1,6 +1,6 @@
 // Copy from docs/content/part-1.md, "Test 2 — Enneagram". Word for word.
 // Lines marked "drafted" were missing from the content doc and approved in the build plan.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 
 export type TypeNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
@@ -260,3 +260,22 @@ export const faqs: Faq[] = [
 export const sources: Source[] = [
   { before: 'Hook, J. N., et al. (2021). The Enneagram: A systematic review of the literature and directions for future research. ', title: 'Journal of Clinical Psychology', after: '.' },
 ];
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/enneagram.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted.
+    { title: 'Read each statement.', text: "There are 45, about everyday habits and motives. Answer for how you usually are, not how you'd like to be." },
+    // Drafted.
+    { title: 'Rate it.', text: 'Pick 1 to 5 for how true it is of you. You can use the number keys, and go back to change an answer.' },
+    // Drafted.
+    { title: 'Nine scores.', text: 'Each of the nine types has five statements, so each type gets a score from 5 to 25.' },
+    // Drafted.
+    { title: 'A close call?', text: 'If two or three types end up within a point of the top score, a short tie-break round asks which motives fit you better.' },
+    // Drafted.
+    { title: 'Your type.', text: 'The top score is your main type, and the higher-scoring of its two neighbours on the circle is your wing.' },
+  ],
+  // Drafted.
+  change: "your mood, what's going on in your life right now, and how honestly you answer. Results can shift over time.",
+  article: 'what-is-the-enneagram',
+};

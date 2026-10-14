@@ -1,6 +1,6 @@
 // Copy from docs/content/part-2.md, "Test 3 — Photographic Memory". Word for word.
 // Lines marked "drafted" were missing from the content doc and approved in the build plan.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 
 export interface MemoryBand {
   /** Lowest score in this band, inclusive. */
@@ -76,3 +76,22 @@ export const sources: Source[] = [
   { before: 'Luck, S. J., & Vogel, E. K. (1997). The capacity of visual working memory for features and conjunctions. ', title: 'Nature', after: '.' },
   { before: 'Haber, R. N. (1979). Twenty years of haunting eidetic imagery. ', title: 'Behavioral and Brain Sciences', after: '.' },
 ];
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/photographic-memory.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted.
+    { title: 'Look.', text: 'Some tiles light up for 1.2 seconds. Level 1 lights 3 tiles, and each level adds one.' },
+    // Drafted.
+    { title: 'Rebuild it.', text: 'Click or tap the tiles that lit up, in any order.' },
+    // Drafted.
+    { title: 'Lives.', text: 'A wrong tile ends the round and costs one of your three lives. You then try the same level with a new pattern.' },
+    // Drafted.
+    { title: 'Bigger grids.', text: 'The grid grows from 3 by 3 to 4 by 4 at level 4, 5 by 5 at level 8 and 6 by 6 at level 12.' },
+    // Drafted.
+    { title: 'Your score.', text: 'Your score is the highest level you fully completed.' },
+  ],
+  // Drafted.
+  change: 'tiredness, distractions, and whether you group tiles into shapes. A second go often comes out differently.',
+  article: 'is-photographic-memory-real',
+};

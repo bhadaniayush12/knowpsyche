@@ -1,6 +1,6 @@
 // Copy from docs/content/part-1.md, "Test 1 — Reaction Time". Word for word.
 // Lines marked "drafted" were missing from the content doc and approved in the build plan.
-import type { Faq, Source } from '../shared';
+import type { Faq, Source, Happening } from '../shared';
 
 export interface ReactionBand {
   /** Upper bound in ms, inclusive. `Infinity` for the last band. */
@@ -119,3 +119,20 @@ export const sources: Source[] = [
   { before: 'Woods, D. L., et al. (2015). Factors influencing the latency of simple reaction time. ', title: 'Frontiers in Human Neuroscience', after: '.' },
   { before: 'Jain, A., et al. (2015). A comparative study of visual and auditory reaction times. ', title: 'International Journal of Applied and Basic Medical Research', after: '.' },
 ];
+
+// "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/reaction-time.ts and the page script.
+export const happening: Happening = {
+  steps: [
+    // Drafted: Dev's base.
+    { title: 'Wait.', text: "The box sits still, then changes after a random pause, so you can't guess when." },
+    // Drafted: Dev's base, plus the other modes (sound, F1 lights, spacebar).
+    { title: 'React.', text: 'When it turns green, click or tap as fast as you can. The other modes use a beep, race lights going out, or the spacebar instead.' },
+    // Drafted: Dev's base; the code also repeats presses under 100 ms.
+    { title: 'Five tries.', text: "Each try is timed from the change to your press. If you press before the change, or less than 100 ms after it, that try doesn't count and you go again." },
+    // Drafted: Dev's base.
+    { title: 'Your average.', text: 'The five times are averaged. First tries are often slower while you learn the task, so look at the pattern too.' },
+  ],
+  // Drafted.
+  change: 'your screen and device, how rested you are, and whether you were ready. A different setup can give a different number.',
+  article: 'what-a-reaction-time-test-measures',
+};

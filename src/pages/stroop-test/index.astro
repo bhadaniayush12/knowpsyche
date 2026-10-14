@@ -13,7 +13,7 @@ import CopyScores from '../../components/result/CopyScores.astro';
 import SaveResult from '../../components/result/SaveResult.astro';
 import ProgressTrail from '../../components/result/ProgressTrail.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
-import { faqs, page, result, resultUi, sources, stroopBands, ui } from '../../data/tests/stroop';
+import { faqs, page, result, resultUi, sources, stroopBands, ui, happening } from '../../data/tests/stroop';
 import { TOTAL_TRIALS } from '../../lib/tests/stroop';
 
 const segClass = ['flex-[80] bg-paper', 'flex-[80] bg-lilac', 'flex-[90] bg-lilac-bright', 'flex-[70] bg-blue'];
@@ -31,6 +31,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   metaLine={page.metaLine}
   faqs={faqs}
   sources={sources}
+  happening={happening}
   preloadBold
 >
   <div
