@@ -80,6 +80,7 @@ const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2
             <a
               href={testHref(id)}
               data-trail-link
+              data-id={id}
               data-name={names[id]}
               aria-current={id === current ? 'page' : undefined}
               class="kp-link flex w-11 flex-col items-center no-underline"
@@ -112,6 +113,35 @@ const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2
     </div>
   </div>
 </section>
+{!card && (
+  /* Before the strip is painted, set its bottom row (Next link, "all done", "so far") from the ids TrailFlag
+     put on <html>, the same way trailState() does, so the script below changes nothing that moves the page.
+     trail-strip.test.ts checks it against trailState(). */
+  <script is:inline define:vars={{ nextTpl: trailCopy.next('%') }}>
+    (function (el) {
+      try {
+        var have = ' ' + (document.documentElement.getAttribute('data-kp-report') || '') + ' ';
+        var links = el.querySelectorAll('[data-trail-link]'), cur = el.getAttribute('data-current'), n = 0, start = 0, next = null, i, a;
+        for (i = 0; i < links.length; i++) {
+          if (have.indexOf(' ' + links[i].getAttribute('data-id') + ' ') > -1) n++;
+          if (links[i].getAttribute('data-id') === cur) start = i + 1;
+        }
+        for (i = 0; i < links.length && !next; i++) {
+          a = links[(start + i) % links.length];
+          if (a.getAttribute('data-id') !== cur && have.indexOf(' ' + a.getAttribute('data-id') + ' ') < 0) next = a;
+        }
+        var nextEl = el.querySelector('[data-trail-next]'), done = el.querySelector('[data-trail-done]'), soFar = el.querySelector('[data-trail-sofar]');
+        nextEl.hidden = n === links.length || !next;
+        if (next) {
+          nextEl.setAttribute('href', next.getAttribute('href'));
+          nextEl.textContent = nextTpl.replace('%', next.getAttribute('data-name'));
+        }
+        done.hidden = n !== links.length;
+        if (soFar) soFar.hidden = n === 0 || n === links.length;
+      } catch (e) {}
+    })(document.currentScript.previousElementSibling);
+  </script>
+)}
 
 <style>
   .kp-trail { display: none; }
