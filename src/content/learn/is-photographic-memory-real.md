@@ -6,6 +6,7 @@ datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "Memory"
 relatedTest: photographic-memory-test
+scene: is-photographic-memory-real
 related:
   - short-term-memory-capacity
   - what-psychology-tests-can-and-cant-tell-you

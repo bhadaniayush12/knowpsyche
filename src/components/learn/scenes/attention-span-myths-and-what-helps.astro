@@ -1,0 +1,196 @@
+---
+/**
+ * Scene 6: Attention span: myths, and what helps
+ * Tired character at a desk with a phone, a small butterfly wandering off.
+ * Motion: butterfly path, blink.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+---
+<div class:list={['scene-attention relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'short', color: 'ink' }}
+    shirt="sage"
+    expression="tired"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Wandering flight trail of the butterfly */}
+    <path
+      d="M110 180 C95 155 75 150 80 125 S50 115 54 94"
+      fill="none"
+      stroke="var(--color-ink)"
+      stroke-width="2"
+      stroke-dasharray="3 4"
+      opacity="0.38"
+      stroke-linecap="round"
+    />
+
+    {/* The small butterfly wandering off */}
+    <g class="scene-butterfly" stroke-linecap="round" stroke-linejoin="round">
+      {/* Top left wing */}
+      <ellipse
+        cx="48"
+        cy="86"
+        rx="9"
+        ry="6.5"
+        transform="rotate(-25 48 86)"
+        fill="var(--color-coral)"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+      {/* Bottom left wing */}
+      <ellipse
+        cx="47"
+        cy="94"
+        rx="7"
+        ry="5"
+        transform="rotate(-15 47 94)"
+        fill="var(--color-coral)"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+      {/* Top right wing */}
+      <ellipse
+        cx="60"
+        cy="87"
+        rx="8.5"
+        ry="6"
+        transform="rotate(20 60 87)"
+        fill="var(--color-coral)"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+      {/* Bottom right wing */}
+      <ellipse
+        cx="59"
+        cy="94"
+        rx="6.5"
+        ry="4.5"
+        transform="rotate(10 59 94)"
+        fill="var(--color-coral)"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+      {/* Body */}
+      <line x1="54" y1="83" x2="54" y2="97" stroke="var(--color-ink)" stroke-width="2.5" />
+      {/* Antennae */}
+      <path
+        d="M54 83 Q50 77 46 78 M54 83 Q58 77 62 78"
+        fill="none"
+        stroke="var(--color-ink)"
+        stroke-width="1.8"
+      />
+    </g>
+
+    {/* Character arms resting forward on the desk */}
+    <g stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      {/* Left arm */}
+      <path
+        style="fill:var(--color-sage)"
+        d="M76 316 C74 286 64 268 46 268 L32 276 C40 288 42 302 42 316 Z"
+      />
+      <circle cx="56" cy="270" r="9" fill="#E3B48C" />
+
+      {/* Right arm */}
+      <path
+        style="fill:var(--color-sage)"
+        d="M164 316 C166 286 176 268 194 268 L208 276 C200 288 198 302 198 316 Z"
+      />
+      <circle cx="148" cy="270" r="9" fill="#E3B48C" />
+    </g>
+
+    {/* Desk surface in front of the character */}
+    <g class="scene-desk" stroke-linecap="round" stroke-linejoin="round">
+      {/* Desk surface body with ink shadow */}
+      <rect x="8" y="274" width="224" height="28" rx="4" fill="var(--color-ink)" stroke="none" />
+      <rect
+        x="6"
+        y="271"
+        width="224"
+        height="28"
+        rx="4"
+        fill="var(--color-card)"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+      <line x1="16" y1="281" x2="220" y2="281" stroke="var(--color-line-card)" stroke-width="2" />
+    </g>
+
+    {/* Phone resting on the desk */}
+    <g class="scene-phone" stroke-linecap="round" stroke-linejoin="round">
+      {/* Phone shadow */}
+      <rect x="162" y="258" width="34" height="20" rx="4" fill="var(--color-ink)" stroke="none" />
+      {/* Phone chassis */}
+      <rect
+        x="160"
+        y="256"
+        width="34"
+        height="20"
+        rx="4"
+        fill="var(--color-ink)"
+        stroke="var(--color-ink)"
+        stroke-width="2"
+      />
+      {/* Phone screen glowing */}
+      <rect x="163" y="259" width="28" height="14" rx="2" fill="var(--color-mint-go)" stroke="none" />
+      {/* Notification indicator dot */}
+      <circle cx="184" cy="266" r="2.5" fill="var(--color-coral)" stroke="none" />
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable body float so there are at most two animated parts: butterfly wandering path and blink. */
+  :global(.scene-attention .ch-float) {
+    animation: none !important;
+  }
+
+  /* Animated part 1: Butterfly wandering path */
+  .scene-butterfly {
+    transform-origin: 54px 88px;
+    animation: butterfly-wander 6s ease-in-out infinite paused;
+  }
+
+  /* Play animations only while in view */
+  :global(.ch-panel[data-on]) .scene-butterfly,
+  :global(.scene-attention .ch-panel[data-on] .ch-eyes) {
+    animation-play-state: running;
+  }
+
+  :global([data-motion='paused']) .scene-butterfly,
+  :global([data-motion='paused']) :global(.scene-attention .ch-eyes) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-butterfly,
+    :global(.scene-attention .ch-eyes) {
+      animation: none !important;
+    }
+  }
+
+  @keyframes butterfly-wander {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    28% {
+      transform: translate(-12px, -18px) rotate(-14deg);
+    }
+    55% {
+      transform: translate(6px, -30px) rotate(10deg);
+    }
+    78% {
+      transform: translate(-8px, -12px) rotate(-6deg);
+    }
+  }
+</style>

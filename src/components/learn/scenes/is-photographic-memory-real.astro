@@ -1,0 +1,154 @@
+---
+/**
+ * Scene 4: Is photographic memory real?
+ * Doubtful character, eyes closed, a thought bubble with a blurry framed picture that sharpens only partly.
+ * Motion: bubble blur pulse, blink.
+ * Ink stroke: 3px, round joins and caps, token fills. aria-hidden.
+ */
+import Character from '../../Character.astro';
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 150, class: className } = Astro.props;
+---
+<div class:list={['scene-photo relative flex items-center justify-center', className]} aria-hidden="true">
+  <Character
+    skin="medium"
+    hair={{ style: 'short', color: 'ink' }}
+    shirt="ochre"
+    expression="puzzled"
+    prop="none"
+    size={size}
+    class="scene-char"
+  >
+    {/* Closed eyes covering default eyes to show concentrated doubtful recall */}
+    <g class="closed-eyes-group">
+      <ellipse cx="100" cy="137" rx="8" ry="7" fill="#E3B48C" stroke="none" />
+      <ellipse cx="140" cy="137" rx="8" ry="7" fill="#E3B48C" stroke="none" />
+      <path
+        d="M93 138 Q100 144 107 138 M133 138 Q140 144 147 138"
+        fill="none"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </g>
+
+    {/* Thought bubble trail */}
+    <g stroke="var(--color-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="156" cy="98" r="4.5" fill="var(--color-card)" />
+      <circle cx="168" cy="80" r="7" fill="var(--color-card)" />
+    </g>
+
+    {/* Main thought bubble cloud with ink shadow */}
+    <g stroke-linecap="round" stroke-linejoin="round">
+      {/* Cloud shadow */}
+      <path
+        d="M142 54 C134 54 130 44 136 36 C134 26 146 18 156 22 C164 14 182 12 190 22 C200 16 214 24 212 36 C220 42 220 54 210 60 C212 70 198 76 188 70 C178 76 162 76 154 68 C144 72 136 64 142 54 Z"
+        fill="var(--color-ink)"
+        stroke="none"
+      />
+      {/* Cloud body */}
+      <path
+        d="M139 51 C131 51 127 41 133 33 C131 23 143 15 153 19 C161 11 179 9 187 19 C197 13 211 21 209 33 C217 39 217 51 207 57 C209 67 195 73 185 67 C175 73 159 73 151 65 C141 69 133 61 139 51 Z"
+        fill="var(--color-card)"
+        stroke="var(--color-ink)"
+        stroke-width="3"
+      />
+    </g>
+
+    {/* Framed picture inside the thought bubble */}
+    <g class="scene-photo-frame" stroke-linecap="round" stroke-linejoin="round">
+      {/* Picture frame */}
+      <rect
+        x="148"
+        y="25"
+        width="46"
+        height="32"
+        rx="3"
+        fill="var(--color-paper)"
+        stroke="var(--color-ink)"
+        stroke-width="2.5"
+      />
+
+      {/* Picture art that sharpens only partly */}
+      <g class="scene-blur-art">
+        {/* Sky background */}
+        <rect x="151" y="28" width="40" height="26" fill="var(--color-mint)" stroke="none" />
+        {/* Sun */}
+        <circle cx="182" cy="34" r="4" fill="var(--color-coral)" stroke="var(--color-ink)" stroke-width="1.5" />
+        {/* Mountains */}
+        <polygon points="152,53 164,37 176,53" fill="var(--color-teal)" stroke="var(--color-ink)" stroke-width="2" />
+        <polygon points="168,53 178,41 190,53" fill="var(--color-sage)" stroke="var(--color-ink)" stroke-width="2" />
+      </g>
+    </g>
+  </Character>
+</div>
+
+<style>
+  /* Disable body float so there are at most two animated parts: blur pulse and blink. */
+  :global(.scene-photo .ch-float) {
+    animation: none !important;
+  }
+  :global(.scene-photo .ch-eyes) {
+    animation: none !important;
+  }
+
+  /* Animated part 1: Thought bubble blurry framed picture sharpens only partly */
+  .scene-blur-art {
+    transform-origin: 171px 41px;
+    filter: blur(2.8px);
+    opacity: 0.7;
+    animation: blur-sharp-pulse 4.5s ease-in-out infinite paused;
+  }
+
+  /* Animated part 2: Closed eyes fluttering blink */
+  .closed-eyes-group {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: closed-blink 5.2s ease-in-out infinite paused;
+  }
+
+  /* Play animations only while in view */
+  :global(.ch-panel[data-on]) :is(.scene-blur-art, .closed-eyes-group) {
+    animation-play-state: running;
+  }
+
+  :global([data-motion='paused']) :is(.scene-blur-art, .closed-eyes-group) {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene-blur-art,
+    .closed-eyes-group {
+      animation: none !important;
+    }
+    .scene-blur-art {
+      filter: blur(1.2px) !important;
+      opacity: 0.9 !important;
+    }
+  }
+
+  @keyframes blur-sharp-pulse {
+    0%, 100% {
+      filter: blur(2.8px);
+      opacity: 0.7;
+    }
+    50% {
+      filter: blur(0.9px);
+      opacity: 0.96;
+    }
+  }
+
+  @keyframes closed-blink {
+    0%, 92%, 100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.2);
+    }
+  }
+</style>

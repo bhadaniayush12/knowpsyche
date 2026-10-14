@@ -6,11 +6,17 @@
 import WhatPsychologyTestsCanAndCantTellYou from './what-psychology-tests-can-and-cant-tell-you.astro';
 import WhatAReactionTimeTestMeasures from './what-a-reaction-time-test-measures.astro';
 import WhatIsTheEnneagram from './what-is-the-enneagram.astro';
+import IsPhotographicMemoryReal from './is-photographic-memory-real.astro';
+import ShortTermMemoryCapacity from './short-term-memory-capacity.astro';
+import AttentionSpanMythsAndWhatHelps from './attention-span-myths-and-what-helps.astro';
 
 export const scenes: Record<string, any> = {
   'what-psychology-tests-can-and-cant-tell-you': WhatPsychologyTestsCanAndCantTellYou,
   'what-a-reaction-time-test-measures': WhatAReactionTimeTestMeasures,
   'what-is-the-enneagram': WhatIsTheEnneagram,
+  'is-photographic-memory-real': IsPhotographicMemoryReal,
+  'short-term-memory-capacity': ShortTermMemoryCapacity,
+  'attention-span-myths-and-what-helps': AttentionSpanMythsAndWhatHelps,
 };
 
 export type SceneSlug = keyof typeof scenes;

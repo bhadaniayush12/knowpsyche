@@ -6,6 +6,7 @@ datePublished: 2026-10-21
 dateModified: 2026-10-21
 category: "Attention"
 relatedTest: attention-span-test
+scene: attention-span-myths-and-what-helps
 related:
   - what-a-reaction-time-test-measures
   - the-stroop-effect-explained
