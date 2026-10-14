@@ -13,18 +13,18 @@ const rows = [
     <div class="reveal flex min-w-0 flex-[1_1_400px] flex-col gap-[18px]">
       <h2 id="results-title" class="m-0 text-[clamp(36px,4.4vw,58px)] leading-none font-semibold tracking-[-.045em]">Results you can <span class="serif text-blue">actually read.</span></h2>
       <p class="m-0 max-w-[480px] text-[17.5px] leading-[1.6] text-ink-soft">No confusing labels. Every result answers three questions:</p>
-      <OffsetFrame rotate={-0.6} class="flex flex-col gap-4 rounded-22 bg-white p-6 shadow-panel">
+      <OffsetFrame rotate={-0.6} class="rx flex flex-col gap-4 rounded-22 bg-white p-6 shadow-panel">
         <span class="text-sm font-medium text-muted">Example · Reaction time</span>
         <div class="flex flex-wrap items-baseline gap-x-3">
           <span class="text-[17px] font-semibold">Your time</span>
-          <span class="text-[72px] leading-[.9] font-semibold tracking-[-.06em]">247<span class="ml-1.5 text-2xl tracking-[-.02em]">ms</span></span>
+          <span class="text-[72px] leading-[.9] font-semibold tracking-[-.06em]"><span class="rx-num inline-block min-w-[3ch] text-right tabular-nums" aria-hidden="true">247</span><span class="sr-only">247</span><span class="ml-1.5 text-2xl tracking-[-.02em]">ms</span></span>
         </div>
         <div aria-hidden="true" class="relative h-3 rounded-full bg-[linear-gradient(90deg,var(--color-blue)_0_25%,var(--color-trail)_25%_50%,#EDE7DA_50%_100%)]">
           <span class="slide absolute -top-[5px] h-[22px] w-1 rounded-sm bg-coral"></span>
         </div>
         <div class="flex flex-col gap-3 text-[15.5px] leading-[1.55]">
-          {rows.map((r) => (
-            <div class="flex gap-3">
+          {rows.map((r, i) => (
+            <div class="rx-row flex gap-3" style={`--r:${i}`}>
               <span aria-hidden="true" class="inline-flex size-[26px] flex-none items-center justify-center rounded-lg text-[13px] font-bold" style={{ background: r.bg, color: r.fg }}>{r.icon}</span>
               <span><b>{r.q}</b> {r.a}</span>
             </div>
@@ -45,3 +45,32 @@ const rows = [
     </div>
   </div>
 </section>
+
+<script>
+  import { easeHouse, onceInView, reducedMotion } from '../../lib/once-in-view';
+
+  // Once, when the example card comes on screen: 0 → 247 over 700 ms with the site easing, then the three
+  // answers come in one by one (CSS). Reduced motion or no JS: 247 and the answers are there from the start.
+  const card = document.querySelector<HTMLElement>('.rx');
+  const num = card?.querySelector<HTMLElement>('.rx-num');
+  if (card && num) {
+    const target = Number(num.textContent);
+    const COUNT_MS = 700;
+    if (!reducedMotion() && 'IntersectionObserver' in window) num.textContent = '0';
+    onceInView([card], () => {
+      if (reducedMotion()) {
+        num.textContent = String(target);
+        card.classList.add('is-done');
+        return;
+      }
+      const start = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - start) / COUNT_MS);
+        num.textContent = String(Math.round(easeHouse(p) * target));
+        if (p < 1) requestAnimationFrame(tick);
+        else card.classList.add('is-done');
+      };
+      requestAnimationFrame(tick);
+    }, 0.4);
+  }
+</script>
