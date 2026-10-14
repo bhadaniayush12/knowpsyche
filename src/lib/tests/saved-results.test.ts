@@ -4,14 +4,23 @@ import {
   getIsoDay,
   getName,
   getSavedResult,
-  hasAnySavedResults,
+  hasSavedData,
   isStorageAvailable,
   readReport,
-  removeResult,
   saveResult,
   setName,
   STORAGE_KEY,
+  type SavedTestResult,
 } from '../saved-results';
+
+const rt = (over: Partial<SavedTestResult> = {}): SavedTestResult => ({
+  testId: 'reaction-time',
+  date: '2026-10-14',
+  badge: 'Quick',
+  headline: '220 ms · Quick',
+  data: 220,
+  ...over,
+});
 
 // In-memory localStorage mock for node environment testing
 class MockLocalStorage implements Storage {
@@ -56,270 +65,191 @@ describe('saved-results storage layer', () => {
   });
 
   describe('isStorageAvailable', () => {
-    it('returns true when storage is functional', () => {
+    it('is true when storage works', () => {
       expect(isStorageAvailable()).toBe(true);
     });
 
-    it('returns false when storage is null or undefined', () => {
+    it('never writes anything (no storage before opt-in)', () => {
+      const set = vi.spyOn(mockStorage, 'setItem');
+      expect(isStorageAvailable()).toBe(true);
+      expect(set).not.toHaveBeenCalled();
+      expect(mockStorage.length).toBe(0);
+    });
+
+    it('is false when there is no storage', () => {
       vi.stubGlobal('localStorage', undefined);
       vi.stubGlobal('window', undefined);
       expect(isStorageAvailable()).toBe(false);
     });
 
-    it('returns false when storage throws on setItem (blocked storage)', () => {
-      vi.spyOn(mockStorage, 'setItem').mockImplementation(() => {
-        throw new DOMException('The operation is insecure.', 'SecurityError');
+    it('is false when reading window.localStorage throws (cookies blocked)', () => {
+      const blocked = {};
+      Object.defineProperty(blocked, 'localStorage', {
+        get() {
+          throw new DOMException('The operation is insecure.', 'SecurityError');
+        },
+      });
+      vi.stubGlobal('window', blocked);
+      vi.stubGlobal('localStorage', undefined);
+      expect(isStorageAvailable()).toBe(false);
+      expect(saveResult(rt())).toBe(false);
+      expect(readReport()).toBeNull();
+      expect(clearResults()).toBe(false);
+    });
+
+    it('is false when getItem throws', () => {
+      vi.spyOn(mockStorage, 'getItem').mockImplementation(() => {
+        throw new DOMException('Access denied', 'SecurityError');
       });
       expect(isStorageAvailable()).toBe(false);
     });
   });
 
   describe('getIsoDay', () => {
-    it('formats date as YYYY-MM-DD', () => {
-      const d = new Date(2026, 9, 14, 12, 0, 0); // Oct 14 2026
-      expect(getIsoDay(d)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    it('formats a date as the ISO day', () => {
+      expect(getIsoDay(new Date('2026-10-14T12:00:00Z'))).toBe('2026-10-14');
     });
   });
 
-  describe('saveResult & readReport', () => {
-    it('saves a single test result with correct fields and reads it back', () => {
-      const res = saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Lightning',
-        headline: '185 ms · Lightning',
-        data: 185,
-      });
-
-      expect(res).toBe(true);
+  describe('save and read', () => {
+    it('saves one result with exactly the allowed fields and reads it back', () => {
+      expect(saveResult(rt())).toBe(true);
       const report = readReport();
-      expect(report).not.toBeNull();
-      expect(report?.version).toBe(1);
-      expect(report?.results['reaction-time']).toEqual({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Lightning',
-        headline: '185 ms · Lightning',
-        data: 185,
-      });
-      expect(hasAnySavedResults()).toBe(true);
+      expect(report).toEqual({ version: 1, results: { 'reaction-time': rt() } });
+      expect(hasSavedData()).toBe(true);
     });
 
-    it('stores complex data (Enneagram 9 types or EQ 4 areas)', () => {
-      const enneagramScores = {
-        '1': 12,
-        '2': 8,
-        '3': 15,
-        '4': 20,
-        '5': 18,
-        '6': 9,
-        '7': 14,
-        '8': 11,
-        '9': 7,
-      };
-
-      saveResult({
-        testId: 'enneagram',
-        date: '2026-10-14',
-        badge: 'Type 4 · The Individualist',
-        headline: 'Type 4 with Type 5 wing',
-        data: enneagramScores,
-      });
-
-      const saved = getSavedResult('enneagram');
-      expect(saved?.data).toEqual(enneagramScores);
-      expect(saved?.badge).toBe('Type 4 · The Individualist');
+    it('stores Enneagram nine scores and EQ four areas', () => {
+      const nine = { '1': 12, '2': 8, '3': 15, '4': 20, '5': 18, '6': 9, '7': 14, '8': 11, '9': 7 };
+      const four = { knowing: 70, managing: 55, reading: 80, relationships: 62 };
+      saveResult({ testId: 'enneagram', date: '2026-10-14', badge: '4w5', headline: "You're most likely a Type 4: The Individualist", data: nine });
+      saveResult({ testId: 'emotional-intelligence', date: '2026-10-14', badge: 'Growing', headline: 'Your strongest area is Reading feelings', data: four });
+      expect(getSavedResult('enneagram')?.data).toEqual(nine);
+      expect(getSavedResult('emotional-intelligence')?.data).toEqual(four);
     });
 
-    it('stores multiple distinct tests', () => {
-      saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Lightning',
-        headline: '185 ms · Lightning',
-        data: 185,
-      });
-      saveResult({
-        testId: 'number-memory',
-        date: '2026-10-14',
-        badge: 'Deep span',
-        headline: '9 digits · Deep span',
-        data: 9,
-      });
-
-      const report = readReport();
-      expect(Object.keys(report?.results ?? {})).toHaveLength(2);
-      expect(getSavedResult('reaction-time')?.data).toBe(185);
-      expect(getSavedResult('number-memory')?.data).toBe(9);
+    it('stores null when the result has no number (Stroop not measured)', () => {
+      saveResult({ testId: 'stroop', date: '2026-10-14', badge: '', headline: 'Not measured', data: null });
+      expect(getSavedResult('stroop')?.data).toBeNull();
     });
-  });
 
-  describe('overwrite behavior', () => {
-    it('retaking a test overwrites that test entry completely without affecting others', () => {
-      saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-13',
-        badge: 'Steady',
-        headline: '260 ms · Steady',
-        data: 260,
-      });
-      saveResult({
-        testId: 'stroop',
-        date: '2026-10-13',
-        badge: 'Mild pull',
-        headline: '42 ms · Mild pull',
-        data: 42,
-      });
-
-      // Retake reaction time
-      saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Quick',
-        headline: '220 ms · Quick',
-        data: 220,
-      });
-
-      const report = readReport();
-      expect(report?.results['reaction-time']).toEqual({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Quick',
-        headline: '220 ms · Quick',
-        data: 220,
-      });
-      // Stroop remains unchanged
-      expect(report?.results['stroop']).toEqual({
-        testId: 'stroop',
-        date: '2026-10-13',
-        badge: 'Mild pull',
-        headline: '42 ms · Mild pull',
-        data: 42,
-      });
+    it('drops anything extra, such as answers or per-try timings', () => {
+      const sneaky = { ...rt(), answers: [1, 2, 3], tries: [210, 230, 220] } as unknown as SavedTestResult;
+      saveResult(sneaky);
+      const raw = mockStorage.getItem(STORAGE_KEY)!;
+      expect(raw).not.toContain('answers');
+      expect(raw).not.toContain('tries');
+      expect(Object.keys(getSavedResult('reaction-time')!).sort()).toEqual(['badge', 'data', 'date', 'headline', 'testId']);
     });
-  });
 
-  describe('clearResults & removeResult', () => {
-    it('clears all results', () => {
-      saveResult({
-        testId: 'attention-span',
-        date: '2026-10-14',
-        badge: 'High vigilance',
-        headline: 'High vigilance · 88 / 100',
-        data: 88,
-      });
-
-      expect(hasAnySavedResults()).toBe(true);
-      expect(clearResults()).toBe(true);
-      expect(readReport()).toBeNull();
-      expect(hasAnySavedResults()).toBe(false);
+    it('rejects an unknown test id or a bad data shape', () => {
+      expect(saveResult(rt({ testId: 'iq' as never }))).toBe(false);
+      expect(saveResult(rt({ data: [1, 2] as never }))).toBe(false);
+      expect(saveResult(rt({ data: { a: 'x' } as never }))).toBe(false);
       expect(mockStorage.getItem(STORAGE_KEY)).toBeNull();
     });
 
-    it('removeResult removes only the target test', () => {
-      saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Lightning',
-        headline: '180 ms',
-        data: 180,
-      });
-      saveResult({
-        testId: 'number-memory',
-        date: '2026-10-14',
-        badge: 'Deep span',
-        headline: '9 digits',
-        data: 9,
-      });
-
-      expect(removeResult('reaction-time')).toBe(true);
-      expect(getSavedResult('reaction-time')).toBeNull();
-      expect(getSavedResult('number-memory')).not.toBeNull();
+    it('keeps several tests side by side', () => {
+      saveResult(rt());
+      saveResult({ testId: 'number-memory', date: '2026-10-14', badge: 'Strong span', headline: '9 digits · Strong span', data: 9 });
+      expect(Object.keys(readReport()!.results)).toEqual(['reaction-time', 'number-memory']);
     });
   });
 
-  describe('optional name field', () => {
-    it('stores and retrieves name', () => {
-      expect(getName()).toBeNull();
-      expect(setName('Ayush')).toBe(true);
-      expect(getName()).toBe('Ayush');
-
-      // Saving a test result preserves the name
-      saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Quick',
-        headline: '210 ms',
-        data: 210,
-      });
-      expect(getName()).toBe('Ayush');
-      expect(readReport()?.name).toBe('Ayush');
+  describe('overwrite', () => {
+    it('a retake replaces that test only', () => {
+      saveResult(rt({ date: '2026-10-13', badge: 'Steady', headline: '260 ms · Steady', data: 260 }));
+      const stroop: SavedTestResult = { testId: 'stroop', date: '2026-10-13', badge: 'Mild pull', headline: 'Mild pull · 42 ms', data: 42 };
+      saveResult(stroop);
+      saveResult(rt());
+      expect(getSavedResult('reaction-time')).toEqual(rt());
+      expect(getSavedResult('stroop')).toEqual(stroop);
     });
   });
 
-  describe('blocked storage handling', () => {
-    it('saveResult returns false and does not throw when setItem throws', () => {
-      vi.spyOn(mockStorage, 'setItem').mockImplementation(() => {
-        throw new DOMException('QuotaExceededError', 'QuotaExceededError');
-      });
-
-      const res = saveResult({
-        testId: 'reaction-time',
-        date: '2026-10-14',
-        badge: 'Quick',
-        headline: '210 ms',
-        data: 210,
-      });
-      expect(res).toBe(false);
-    });
-
-    it('readReport returns null and does not throw when getItem throws', () => {
-      vi.spyOn(mockStorage, 'getItem').mockImplementation(() => {
-        throw new DOMException('Access denied', 'SecurityError');
-      });
-
+  describe('clear', () => {
+    it('removes every result and the name', () => {
+      saveResult(rt());
+      setName('Sam');
+      expect(clearResults()).toBe(true);
+      expect(mockStorage.getItem(STORAGE_KEY)).toBeNull();
       expect(readReport()).toBeNull();
-      expect(getSavedResult('reaction-time')).toBeNull();
-      expect(hasAnySavedResults()).toBe(false);
+      expect(hasSavedData()).toBe(false);
     });
 
-    it('clearResults returns false and does not throw when removeItem throws', () => {
+    it('is false and does not throw when removeItem throws', () => {
       vi.spyOn(mockStorage, 'removeItem').mockImplementation(() => {
         throw new DOMException('Access denied', 'SecurityError');
       });
-
       expect(clearResults()).toBe(false);
     });
   });
 
-  describe('bad JSON handling', () => {
-    it('readReport returns null when storage contains corrupted JSON', () => {
-      mockStorage.setItem(STORAGE_KEY, 'not-valid-json{{;;');
+  describe('optional name', () => {
+    it('is absent by default, survives saves, and an empty name removes it', () => {
+      expect(getName()).toBeNull();
+      expect(setName('  Sam ')).toBe(true);
+      saveResult(rt());
+      expect(getName()).toBe('Sam');
+      setName('   ');
+      expect(getName()).toBeNull();
+      expect(readReport()).not.toHaveProperty('name');
+    });
+
+    it('counts as saved data so Clear is offered', () => {
+      setName('Sam');
+      expect(hasSavedData()).toBe(true);
+    });
+  });
+
+  describe('blocked storage', () => {
+    it('saveResult is false and does not throw when setItem throws (quota or private mode)', () => {
+      vi.spyOn(mockStorage, 'setItem').mockImplementation(() => {
+        throw new DOMException('Quota exceeded', 'QuotaExceededError');
+      });
+      expect(saveResult(rt())).toBe(false);
+      expect(setName('Sam')).toBe(false);
+    });
+
+    it('reads return nothing and do not throw when getItem throws', () => {
+      vi.spyOn(mockStorage, 'getItem').mockImplementation(() => {
+        throw new DOMException('Access denied', 'SecurityError');
+      });
       expect(readReport()).toBeNull();
       expect(getSavedResult('reaction-time')).toBeNull();
-      expect(hasAnySavedResults()).toBe(false);
+      expect(hasSavedData()).toBe(false);
+      expect(getName()).toBeNull();
+    });
+  });
+
+  describe('bad JSON', () => {
+    it.each([
+      ['broken JSON', 'not-valid-json{{;;'],
+      ['a string', '"just a string"'],
+      ['a number', '42'],
+      ['null', 'null'],
+      ['an array', '[1,2]'],
+      ['no results', '{"version":1}'],
+      ['null results', '{"version":1,"results":null}'],
+      ['array results', '{"version":1,"results":[]}'],
+    ])('readReport is null for %s', (_, raw) => {
+      mockStorage.setItem(STORAGE_KEY, raw);
+      expect(readReport()).toBeNull();
+      expect(hasSavedData()).toBe(false);
     });
 
-    it('readReport returns null when storage contains non-object JSON', () => {
-      mockStorage.setItem(STORAGE_KEY, '"just a string"');
-      expect(readReport()).toBeNull();
-      mockStorage.setItem(STORAGE_KEY, '42');
-      expect(readReport()).toBeNull();
-      mockStorage.setItem(STORAGE_KEY, '{"version": 1}'); // missing results object
-      expect(readReport()).toBeNull();
+    it('drops broken entries but keeps good ones', () => {
+      mockStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ version: 1, results: { 'reaction-time': rt(), stroop: { testId: 'stroop', data: 'x' }, iq: { ...rt(), testId: 'iq' } } }),
+      );
+      expect(readReport()).toEqual({ version: 1, results: { 'reaction-time': rt() } });
     });
 
-    it('saveResult resets gracefully when existing storage is corrupted JSON', () => {
-      mockStorage.setItem(STORAGE_KEY, '{broken-json');
-      const ok = saveResult({
-        testId: 'photographic-memory',
-        date: '2026-10-14',
-        badge: 'Vivid memory',
-        headline: 'Level 7 · Vivid memory',
-        data: 7,
-      });
-      expect(ok).toBe(true);
-      expect(getSavedResult('photographic-memory')?.data).toBe(7);
+    it.each(['{broken-json', '{"version":1,"results":null}'])('a save over %s starts a fresh report', (raw) => {
+      mockStorage.setItem(STORAGE_KEY, raw);
+      expect(saveResult(rt())).toBe(true);
+      expect(readReport()).toEqual({ version: 1, results: { 'reaction-time': rt() } });
     });
   });
 });

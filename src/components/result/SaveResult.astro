@@ -5,8 +5,10 @@
  * Data stays in browser localStorage under `knowpsyche_saved_results`.
  * Zero network requests. If storage is blocked, container remains hidden.
  */
+import type { TestId } from '../../lib/saved-results';
+
 interface Props {
-  testId: string;
+  testId: TestId;
   class?: string;
 }
 const { testId, class: className } = Astro.props;
@@ -16,11 +18,12 @@ const { testId, class: className } = Astro.props;
   data-test-id={testId}
   aria-labelledby={`save-optin-title-${testId}`}
   class:list={[
-    'flex flex-col gap-3.5 border border-ink bg-card p-[clamp(18px,3vw,28px)] transition-opacity duration-300',
+    'flex flex-col gap-3.5 border border-ink bg-card p-[clamp(18px,3vw,28px)]',
     className,
   ]}
   hidden
 >
+  <!-- Drafted: every line of copy in this box. -->
   <div class="flex flex-wrap items-center justify-between gap-2">
     <div id={`save-optin-title-${testId}`} class="mono text-[11px] text-muted">
       Your report · on this device
@@ -28,7 +31,7 @@ const { testId, class: className } = Astro.props;
     <button
       type="button"
       data-clear-btn
-      class="mono inline-flex min-h-[32px] cursor-pointer items-center border-0 bg-transparent p-0 text-xs text-ink-soft underline underline-offset-4 transition-colors duration-200 hover:text-coral-ink"
+      class="mono inline-flex min-h-11 cursor-pointer items-center border-0 bg-transparent p-0 text-xs text-ink-soft underline underline-offset-4 transition-colors duration-200 hover:text-coral-ink"
       hidden
     >
       Clear saved results

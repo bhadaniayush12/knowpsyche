@@ -536,9 +536,9 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     saveOptIn.show({
       testId: 'stroop',
-      badge: measured ? band.badge : 'Not measured',
-      headline: measured ? (scores.stroopEffectMs <= 0 ? 'No interference effect' : `${scores.stroopEffectMs} ms Stroop effect`) : copy.notMeasured,
-      data: measured ? scores.stroopEffectMs : 0,
+      badge: measured ? band.badge : '',
+      headline: headline.textContent ?? '',
+      data: measured ? scores.stroopEffectMs : null,
     });
 
     resultEl.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });

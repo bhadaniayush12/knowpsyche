@@ -1,75 +1,97 @@
 /**
- * KnowPsyche Local Storage Layer for Saved Results.
+ * Opt-in saved results, kept only in this browser's localStorage under one key.
  *
- * All results are saved in the user's own browser via localStorage under one key.
- * Only summary data already visible on the result page is stored:
+ * Only what the result screen already shows is stored:
  * - test id
  * - date (ISO day: YYYY-MM-DD)
  * - band badge
  * - headline
- * - data (Enneagram: nine scores; EQ: four area scores; others: the main number)
+ * - data (Enneagram: nine type scores; EQ: four area scores; others: the main number, or null if none)
+ * - an optional name, once for the whole report
  *
- * NO individual answers and NO per-try timings are ever stored.
- * An optional name field may be stored once.
- * Every read and write is wrapped in try/catch to gracefully handle blocked storage.
- * Retaking a test overwrites that test's saved entry.
+ * Never individual answers, never per-try timings. Nothing is written until someone presses Save,
+ * and nothing here makes a network request. Every storage call is wrapped in try/catch: if storage
+ * is blocked, the opt-in stays hidden and the page works as before. Retaking a test overwrites its entry.
  */
 
 export const STORAGE_KEY = 'knowpsyche_saved_results';
 
-export type TestId =
-  | 'reaction-time'
-  | 'enneagram'
-  | 'photographic-memory'
-  | 'number-memory'
-  | 'attention-span'
-  | 'stroop'
-  | 'emotional-intelligence';
+export const TEST_IDS = [
+  'reaction-time',
+  'enneagram',
+  'photographic-memory',
+  'number-memory',
+  'attention-span',
+  'stroop',
+  'emotional-intelligence',
+] as const;
+
+export type TestId = (typeof TEST_IDS)[number];
+
+export type SavedData = number | null | Record<string, number>;
 
 export interface SavedTestResult {
-  testId: string;
+  testId: TestId;
   date: string; // ISO day "YYYY-MM-DD"
   badge: string;
   headline: string;
-  data: number | Record<string, number>;
+  data: SavedData;
 }
 
 export interface SavedReport {
   version: 1;
   name?: string;
-  results: Record<string, SavedTestResult>;
+  results: Partial<Record<TestId, SavedTestResult>>;
 }
 
-/** Safely get localStorage reference. */
+const isTestId = (v: unknown): v is TestId => typeof v === 'string' && (TEST_IDS as readonly string[]).includes(v);
+
+const isPlainObject = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
+
+const isFiniteNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+
+const isSavedData = (v: unknown): v is SavedData =>
+  v === null || isFiniteNumber(v) || (isPlainObject(v) && Object.values(v).every(isFiniteNumber));
+
+/** Keeps only the allowed fields, so nothing extra can ride along. Null if the entry is not valid. */
+function clean(entry: unknown): SavedTestResult | null {
+  if (!isPlainObject(entry)) return null;
+  const { testId, date, badge, headline, data } = entry;
+  if (!isTestId(testId) || typeof date !== 'string' || typeof badge !== 'string' || typeof headline !== 'string' || !isSavedData(data)) {
+    return null;
+  }
+  return { testId, date, badge, headline, data: isPlainObject(data) ? { ...data } : data };
+}
+
+/** This browser's localStorage, or null when it is missing or blocked (reading it can throw). */
 export function getStorage(): Storage | null {
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      return window.localStorage;
-    }
-    if (typeof localStorage !== 'undefined') {
-      return localStorage;
-    }
+    if (typeof window !== 'undefined' && window.localStorage) return window.localStorage;
+    if (typeof localStorage !== 'undefined' && localStorage) return localStorage;
   } catch {
     return null;
   }
   return null;
 }
 
-/** Check if localStorage is available and writable. Returns false if blocked or unavailable. */
+/**
+ * True when localStorage can be read. This only reads, so nothing is written before someone opts in.
+ * If a later write still fails (quota, strict privacy modes), `saveResult` returns false and the
+ * opt-in hides itself.
+ */
 export function isStorageAvailable(): boolean {
   try {
     const storage = getStorage();
     if (!storage) return false;
-    const testKey = '__kp_test__';
-    storage.setItem(testKey, '1');
-    storage.removeItem(testKey);
+    storage.getItem(STORAGE_KEY);
     return true;
   } catch {
     return false;
   }
 }
 
-/** Returns the ISO day string (e.g. "2026-10-14"). */
+/** The ISO day, e.g. "2026-10-14". */
 export function getIsoDay(d = new Date()): string {
   try {
     return d.toISOString().slice(0, 10);
@@ -78,56 +100,58 @@ export function getIsoDay(d = new Date()): string {
   }
 }
 
-/** Read the full saved report from localStorage. Returns null if empty, blocked, or invalid JSON. */
+/** The saved report. Null if nothing is saved, storage is blocked, or the stored JSON is not valid. */
 export function readReport(): SavedReport | null {
   try {
-    const storage = getStorage();
-    if (!storage) return null;
-    const raw = storage.getItem(STORAGE_KEY);
+    const raw = getStorage()?.getItem(STORAGE_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object' || typeof parsed.results !== 'object') {
-      return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (!isPlainObject(parsed) || !isPlainObject(parsed.results)) return null;
+    const results: SavedReport['results'] = {};
+    for (const value of Object.values(parsed.results)) {
+      const entry = clean(value);
+      if (entry) results[entry.testId] = entry;
     }
-    return parsed as SavedReport;
+    const report: SavedReport = { version: 1, results };
+    if (typeof parsed.name === 'string' && parsed.name.trim()) report.name = parsed.name.trim();
+    return report;
   } catch {
     return null;
   }
 }
 
-/** Save or overwrite a test result. Returns true on success, false if storage is blocked. */
+function write(report: SavedReport): boolean {
+  const storage = getStorage();
+  if (!storage) return false;
+  storage.setItem(STORAGE_KEY, JSON.stringify(report));
+  return true;
+}
+
+/** Saves a result, replacing any earlier one for the same test. False if storage is blocked or the entry is not valid. */
 export function saveResult(entry: SavedTestResult): boolean {
   try {
-    const storage = getStorage();
-    if (!storage) return false;
-    const existing = readReport() ?? { version: 1, results: {} };
-    existing.results[entry.testId] = {
-      testId: entry.testId,
-      date: entry.date,
-      badge: entry.badge,
-      headline: entry.headline,
-      data: entry.data,
-    };
-    storage.setItem(STORAGE_KEY, JSON.stringify(existing));
-    return true;
+    const safe = clean(entry);
+    if (!safe) return false;
+    const report = readReport() ?? { version: 1, results: {} };
+    report.results[safe.testId] = safe;
+    return write(report);
   } catch {
     return false;
   }
 }
 
-/** Get a saved result for a specific test, or null if none saved. */
-export function getSavedResult(testId: string): SavedTestResult | null {
-  const report = readReport();
-  return report?.results?.[testId] ?? null;
+/** The saved result for one test, or null. */
+export function getSavedResult(testId: TestId): SavedTestResult | null {
+  return readReport()?.results[testId] ?? null;
 }
 
-/** Returns true if any test result is currently saved in localStorage. */
-export function hasAnySavedResults(): boolean {
+/** True when anything at all is saved (a result or a name), so "Clear saved results" has something to clear. */
+export function hasSavedData(): boolean {
   const report = readReport();
-  return Boolean(report && Object.keys(report.results).length > 0);
+  return Boolean(report && (Object.keys(report.results).length > 0 || report.name));
 }
 
-/** Clear all saved results and report from localStorage. */
+/** Removes everything this feature saved. */
 export function clearResults(): boolean {
   try {
     const storage = getStorage();
@@ -139,43 +163,22 @@ export function clearResults(): boolean {
   }
 }
 
-/** Remove a single test result from saved storage. */
-export function removeResult(testId: string): boolean {
-  try {
-    const storage = getStorage();
-    if (!storage) return false;
-    const report = readReport();
-    if (!report || !report.results[testId]) return false;
-    delete report.results[testId];
-    if (Object.keys(report.results).length === 0 && !report.name) {
-      storage.removeItem(STORAGE_KEY);
-    } else {
-      storage.setItem(STORAGE_KEY, JSON.stringify(report));
-    }
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Set optional user name stored once for the report. */
+/** Sets the optional name shown on the report. An empty name removes it. */
 export function setName(name: string): boolean {
   try {
-    const storage = getStorage();
-    if (!storage) return false;
     const report = readReport() ?? { version: 1, results: {} };
-    report.name = name.trim();
-    storage.setItem(STORAGE_KEY, JSON.stringify(report));
-    return true;
+    const trimmed = name.trim();
+    if (trimmed) report.name = trimmed;
+    else delete report.name;
+    return write(report);
   } catch {
     return false;
   }
 }
 
-/** Get the optional user name stored for the report. */
+/** The optional name, or null. */
 export function getName(): string | null {
-  const report = readReport();
-  return report?.name ?? null;
+  return readReport()?.name ?? null;
 }
 
 export interface SaveOptInHandle {
@@ -183,85 +186,80 @@ export interface SaveOptInHandle {
   reset(): void;
 }
 
+const sameResult = (a: Omit<SavedTestResult, 'date'>, b: Omit<SavedTestResult, 'date'>) =>
+  a.badge === b.badge && a.headline === b.headline && JSON.stringify(a.data) === JSON.stringify(b.data);
+
 /**
- * Initializes the opt-in UI component on a result page.
- * If storage is blocked, the container remains hidden and everything works as before.
+ * Wires the opt-in on a result page (see SaveResult.astro). Nothing is saved until the Save button is pressed.
+ * If storage is blocked, the box stays hidden; if a save or clear fails later, it hides itself.
  */
 export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
-  if (!container || !isStorageAvailable()) {
-    if (container) container.hidden = true;
-    return {
-      show() {},
-      reset() {},
-    };
+  const off: SaveOptInHandle = { show() {}, reset() {} };
+  if (!container) return off;
+  if (!isStorageAvailable()) {
+    container.hidden = true;
+    return off;
   }
 
   const saveBtn = container.querySelector<HTMLButtonElement>('[data-save-btn]');
   const clearBtn = container.querySelector<HTMLButtonElement>('[data-clear-btn]');
   const statusEl = container.querySelector<HTMLElement>('[data-save-status]');
+  let current: Omit<SavedTestResult, 'date'> | null = null;
+  let broken = false;
 
-  let currentResult: Omit<SavedTestResult, 'date'> | null = null;
-
-  const updateClearVisibility = () => {
-    if (clearBtn) {
-      clearBtn.hidden = !hasAnySavedResults();
-    }
+  const status = (text: string) => {
+    if (statusEl) statusEl.textContent = text;
   };
 
-  const updateButtonState = () => {
-    if (!saveBtn || !currentResult) return;
-    const existing = getSavedResult(currentResult.testId);
-    if (existing) {
-      const isSameData = JSON.stringify(existing.data) === JSON.stringify(currentResult.data);
-      if (isSameData && existing.badge === currentResult.badge) {
-        saveBtn.textContent = 'Saved on this device';
-        saveBtn.setAttribute('aria-pressed', 'true');
-        if (statusEl) statusEl.textContent = 'Saved to your browser on this device.';
-      } else {
-        saveBtn.textContent = 'Update saved result';
-        saveBtn.setAttribute('aria-pressed', 'false');
-        if (statusEl) statusEl.textContent = 'A previous result is saved on this device. Save to overwrite it.';
-      }
+  const giveUp = () => {
+    broken = true;
+    container.hidden = true;
+  };
+
+  const render = () => {
+    if (clearBtn) clearBtn.hidden = !hasSavedData();
+    if (!saveBtn || !current) return;
+    const existing = getSavedResult(current.testId);
+    // Drafted: button labels and status lines below.
+    if (existing && sameResult(existing, current)) {
+      saveBtn.textContent = 'Saved on this device';
+      saveBtn.setAttribute('aria-pressed', 'true');
+      status('Saved to your browser on this device.');
+    } else if (existing) {
+      saveBtn.textContent = 'Update saved result';
+      saveBtn.setAttribute('aria-pressed', 'false');
+      status('A previous result is saved on this device. Save to overwrite it.');
     } else {
       saveBtn.textContent = 'Save result';
       saveBtn.setAttribute('aria-pressed', 'false');
-      if (statusEl) statusEl.textContent = '';
+      status('');
     }
-    updateClearVisibility();
   };
 
   saveBtn?.addEventListener('click', () => {
-    if (!currentResult) return;
-    const ok = saveResult({
-      ...currentResult,
-      date: getIsoDay(),
-    });
-    if (ok) {
-      if (saveBtn) {
-        saveBtn.textContent = 'Saved on this device';
-        saveBtn.setAttribute('aria-pressed', 'true');
-      }
-      if (statusEl) statusEl.textContent = 'Saved to your browser on this device.';
-      updateClearVisibility();
-    }
+    if (!current) return;
+    if (!saveResult({ ...current, date: getIsoDay() })) return giveUp();
+    render();
   });
 
   clearBtn?.addEventListener('click', () => {
-    clearResults();
-    updateButtonState();
-    if (statusEl) statusEl.textContent = 'Saved results cleared from this device.';
+    if (!clearResults()) return giveUp();
+    render();
+    status('Saved results cleared from this device.'); // Drafted.
+    saveBtn?.focus();
   });
 
   return {
     show(res) {
-      currentResult = res;
+      if (broken) return;
+      current = res;
       container.hidden = false;
-      updateButtonState();
+      render();
     },
     reset() {
-      currentResult = null;
+      current = null;
       container.hidden = true;
-      if (statusEl) statusEl.textContent = '';
+      status('');
     },
   };
 }
