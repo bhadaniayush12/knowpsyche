@@ -17,6 +17,8 @@ const summary = [
 ];
 const toc = [
   { id: 'collect', label: 'What we collect' },
+  // Drafted: contents entry for the saved-results section.
+  { id: 'saved', label: 'Saved results on your device' },
   { id: 'ads', label: 'Cookies & advertising' },
   { id: 'choices', label: 'Your choices' },
   { id: 'children', label: 'Children' },
@@ -32,6 +34,19 @@ const toc = [
     <PolicySection id="collect" toc={toc} color="text-blue" title="What we collect">
       <p class="pp">Your test answers and scores are calculated on your own device and are not sent to our servers. If you share a result, the share image is created in your browser too.</p>
       <p class="pp">Like most websites, our host may keep basic technical logs (such as IP address and browser type) to keep the site secure and working.</p>
+    </PolicySection>
+
+    <!-- Drafted: this whole section, including the button and status text. -->
+    <PolicySection id="saved" toc={toc} color="text-teal-ink" title="Saved results on your device">
+      <p class="pp">Nothing is saved unless you ask. Press "Save result" on any result screen to keep that result in this browser. It stays off until you press it.</p>
+      <p class="pp">For each test you save, we keep the test name, the day, your band, the headline and the score you saw: all nine type scores for the Enneagram, the four area scores for emotional intelligence, the main number for the others. Never your answers, and never the time of each try.</p>
+      <p class="pp">It sits in your browser's local storage on this device. It is never sent to us or anyone else, and we can't see it.</p>
+      <p class="pp">Another phone, computer or browser has its own separate report, which starts empty. Private windows usually forget it when you close them.</p>
+      <p class="pp">To clear it, press "Clear saved results" on any result screen, or the button below when something is saved. Clearing site data for knowpsyche.com in your browser settings removes it too. Saving a test again replaces its old result.</p>
+      <div class="mt-2 flex items-center gap-3" data-privacy-clear-wrap hidden>
+        <button type="button" data-privacy-clear-btn class="mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-coral-ink hover:text-coral-ink">Clear saved results now</button>
+        <span data-privacy-clear-status role="status" aria-live="polite" class="text-[14px] text-ink-soft"></span>
+      </div>
     </PolicySection>
 
     <PolicySection id="ads" toc={toc} color="text-gold-ink" title="Cookies & advertising">
@@ -61,3 +76,22 @@ const toc = [
     </PolicySection>
   </PolicyPage>
 </BaseLayout>
+
+<script>
+  import { clearResults, hasSavedData, isStorageAvailable } from '../../lib/saved-results';
+  import { $ } from '../../lib/test-ui';
+
+  const wrap = $('[data-privacy-clear-wrap]');
+  const btn = $('[data-privacy-clear-btn]');
+  const status = $('[data-privacy-clear-status]');
+
+  if (wrap && isStorageAvailable() && hasSavedData()) {
+    wrap.hidden = false;
+  }
+
+  btn?.addEventListener('click', () => {
+    clearResults();
+    if (status) status.textContent = 'Saved results cleared from this device.';
+    if (btn) btn.hidden = true;
+  });
+</script>
