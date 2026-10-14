@@ -7,7 +7,7 @@ import Scene from './scenes/Scene.astro';
  *  in the colours of the article's test; ink for the pillar article. */
 interface Props {
   article: Article;
-  /** Homepage lead card: taller, with a bigger title. */
+  /** Homepage lead card: bigger title, scene in its own column. */
   featured?: boolean;
   /** Learn hub pillar card: wide featured card on its own row. */
   wide?: boolean;
@@ -24,7 +24,7 @@ const dark = !test || test.dark;
   data-category={article.data.category}
   class:list={[
     'card relative rounded-20 no-underline overflow-hidden transition-colors',
-    wide ? 'p-6 sm:p-8' : featured ? 'flex flex-col gap-3.5 p-[22px] min-h-[300px] md:min-h-[400px] md:p-8' : 'flex flex-col justify-between gap-3.5 p-[22px] min-h-[230px] h-full',
+    wide ? 'p-6 sm:p-8' : featured ? 'flex flex-col gap-5 p-[22px] md:p-8' : 'flex flex-col justify-between gap-3.5 p-[22px] min-h-[230px] h-full',
     dark ? 'bg-ink text-paper hover:text-paper' : 'text-ink hover:text-ink',
     className,
   ]}
@@ -58,6 +58,29 @@ const dark = !test || test.dark;
         </div>
       )}
     </div>
+  ) : featured ? (
+    <>
+      <div class="flex items-center justify-between gap-2">
+        <span
+          class:list={['rounded-full px-2.5 py-[5px] text-[12.5px] font-semibold', dark ? 'bg-yellow text-ink' : 'bg-white']}
+          style={dark ? undefined : { color: test.color }}
+        >{article.data.category}</span>
+        <span class="text-[13.5px] opacity-75">{readingTime(article.body ?? '')}</span>
+      </div>
+      {/* Text on the left, scene in its own column on the right; scene above the text on small screens. */}
+      <div class="grid grid-cols-1 items-center gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:gap-10">
+        <div class="flex flex-col gap-3.5">
+          <h3 class="m-0 max-w-[18ch] font-semibold text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]">{article.data.title}</h3>
+          <p class="m-0 max-w-[52ch] text-[17px] leading-[1.55] opacity-[.88] line-clamp-4">{article.data.deck ?? article.data.description}</p>
+          <span class="text-[15.5px] font-semibold mt-2">Read <span class="card-arrow">→</span></span>
+        </div>
+        {article.data.scene && (
+          <div class="pointer-events-none order-first flex justify-center md:order-last">
+            <Scene slug={article.data.scene} size={160} />
+          </div>
+        )}
+      </div>
+    </>
   ) : (
     <>
       <div class="flex items-center justify-between gap-2">
@@ -68,15 +91,15 @@ const dark = !test || test.dark;
         <span class="text-[13.5px] opacity-75">{readingTime(article.body ?? '')}</span>
       </div>
       {article.data.scene && (
-        <div class:list={['pointer-events-none', featured ? 'my-2 sm:self-end md:absolute md:right-8 md:bottom-8 md:my-0' : 'self-end -my-1 sm:-my-2']}>
-          <Scene slug={article.data.scene} size={featured ? 120 : 96} />
+        <div class="pointer-events-none self-end">
+          <Scene slug={article.data.scene} size={96} />
         </div>
       )}
-      <div class:list={[featured && 'md:mt-auto']}>
-        <h3 class:list={['m-0 mb-1.5 font-semibold line-clamp-3', featured ? 'max-w-[18ch] text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]' : 'text-[24px] leading-[1.15] tracking-[-.035em]']}>{article.data.title}</h3>
-        <p class:list={['m-0 leading-[1.55] opacity-[.88] line-clamp-4', featured ? 'max-w-[52ch] text-[17px]' : 'text-[15.5px]']}>{article.data.deck ?? article.data.description}</p>
+      <div>
+        <h3 class="m-0 mb-1.5 font-semibold line-clamp-3 text-[24px] leading-[1.15] tracking-[-.035em]">{article.data.title}</h3>
+        <p class="m-0 leading-[1.55] opacity-[.88] line-clamp-4 text-[15.5px]">{article.data.deck ?? article.data.description}</p>
       </div>
-      <span class:list={['text-[15.5px] font-semibold', featured ? 'mt-auto md:mt-2' : 'mt-auto']}>Read <span class="card-arrow">→</span></span>
+      <span class="text-[15.5px] font-semibold mt-auto">Read <span class="card-arrow">→</span></span>
     </>
   )}
 </a>

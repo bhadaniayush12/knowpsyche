@@ -1,7 +1,7 @@
 ---
 /**
  * Homepage "Learn psychology" section: big header with a faint ψ behind it, the pillar article as the lead
- * card, the two most recently updated other articles beside it, and a link to /learn/.
+ * card, the two most recently updated other articles below it, and a link to /learn/.
  */
 import ArticleCard from '../learn/ArticleCard.astro';
 import Button from '../ui/Button.astro';
@@ -35,9 +35,10 @@ const intro = 'Short, sourced guides to what the tests measure and what the rese
         <p class="mt-4 mb-0 max-w-[520px] text-[17px] leading-[1.6] text-ink-soft">{intro}</p>
       </div>
 
-      <div class="learn-cards relative grid gap-4 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+      {/* Lead card on its own row so its height follows its content; the two others side by side below. */}
+      <div class="learn-cards relative grid gap-4">
         <ArticleCard article={lead} featured class="reveal-once card-lift" />
-        <div class="grid gap-4">
+        <div class="grid gap-4 md:grid-cols-2">
           {recent.map((a) => <ArticleCard article={a} class="reveal-once card-lift" />)}
         </div>
       </div>
