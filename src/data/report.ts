@@ -84,7 +84,7 @@ export const standout: Record<TestId, { all?: string; byBand?: Record<string, st
       // Drafted.
       Quick: 'Your average came out quick. Your screen and device add a little delay of their own.',
       // Drafted.
-      Steady: 'A steady average. Nothing here points to a problem, and screens add some delay.',
+      Steady: 'A steady average. This is a snapshot of one moment, nothing more. Screens add some delay.',
       // Drafted.
       'Needs a coffee': 'Your average landed in the slower bands. Tiredness, distractions or a laggy device often explain that.',
       // Drafted.
@@ -147,7 +147,7 @@ export const standout: Record<TestId, { all?: string; byBand?: Record<string, st
     // Keyed by the overall band.
     byBand: {
       // Drafted.
-      Growing: 'Some areas are still developing, which is normal. The skills behind this can be practised.',
+      Growing: 'Some areas are still developing. The skills behind this can be practised.',
       // Drafted.
       Solid: 'You handle feelings well most of the time.',
       // Drafted.

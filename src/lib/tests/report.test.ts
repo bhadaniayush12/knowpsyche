@@ -107,3 +107,15 @@ describe('report copy', () => {
     expect(text).not.toMatch(/percent|better than|average person|most people|others|streak|\d+ points|earn points|top \d/i);
   });
 });
+
+describe('report copy wording (Q1-08)', () => {
+  const all = JSON.stringify({ standout, tryThis });
+  it.each(['points to a problem', 'which is normal', 'Totally normal', /\bnormal\b/i])('never says %s', (phrase) => {
+    if (typeof phrase === 'string') expect(all).not.toContain(phrase);
+    else expect(all).not.toMatch(phrase);
+  });
+  it('the replacement lines read as whole sentences', () => {
+    expect(standout['reaction-time'].byBand!.Steady).toBe('A steady average. This is a snapshot of one moment, nothing more. Screens add some delay.');
+    expect(standout['emotional-intelligence'].byBand!.Growing).toBe('Some areas are still developing. The skills behind this can be practised.');
+  });
+});
