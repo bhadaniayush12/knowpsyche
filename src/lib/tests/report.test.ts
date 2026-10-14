@@ -92,11 +92,9 @@ describe('report copy', () => {
     }
   });
 
-  it('fallbacks exist only where a result can have no band', () => {
+  it('only the Enneagram has a one-for-all line; the unused Stroop "couldn\'t measure" lines are gone', () => {
     expect(standout.enneagram.all).toBeTruthy();
-    expect(standout.stroop.all).toBe("This run couldn't be measured, so there is no result to show for it.");
-    expect(tryThis.stroop.all).toBe('Take the test again and save the new result.');
-    for (const id of ['reaction-time', 'number-memory', 'photographic-memory', 'attention-span', 'emotional-intelligence'] as const) {
+    for (const id of ['reaction-time', 'number-memory', 'photographic-memory', 'attention-span', 'stroop', 'emotional-intelligence'] as const) {
       expect(standout[id].all).toBeUndefined();
       expect(tryThis[id].all).toBeUndefined();
     }

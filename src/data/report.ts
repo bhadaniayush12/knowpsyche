@@ -62,8 +62,6 @@ export const reportSheet = {
   // Word for word from the Disclaimer on /privacy/.
   disclaimer:
     'Everything on KnowPsyche is for education and self-reflection. Our tests are not clinical assessments, cannot diagnose any condition, and are not a substitute for advice from a qualified professional.',
-  // Drafted: score labels next to the main number.
-  notMeasured: 'None',
 };
 
 /** Unit shown after the main number on single-score tests. Drafted. */
@@ -77,8 +75,8 @@ export const scoreUnit: Partial<Record<TestId, { before?: string; after?: string
 
 /**
  * "What stood out", band by band, keyed by each test's band badge (Dev's copy, Drafted).
- * `all` is used when no band matches: the Enneagram (one line for every type) and a Stroop run that
- * couldn't be measured (it has no band).
+ * `all` is the Enneagram's one line for every type. A Stroop run that couldn't be measured has no band and
+ * gets no boxes at all.
  */
 export const standout: Record<TestId, { all?: string; byBand?: Record<string, string> }> = {
   'reaction-time': {
@@ -134,8 +132,6 @@ export const standout: Record<TestId, { all?: string; byBand?: Record<string, st
     },
   },
   stroop: {
-    // Drafted: a run that couldn't be measured has no band.
-    all: "This run couldn't be measured, so there is no result to show for it.",
     byBand: {
       // Drafted.
       Unshakeable: "The clashing words hardly slowed you down. Going carefully can do that, so it doesn't mean the effect is missing in you.",
@@ -163,7 +159,7 @@ export const standout: Record<TestId, { all?: string; byBand?: Record<string, st
 };
 
 /**
- * "One thing to try", band by band (Dev's copy, Drafted). `all` covers a Stroop run with no band.
+ * "One thing to try", band by band (Dev's copy, Drafted).
  * The Enneagram has no entries here: it uses the type's own tip from enneagram.ts.
  */
 export const tryThis: Record<TestId, { all?: string; byBand?: Record<string, string> }> = {
@@ -219,8 +215,6 @@ export const tryThis: Record<TestId, { all?: string; byBand?: Record<string, str
     },
   },
   stroop: {
-    // Drafted: a run that couldn't be measured has no band.
-    all: 'Take the test again and save the new result.',
     byBand: {
       // Drafted.
       Unshakeable: 'Try again at a quicker pace and see what changes. Speed and accuracy trade off.',
