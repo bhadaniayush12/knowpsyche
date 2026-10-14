@@ -19,14 +19,19 @@ export const reportPage = {
   nameHint: 'Optional. It stays on this device and appears on the cover.',
   // Given by Dev.
   savePdf: 'Save as PDF',
+  // Given by Dev (G1).
+  pdfHint: 'On iPhone: tap Share, then Print, then pinch the preview to get a PDF.',
   clear: 'Clear saved results',
   // Drafted: same wording as the result pages' clear status.
   cleared: 'Saved results cleared from this device.',
   // Drafted.
   previewLabel: 'Preview of your report',
-  // Drafted: empty state.
+  // Drafted: empty state title.
   emptyTitle: 'Nothing saved yet',
-  emptyText: 'Take any test and press "Save result" on your result. It will show up here, ready to save as a PDF.',
+  // Given by Dev (G1).
+  emptyText: 'Take a test and choose Save result, and your report will appear here.',
+  // Reused from the 404 page.
+  emptyLink: 'Browse the tests →',
 };
 
 export const reportSheet = {

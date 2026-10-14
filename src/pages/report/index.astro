@@ -1,7 +1,7 @@
 ---
 /**
  * /report/ (Task C3): the person's saved results (C1) as A4 pages, previewed on screen and saved as a PDF
- * through the browser's own print dialog. noindex, kept out of the sitemap and the footer.
+ * through the browser's own print dialog. noindex and kept out of the sitemap; the footer has a small link to it.
  *
  * Each page is a fixed A4 box sized in container units (cqw), so the screen preview is a scaled copy of the
  * print and nothing reflows between them. TrailFlag (in <head>) lists the saved tests on <html> before the
@@ -11,6 +11,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TrailFlag from '../../components/result/TrailFlag.astro';
 import Character from '../../components/Character.astro';
+import Button from '../../components/ui/Button.astro';
 import { BANDS_NOTE } from '../../data/shared';
 import { homeTests } from '../../data/home';
 import { REPORT_REF_URL, reportPage, reportSheet } from '../../data/report';
@@ -42,6 +43,11 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
     <section class="rp-intro mb-8 flex flex-col gap-3">
       <h1 class="m-0 text-[clamp(40px,5.4vw,72px)] leading-[.95] font-semibold tracking-[-.05em]">Your <span class="serif text-blue">report</span></h1>
       <p class="m-0 max-w-[560px] text-[17px] leading-[1.55] text-ink-soft">{reportPage.deviceLine}</p>
+      <!-- Screen only, and only when something is saved (hidden in print and in the empty state). -->
+      <div class="rp-pdf mt-2 flex-col items-start gap-2">
+        <button type="button" data-rp-print class:list={[btn, 'border-0 bg-ink font-semibold text-paper hover:bg-blue']}>{reportPage.savePdf}</button>
+        <p class="m-0 text-[14.5px] leading-[1.5] text-ink-soft">{reportPage.pdfHint}</p>
+      </div>
       <p data-rp-status role="status" aria-live="polite" class="m-0 min-h-[1.5em] text-[14.5px] text-ink-soft"></p>
     </section>
 
@@ -51,6 +57,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
         <h2 id="rp-empty-title" tabindex="-1" class="m-0 text-[clamp(26px,3vw,34px)] font-semibold tracking-[-.03em]">{reportPage.emptyTitle}</h2>
         <p class="m-0 text-[16.5px] leading-[1.6]">{reportPage.emptyText}</p>
       </div>
+      <div><Button href="/tests/" variant="outline" size="md">{reportPage.emptyLink}</Button></div>
       <ul class="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
         {tests.map((t) => (
           <li>
@@ -72,7 +79,6 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
           <input id="rp-name" type="text" autocomplete="name" maxlength="60" spellcheck="false" aria-describedby="rp-name-hint" class="min-h-12 w-full border border-ink bg-paper px-4 text-[17px] text-ink" />
         </div>
         <div class="flex flex-wrap gap-2.5">
-          <button type="button" data-rp-print class:list={[btn, 'border-0 bg-ink font-semibold text-paper hover:bg-blue']}>{reportPage.savePdf}</button>
           <button type="button" data-rp-clear class:list={[btn, 'border border-ink bg-transparent text-ink hover:border-coral-ink hover:text-coral-ink']}>{reportPage.clear}</button>
         </div>
       </div>
@@ -159,8 +165,9 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
 
 <style is:global>
   /* Which block shows is decided before the first paint (TrailFlag sets html[data-kp-saved]). */
-  .rp-has { display: none; }
+  .rp-has, .rp-pdf { display: none; }
   html[data-kp-saved] .rp-has { display: block; }
+  html[data-kp-saved] .rp-pdf { display: flex; }
   html[data-kp-saved] .rp-empty { display: none; }
   .rp-test { display: none; }
 
@@ -264,7 +271,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
   @media print {
     html, body { background: var(--color-paper) !important; }
     body { display: block !important; min-height: 0 !important; }
-    body > :not(main), main > nav, .rp-intro, .rp-controls, .rp-empty { display: none !important; }
+    body > :not(main), main > nav, .rp-intro, .rp-pdf, .rp-controls, .rp-empty { display: none !important; }
     .rp-screen { max-width: none !important; margin: 0 !important; padding: 0 !important; }
     .rp-doc { display: block; }
     .rp-sheet {
