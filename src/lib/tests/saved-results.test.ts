@@ -11,6 +11,7 @@ import {
   setName,
   STORAGE_KEY,
   CHANGE_EVENT,
+  DATA_RULES,
   type SavedTestResult,
 } from '../saved-results';
 
@@ -325,5 +326,121 @@ describe('change event', () => {
     vi.stubGlobal('window', { localStorage: storage, dispatchEvent });
     expect(saveResult(rt())).toBe(false);
     expect(dispatchEvent).not.toHaveBeenCalled();
+  });
+});
+
+describe('what clean() keeps (Q1-13)', () => {
+  let storage: MockLocalStorage;
+  beforeEach(() => {
+    storage = new MockLocalStorage();
+    vi.stubGlobal('localStorage', storage);
+    vi.stubGlobal('window', { localStorage: storage });
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  const e = (testId: SavedTestResult['testId'], data: unknown, over: Record<string, unknown> = {}) =>
+    ({ testId, date: '2026-10-14', badge: 'B', headline: 'H', data, ...over }) as unknown as SavedTestResult;
+  /** Stores raw JSON (as if hand-edited) and reads it back through readReport. */
+  const kept = (entry: unknown, extra: Record<string, unknown> = {}) => {
+    storage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, results: { x: entry }, ...extra }));
+    return readReport();
+  };
+  const keeps = (entry: SavedTestResult) => Object.keys(kept(entry)!.results).length === 1;
+  const eq = (v: number, over: Record<string, number> = {}) => ({ knowing: v, managing: v, reading: v, relationships: v, ...over });
+  const enne = (v: number, over: Record<string, number> = {}) => ({ ...Object.fromEntries([1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => [String(n), v])), ...over });
+
+  describe('day must be a real YYYY-MM-DD', () => {
+    it.each(['2026-10-14', '2024-02-29', '2026-12-31'])('keeps %s', (date) => expect(keeps(e('number-memory', 7, { date }))).toBe(true));
+    it.each(['garbage', '', '2026-1-4', '14-10-2026', '2026-10-14T10:00:00Z', ' 2026-10-14', '2026-13-01', '2026-00-10', '2026-02-30', '2025-02-29', '2026-10-00'])(
+      'drops %j',
+      (date) => expect(keeps(e('number-memory', 7, { date }))).toBe(false),
+    );
+    it('drops a day that is not a string', () => expect(keeps(e('number-memory', 7, { date: 20261014 }))).toBe(false));
+  });
+
+  describe('badge and headline up to 120 characters', () => {
+    it('keeps exactly 120', () => expect(keeps(e('number-memory', 7, { badge: 'b'.repeat(120), headline: 'h'.repeat(120) }))).toBe(true));
+    it('drops a 121-character headline', () => expect(keeps(e('number-memory', 7, { headline: 'h'.repeat(121) }))).toBe(false));
+    it('drops a 121-character badge', () => expect(keeps(e('number-memory', 7, { badge: 'b'.repeat(121) }))).toBe(false));
+    it('keeps an empty badge', () => expect(keeps(e('stroop', null, { badge: '' }))).toBe(true));
+  });
+
+  describe('name up to 60 characters', () => {
+    it('keeps 60', () => expect(kept(e('number-memory', 7), { name: 'n'.repeat(60) })!.name).toBe('n'.repeat(60)));
+    it('keeps a name that is 60 once trimmed', () => expect(kept(e('number-memory', 7), { name: `  ${'n'.repeat(60)}  ` })!.name).toBe('n'.repeat(60)));
+    it('drops 61 (the results stay)', () => {
+      const r = kept(e('number-memory', 7), { name: 'n'.repeat(61) })!;
+      expect(r.name).toBeUndefined();
+      expect(Object.keys(r.results)).toEqual(['number-memory']);
+    });
+    it('setName does not store 61', () => {
+      expect(setName('n'.repeat(61))).toBe(false);
+      expect(storage.getItem(STORAGE_KEY)).toBeNull();
+      expect(setName('n'.repeat(60))).toBe(true);
+      expect(getName()).toBe('n'.repeat(60));
+    });
+  });
+
+  describe('reaction time: a number from 0 to 100000 ms', () => {
+    it.each([0, 1, 220, 245.5, 100000])('keeps %s', (v) => expect(keeps(e('reaction-time', v))).toBe(true));
+    it.each([-1, 100001, 999999999, NaN, Infinity, '220', null, { a: 1 }])('drops %j', (v) => expect(keeps(e('reaction-time', v))).toBe(false));
+  });
+
+  describe('Stroop: -100000 to 100000 ms, or null for an unmeasured run', () => {
+    it.each([-20, 0, 120, null, -100000, 100000])('keeps %j', (v) => expect(keeps(e('stroop', v))).toBe(true));
+    it.each([-100001, 100001, '120', { a: 1 }])('drops %j', (v) => expect(keeps(e('stroop', v))).toBe(false));
+  });
+
+  describe('attention span: 0 to 100', () => {
+    it.each([0, 78, 89.5, 100])('keeps %s', (v) => expect(keeps(e('attention-span', v))).toBe(true));
+    it.each([-1, 101, null])('drops %j', (v) => expect(keeps(e('attention-span', v))).toBe(false));
+  });
+
+  describe('number memory and photographic memory: whole numbers from 0', () => {
+    it.each([['number-memory', 0], ['number-memory', 12], ['photographic-memory', 0], ['photographic-memory', 14]] as const)('%s keeps %s', (id, v) =>
+      expect(keeps(e(id, v))).toBe(true),
+    );
+    it.each([
+      ['number-memory', -5],
+      ['number-memory', 7.5],
+      ['number-memory', null],
+      ['number-memory', 100001],
+      ['photographic-memory', -1],
+      ['photographic-memory', 3.2],
+      ['photographic-memory', null],
+    ] as const)('%s drops %j', (id, v) => expect(keeps(e(id, v))).toBe(false));
+  });
+
+  describe('EQ: exactly the four areas, each a whole number 0 to 100', () => {
+    it.each([eq(0), eq(100), eq(64)])('keeps %j', (v) => expect(keeps(e('emotional-intelligence', v))).toBe(true));
+    it.each([
+      eq(101),
+      eq(-1),
+      eq(50, { knowing: 50.5 }),
+      { knowing: 50, managing: 50, reading: 50 },
+      { ...eq(50), extra: 50 },
+      { foo: 60 },
+      {},
+      60,
+      null,
+    ])('drops %j', (v) => expect(keeps(e('emotional-intelligence', v))).toBe(false));
+    it('the area ids match the EQ test data', async () => {
+      const { areas } = await import('../../data/tests/emotional-intelligence');
+      expect(DATA_RULES['emotional-intelligence'].keys).toEqual(areas.map((a) => a.id));
+    });
+  });
+
+  describe('Enneagram: exactly types 1 to 9, each a whole number 5 to 25', () => {
+    it.each([enne(5), enne(25), enne(10, { 4: 22, 5: 21 })])('keeps %j', (v) => expect(keeps(e('enneagram', v))).toBe(true));
+    it.each([enne(4), enne(26), enne(10, { 4: 999, 5: -3 }), enne(10, { 4: 22.5 }), { ...enne(10), x: 2 }, { 4: 22 }, {}, 22, null])('drops %j', (v) =>
+      expect(keeps(e('enneagram', v))).toBe(false),
+    );
+  });
+
+  it('saveResult refuses what clean() drops, and stores nothing', () => {
+    expect(saveResult(e('reaction-time', -5))).toBe(false);
+    expect(saveResult(e('number-memory', 7, { date: '2026-13-45' }))).toBe(false);
+    expect(saveResult(e('number-memory', 7, { headline: 'h'.repeat(121) }))).toBe(false);
+    expect(storage.getItem(STORAGE_KEY)).toBeNull();
   });
 });

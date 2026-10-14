@@ -49,19 +49,79 @@ const isTestId = (v: unknown): v is TestId => typeof v === 'string' && (TEST_IDS
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === 'object' && v !== null && !Array.isArray(v);
 
-const isFiniteNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+/** Longest badge or headline kept, and longest name (the same as the name input's maxlength). */
+export const MAX_TEXT = 120;
+export const MAX_NAME = 60;
 
-const isSavedData = (v: unknown): v is SavedData =>
-  v === null || isFiniteNumber(v) || (isPlainObject(v) && Object.values(v).every(isFiniteNumber));
+/**
+ * What each test's saved number (or numbers) may be. Plain data, so the head flag (TrailFlag.astro) checks
+ * exactly the same rules without importing anything. `keys`: the data is an object with exactly these keys,
+ * each a number in range; otherwise one number in range. `int`: whole numbers only. `nullable`: null allowed.
+ */
+export interface DataRule {
+  min: number;
+  max: number;
+  int?: boolean;
+  nullable?: boolean;
+  keys?: readonly string[];
+}
+export const DATA_RULES: Record<TestId, DataRule> = {
+  // Milliseconds.
+  'reaction-time': { min: 0, max: 100000 },
+  // Area ids from data/tests/emotional-intelligence.ts; each area score is 0 to 100.
+  'emotional-intelligence': { min: 0, max: 100, int: true, keys: ['knowing', 'managing', 'reading', 'relationships'] },
+  // Each type's sum of five 1 to 5 answers.
+  enneagram: { min: 5, max: 25, int: true, keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] },
+  // Level reached.
+  'photographic-memory': { min: 0, max: 100000, int: true },
+  // Digits held.
+  'number-memory': { min: 0, max: 100000, int: true },
+  // Score out of 100 (an average of two whole percentages, so it can end in .5).
+  'attention-span': { min: 0, max: 100 },
+  // Milliseconds; the effect can be negative (clashing words faster). Null only for an unmeasured run.
+  stroop: { min: -100000, max: 100000, nullable: true },
+};
 
-/** Keeps only the allowed fields, so nothing extra can ride along. Null if the entry is not valid. */
+const inRange = (v: unknown, rule: DataRule): v is number =>
+  typeof v === 'number' && Number.isFinite(v) && v >= rule.min && v <= rule.max && (!rule.int || Number.isInteger(v));
+
+function isValidData(testId: TestId, v: unknown): v is SavedData {
+  const rule = DATA_RULES[testId];
+  if (v === null) return Boolean(rule.nullable);
+  if (!rule.keys) return inRange(v, rule);
+  if (!isPlainObject(v)) return false;
+  const keys = Object.keys(v);
+  return keys.length === rule.keys.length && rule.keys.every((k) => Object.prototype.hasOwnProperty.call(v, k) && inRange(v[k], rule));
+}
+
+/** A real calendar day written as YYYY-MM-DD. */
+export function isIsoDay(v: unknown): v is string {
+  if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
+  const [y, m, d] = v.split('-').map(Number);
+  return m >= 1 && m <= 12 && d >= 1 && d <= new Date(Date.UTC(y, m, 0)).getUTCDate();
+}
+
+const isShortText = (v: unknown): v is string => typeof v === 'string' && v.length <= MAX_TEXT;
+
+/**
+ * Keeps only the allowed fields, so nothing extra can ride along. Null if the entry is not valid: an unknown
+ * test, a day that isn't YYYY-MM-DD, a badge or headline over MAX_TEXT, or data outside DATA_RULES.
+ * Anything that fails is dropped, never stored. TrailFlag.astro repeats these checks; keep them in step.
+ */
 function clean(entry: unknown): SavedTestResult | null {
   if (!isPlainObject(entry)) return null;
   const { testId, date, badge, headline, data } = entry;
-  if (!isTestId(testId) || typeof date !== 'string' || typeof badge !== 'string' || typeof headline !== 'string' || !isSavedData(data)) {
+  if (!isTestId(testId) || !isIsoDay(date) || !isShortText(badge) || !isShortText(headline) || !isValidData(testId, data)) {
     return null;
   }
   return { testId, date, badge, headline, data: isPlainObject(data) ? { ...data } : data };
+}
+
+/** The trimmed name if it can be kept (a non-empty string up to MAX_NAME), else null. */
+function cleanName(v: unknown): string | null {
+  if (typeof v !== 'string') return null;
+  const t = v.trim();
+  return t && t.length <= MAX_NAME ? t : null;
 }
 
 /** This browser's localStorage, or null when it is missing or blocked (reading it can throw). */
@@ -114,7 +174,8 @@ export function readReport(): SavedReport | null {
       if (entry) results[entry.testId] = entry;
     }
     const report: SavedReport = { version: 1, results };
-    if (typeof parsed.name === 'string' && parsed.name.trim()) report.name = parsed.name.trim();
+    const name = cleanName(parsed.name);
+    if (name) report.name = name;
     return report;
   } catch {
     return null;
@@ -188,11 +249,12 @@ export function clearResults(): boolean {
   }
 }
 
-/** Sets the optional name shown on the report. An empty name removes it. */
+/** Sets the optional name shown on the report. An empty name removes it; one over MAX_NAME is not stored. */
 export function setName(name: string): boolean {
   try {
-    const report = readReport() ?? { version: 1, results: {} };
     const trimmed = name.trim();
+    if (trimmed.length > MAX_NAME) return false;
+    const report = readReport() ?? { version: 1, results: {} };
     if (trimmed) report.name = trimmed;
     else delete report.name;
     return write(report);
