@@ -310,7 +310,7 @@ details[open] .plus {
 }
 
 @media print {
-  .reveal, .late { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .reveal, .late, .reveal-once, .how-text, .rx-row { animation: none !important; opacity: 1 !important; transform: none !important; }
   .draw, .strike { animation: none !important; stroke-dashoffset: 0; }
   .motion-toggle { display: none !important; }
 }
@@ -380,6 +380,61 @@ details[open] .plus {
   .pointer-swap > .on-touch { visibility: visible; }
 }
 
+/* ---------- Homepage motion, pass 2 ----------
+   Rule: things move on hover, on keyboard focus, or once the first time they scroll into view, then stop.
+   Only opacity and transform change, so nothing shifts the layout. Each "once" state is added by a small
+   IntersectionObserver script (.is-in); without JS nothing is hidden, and with reduced motion the final
+   state is set at once (the global rule below turns every animation and transition off). */
+
+/* Card lift: hover or keyboard focus raises the card onto a hard offset shadow, like the site's other panels. */
+.card.card-lift { transition: transform .45s var(--ease-house), box-shadow .45s var(--ease-house); }
+.card.card-lift:is(:hover, :focus-visible) { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--color-ink); }
+.card.card-lift:focus-visible .glyph { transform: scale(1.08) rotate(-3deg); }
+
+/* Reveal once, with a short stagger (--i). backwards fill only, so hover can move the card afterwards. */
+@keyframes kp-in { from { opacity: 0; transform: translateY(18px); } }
+.js .reveal-once:not(.is-in, .is-shown) { opacity: 0; }
+.reveal-once.is-in { animation: kp-in .5s var(--ease-house) calc(var(--i, 0) * 70ms) backwards; }
+
+/* Card motifs, on hover or focus only: the digits flip in one by one, the colour words swap ink. */
+@keyframes kp-flip { from { opacity: 0; transform: rotateX(90deg) translateY(-6px); } }
+.nm-d { display: inline-block; }
+.card:is(:hover, :focus-visible) .nm-d { animation: kp-flip .5s var(--ease-house) calc(var(--d) * 60ms) backwards; }
+.st-w { transition: color .45s var(--ease-house); }
+.card:is(:hover, :focus-visible) .st-w1 { color: var(--color-blue); }
+.card:is(:hover, :focus-visible) .st-w2 { color: var(--color-coral); }
+
+/* How it works: the dashed line draws, each number fills, each text fades up, in order (about .9 s in all). */
+.js .how-trail { stroke-dashoffset: 1200; }
+.how.is-in .how-trail { stroke-dashoffset: 0; transition: stroke-dashoffset .6s var(--ease-house); }
+.how-num { transition: color .35s var(--ease-house), -webkit-text-stroke-color .35s var(--ease-house); }
+.how.is-in .how-num { color: var(--color-ink); transition-delay: calc(var(--s) * 150ms); }
+.how.is-in .how-num-dark { color: var(--color-yellow); }
+.js .how:not(.is-in) .how-text { opacity: 0; transform: translateY(12px); }
+.how-text { transition: opacity .35s var(--ease-house), transform .35s var(--ease-house); }
+.how.is-in .how-text { transition-delay: calc(var(--s) * 150ms + 150ms); }
+/* Step 3's little marker joins the same sequence, so the whole section settles in under a second. */
+.how .slide { animation-duration: .55s; animation-delay: .35s; }
+
+/* Results example: the three answers come in one after another once the count-up ends (.is-done). */
+.js .rx:not(.is-done) .rx-row { opacity: 0; transform: translateY(10px); }
+.rx-row { transition: opacity .35s var(--ease-house), transform .35s var(--ease-house); }
+.rx.is-done .rx-row { transition-delay: calc(var(--r) * 140ms); }
+
+/* Learn section: the big faint ψ drifts a few pixels while the pointer is over the section. */
+.learn-psi { transition: transform .9s var(--ease-house); }
+.learn-home:hover .learn-psi { transform: translate(-6px, 4px) rotate(-2deg); }
+
+/* Footer wordmark: letters lift one after another and the serif "psyche" leans, on hover only. */
+.wm-l { display: inline-block; transition: transform .35s var(--ease-house); }
+.wordmark:hover .wm-l { transform: translateY(-.06em); transition-delay: calc(var(--l) * 35ms); }
+.wm-serif { display: inline-block; transition: transform .5s var(--ease-house); transform-origin: left bottom; }
+.wordmark:hover .wm-serif { transform: skewX(-6deg); }
+
+/* Mini reaction test: one ripple from the press point. */
+@keyframes kp-ripple { from { opacity: .45; transform: translate(-50%, -50%) scale(0); } to { opacity: 0; transform: translate(-50%, -50%) scale(1); } }
+.mrt-ripple { position: absolute; width: 440px; height: 440px; border-radius: 999px; background: currentColor; pointer-events: none; animation: kp-ripple .55s var(--ease-house) forwards; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
@@ -389,6 +444,7 @@ details[open] .plus {
   .draw, .strike { stroke-dashoffset: 0; }
   .late { opacity: 1; }
   .reveal { opacity: 1; transform: none; }
+  .mrt-ripple { display: none; }
   /* Nothing moves, so there's nothing to pause. */
   .motion-toggle { display: none !important; }
 }
