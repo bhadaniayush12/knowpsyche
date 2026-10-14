@@ -1,0 +1,82 @@
+import { describe, expect, it } from 'vitest';
+import { boxCopy, fillBoxes } from '../report-view';
+import { standout, tryThis } from '../../data/report';
+import { result as enneagramCopy, types as enneagramTypes } from '../../data/tests/enneagram';
+import type { SavedTestResult, TestId } from '../saved-results';
+
+const saved = (testId: TestId, badge: string, data: SavedTestResult['data'] = 7): SavedTestResult => ({ testId, date: '2026-10-14', badge, headline: `${badge} result`, data });
+
+// Every line of Enneagram copy the two boxes could ever show.
+const enneagramLines = [standout.enneagram.all!, enneagramCopy.evenTip, ...enneagramTypes.map((t) => t.tip)];
+
+// A stand-in sheet: just the two boxes and their row.
+const fakeSheet = () => {
+  const parts: Record<string, { hidden: boolean; textContent: string }> = {
+    '.rp-two': { hidden: false, textContent: '' },
+    '[data-f="standout"]': { hidden: false, textContent: 'old' },
+    '[data-f="try"]': { hidden: false, textContent: 'old' },
+  };
+  return { parts, sheet: { querySelector: (s: string) => parts[s] ?? null } as unknown as Pick<HTMLElement, 'querySelector'> };
+};
+
+describe('report boxes for a badge that is not a current band', () => {
+  const unknown: [TestId, string, SavedTestResult['data']][] = [
+    ['reaction-time', 'Turbo', 150],
+    ['number-memory', 'Level 9', 9],
+    ['number-memory', '', 7],
+    ['photographic-memory', 'Turbo', 5],
+    ['attention-span', '1', 50],
+    ['stroop', '', null],
+    ['emotional-intelligence', 'Turbo', { knowing: 50 }],
+  ];
+
+  it.each(unknown)('%s with badge %j: no copy at all', (id, badge, data) => {
+    expect(boxCopy(saved(id, badge, data))).toBeNull();
+  });
+
+  it.each(unknown)('%s with badge %j: the row is hidden and nothing is left in the boxes', (id, badge, data) => {
+    const { parts, sheet } = fakeSheet();
+    fillBoxes(sheet, saved(id, badge, data));
+    expect(parts['.rp-two'].hidden).toBe(true);
+    expect(parts['[data-f="standout"]'].textContent).toBe('');
+    expect(parts['[data-f="try"]'].textContent).toBe('');
+    for (const line of enneagramLines) expect(JSON.stringify(parts)).not.toContain(line);
+  });
+});
+
+describe('report boxes for a valid band', () => {
+  it.each([
+    ['reaction-time', 'Quick'],
+    ['number-memory', 'Steady'],
+    ['photographic-memory', 'Sharp'],
+    ['attention-span', 'Laser'],
+    ['stroop', 'Mild pull'],
+    ['emotional-intelligence', 'Very strong'],
+  ] as [TestId, string][])('%s %s shows its own copy', (id, badge) => {
+    const { parts, sheet } = fakeSheet();
+    fillBoxes(sheet, saved(id, badge, id === 'emotional-intelligence' ? { knowing: 90 } : 7));
+    expect(parts['.rp-two'].hidden).toBe(false);
+    expect(parts['[data-f="standout"]'].textContent).toBe(standout[id].byBand![badge]);
+    expect(parts['[data-f="try"]'].textContent).toBe(tryThis[id].byBand![badge]);
+    for (const line of enneagramLines) expect(JSON.stringify(parts)).not.toContain(line);
+  });
+
+  it('every band of every non-Enneagram test has both lines', () => {
+    for (const id of ['reaction-time', 'number-memory', 'photographic-memory', 'attention-span', 'stroop', 'emotional-intelligence'] as TestId[]) {
+      for (const badge of Object.keys(standout[id].byBand ?? {})) expect(boxCopy(saved(id, badge))).not.toBeNull();
+    }
+  });
+});
+
+describe('the Enneagram keeps its own copy', () => {
+  const scores = { 1: 10, 2: 10, 3: 10, 4: 22, 5: 21, 6: 10, 7: 10, 8: 10, 9: 10 };
+  it('a wing badge uses the main type tip', () => {
+    expect(boxCopy(saved('enneagram', '4w5', scores))).toEqual({ standout: standout.enneagram.all, tip: enneagramTypes.find((t) => t.n === 4)!.tip });
+  });
+  it('a tie uses the first type tip', () => {
+    expect(boxCopy(saved('enneagram', '4 or 9', scores))?.tip).toBe(enneagramTypes.find((t) => t.n === 4)!.tip);
+  });
+  it('"Even" uses the even tip', () => {
+    expect(boxCopy(saved('enneagram', 'Even', scores))?.tip).toBe(enneagramCopy.evenTip);
+  });
+});

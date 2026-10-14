@@ -97,13 +97,35 @@ function meaningFor(id: TestId, r: SavedTestResult): string[] {
   return [overall?.text, eqCopy.closing].filter((x): x is string => Boolean(x));
 }
 
-function tipFor(id: TestId, r: SavedTestResult): string {
-  const own = tryThis[id].byBand?.[r.badge] ?? tryThis[id].all;
-  if (own) return own;
-  // The Enneagram: the main type's own tip, or the "even" tip.
-  const e = enneagramTypes(r.badge, r.data && typeof r.data === 'object' ? r.data : null);
-  if (e.kind === 'even') return enneagramCopy.evenTip;
-  return enneagramTypes_.find((t) => t.n === e.types[0])?.tip ?? enneagramCopy.evenTip;
+/**
+ * "What stood out" and "One thing to try" for a saved result, or null when there is nothing right to say:
+ * every test except the Enneagram needs a badge that is one of its current bands (a renamed band, an
+ * unmeasured Stroop run or hand-edited data gets null). The Enneagram copy is only ever used for the Enneagram.
+ */
+export function boxCopy(r: SavedTestResult): { standout: string; tip: string } | null {
+  const id = r.testId;
+  if (id === 'enneagram') {
+    // The main type's own tip, or the "even" tip.
+    const e = enneagramTypes(r.badge, r.data && typeof r.data === 'object' ? r.data : null);
+    const tip = e.kind === 'even' ? enneagramCopy.evenTip : (enneagramTypes_.find((t) => t.n === e.types[0])?.tip ?? enneagramCopy.evenTip);
+    return standout.enneagram.all ? { standout: standout.enneagram.all, tip } : null;
+  }
+  const bands: readonly { badge: string }[] = single[id]?.bands ?? (id === 'emotional-intelligence' ? eqBands : []);
+  if (!r.badge || !bands.some((b) => b.badge === r.badge)) return null;
+  const s = standout[id].byBand?.[r.badge];
+  const tip = tryThis[id].byBand?.[r.badge];
+  return s && tip ? { standout: s, tip } : null;
+}
+
+/** Fills the two boxes, or hides their row completely when there is no copy for this result. No DOM building. */
+export function fillBoxes(sheet: Pick<HTMLElement, 'querySelector'>, r: SavedTestResult) {
+  const row = sheet.querySelector<HTMLElement>('.rp-two');
+  const s = sheet.querySelector<HTMLElement>('[data-f="standout"]');
+  const t = sheet.querySelector<HTMLElement>('[data-f="try"]');
+  const copy = boxCopy(r);
+  if (row) row.hidden = !copy;
+  if (s) s.textContent = copy?.standout ?? '';
+  if (t) t.textContent = copy?.tip ?? '';
 }
 
 /** Fills one test sheet. */
@@ -115,8 +137,7 @@ export function fillSheet(sheet: HTMLElement, r: SavedTestResult) {
   f('badge').textContent = r.badge;
   f('badge').hidden = !r.badge;
   f('visual').replaceChildren(visualFor(id, r));
-  f('standout').textContent = standout[id].byBand?.[r.badge] ?? standout[id].all ?? '';
-  f('try').textContent = tipFor(id, r);
+  fillBoxes(sheet, r);
   f('means').replaceChildren(...meaningFor(id, r).map((t) => el('p', '', t)));
 }
 
