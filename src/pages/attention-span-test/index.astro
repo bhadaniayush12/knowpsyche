@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { attentionBands, faqs, page, result, resultUi, sources, ui } from '../../data/tests/attention-span';
 import { TOTAL_TRIALS } from '../../lib/tests/attention-span';
@@ -157,6 +158,8 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
     <BandsNote />
 
+    <SaveResult testId="attention-span" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -204,6 +207,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   } from '../../lib/tests/attention-span';
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
@@ -220,6 +224,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   const circleEl = $('.as-circle');
   const feedbackEl = $('.as-feedback');
   const resultEl = $('[data-result]');
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
   const isCardOnScreen = onScreen(card);
   // "Tap" on touch screens, "click" with a mouse.
   const touch = window.matchMedia('(pointer: coarse)').matches;
@@ -463,6 +468,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       filename: 'attention-span-knowpsyche',
     });
 
+    saveOptIn.show({
+      testId: 'attention-span',
+      badge: band.badge,
+      headline: `${band.badge} · ${scores.overall} / 100`,
+      data: scores.overall,
+    });
+
     resultEl.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   }
 
@@ -478,6 +490,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     blankCircle();
     feedbackEl.textContent = '';
     resultEl.hidden = true;
+    saveOptIn.reset();
     setView('idle');
   }
 

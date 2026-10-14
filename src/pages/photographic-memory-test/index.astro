@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, page, photoBands, result, sources, ui } from '../../data/tests/photographic-memory';
 import { LIVES } from '../../lib/tests/photographic-memory';
@@ -77,6 +78,8 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
 
     <BandsNote />
 
+    <SaveResult testId="photographic-memory" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -132,6 +135,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
   } from '../../lib/tests/photographic-memory';
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   /** Pause after a finished level, and after a wrong tile, before the next pattern. */
@@ -147,6 +151,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
   const resultEl = $('[data-result]');
   const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
   const share = createShareCard($('[data-share]'));
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
 
   const ICON_OK = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
   const ICON_MISSED = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="6.5"/></svg>';
@@ -312,6 +317,13 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
       filename: 'knowpsyche-photographic-memory',
     });
 
+    saveOptIn.show({
+      testId: 'photographic-memory',
+      badge: band.badge,
+      headline: `Level ${score} · ${band.badge}`,
+      data: score,
+    });
+
     resultEl.hidden = false;
   };
 
@@ -332,6 +344,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     buildBoard(3);
     status.textContent = ui.ready;
     resultEl.hidden = true;
+    saveOptIn.reset();
   };
 
   const start = () => {

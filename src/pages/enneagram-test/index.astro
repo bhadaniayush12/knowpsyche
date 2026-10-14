@@ -9,6 +9,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import { faqs, page, result, scale, sources, statements, tieBreak, types, ui } from '../../data/tests/enneagram';
 
 const btnSmall =
@@ -153,6 +154,8 @@ const choiceBtn =
 
     <BandsNote />
 
+    <SaveResult testId="enneagram" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -190,6 +193,7 @@ const choiceBtn =
     type TieBreakQuestion,
   } from '../../lib/tests/enneagram';
   import { createShareCard } from '../../lib/share-card';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
 
   const card = $('.en-card');
@@ -208,6 +212,7 @@ const choiceBtn =
   const resultEl = $('[data-result]');
   const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
   const share = createShareCard($('[data-share]'));
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const cardVisible = onScreen(card);
 
@@ -348,6 +353,7 @@ const choiceBtn =
     pending = null;
     shown = null;
     resultEl.hidden = true;
+    saveOptIn.reset();
     render();
   };
 
@@ -546,6 +552,13 @@ const choiceBtn =
     } else {
       void share.update({ ...shareBase, label: 'My Enneagram scores', big: 'Even', badge: 'No single type stood out', tagline: "What's your type?", text: "My Enneagram scores came out very even. What's your type?" });
     }
+
+    saveOptIn.show({
+      testId: 'enneagram',
+      badge: r('badge').textContent ?? '',
+      headline: r('headline').textContent ?? '',
+      data: Object.fromEntries(res.ranked.map((x) => [String(x.type), x.sum])),
+    });
 
     resultEl.hidden = false;
     r('headline').focus({ preventScroll: true });

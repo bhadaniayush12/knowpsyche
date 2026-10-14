@@ -10,6 +10,7 @@ import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
 import BandScale from '../../components/result/BandScale.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { arena, faqs, modes, page, result, sources } from '../../data/tests/reaction-time';
 import { TRIES } from '../../lib/tests/reaction-time';
@@ -111,6 +112,8 @@ const ticks = [100, 200, 300, 400, 500];
 
     <BandsNote />
 
+    <SaveResult testId="reaction-time" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -153,6 +156,7 @@ const ticks = [100, 200, 300, 400, 500];
   } from '../../lib/tests/reaction-time';
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, today } from '../../lib/test-ui';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
@@ -170,6 +174,7 @@ const ticks = [100, 200, 300, 400, 500];
   const modeButtons = $$<HTMLButtonElement>('.rt-mode');
   const modeNote = $('[data-mode-note]');
   const resultEl = $('[data-result]');
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
   const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
   const share = createShareCard($('[data-share]'));
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -382,6 +387,13 @@ const ticks = [100, 200, 300, 400, 500];
       filename: 'knowpsyche-reaction-time',
     });
 
+    saveOptIn.show({
+      testId: 'reaction-time',
+      badge: band.badge,
+      headline: `${s.average} ms · ${band.badge}`,
+      data: s.average,
+    });
+
     resultEl.hidden = false;
     const headline = r('headline');
     headline.focus({ preventScroll: true });
@@ -421,6 +433,7 @@ const ticks = [100, 200, 300, 400, 500];
     phase = 'idle';
     renderLights(0);
     resultEl.hidden = true;
+    saveOptIn.reset();
     render();
   };
 

@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, page, result, resultUi, sources, stroopBands, ui } from '../../data/tests/stroop';
 import { TOTAL_TRIALS } from '../../lib/tests/stroop';
@@ -214,6 +215,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     <BandsNote />
 
+    <SaveResult testId="stroop" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -254,6 +257,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   } from '../../lib/tests/stroop';
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
@@ -274,6 +278,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   const feedbackEl = $('.st-feedback');
   const choiceBtns = $$<HTMLButtonElement>('.st-btn');
   const resultEl = $('[data-result]');
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
   const isCardOnScreen = onScreen(card);
   const scrollBehavior = (): ScrollBehavior => (prefersReducedMotion() ? 'auto' : 'smooth');
 
@@ -529,6 +534,13 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       filename: 'stroop-test-knowpsyche',
     });
 
+    saveOptIn.show({
+      testId: 'stroop',
+      badge: measured ? band.badge : 'Not measured',
+      headline: measured ? (scores.stroopEffectMs <= 0 ? 'No interference effect' : `${scores.stroopEffectMs} ms Stroop effect`) : copy.notMeasured,
+      data: measured ? scores.stroopEffectMs : 0,
+    });
+
     resultEl.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
   }
 
@@ -543,6 +555,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     blankWord();
     feedbackEl.textContent = '';
     resultEl.hidden = true;
+    saveOptIn.reset();
     setView('idle');
   }
 

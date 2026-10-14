@@ -10,6 +10,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import FeedbackToggle from '../../components/ui/FeedbackToggle.astro';
 import { faqs, numberBands, page, result, sources, ui } from '../../data/tests/number-memory';
 import { LIVES, START_DIGITS } from '../../lib/tests/number-memory';
@@ -138,6 +139,8 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
 
     <BandsNote />
 
+    <SaveResult testId="number-memory" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -201,6 +204,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   } from '../../lib/tests/number-memory';
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
 
   /** How long "Correct" shows before the next number. */
@@ -222,6 +226,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   const resultEl = $('[data-result]');
   const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
   const share = createShareCard($('[data-share]'));
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
 
   // The game lives only in these variables. Nothing is stored or sent.
   let view: View = 'idle';
@@ -339,6 +344,14 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
       url: 'https://knowpsyche.com/number-memory-test/',
       filename: 'knowpsyche-number-memory',
     });
+
+    saveOptIn.show({
+      testId: 'number-memory',
+      badge: band.badge,
+      headline: `${n} digits · ${band.badge}`,
+      data: n,
+    });
+
     resultEl.hidden = false;
   };
 
@@ -358,6 +371,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     setView('idle');
     renderHud();
     resultEl.hidden = true;
+    saveOptIn.reset();
   };
 
   const start = () => {

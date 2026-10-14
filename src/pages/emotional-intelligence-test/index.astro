@@ -8,6 +8,7 @@ import ShareCard from '../../components/result/ShareCard.astro';
 import TryAgain from '../../components/result/TryAgain.astro';
 import NextTest from '../../components/result/NextTest.astro';
 import CopyScores from '../../components/result/CopyScores.astro';
+import SaveResult from '../../components/result/SaveResult.astro';
 import { areas, bands, faqs, order, page, result, resultUi, scale, sources, sourcesNote, statements, ui } from '../../data/tests/emotional-intelligence';
 
 const btnSmall =
@@ -126,6 +127,8 @@ const first = statements[order[0] - 1];
 
     <BandsNote />
 
+    <SaveResult testId="emotional-intelligence" />
+
     <ShareCard>
       <TryAgain />
     </ShareCard>
@@ -146,6 +149,7 @@ const first = statements[order[0] - 1];
   import { order, result as copy, resultUi, statements, strongestLine, ui } from '../../data/tests/emotional-intelligence';
   import { getResult, scalePercent, type EqResult } from '../../lib/tests/emotional-intelligence';
   import { createShareCard } from '../../lib/share-card';
+  import { initSaveOptIn } from '../../lib/saved-results';
   import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
 
   const card = $('.eq-card');
@@ -158,6 +162,7 @@ const first = statements[order[0] - 1];
   const resultEl = $('[data-result]');
   const r = (key: string) => $(`[data-r="${key}"]`, resultEl);
   const share = createShareCard($('[data-share]'));
+  const saveOptIn = initSaveOptIn($('[data-save-optin]', resultEl));
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const cardVisible = onScreen(card);
 
@@ -232,6 +237,7 @@ const first = statements[order[0] - 1];
     done = false;
     shown = null;
     resultEl.hidden = true;
+    saveOptIn.reset();
     render();
   };
 
@@ -280,6 +286,13 @@ const first = statements[order[0] - 1];
       text: resultUi.shareText(res.overall, names),
       url: 'https://knowpsyche.com/emotional-intelligence-test/',
       filename: 'knowpsyche-emotional-intelligence',
+    });
+
+    saveOptIn.show({
+      testId: 'emotional-intelligence',
+      badge: res.overallBand.badge,
+      headline: r('headline').textContent ?? '',
+      data: Object.fromEntries(res.areas.map((a) => [a.area.id, a.score])),
     });
 
     resultEl.hidden = false;

@@ -1,0 +1,56 @@
+---
+/**
+ * Opt-in save component on test result pages.
+ * Off by default; saves only if the user explicitly clicks the button.
+ * Data stays in browser localStorage under `knowpsyche_saved_results`.
+ * Zero network requests. If storage is blocked, container remains hidden.
+ */
+interface Props {
+  testId: string;
+  class?: string;
+}
+const { testId, class: className } = Astro.props;
+---
+<section
+  data-save-optin
+  data-test-id={testId}
+  aria-labelledby={`save-optin-title-${testId}`}
+  class:list={[
+    'flex flex-col gap-3.5 border border-ink bg-card p-[clamp(18px,3vw,28px)] transition-opacity duration-300',
+    className,
+  ]}
+  hidden
+>
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <div id={`save-optin-title-${testId}`} class="mono text-[11px] text-muted">
+      Your report · on this device
+    </div>
+    <button
+      type="button"
+      data-clear-btn
+      class="mono inline-flex min-h-[32px] cursor-pointer items-center border-0 bg-transparent p-0 text-xs text-ink-soft underline underline-offset-4 transition-colors duration-200 hover:text-coral-ink"
+      hidden
+    >
+      Clear saved results
+    </button>
+  </div>
+  <p class="m-0 text-[15.5px] leading-[1.55] text-ink">
+    Save this result on this device to build your report. It stays in your browser. We never receive it.
+  </p>
+  <div class="flex flex-wrap items-center gap-3">
+    <button
+      type="button"
+      data-save-btn
+      aria-pressed="false"
+      class="inline-flex min-h-[44px] items-center border border-ink bg-ink px-4 py-2.5 text-[15px] font-semibold text-paper transition-colors duration-300 ease-house hover:border-blue hover:bg-blue aria-pressed:border-teal-dark aria-pressed:bg-teal-dark aria-pressed:text-paper"
+    >
+      Save result
+    </button>
+    <span
+      data-save-status
+      role="status"
+      aria-live="polite"
+      class="text-[13.5px] text-ink-soft"
+    ></span>
+  </div>
+</section>
