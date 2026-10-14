@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { boxCopy, fillBoxes, meaningFor } from '../report-view';
+import { boxCopy, fillBoxes, hasVisual, meaningFor } from '../report-view';
 import { standout, tryThis } from '../../data/report';
 import { result as enneagramCopy, types as enneagramTypes } from '../../data/tests/enneagram';
 import { bands as eqBands, result as eqCopy } from '../../data/tests/emotional-intelligence';
@@ -96,5 +96,20 @@ describe('"What it means" on the Stroop sheet (Q1-10)', () => {
     const lines = meaningFor('stroop', saved('stroop', 'Mild pull', 120));
     expect(lines.at(-1)).toBe('What can change your result: reading speed, practice, tiredness and how fast you try to go. Colour-vision differences can affect it too.');
     expect(lines.at(-1)).toMatch(/\.$/);
+  });
+});
+
+describe('the score visual (Q1-09)', () => {
+  it('an unmeasured Stroop run has no visual: no big number, no chips', () => {
+    expect(hasVisual(saved('stroop', '', null))).toBe(false);
+  });
+  it.each([
+    ['stroop', 'Mild pull', 120],
+    ['stroop', 'Unshakeable', -20],
+    ['reaction-time', 'Quick', 220],
+    ['number-memory', 'Steady', 7],
+    ['emotional-intelligence', 'Solid', { knowing: 60, managing: 60, reading: 60, relationships: 60 }],
+  ] as [TestId, string, SavedTestResult['data']][])('%s %s has a visual', (id, badge, data) => {
+    expect(hasVisual(saved(id, badge, data))).toBe(true);
   });
 });

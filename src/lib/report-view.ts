@@ -43,6 +43,11 @@ function barRow(label: string, value: number, max: number, valueText: string, ma
   return row;
 }
 
+/** False when there is no number to show: an unmeasured Stroop run (data null) gets no big number and no chips. */
+export function hasVisual(r: SavedTestResult): boolean {
+  return !(r.testId in single) || typeof r.data === 'number';
+}
+
 function visualFor(id: TestId, r: SavedTestResult): HTMLElement {
   const box = el('div', 'rp-visual');
   if (id === 'enneagram' && r.data && typeof r.data === 'object') {
@@ -71,8 +76,8 @@ function visualFor(id: TestId, r: SavedTestResult): HTMLElement {
   const unit = scoreUnit[id] ?? {};
   const num = el('div', 'rp-num');
   if (unit.before) num.append(el('span', 'rp-unit', unit.before));
-  num.append(el('span', 'rp-num-v', typeof r.data === 'number' ? String(r.data) : reportSheet.notMeasured));
-  if (unit.after && typeof r.data === 'number') num.append(el('span', 'rp-unit', unit.after));
+  num.append(el('span', 'rp-num-v', String(r.data)));
+  if (unit.after) num.append(el('span', 'rp-unit', unit.after));
   const chips = el('ul', 'rp-chips');
   for (const b of single[id]?.bands ?? []) {
     const c = el('li', `rp-chip${b.badge === r.badge ? ' rp-chip-on' : ''}`, b.badge);
@@ -140,7 +145,9 @@ export function fillSheet(sheet: HTMLElement, r: SavedTestResult) {
   f('headline').textContent = r.headline;
   f('badge').textContent = r.badge;
   f('badge').hidden = !r.badge;
-  f('visual').replaceChildren(visualFor(id, r));
+  const visual = f('visual');
+  visual.hidden = !hasVisual(r);
+  visual.replaceChildren(...(visual.hidden ? [] : [visualFor(id, r)]));
   fillBoxes(sheet, r);
   const means = meaningFor(id, r);
   f('means').replaceChildren(...means.map((t) => el('p', '', t)));
