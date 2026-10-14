@@ -202,6 +202,32 @@ export interface SaveOptInHandle {
 const sameResult = (a: Omit<SavedTestResult, 'date'>, b: Omit<SavedTestResult, 'date'>) =>
   a.badge === b.badge && a.headline === b.headline && JSON.stringify(a.data) === JSON.stringify(b.data);
 
+/** Copy for the save box (SaveResult.astro). Drafted, except `savedText` and `openReport` (given by Dev, G1). */
+export const saveCopy = {
+  intro: 'Save this result on this device to build your report. It stays in your browser. We never receive it.',
+  savedText: 'Saved on this device. We never receive it.',
+  openReport: 'Open your report',
+  save: 'Save result',
+  update: 'Update saved result',
+  previous: 'A previous result is saved on this device. Save to overwrite it.',
+  cleared: 'Saved results cleared from this device.',
+};
+
+export interface SaveBoxView {
+  /** This exact result is saved: the box shows the saved line and the "Open your report" link instead of Save. */
+  saved: boolean;
+  text: string;
+  buttonLabel: string;
+  status: string;
+}
+
+/** What the save box shows, given what is saved for this test and the result on screen. Pure. */
+export function saveBoxView(existing: Omit<SavedTestResult, 'date'> | null, current: Omit<SavedTestResult, 'date'>): SaveBoxView {
+  if (existing && sameResult(existing, current)) return { saved: true, text: saveCopy.savedText, buttonLabel: saveCopy.save, status: '' };
+  if (existing) return { saved: false, text: saveCopy.intro, buttonLabel: saveCopy.update, status: saveCopy.previous };
+  return { saved: false, text: saveCopy.intro, buttonLabel: saveCopy.save, status: '' };
+}
+
 /**
  * Wires the opt-in on a result page (see SaveResult.astro). Nothing is saved until the Save button is pressed.
  * If storage is blocked, the box stays hidden; if a save or clear fails later, it hides itself.
@@ -218,6 +244,7 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
   const clearBtn = container.querySelector<HTMLButtonElement>('[data-clear-btn]');
   const statusEl = container.querySelector<HTMLElement>('[data-save-status]');
   const reportLink = container.querySelector<HTMLElement>('[data-report-link]');
+  const textEl = container.querySelector<HTMLElement>('[data-save-text]');
   let current: Omit<SavedTestResult, 'date'> | null = null;
   let broken = false;
 
@@ -233,35 +260,28 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
   const render = () => {
     if (clearBtn) clearBtn.hidden = !hasSavedData();
     if (!saveBtn || !current) return;
-    const existing = getSavedResult(current.testId);
-    // The confirmation links to the report once this result is saved.
-    if (reportLink) reportLink.hidden = !(existing && sameResult(existing, current));
-    // Drafted: button labels and status lines below.
-    if (existing && sameResult(existing, current)) {
-      saveBtn.textContent = 'Saved on this device';
-      saveBtn.setAttribute('aria-pressed', 'true');
-      status('Saved to your browser on this device.');
-    } else if (existing) {
-      saveBtn.textContent = 'Update saved result';
-      saveBtn.setAttribute('aria-pressed', 'false');
-      status('A previous result is saved on this device. Save to overwrite it.');
-    } else {
-      saveBtn.textContent = 'Save result';
-      saveBtn.setAttribute('aria-pressed', 'false');
-      status('');
-    }
+    const view = saveBoxView(getSavedResult(current.testId), current);
+    // Once this result is saved, the Save button gives way to the link to the report.
+    saveBtn.hidden = view.saved;
+    saveBtn.textContent = view.buttonLabel;
+    saveBtn.setAttribute('aria-pressed', String(view.saved));
+    if (reportLink) reportLink.hidden = !view.saved;
+    if (textEl && textEl.textContent !== view.text) textEl.textContent = view.text;
+    status(view.status);
   };
 
   saveBtn?.addEventListener('click', () => {
     if (!current) return;
     if (!saveResult({ ...current, date: getIsoDay() })) return giveUp();
     render();
+    // The Save button is gone now; keep focus in the box, on the next step.
+    reportLink?.focus();
   });
 
   clearBtn?.addEventListener('click', () => {
     if (!clearResults()) return giveUp();
     render();
-    status('Saved results cleared from this device.'); // Drafted.
+    status(saveCopy.cleared);
     saveBtn?.focus();
   });
 

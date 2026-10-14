@@ -5,7 +5,7 @@
  * Data stays in browser localStorage under `knowpsyche_saved_results`.
  * Zero network requests. If storage is blocked, container remains hidden.
  */
-import type { TestId } from '../../lib/saved-results';
+import { saveCopy, type TestId } from '../../lib/saved-results';
 
 interface Props {
   testId: TestId;
@@ -37,9 +37,8 @@ const { testId, class: className } = Astro.props;
       Clear saved results
     </button>
   </div>
-  <p class="m-0 text-[15.5px] leading-[1.55] text-ink">
-    Save this result on this device to build your report. It stays in your browser. We never receive it.
-  </p>
+  <!-- Swaps to the saved line after a save (saveBoxView in saved-results.ts), so it is announced. -->
+  <p data-save-text aria-live="polite" class="m-0 text-[15.5px] leading-[1.55] text-ink">{saveCopy.intro}</p>
   <div class="flex flex-wrap items-center gap-3">
     <button
       type="button"
@@ -47,9 +46,14 @@ const { testId, class: className } = Astro.props;
       aria-pressed="false"
       class="inline-flex min-h-[44px] items-center border border-ink bg-ink px-4 py-2.5 text-[15px] font-semibold text-paper transition-colors duration-300 ease-house hover:border-blue hover:bg-blue aria-pressed:border-teal-dark aria-pressed:bg-teal-dark aria-pressed:text-paper"
     >
-      Save result
+      {saveCopy.save}
     </button>
-    <a data-report-link href="/report/" class="hit-44 text-[14.5px] font-semibold text-ink underline underline-offset-[3px]" hidden>See your report</a>
+    <a
+      data-report-link
+      href="/report/"
+      class="inline-flex min-h-[44px] items-center border border-ink bg-ink px-4 py-2.5 text-[15px] font-semibold text-paper no-underline transition-colors duration-300 ease-house hover:border-blue hover:bg-blue hover:text-paper"
+      hidden
+    >{saveCopy.openReport}</a>
     <span
       data-save-status
       role="status"
