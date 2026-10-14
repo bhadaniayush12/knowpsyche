@@ -4,7 +4,7 @@
  * joins and caps, flat token fills, on a lilac grid panel with an offset ink shadow.
  * Expressions change only the eyes, brows and mouth. Each prop is its own group with a sleeve and hand.
  * Motion: a blink and a 3px float, only while on screen, never with reduced motion or "Pause motion".
- * Decorative (aria-hidden) unless a title is passed.
+ * Decorative (aria-hidden) unless a title is passed. Pass SVG children to draw extras inside the panel.
  */
 export type Skin = 'light' | 'medium' | 'deep';
 export type HairStyle = 'short' | 'long' | 'curly' | 'bun';
@@ -200,6 +200,8 @@ const shadow = Math.max(4, Math.round(size * 0.027));
         </g>
       )}
     </g>
+    {/* Optional extras from the page, drawn in the same 240 x 300 space (e.g. a floating question mark). */}
+    <slot />
   </svg>
 </div>
 
