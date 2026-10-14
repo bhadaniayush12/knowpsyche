@@ -15,5 +15,6 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [sitemap()]
+  // /report/ is personal and noindex, so it stays out of the sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/report/') })]
 });
