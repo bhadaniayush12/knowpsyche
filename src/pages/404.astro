@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FontPreloads from '../components/FontPreloads.astro';
 import Button from '../components/ui/Button.astro';
 import Card from '../components/ui/Card.astro';
 import Character from '../components/Character.astro';
@@ -20,6 +21,7 @@ const pages = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/404/" noindex>
+  <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(56px,9vw,120px)] pb-20">
     <section class="flex flex-wrap items-center gap-x-[clamp(32px,5vw,72px)] gap-y-10">
       <div class="flex min-w-0 flex-[999_1_560px] flex-col items-start gap-6">

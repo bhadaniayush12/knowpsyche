@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import FontPreloads from '../../components/FontPreloads.astro';
 import Character from '../../components/Character.astro';
 
 // Copy word for word from docs/design/About.dc.html, except where Dev changed it: the eyebrow,
@@ -58,6 +59,7 @@ const wontDo = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/about/" ogImage="/og/about.png" crumbs={[{ name: 'About' }]}>
+  <FontPreloads slot="head" />
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(56px,7vw,96px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,56px)] pb-20">
     <section class="flex flex-wrap items-end gap-10">
       <div class="min-w-0 flex-[999_1_600px]">
