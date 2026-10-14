@@ -1,0 +1,354 @@
+---
+/**
+ * /report/ (Task C3): the person's saved results (C1) as A4 pages, previewed on screen and saved as a PDF
+ * through the browser's own print dialog. noindex, kept out of the sitemap and the footer.
+ *
+ * Each page is a fixed A4 box sized in container units (cqw), so the screen preview is a scaled copy of the
+ * print and nothing reflows between them. TrailFlag (in <head>) lists the saved tests on <html> before the
+ * first paint, so the right pages are laid out from the start; the script then fills them in.
+ * Everything is read from this browser only. Nothing is sent anywhere.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FontPreloads from '../../components/FontPreloads.astro';
+import TrailFlag from '../../components/result/TrailFlag.astro';
+import Character from '../../components/Character.astro';
+import { BANDS_NOTE } from '../../data/shared';
+import { homeTests } from '../../data/home';
+import { REPORT_REF_URL, reportPage, reportSheet } from '../../data/report';
+import { TEST_IDS } from '../../lib/saved-results';
+import { MARK_RADIUS, MARK_SIZE, PSI_BOWL, PSI_STEM, PSI_WEIGHTS } from '../../lib/brand/mark.js';
+
+const site = 'https://knowpsyche.com';
+const tests = TEST_IDS.map((id, i) => {
+  const t = homeTests.find((h) => h.href === `/${id}-test/`)!;
+  return { id, n: String(i + 1).padStart(2, '0'), name: t.name, time: t.time, href: t.href };
+});
+const w = PSI_WEIGHTS.regular;
+
+// Show a page only for a saved test, and list a test under "Other tests" only when it isn't saved.
+const has = (id: string) => `html[data-kp-report~="${id}"]`;
+const visibility = [
+  ...TEST_IDS.map((id) => `${has(id)} .rp-test[data-id="${id}"]{display:block}`),
+  ...TEST_IDS.map((id) => `${has(id)} .rp-untried li[data-id="${id}"]{display:none}`),
+  `${TEST_IDS.map(has).join('').replace(/html/g, '').replace(/^/, 'html')} .rp-untried{display:none}`,
+].join('\n');
+
+const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-base transition-colors duration-300 ease-house';
+---
+<BaseLayout title={reportPage.title} description={reportPage.description} path="/report/" noindex crumbs={[{ name: reportPage.h1 }]} crumbWidth={1120}>
+  <FontPreloads slot="head" bold />
+  <TrailFlag slot="head" />
+  <style is:inline slot="head" set:html={visibility}></style>
+
+  <div class="rp-screen mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-[18px] pb-20">
+    <section class="rp-intro mb-8 flex flex-col gap-3">
+      <h1 class="m-0 text-[clamp(40px,5.4vw,72px)] leading-[.95] font-semibold tracking-[-.05em]">Your <span class="serif text-blue">report</span></h1>
+      <p class="m-0 max-w-[560px] text-[17px] leading-[1.55] text-ink-soft">{reportPage.deviceLine}</p>
+      <p data-rp-status role="status" aria-live="polite" class="m-0 min-h-[1.5em] text-[14.5px] text-ink-soft"></p>
+    </section>
+
+    <!-- Nothing saved (or storage blocked): a friendly way in. -->
+    <section class="rp-empty flex flex-col gap-5" aria-labelledby="rp-empty-title">
+      <div class="flex max-w-[620px] flex-col gap-2">
+        <h2 id="rp-empty-title" tabindex="-1" class="m-0 text-[clamp(26px,3vw,34px)] font-semibold tracking-[-.03em]">{reportPage.emptyTitle}</h2>
+        <p class="m-0 text-[16.5px] leading-[1.6]">{reportPage.emptyText}</p>
+      </div>
+      <ul class="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        {tests.map((t) => (
+          <li>
+            <a href={t.href} class="card card-lift flex min-h-[64px] items-center justify-between gap-3 border border-ink bg-card px-5 py-3 no-underline">
+              <span class="flex flex-col"><span class="mono text-[11px] text-muted">Test / {t.n} · {t.time}</span><span class="text-[17px] font-semibold">{t.name}</span></span>
+              <span class="card-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Something saved: name, buttons, and the pages. -->
+    <div class="rp-has">
+      <div class="rp-controls mb-10 flex flex-wrap items-end gap-x-8 gap-y-5 border border-ink bg-card p-[clamp(18px,3vw,28px)]">
+        <div class="flex min-w-0 flex-[1_1_320px] flex-col gap-2">
+          <label for="rp-name" class="text-[17px] font-semibold">{reportPage.nameLabel}</label>
+          <p id="rp-name-hint" class="m-0 text-[14px] text-ink-soft">{reportPage.nameHint}</p>
+          <input id="rp-name" type="text" autocomplete="name" maxlength="60" spellcheck="false" aria-describedby="rp-name-hint" class="min-h-12 w-full border border-ink bg-paper px-4 text-[17px] text-ink" />
+        </div>
+        <div class="flex flex-wrap gap-2.5">
+          <button type="button" data-rp-print class:list={[btn, 'border-0 bg-ink font-semibold text-paper hover:bg-blue']}>{reportPage.savePdf}</button>
+          <button type="button" data-rp-clear class:list={[btn, 'border border-ink bg-transparent text-ink hover:border-coral-ink hover:text-coral-ink']}>{reportPage.clear}</button>
+        </div>
+      </div>
+
+      <section aria-label={reportPage.previewLabel} class="rp-doc">
+        <!-- Cover -->
+        <article class="rp-sheet rp-cover" data-cover aria-label="Cover">
+          <div class="rp-in">
+            <header class="rp-top">
+              <span class="rp-brand">
+                <svg aria-hidden="true" class="rp-psi" viewBox={`0 0 ${MARK_SIZE} ${MARK_SIZE}`}>
+                  <rect width={MARK_SIZE} height={MARK_SIZE} rx={MARK_RADIUS} fill="var(--color-ink)"></rect>
+                  <g fill="none" stroke="var(--color-paper)" stroke-linecap="round"><path stroke-width={w.stem} d={PSI_STEM}></path><path stroke-width={w.bowl} d={PSI_BOWL}></path></g>
+                </svg>
+                <span class="rp-word">know<span class="rp-word-serif">psyche</span></span>
+              </span>
+              <span class="rp-mono" data-f="made"></span>
+            </header>
+            <div class="rp-cover-main">
+              <p class="rp-mono rp-eyebrow">{reportSheet.coverEyebrow}</p>
+              <h2 class="rp-name" data-f="name">{reportSheet.noNameLead}<span class="rp-accent">{reportSheet.noNameAccent}</span></h2>
+            </div>
+            <div class="rp-cover-art">
+              <Character skin="medium" hair={{ style: 'short', color: 'ink' }} shirt="blue" expression="happy" prop="magnifier" size={300} />
+            </div>
+            <footer class="rp-foot"><span>{reportSheet.linkCta}</span> · <a href={REPORT_REF_URL}>{reportSheet.linkText}</a></footer>
+          </div>
+        </article>
+
+        <!-- One page per saved test -->
+        {tests.map((t) => (
+          <article class="rp-sheet rp-test" data-id={t.id} aria-label={t.name}>
+            <div class="rp-in">
+              <header class="rp-top"><span class="rp-mono rp-blue">Test / {t.n} · {t.name}</span><span class="rp-mono" data-f="date"></span></header>
+              <div class="rp-head">
+                <h2 class="rp-headline" data-f="headline"></h2>
+                <p class="rp-badge" data-f="badge"></p>
+              </div>
+              <div data-f="visual"></div>
+              <div class="rp-two">
+                <section class="rp-box rp-box-card"><h3 class="rp-label rp-blue">{reportSheet.standout}</h3><p data-f="standout"></p></section>
+                <section class="rp-box rp-box-try"><h3 class="rp-label">{reportSheet.tryThis}</h3><p class="rp-try" data-f="try"></p></section>
+              </div>
+              <section class="rp-means"><h3 class="rp-label rp-gold">{reportSheet.means}</h3><div data-f="means"></div></section>
+              <footer class="rp-foot"><span>{reportSheet.linkCta}</span> · <a href={REPORT_REF_URL}>{reportSheet.linkText}</a></footer>
+            </div>
+          </article>
+        ))}
+
+        <!-- Last page: tests not tried yet (if any), then the notes. -->
+        <article class="rp-sheet rp-last" aria-label={reportSheet.notesTitle}>
+          <div class="rp-in">
+            <header class="rp-top">
+              <span class="rp-brand">
+                <svg aria-hidden="true" class="rp-psi" viewBox={`0 0 ${MARK_SIZE} ${MARK_SIZE}`}>
+                  <rect width={MARK_SIZE} height={MARK_SIZE} rx={MARK_RADIUS} fill="var(--color-ink)"></rect>
+                  <g fill="none" stroke="var(--color-paper)" stroke-linecap="round"><path stroke-width={w.stem} d={PSI_STEM}></path><path stroke-width={w.bowl} d={PSI_BOWL}></path></g>
+                </svg>
+                <span class="rp-word">know<span class="rp-word-serif">psyche</span></span>
+              </span>
+            </header>
+            <section class="rp-untried">
+              <h2 class="rp-h2">{reportSheet.untriedTitle}</h2>
+              <ul>
+                {tests.map((t) => (
+                  <li data-id={t.id}><a href={`${site}${t.href}`}><span class="rp-mono">Test / {t.n}</span> <b>{t.name}</b></a><span class="rp-mono">{t.time}</span></li>
+                ))}
+              </ul>
+            </section>
+            <section class="rp-notes">
+              <h2 class="rp-h2">{reportSheet.notesTitle}</h2>
+              <p class="rp-note">{BANDS_NOTE}</p>
+              <p>{reportSheet.disclaimer}</p>
+              <p><b>{reportSheet.shareLine}</b></p>
+              <p class="rp-cta"><span class="rp-cta-t">{reportSheet.linkCta}</span><a href={REPORT_REF_URL}>{reportSheet.linkText}</a></p>
+            </section>
+            <footer class="rp-foot"><span>{reportSheet.linkCta}</span> · <a href={REPORT_REF_URL}>{reportSheet.linkText}</a></footer>
+          </div>
+        </article>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* Which block shows is decided before the first paint (TrailFlag sets html[data-kp-saved]). */
+  .rp-has { display: none; }
+  html[data-kp-saved] .rp-has { display: block; }
+  html[data-kp-saved] .rp-empty { display: none; }
+  .rp-test { display: none; }
+
+  /* ---------- A4 pages (screen preview and print share these rules) ---------- */
+  .rp-doc { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+  .rp-sheet {
+    position: relative;
+    width: 100%;
+    max-width: 794px;
+    aspect-ratio: 210 / 297;
+    container-type: inline-size;
+    overflow: hidden;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper);
+    box-shadow: 8px 8px 0 var(--color-ink);
+    color: var(--color-ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .rp-in {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3.2cqw;
+    padding: 7cqw 7.5cqw 4.5cqw;
+    font-size: 1.85cqw;
+    line-height: 1.5;
+  }
+  .rp-in p { margin: 0; }
+  .rp-mono { font-family: var(--font-mono); font-size: 1.35cqw; letter-spacing: .02em; text-transform: uppercase; color: var(--color-muted); }
+  .rp-blue { color: var(--color-blue); }
+  .rp-gold { color: var(--color-gold-ink); }
+  .rp-top { display: flex; align-items: center; justify-content: space-between; gap: 2cqw; padding-bottom: 2cqw; border-bottom: 1px solid var(--color-ink); }
+  .rp-brand { display: inline-flex; align-items: center; gap: 1.4cqw; }
+  .rp-psi { width: 4.6cqw; height: 4.6cqw; display: block; }
+  .rp-word { font-size: 2.8cqw; font-weight: 600; letter-spacing: -.03em; }
+  .rp-word-serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 1.14em; color: var(--color-blue); }
+  .rp-foot { margin-top: auto; padding-top: 1.6cqw; border-top: 1px solid var(--color-line-inner); font-size: 1.4cqw; color: var(--color-ink-soft); }
+  .rp-foot a, .rp-cta a, .rp-untried a { color: var(--color-ink); text-decoration: underline; text-underline-offset: .2em; }
+  .rp-label { margin: 0 0 1cqw; font-family: var(--font-mono); font-size: 1.35cqw; font-weight: 500; text-transform: uppercase; letter-spacing: .02em; }
+  .rp-h2 { margin: 0 0 1.6cqw; font-size: 4cqw; font-weight: 600; letter-spacing: -.03em; line-height: 1.1; }
+
+  /* Cover */
+  .rp-cover-main { display: flex; flex-direction: column; gap: 2cqw; padding-top: 9cqw; }
+  .rp-eyebrow { color: var(--color-blue); }
+  .rp-name {
+    --fs: 15cqw;
+    margin: 0;
+    font-size: var(--fs);
+    font-weight: 700;
+    line-height: .98;
+    letter-spacing: -.055em;
+    overflow-wrap: normal;
+  }
+  .rp-name.rp-break { overflow-wrap: anywhere; }
+  .rp-accent { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -.01em; color: var(--color-blue); }
+  .rp-cover-art { margin-top: auto; align-self: flex-end; width: 36cqw; transform: rotate(1.5deg); }
+  .rp-cover-art [data-character] { width: 100% !important; box-shadow: 1.2cqw 1.2cqw 0 var(--color-ink) !important; }
+
+  /* Test pages */
+  .rp-head { display: flex; flex-direction: column; align-items: flex-start; gap: 1.6cqw; }
+  .rp-headline { margin: 0; font-size: 5.6cqw; font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
+  .rp-badge { display: inline-block; padding: .5cqw 1.6cqw; border: 1px solid var(--color-ink); border-radius: 999px; background: var(--color-lilac); font-family: var(--font-serif); font-style: italic; font-size: 2.6cqw; line-height: 1.3; }
+  .rp-visual { border: 1px solid var(--color-ink); background: var(--color-card); padding: 2.6cqw 3cqw; }
+  .rp-num { display: flex; align-items: baseline; flex-wrap: wrap; gap: 1.4cqw; margin-bottom: 2cqw; }
+  .rp-num-v { font-size: 11cqw; font-weight: 600; letter-spacing: -.06em; line-height: .85; }
+  .rp-unit { font-family: var(--font-serif); font-style: italic; font-size: 3.2cqw; color: var(--color-blue); }
+  .rp-chips { display: flex; flex-wrap: wrap; gap: 1cqw; margin: 0; padding: 0; list-style: none; }
+  .rp-chip { padding: .4cqw 1.4cqw; border: 1px solid var(--color-line-inner); border-radius: 999px; font-size: 1.5cqw; color: var(--color-muted); }
+  .rp-chip-on { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-paper); }
+  .rp-bars { display: flex; flex-direction: column; gap: 1.5cqw; margin: 0; padding: 0; list-style: none; }
+  .rp-bars-9 { gap: 1cqw; }
+  .rp-bar-head { display: flex; justify-content: space-between; gap: 2cqw; font-size: 1.6cqw; line-height: 1.3; }
+  .rp-bar-val { font-family: var(--font-mono); font-size: 1.4cqw; }
+  .rp-track { height: 1.3cqw; margin-top: .5cqw; overflow: hidden; border-radius: 999px; background: var(--color-line); }
+  .rp-fill { height: 100%; border-radius: 999px; background: var(--color-muted); }
+  .rp-bar-main .rp-bar-name { font-weight: 600; }
+  .rp-bar-main .rp-fill { background: var(--color-blue); }
+  .rp-bars:not(.rp-bars-9) .rp-fill { background: var(--color-blue); }
+  .rp-two { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--color-ink); }
+  .rp-box { padding: 2.4cqw 2.8cqw; }
+  .rp-box-card { background: var(--color-card); }
+  .rp-box-try { border-left: 1px solid var(--color-ink); background: var(--color-yellow); }
+  .rp-try { font-family: var(--font-serif); font-style: italic; font-size: 2.2cqw; line-height: 1.3; }
+  .rp-means { border-top: 1px solid var(--color-ink); padding-top: 2.2cqw; }
+  .rp-means [data-f="means"] { display: flex; flex-direction: column; gap: 1.2cqw; }
+
+  /* Last page */
+  .rp-untried ul { display: grid; grid-template-columns: 1fr 1fr; gap: 1cqw 3cqw; margin: 0; padding: 0; list-style: none; }
+  .rp-untried li { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5cqw; padding: 1.2cqw 0; border-bottom: 1px solid var(--color-line-inner); }
+  .rp-untried b { font-weight: 600; }
+  .rp-notes { display: flex; flex-direction: column; gap: 1.8cqw; }
+  .rp-note { padding-left: 1.8cqw; border-left: .45cqw solid var(--color-blue); }
+  .rp-cta { display: flex; flex-direction: column; gap: .6cqw; margin-top: 1.4cqw !important; padding: 3cqw; border: 1px solid var(--color-ink); background: var(--color-lilac); }
+  .rp-cta-t { font-family: var(--font-serif); font-style: italic; font-size: 3.4cqw; color: var(--color-blue); line-height: 1.1; }
+  .rp-cta a { font-size: 3cqw; font-weight: 600; letter-spacing: -.02em; }
+
+  /* ---------- Print: only the pages, one A4 sheet each, colours kept ---------- */
+  @page { size: A4; margin: 0; }
+  @media print {
+    html, body { background: var(--color-paper) !important; }
+    body { display: block !important; min-height: 0 !important; }
+    body > :not(main), main > nav, .rp-intro, .rp-controls, .rp-empty { display: none !important; }
+    .rp-screen { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+    .rp-doc { display: block; }
+    .rp-sheet {
+      width: 210mm !important;
+      height: 297mm;
+      max-width: none;
+      aspect-ratio: auto;
+      border: 0;
+      box-shadow: none;
+      break-after: page;
+      page-break-after: always;
+    }
+    .rp-last { break-after: auto; page-break-after: auto; }
+    *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; animation: none !important; transition: none !important; }
+  }
+</style>
+
+<script>
+  import { CHANGE_EVENT, clearResults, isStorageAvailable, readReport, setName, TEST_IDS } from '../../lib/saved-results';
+  import { fillCover, fillSheet, fitName } from '../../lib/report-view';
+  import { formatDay } from '../../lib/report';
+  import { reportPage, reportSheet } from '../../data/report';
+
+  const root = document.documentElement;
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const cover = $('[data-cover]');
+  const nameEl = $('.rp-name');
+  const input = $<HTMLInputElement>('#rp-name');
+  const status = $('[data-rp-status]');
+
+  const localDay = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+
+  const render = () => {
+    const report = isStorageAvailable() ? readReport() : null;
+    const ids = TEST_IDS.filter((id) => report?.results[id]);
+    root.toggleAttribute('data-kp-saved', ids.length > 0);
+    if (ids.length) root.setAttribute('data-kp-report', ids.join(' '));
+    else root.removeAttribute('data-kp-report');
+    for (const id of ids) fillSheet($(`.rp-test[data-id="${id}"]`), report!.results[id]!);
+    $('[data-f="made"]').textContent = reportSheet.madeOn(formatDay(localDay()));
+    if (document.activeElement !== input) input.value = report?.name ?? '';
+    fillCover(cover, input.value);
+  };
+
+  // The name updates the cover as you type, and is kept with your saved results on this device.
+  input.addEventListener('input', () => {
+    fillCover(cover, input.value);
+    setName(input.value);
+  });
+
+  // Fonts first, so the PDF never falls back to a system font, then the browser's own print dialog.
+  const FONTS = ['700 1em "Space Grotesk"', '600 1em "Space Grotesk"', '500 1em "Space Grotesk"', '400 1em "Space Grotesk"', 'italic 400 1em "Instrument Serif"', '400 1em "DM Mono"', '500 1em "DM Mono"'];
+  $('[data-rp-print]').addEventListener('click', async () => {
+    try {
+      await Promise.all(FONTS.map((f) => document.fonts.load(f)));
+      await document.fonts.ready;
+    } catch {
+      // Print anyway; the browser uses what it has.
+    }
+    fitName(nameEl);
+    window.print();
+  });
+  window.addEventListener('beforeprint', () => fitName(nameEl));
+
+  $('[data-rp-clear]').addEventListener('click', () => {
+    if (!clearResults()) return;
+    input.value = '';
+    render();
+    status.textContent = reportPage.cleared;
+    $('#rp-empty-title').focus();
+  });
+
+  // Refit when the preview changes width, and once the web fonts are in.
+  if ('ResizeObserver' in window) new ResizeObserver(() => fitName(nameEl)).observe(cover);
+  void document.fonts?.ready.then(() => fitName(nameEl));
+
+  render();
+  window.addEventListener(CHANGE_EVENT, () => {
+    if (document.activeElement !== input) render();
+  });
+  window.addEventListener('storage', render);
+</script>
