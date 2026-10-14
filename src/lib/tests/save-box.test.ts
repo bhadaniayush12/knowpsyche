@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { initSaveOptIn, saveBoxView, saveCopy, type SavedTestResult } from '../saved-results';
+import { clearResults, initSaveOptIn, saveBoxView, saveCopy, type SavedTestResult } from '../saved-results';
 
 const current: Omit<SavedTestResult, 'date'> = { testId: 'number-memory', badge: 'Steady', headline: '7 digits held', data: 7 };
 
@@ -43,6 +43,26 @@ const memoryStorage = (): Storage => {
   };
 };
 
+// A window that keeps its listeners, so change and storage events reach the box.
+type Listener = (e: { type: string; key?: string | null }) => void;
+let listeners: Record<string, Listener[]> = {};
+const fakeWindow = (storage: Storage) => {
+  listeners = {};
+  return {
+    localStorage: storage,
+    addEventListener: (type: string, fn: Listener) => void (listeners[type] ??= []).push(fn),
+    dispatchEvent: (e: Event) => {
+      (listeners[e.type] ?? []).forEach((fn) => fn(e));
+      return true;
+    },
+  };
+};
+/** Another tab writing the same localStorage: the write happens, then only a storage event arrives here. */
+const otherTab = (write: () => void, key: string | null = 'knowpsyche_saved_results') => {
+  write();
+  (listeners.storage ?? []).forEach((fn) => fn({ type: 'storage', key }));
+};
+
 describe('saveBoxView', () => {
   it('nothing saved: intro and Save', () => {
     expect(saveBoxView(null, current)).toEqual({ saved: false, text: saveCopy.intro, buttonLabel: 'Save result', status: '' });
@@ -66,7 +86,7 @@ describe('save box on a result page', () => {
   beforeEach(() => {
     const storage = memoryStorage();
     vi.stubGlobal('localStorage', storage);
-    vi.stubGlobal('window', { localStorage: storage, dispatchEvent: () => true });
+    vi.stubGlobal('window', fakeWindow(storage));
     focused = null;
   });
   afterEach(() => vi.unstubAllGlobals());
@@ -139,5 +159,39 @@ describe('save box on a result page', () => {
     const box = makeBox();
     initSaveOptIn(box.container as unknown as HTMLElement).show(current);
     expect(box.container.hidden).toBe(true);
+  });
+
+  it('Clear in another tab brings back "Save result" (Q1-05)', () => {
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    box['[data-save-btn]'].click();
+    expect(box['[data-save-btn]'].hidden).toBe(true);
+
+    otherTab(() => localStorage.removeItem('knowpsyche_saved_results'));
+
+    expect(box['[data-save-btn]'].hidden).toBe(false);
+    expect(box['[data-save-btn]'].textContent).toBe(saveCopy.save);
+    expect(box['[data-report-link]'].hidden).toBe(true);
+    expect(box['[data-save-text]'].textContent).toBe(saveCopy.intro);
+    expect(box['[data-clear-btn]'].hidden).toBe(true);
+  });
+
+  it('a clear of all storage in another tab (key null) also re-renders, other keys do not (Q1-05)', () => {
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    box['[data-save-btn]'].click();
+    otherTab(() => localStorage.setItem('something-else', '1'), 'something-else');
+    expect(box['[data-save-btn]'].hidden).toBe(true);
+    otherTab(() => localStorage.clear(), null);
+    expect(box['[data-save-btn]'].hidden).toBe(false);
+  });
+
+  it('a clear somewhere else on this page (change event) brings back "Save result" (Q1-05)', () => {
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    box['[data-save-btn]'].click();
+    clearResults();
+    expect(box['[data-save-btn]'].hidden).toBe(false);
+    expect(box['[data-report-link]'].hidden).toBe(true);
   });
 });

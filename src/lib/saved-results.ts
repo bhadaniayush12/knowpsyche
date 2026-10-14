@@ -297,6 +297,20 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
     saveBtn?.focus();
   });
 
+  // Saved results can change under this box: Clear in another tab (storage event) or on this page (change
+  // event). Re-render so the box always matches what is stored, e.g. back to "Save result" after a clear.
+  const refresh = () => {
+    if (!broken && current) render();
+  };
+  try {
+    window.addEventListener(CHANGE_EVENT, refresh);
+    window.addEventListener('storage', (e: StorageEvent) => {
+      if (e.key === null || e.key === STORAGE_KEY) refresh();
+    });
+  } catch {
+    // No window events: the box still works, it just won't follow other tabs.
+  }
+
   return {
     show(res) {
       if (broken) return;
