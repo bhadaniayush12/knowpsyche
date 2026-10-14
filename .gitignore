@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # claude settings
 .claude/
+
+# wrangler local state
+.wrangler/

@@ -14,7 +14,8 @@
     "check": "node scripts/check-links.mjs",
     "og": "node scripts/og.mjs",
     "prebuild": "npm run og && npm run icons",
-    "icons": "node scripts/icons.mjs"
+    "icons": "node scripts/icons.mjs",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "satori": "^0.56.1",
     "sharp": "^0.35.5",
-    "vitest": "^5.0.4"
+    "vitest": "^5.0.4",
+    "wrangler": "^4.151.0"
   }
 }
