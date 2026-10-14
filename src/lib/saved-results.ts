@@ -217,6 +217,7 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
   const saveBtn = container.querySelector<HTMLButtonElement>('[data-save-btn]');
   const clearBtn = container.querySelector<HTMLButtonElement>('[data-clear-btn]');
   const statusEl = container.querySelector<HTMLElement>('[data-save-status]');
+  const reportLink = container.querySelector<HTMLElement>('[data-report-link]');
   let current: Omit<SavedTestResult, 'date'> | null = null;
   let broken = false;
 
@@ -233,6 +234,8 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
     if (clearBtn) clearBtn.hidden = !hasSavedData();
     if (!saveBtn || !current) return;
     const existing = getSavedResult(current.testId);
+    // The confirmation links to the report once this result is saved.
+    if (reportLink) reportLink.hidden = !(existing && sameResult(existing, current));
     // Drafted: button labels and status lines below.
     if (existing && sameResult(existing, current)) {
       saveBtn.textContent = 'Saved on this device';
