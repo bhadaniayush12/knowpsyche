@@ -67,6 +67,12 @@ export const homeFaqs: { q: string; a: string }[] = [
   { q: 'Do you save my answers?', a: 'No. Your answers are scored on your own device and never sent to us.' },
   // Drafted: em dash removed.
   { q: 'Is this a medical or mental-health test?', a: "No. KnowPsyche is for learning and self-reflection. It can't diagnose anything. For that, please talk to a professional." },
+  // Drafted: the five questions below (Dev's wording).
+  { q: 'Do I need to create an account?', a: 'No. There is no sign-up, no email and nothing to install. Open a test and start.' },
+  { q: 'Does it work on my phone?', a: 'Yes. Every test works on phones and computers. You tap on a touch screen and click or use the keyboard on a computer.' },
+  { q: 'Can I retake a test?', a: 'Yes, as often as you like. Results can change from one try to the next because of sleep, mood and practice, so a different score is not a mistake.' },
+  { q: "Why don't you compare me with other people?", a: "We don't collect anyone's answers, so we have no group to compare you with, and any ranking would be made up. Instead, each result comes with bands that are our own guide, plus plain-English notes on what it means." },
+  { q: 'Will there be ads?', a: "The site is free to use. We may show ads later, never inside a running test and never based on your answers, which we don't collect." },
 ];
 
 export interface FooterMode {
