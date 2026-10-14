@@ -1,0 +1,253 @@
+---
+/**
+ * A small person in the same drawing style as Dev's illustration on /about/: 3px ink strokes, round
+ * joins and caps, flat token fills, on a lilac grid panel with an offset ink shadow.
+ * Expressions change only the eyes, brows and mouth. Each prop is its own group with a sleeve and hand.
+ * Motion: a blink and a 3px float, only while on screen, never with reduced motion or "Pause motion".
+ * Decorative (aria-hidden) unless a title is passed.
+ */
+export type Skin = 'light' | 'medium' | 'deep';
+export type HairStyle = 'short' | 'long' | 'curly' | 'bun';
+export type HairColor = 'ink' | 'ink-soft' | 'ochre' | 'gold' | 'red';
+export type ShirtColor = 'blue' | 'teal' | 'coral' | 'violet' | 'yellow' | 'sage';
+export type Expression = 'neutral' | 'thinking' | 'happy' | 'worried' | 'surprised' | 'tired' | 'puzzled';
+export type Prop = 'magnifier' | 'envelope' | 'map' | 'button' | 'phone' | 'none';
+
+interface Props {
+  skin?: Skin;
+  hair?: { style: HairStyle; color: HairColor };
+  shirt?: ShirtColor;
+  expression?: Expression;
+  prop?: Prop;
+  /** Panel width in px. Height follows at 4:5. */
+  size?: number;
+  /** Pass one when the picture carries meaning; otherwise it is hidden from screen readers. */
+  title?: string;
+  class?: string;
+}
+
+const {
+  skin = 'medium',
+  hair = { style: 'short', color: 'ink' },
+  shirt = 'blue',
+  expression = 'neutral',
+  prop = 'none',
+  size = 300,
+  title,
+  class: className,
+} = Astro.props;
+
+// Skin is not a design token; medium is the tone in Dev's illustration.
+const skinFill: Record<Skin, string> = { light: '#F1CDA9', medium: '#E3B48C', deep: '#A8714A' };
+const s = skinFill[skin];
+const hairFill = `var(--color-${hair.color})`;
+const shirtFill = `var(--color-${shirt})`;
+const ink = 'var(--color-ink)';
+const shadow = Math.max(4, Math.round(size * 0.027));
+---
+<div
+  data-character
+  class:list={['ch-panel relative flex max-w-full items-end justify-center overflow-hidden border border-ink bg-lilac', className]}
+  style={`width:${size}px;aspect-ratio:4/5;box-shadow:${shadow}px ${shadow}px 0 var(--color-ink)`}
+>
+  <svg
+    viewBox="0 0 240 300"
+    class="block h-auto w-[88%] overflow-visible"
+    {...(title ? { role: 'img', 'aria-label': title } : { 'aria-hidden': 'true', focusable: 'false' })}
+  >
+    <g class="ch-float">
+      <g stroke={ink} stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+        {/* Back hair */}
+        {hair.style === 'long' && (
+          <path style={`fill:${hairFill}`} d="M62 140 C56 92 86 66 120 66 C154 66 184 92 178 140 L182 226 Q160 238 148 216 L92 216 Q80 238 58 226 Z" />
+        )}
+        {hair.style === 'bun' && <circle style={`fill:${hairFill}`} cx="120" cy="66" r="17" />}
+
+        {/* Body */}
+        <path style={`fill:${shirtFill}`} d="M24 316 C26 268 52 242 94 236 L146 236 C188 242 214 268 216 316 Z" />
+        <path style={`fill:${s}`} d="M100 196 L100 236 Q120 246 140 236 L140 196 Z" />
+        <path style={`fill:${shirtFill}`} d="M84 234 Q120 256 156 234 L160 248 Q120 274 80 248 Z" />
+        <path d="M84 234 Q120 256 156 234 L160 248 Q120 274 80 248 Z" fill={ink} fill-opacity=".22" stroke="none" />
+        <path d="M96 244 L94 254 M108 249 L107 259 M120 251 L120 262 M132 249 L133 259 M144 244 L146 254" stroke-width="2" />
+
+        {/* Head */}
+        <circle cx="67" cy="146" r="11" style={`fill:${s}`} /><circle cx="173" cy="146" r="11" style={`fill:${s}`} />
+        <ellipse cx="120" cy="140" rx="52" ry="62" style={`fill:${s}`} />
+
+        {/* Front hair */}
+        {hair.style === 'short' && (
+          <>
+            <path style={`fill:${hairFill}`} d="M104 76 C104 62 118 58 126 64 C132 56 146 60 146 72 Z" />
+            <path style={`fill:${hairFill}`} d="M66 142 C60 96 88 70 122 70 C158 70 182 96 174 142 C170 120 162 108 152 102 C140 114 118 112 104 102 C92 112 76 120 66 142 Z" />
+          </>
+        )}
+        {hair.style === 'long' && (
+          <path style={`fill:${hairFill}`} d="M68 140 C62 94 90 72 122 72 C156 72 180 96 172 140 C166 114 152 100 134 98 C126 110 104 116 84 112 C76 118 70 128 68 140 Z" />
+        )}
+        {hair.style === 'curly' && (
+          <path style={`fill:${hairFill}`} d="M66 140 C54 130 56 110 68 104 C64 88 80 76 94 80 C98 66 116 62 124 72 C134 62 152 66 154 80 C168 78 182 92 176 106 C186 116 184 132 174 140 C168 120 156 108 142 104 C132 112 110 112 100 104 C86 108 74 122 66 140 Z" />
+        )}
+        {hair.style === 'bun' && (
+          <path style={`fill:${hairFill}`} d="M66 140 C60 98 88 76 120 76 C152 76 180 98 174 140 C168 116 150 100 120 100 C90 100 72 116 66 140 Z" />
+        )}
+
+        {/* Nose */}
+        <path d="M119 138 Q113 156 119 159 Q125 160 128 156" fill="none" />
+      </g>
+
+      {/* Cheeks */}
+      <circle cx="86" cy="156" r="6" fill="var(--color-coral)" opacity=".6" />
+      <circle cx="154" cy="156" r="6" fill="var(--color-coral)" opacity=".6" />
+
+      {/* Face: the only part that changes with the expression */}
+      <g class="ch-face" fill="none" stroke={ink} stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+        <g class="ch-brows" stroke-width="4">
+          {expression === 'neutral' && <path d="M88 125 Q99 118 110 123 M130 123 Q141 118 152 125" />}
+          {expression === 'thinking' && <path d="M88 118 Q99 110 110 116 M130 124 L152 123" />}
+          {expression === 'happy' && <path d="M88 120 Q99 112 110 118 M130 118 Q141 112 152 120" />}
+          {expression === 'worried' && <path d="M88 125 Q100 123 110 116 M130 116 Q140 123 152 125" />}
+          {expression === 'surprised' && <path d="M88 116 Q99 106 110 114 M130 114 Q141 106 152 116" />}
+          {expression === 'tired' && <path d="M89 127 L110 127 M130 127 L151 127" />}
+          {expression === 'puzzled' && <path d="M88 118 Q99 110 110 116 M130 121 L152 128" />}
+        </g>
+
+        <g class="ch-eyes">
+          {(expression === 'neutral' || expression === 'worried') && (
+            <>
+              <circle cx="100" cy="138" r="4.5" fill={ink} stroke="none" /><circle cx="140" cy="138" r="4.5" fill={ink} stroke="none" />
+              <circle cx="101.5" cy="136.5" r="1.4" fill="var(--color-paper)" stroke="none" /><circle cx="141.5" cy="136.5" r="1.4" fill="var(--color-paper)" stroke="none" />
+            </>
+          )}
+          {expression === 'thinking' && (
+            <>
+              <circle cx="103" cy="135" r="4.5" fill={ink} stroke="none" /><circle cx="143" cy="135" r="4.5" fill={ink} stroke="none" />
+              <circle cx="104.5" cy="133.5" r="1.4" fill="var(--color-paper)" stroke="none" /><circle cx="144.5" cy="133.5" r="1.4" fill="var(--color-paper)" stroke="none" />
+            </>
+          )}
+          {expression === 'happy' && <path d="M93 140 Q100 131 107 140 M133 140 Q140 131 147 140" />}
+          {expression === 'surprised' && (
+            <>
+              <circle cx="100" cy="137" r="6" fill={ink} stroke="none" /><circle cx="140" cy="137" r="6" fill={ink} stroke="none" />
+              <circle cx="102" cy="135" r="1.8" fill="var(--color-paper)" stroke="none" /><circle cx="142" cy="135" r="1.8" fill="var(--color-paper)" stroke="none" />
+            </>
+          )}
+          {expression === 'tired' && (
+            <>
+              <path d="M94 139 A6 6 0 0 0 106 139 Z M134 139 A6 6 0 0 0 146 139 Z" fill={ink} stroke-width="2" />
+              <path d="M92 139 L108 139 M132 139 L148 139" />
+            </>
+          )}
+          {expression === 'puzzled' && (
+            <>
+              <circle cx="100" cy="137" r="5" fill={ink} stroke="none" /><circle cx="140" cy="139" r="3.5" fill={ink} stroke="none" />
+              <circle cx="101.5" cy="135.5" r="1.4" fill="var(--color-paper)" stroke="none" />
+            </>
+          )}
+        </g>
+
+        <g class="ch-mouth">
+          {expression === 'neutral' && <path d="M110 180 Q120 184 130 180" />}
+          {expression === 'thinking' && <path d="M116 181 Q124 178 132 180" />}
+          {expression === 'happy' && <path d="M104 174 Q120 196 136 174 Z" fill={ink} />}
+          {expression === 'worried' && <path d="M106 183 Q113 177 120 182 Q127 187 134 181" />}
+          {expression === 'surprised' && <ellipse cx="120" cy="182" rx="6" ry="8" fill={ink} />}
+          {expression === 'tired' && <path d="M110 183 Q120 180 130 184" />}
+          {expression === 'puzzled' && <path d="M108 184 Q118 176 132 180" />}
+        </g>
+      </g>
+
+      {/* Prop: sleeve, the object, then the hand on top so it reads as held */}
+      {prop !== 'none' && (
+        <g class="ch-prop" stroke={ink} stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <path style={`fill:${shirtFill}`} d="M164 316 C166 292 172 270 184 256 L206 264 C202 280 200 298 200 316 Z" />
+          {prop === 'magnifier' && (
+            <g>
+              <path d="M198 212 L193 242" stroke-width="8" />
+              <circle cx="204" cy="196" r="18" fill="var(--color-tint-blue)" />
+              <path d="M194 190 Q197 183 205 182" fill="none" stroke="var(--color-white)" />
+            </g>
+          )}
+          {prop === 'envelope' && (
+            <g>
+              <rect x="172" y="212" width="48" height="32" rx="3" fill="var(--color-white)" />
+              <path d="M172 214 L196 231 L220 214" fill="none" />
+              <circle cx="196" cy="231" r="4.5" fill="var(--color-coral)" />
+            </g>
+          )}
+          {prop === 'map' && (
+            <g>
+              <path d="M170 210 L186 204 L202 210 L218 204 L218 240 L202 246 L186 240 L170 246 Z" fill="var(--color-cream)" />
+              <path d="M186 204 L186 240 M202 210 L202 246" fill="none" stroke-width="2" />
+              <path d="M176 236 Q184 222 194 228 T212 214" fill="none" stroke="var(--color-red)" stroke-width="2" stroke-dasharray="3 5" />
+              <circle cx="212" cy="214" r="3.5" fill="var(--color-red)" stroke="none" />
+            </g>
+          )}
+          {prop === 'button' && (
+            <g>
+              <path d="M180 228 A16 16 0 0 1 212 228 Z" fill="var(--color-red)" />
+              <rect x="174" y="226" width="44" height="14" rx="4" fill="var(--color-ink-soft)" />
+              <path d="M186 222 Q190 216 196 215" fill="none" stroke="var(--color-white)" stroke-width="2" />
+            </g>
+          )}
+          {prop === 'phone' && (
+            <g>
+              <rect x="182" y="196" width="28" height="48" rx="6" fill={ink} />
+              <rect x="186.5" y="203" width="19" height="32" rx="2" fill="var(--color-mint-go)" stroke="none" />
+              <path d="M191 213 L201 213 M191 220 L198 220" fill="none" stroke-width="2" />
+            </g>
+          )}
+          <circle cx="194" cy="248" r="11" style={`fill:${s}`} />
+        </g>
+      )}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .ch-panel {
+    background-image: linear-gradient(var(--color-grid) 1px, transparent 1px), linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  /* Two animated parts: the eyes blink, the figure floats. Paused until on screen. */
+  .ch-eyes {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ch-blink 5.2s ease-in-out infinite paused;
+  }
+  .ch-float {
+    animation: ch-float 6s var(--ease-house) infinite paused;
+  }
+  .ch-panel[data-on] :is(.ch-eyes, .ch-float) {
+    animation-play-state: running;
+  }
+  :global([data-motion='paused']) .ch-panel :is(.ch-eyes, .ch-float) {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ch-eyes,
+    .ch-float {
+      animation: none;
+    }
+  }
+  @keyframes ch-blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(.1); }
+  }
+  @keyframes ch-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+</style>
+
+<script>
+  import { reducedMotion } from '../lib/once-in-view';
+
+  // Run the blink and float only while a character is on screen.
+  const panels = document.querySelectorAll<HTMLElement>('[data-character]');
+  if (panels.length > 0 && !reducedMotion() && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.target.toggleAttribute('data-on', e.isIntersecting);
+    });
+    panels.forEach((p) => io.observe(p));
+  }
+</script>
