@@ -173,7 +173,7 @@ export function calculateStroopScores(responses: readonly StroopResponse[]): Str
 /**
  * Result band lookup:
  * Under 80 ms -> Unshakeable
- * 80–160 ms -> Typical
+ * 80–160 ms -> Mild pull
  * 161–250 ms -> Word-pulled
  * Over 250 ms -> Strongly pulled
  */

@@ -8,10 +8,12 @@ export interface StroopBand {
   text: string;
 }
 
-/** Bands: Under 80 ms (Unshakeable), 80–160 ms (Typical), 161–250 ms (Word-pulled), Over 250 ms (Strongly pulled). */
+// Drafted: neutral badge name and task-framed band text.
+/** Bands: Under 80 ms (Unshakeable), 80–160 ms (Mild pull), 161–250 ms (Word-pulled), Over 250 ms (Strongly pulled). */
 export const stroopBands: StroopBand[] = [
   { min: -Infinity, badge: 'Unshakeable', text: 'The clashing words barely slowed you down.' },
-  { min: 80, badge: 'Typical', text: "Your brain read the word anyway, like almost everyone's does." },
+  // Drafted: neutral badge name and task-framed band text.
+  { min: 80, badge: 'Mild pull', text: 'Your brain read the word first, adding a brief delay before you named the ink.' },
   { min: 161, badge: 'Word-pulled', text: 'The words pulled hard on your attention.' },
   // Drafted: em dash removed.
   { min: 251, badge: 'Strongly pulled', text: 'Reading is very automatic for you: the words won the tug-of-war.' },

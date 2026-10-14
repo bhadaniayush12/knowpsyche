@@ -10,10 +10,12 @@ export interface ReactionBand {
 }
 
 export const reactionBands: ReactionBand[] = [
-  // Drafted; em dash removed.
-  { max: 199, badge: 'Lightning', text: 'Quicker than typical. Great focus, or a very fast screen.' },
-  { max: 250, badge: 'Quick', text: 'A little quicker than typical.' },
-  { max: 300, badge: 'Steady', text: 'Right where most people land in browser tests.' },
+  // Drafted: removed comparison wording.
+  { max: 199, badge: 'Lightning', text: 'Crisp and very fast. Great focus, or a very responsive screen.' },
+  // Drafted: removed comparison wording.
+  { max: 250, badge: 'Quick', text: 'Quick and alert on the trigger.' },
+  // Drafted: describes the average without comparing to others.
+  { max: 300, badge: 'Steady', text: 'A steady pace. Your screen and device add a little to this.' },
   { max: 400, badge: 'Needs a coffee', text: 'Tiredness, distractions or a laggy device often explain this.' },
   { max: Infinity, badge: 'Running on empty', text: 'Try again on a computer with a mouse, after a short break.' },
 ];
@@ -21,8 +23,9 @@ export const reactionBands: ReactionBand[] = [
 export const page = {
   // Drafted: em dash removed.
   title: 'Reaction Time Test: Free, 5 Tries, Instant Result',
+  // Drafted: removed comparison wording (146 chars <= 155 chars).
   description:
-    "How fast do you react? Click when the screen changes. Get your average in milliseconds, see what's typical, and learn what affects your speed.",
+    "How fast do you react? Click when the screen changes. Get your average in milliseconds, see your response band, and learn what affects your speed.",
   h1: 'Reaction time test',
   intro: 'Wait for the box to change, then click as fast as you can. Five tries, then your average.',
   // Touch screens: same line with "tap" (shared rule: timed tests on phones say "tap").
@@ -94,14 +97,16 @@ export const result = {
 export const faqs: Faq[] = [
   // Drafted: em dash removed.
   { q: 'What is reaction time?', a: 'The time between noticing a signal and responding to it: here, between the box changing and your click.' },
-  { q: 'What is the average reaction time?', a: 'In browser tests, most people average between 200 and 300 ms. Your device adds part of that.' },
+  // Drafted: general browser fact without comparison to what most people do.
+  { q: 'What is the average reaction time?', a: 'Browser tests often measure between 200 and 300 ms, but times vary with your screen, mouse or phone, and how alert you feel.' },
   { q: 'What is a good reaction time?', a: 'Under 250 ms is quick; under 200 ms is very fast.' },
   { q: 'Why is my reaction time so slow?', a: 'The usual reasons are tiredness, distraction, a phone touchscreen, or a slow monitor or mouse.' },
   { q: 'How can I improve my reaction time?', a: 'Sleep well, warm up with a few tries, stay focused, and practise. For gaming, a fast mouse and a high-refresh monitor help most.' },
   // Drafted: em dash removed.
   { q: 'Does being tired slow your reaction time?', a: 'Yes. Lack of sleep is one of the most reliable ways to slow down.' },
   { q: 'Does caffeine help?', a: "Some studies find a small improvement in alertness and reaction time, especially when you're tired." },
-  { q: 'At what age is reaction time fastest?', a: 'For most people, in their late teens and twenties. It slows gradually after that.' },
+  // Drafted: removed comparison wording.
+  { q: 'At what age is reaction time fastest?', a: 'Usually in the late teens and twenties. It slows gradually after that.' },
   { q: "What's the difference between a reaction and a reflex?", a: "A reflex (like the knee-jerk) happens automatically without a decision. A reaction needs your brain to notice and decide, so it's slower." },
   { q: "What's the difference between simple and choice reaction time?", a: 'Simple = one signal, one response (this test). Choice = several possible signals and responses, which takes longer.' },
   // Drafted: em dash removed.

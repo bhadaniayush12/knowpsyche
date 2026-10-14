@@ -210,9 +210,9 @@ describe('Stroop: band edges', () => {
     expect(getBand(0).badge).toBe('Unshakeable');
     expect(getBand(79).badge).toBe('Unshakeable');
 
-    // 80–160 ms: Typical
-    expect(getBand(80).badge).toBe('Typical');
-    expect(getBand(160).badge).toBe('Typical');
+    // 80–160 ms: Mild pull
+    expect(getBand(80).badge).toBe('Mild pull');
+    expect(getBand(160).badge).toBe('Mild pull');
 
     // 161–250 ms: Word-pulled
     expect(getBand(161).badge).toBe('Word-pulled');
@@ -228,6 +228,6 @@ describe('Stroop: band edges', () => {
     expect(scalePercent(160)).toBe(50);
     expect(scalePercent(320)).toBe(98);
 
-    expect(shareText(120)).toBe('My Stroop effect: 120 ms, Typical. Can you beat it?');
+    expect(shareText(120)).toBe('My Stroop effect: 120 ms, Mild pull. Can you beat it?');
   });
 });

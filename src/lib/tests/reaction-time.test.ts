@@ -126,7 +126,7 @@ describe('isInconsistent', () => {
 describe('meaningLine', () => {
   it('joins band text, fastest and spread without a double full stop', () => {
     const line = meaningLine(summarize([231, 262, 244, 255, 243]));
-    expect(line).toBe('A little quicker than typical. Your fastest try was 231 ms, and your tries were 31 ms apart.');
+    expect(line).toBe('Quick and alert on the trigger. Your fastest try was 231 ms, and your tries were 31 ms apart.');
     expect(line).not.toContain('..');
   });
 

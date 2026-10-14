@@ -100,7 +100,8 @@ export const types: EnneagramType[] = [
     n: 1, name: 'The Ethical Architect', desire: 'To be good and do things right', fear: 'Being flawed or wrong',
     strengths: 'Fair, reliable, high standards', stress: 'Harsh self-criticism', tip: 'Notice one thing that\'s "good enough" today',
     best: 'fair, reliable and you hold high standards',
-    drive: 'You want to do things right, and being wrong or flawed bothers you more than most.',
+    // Drafted: removed comparison wording.
+    drive: 'You want to do things right, and being wrong or flawed matters a lot to you.',
     overfire: 'Your eye for what could be better keeps your standards high. Under stress, it can turn on you as harsh self-criticism.',
   },
   {

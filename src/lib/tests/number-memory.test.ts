@@ -140,7 +140,7 @@ describe('full runs', () => {
     const s = answer(answer(startGame(), false), false);
     expect(s).toMatchObject({ over: true, best: 0, digits: 3 });
     expect(getBand(0).badge).toBe('Warming up');
-    expect(meaningLine(0)).toBe('You held 0 digits. Numbers slip away quickly for many people. Try grouping them.');
+    expect(meaningLine(0)).toBe('You held 0 digits. Numbers slip away quickly. Try grouping them into pairs or threes.');
   });
 });
 
@@ -149,8 +149,8 @@ describe('bands', () => {
     [0, 'Warming up'],
     [3, 'Warming up'],
     [5, 'Warming up'],
-    [6, 'Typical'],
-    [7, 'Typical'],
+    [6, 'Steady'],
+    [7, 'Steady'],
     [8, 'Strong'],
     [9, 'Strong'],
     [10, 'Exceptional'],
@@ -160,7 +160,7 @@ describe('bands', () => {
   });
 
   it('meaning line follows the content doc', () => {
-    expect(meaningLine(7)).toBe('You held 7 digits. Right around where most people land.');
+    expect(meaningLine(7)).toBe('You held 7 digits. Six or seven digits held at once, a steady span for this task.');
   });
 
   it('marker stays on the bar and inside the right band', () => {

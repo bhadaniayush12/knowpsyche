@@ -151,7 +151,7 @@ describe('full runs', () => {
     expect(s.tilesRemembered).toBe(0);
     expect(getBand(0).badge).toBe('Warming up');
     expect(meaningLine(0, 0)).toBe(
-      'Short-term visual memory has limits for everyone. Try again. It often improves on the second go. You remembered 0 tiles in total.',
+      'Short-term visual memory fills up fast. Try again; it often improves on the second go. You remembered 0 tiles in total.',
     );
   });
 });

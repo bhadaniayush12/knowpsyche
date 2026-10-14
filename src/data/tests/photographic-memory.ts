@@ -11,8 +11,8 @@ export interface MemoryBand {
 
 /** Levels 1–4, 5–8, 9–12, 13+. A score of 0 reads as the first band. */
 export const photoBands: MemoryBand[] = [
-  // Drafted: em dash removed.
-  { min: 0, badge: 'Warming up', text: 'Short-term visual memory has limits for everyone. Try again. It often improves on the second go.' },
+  // Drafted: removed comparison wording.
+  { min: 0, badge: 'Warming up', text: 'Short-term visual memory fills up fast. Try again; it often improves on the second go.' },
   { min: 5, badge: 'Solid', text: 'You hold a fair amount of detail from a quick look.' },
   { min: 9, badge: 'Sharp', text: 'You keep a lot of visual detail in mind at once.' },
   { min: 13, badge: 'Exceptional', text: 'Very few patterns get past you.' },
@@ -53,8 +53,9 @@ export const ui = {
 };
 
 export const result = {
+  // Drafted: removed comparison wording.
   change:
-    'Focus, tiredness and strategy. Many people do better by grouping tiles into shapes instead of remembering single squares.',
+    'Focus, tiredness and strategy. Grouping tiles into shapes or patterns makes them easier to hold than single squares.',
   // Try this = FAQ 4's answer (approved in the build plan).
   tip: 'Practice helps, and so does grouping tiles into shapes or patterns.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.

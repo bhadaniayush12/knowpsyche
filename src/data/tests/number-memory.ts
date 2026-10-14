@@ -5,9 +5,12 @@ import type { MemoryBand } from './photographic-memory';
 
 /** Digits 3–5, 6–7, 8–9, 10+. A score under 3 reads as the first band. */
 export const numberBands: MemoryBand[] = [
-  { min: 0, badge: 'Warming up', text: 'Numbers slip away quickly for many people. Try grouping them.' },
-  { min: 6, badge: 'Typical', text: 'Right around where most people land.' },
-  { min: 8, badge: 'Strong', text: 'You hold more digits than most.' },
+  // Drafted: removed comparison wording.
+  { min: 0, badge: 'Warming up', text: 'Numbers slip away quickly. Try grouping them into pairs or threes.' },
+  // Drafted: neutral badge name and task-framed band text.
+  { min: 6, badge: 'Steady', text: 'Six or seven digits held at once, a steady span for this task.' },
+  // Drafted: removed comparison wording.
+  { min: 8, badge: 'Strong', text: 'You hold eight or more digits before losing track.' },
   { min: 10, badge: 'Exceptional', text: "You're likely using a smart strategy, like chunking." },
 ];
 
@@ -26,7 +29,8 @@ export const page = {
 
 export const ui = {
   chunkTip: 'Tip: try splitting it into groups of 2 or 3.',
-  middle: 'Most people lose track in the middle. The first and last digits are usually the easiest to hold.',
+  // Drafted: removed comparison wording.
+  middle: 'The middle digits are often the hardest to hold. The first and last digits are usually easier to keep in mind.',
   // Drafted.
   ready: 'The number will appear here.',
   remember: 'Remember this number',
