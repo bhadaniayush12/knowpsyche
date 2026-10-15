@@ -143,6 +143,7 @@ const ticks = [100, 200, 300, 400, 500];
 </style>
 
 <script>
+  import { placeMarker } from '../../lib/band-scale';
   import { arena as copy, modes, result as resultCopy, soundBlocked, type ReactionMode } from '../../data/tests/reaction-time';
   import {
     addTry,
@@ -382,11 +383,7 @@ const ticks = [100, 200, 300, 400, 500];
     r('eyebrow').textContent = `Your result · Reaction time · ${info.label} mode`;
     r('headline').textContent = `${s.average} ms · ${band.badge}`;
     r('avg').textContent = String(s.average);
-    const pos = `${fillPercent(s.average).toFixed(1)}%`;
-    r('marker').style.left = pos;
-    const ml = r('marker-label');
-    ml.style.left = pos;
-    ml.textContent = `You · ${s.average}`;
+    placeMarker(resultEl, Number(fillPercent(s.average).toFixed(1)), `You · ${s.average}`);
     const note = r('mode-note');
     note.hidden = !info.resultNote;
     note.textContent = info.resultNote ?? '';

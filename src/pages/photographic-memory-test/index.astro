@@ -122,6 +122,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
 </style>
 
 <script>
+  import { placeMarker } from '../../lib/band-scale';
   import { result as copy, ui } from '../../data/tests/photographic-memory';
   import {
     BIGGER_GRID_MS,
@@ -302,11 +303,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     r('headline').textContent = `Level ${score} · ${band.badge}`;
     r('level').textContent = String(score);
     r('tiles').textContent = String(tilesN);
-    const pos = `${scalePercent(score).toFixed(1)}%`;
-    r('marker').style.left = pos;
-    const ml = r('marker-label');
-    ml.style.left = pos;
-    ml.textContent = `You · ${score}`;
+    placeMarker(resultEl, Number(scalePercent(score).toFixed(1)), `You · ${score}`);
     r('meaning').textContent = meaningLine(score, tilesN);
     r('tip').textContent = copy.tip;
 

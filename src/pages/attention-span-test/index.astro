@@ -213,6 +213,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 </style>
 
 <script>
+  import { placeMarker } from '../../lib/band-scale';
   import { result as copy, resultUi, ui } from '../../data/tests/attention-span';
   import {
     calculateAttentionScores,
@@ -446,12 +447,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     $('[data-r=badge]', resultEl).textContent = band.badge;
 
     // Marker
-    const marker = $('[data-r=marker]', resultEl);
-    const markerLabel = $('[data-r=marker-label]', resultEl);
-    const pct = scalePercent(scores.overall);
-    marker.style.left = `${pct}%`;
-    markerLabel.style.left = `${pct}%`;
-    markerLabel.textContent = `You · ${scores.overall}`;
+    placeMarker(resultEl, scalePercent(scores.overall), `You · ${scores.overall}`);
 
     // Breakdown
     $('[data-r=focus]', resultEl).textContent = `${scores.focus}%`;

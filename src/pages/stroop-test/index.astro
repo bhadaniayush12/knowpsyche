@@ -243,6 +243,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 </style>
 
 <script>
+  import { placeMarker } from '../../lib/band-scale';
   import { result as copy, resultUi, ui } from '../../data/tests/stroop';
   import {
     calculateStroopScores,
@@ -504,10 +505,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Marker
     const marker = $('[data-r=marker]', resultEl);
     const markerLabel = $('[data-r=marker-label]', resultEl);
-    const pct = scalePercent(scores.stroopEffectMs);
-    marker.style.left = `${pct}%`;
-    markerLabel.style.left = `${pct}%`;
-    markerLabel.textContent = `You · ${effectLabel(scores.stroopEffectMs)}`;
+    placeMarker(resultEl, scalePercent(scores.stroopEffectMs), `You · ${effectLabel(scores.stroopEffectMs)}`);
     marker.hidden = !measured;
     markerLabel.hidden = !measured;
 

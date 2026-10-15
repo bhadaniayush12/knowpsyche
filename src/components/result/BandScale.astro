@@ -13,10 +13,10 @@ interface Props {
 const { segments, ticks, class: className } = Astro.props;
 ---
 <div class:list={['border border-ink bg-card px-[22px] pt-[46px] pb-3.5', className]}>
-  <div class="relative flex h-10 border border-ink" aria-hidden="true">
+  <div class="bs-bar relative flex h-10 border border-ink" aria-hidden="true">
     {segments.map((s, i) => <div class:list={[s.class, i > 0 && 'border-l border-ink']}></div>)}
     <div data-r="marker" class="absolute -top-3 -bottom-3 w-1 -translate-x-0.5 bg-coral" style="left:0%"></div>
-    <div data-r="marker-label" class="mono absolute -top-[38px] -translate-x-1/2 bg-coral-ink px-[7px] py-[3px] text-[11px] whitespace-nowrap text-white" style="left:0%"></div>
+    <div data-r="marker-label" class="bs-label mono absolute -top-[38px] bg-coral-ink px-[7px] py-[3px] text-[11px] whitespace-nowrap text-white" style="--p:0"></div>
   </div>
   {ticks ? (
     <div class="mono mt-2.5 flex justify-between text-[11px] text-muted" aria-hidden="true">
@@ -25,11 +25,25 @@ const { segments, ticks, class: className } = Astro.props;
   ) : (
     <div class="mt-2.5 flex" aria-hidden="true">
       {segments.map((s) => (
-        <span class:list={[s.class.split(' ').filter((c) => c.startsWith('flex-')), 'flex min-w-0 flex-col gap-0.5 pr-1']}>
+        <span class:list={[s.class.split(' ').filter((c) => c.startsWith('flex-')), 'flex min-w-0 flex-col gap-0.5 pr-1.5']}>
           <span class="mono text-[11px] text-muted">{s.range}</span>
-          <span class="text-[11.5px] leading-[1.2] text-ink-soft sm:text-[12.5px]">{s.label}</span>
+          <span class="text-[11.5px] leading-[1.2] text-ink-soft hyphens-auto sm:text-[12.5px]">{s.label}</span>
         </span>
       ))}
     </div>
   )}
 </div>
+
+<style>
+  /* The bar is the size container, so the label can be clamped in bar widths (cqw) and its own width (%).
+     Centred on the marker (-50%), but never more than 14px past either end of the bar: the card's 22px
+     side padding leaves 8px clear of the card border. `--p` is the marker position, 0–100 (lib/band-scale.ts). */
+  .bs-bar {
+    container-type: inline-size;
+  }
+  .bs-label {
+    --o: 14px;
+    left: calc(var(--p) * 1%);
+    translate: clamp(calc(var(--p) * -1cqw - var(--o)), -50%, calc((100 - var(--p)) * 1cqw + var(--o) - 100%)) 0;
+  }
+</style>

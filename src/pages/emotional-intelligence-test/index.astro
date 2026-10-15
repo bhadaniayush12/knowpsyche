@@ -150,6 +150,7 @@ const first = statements[order[0] - 1];
 </style>
 
 <script>
+  import { placeMarker } from '../../lib/band-scale';
   import { order, result as copy, resultUi, statements, strongestLine, ui } from '../../data/tests/emotional-intelligence';
   import { getResult, scalePercent, type EqResult } from '../../lib/tests/emotional-intelligence';
   import { createShareCard } from '../../lib/share-card';
@@ -276,10 +277,7 @@ const first = statements[order[0] - 1];
 
     r('overall').textContent = String(res.overall);
     r('badge').textContent = res.overallBand.badge;
-    const pct = scalePercent(res.overall);
-    r('marker').style.left = `${pct}%`;
-    r('marker-label').style.left = `${pct}%`;
-    r('marker-label').textContent = `You · ${res.overall}`;
+    placeMarker(resultEl, scalePercent(res.overall), `You · ${res.overall}`);
 
     for (const { area, score, band, high } of res.areas) {
       const scoreBand = resultUi.scoreBand(score, band.badge);

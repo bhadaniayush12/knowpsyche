@@ -191,6 +191,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
 </style>
 
 <script>
+  import { placeMarker } from '../../lib/band-scale';
   import { result as copy, ui } from '../../data/tests/number-memory';
   import {
     answer,
@@ -338,11 +339,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     r('headline').textContent = `${n} digits · ${band.badge}`;
     r('span').textContent = String(n);
     r('longest').textContent = longest || 'None';
-    const pos = `${scalePercent(n).toFixed(1)}%`;
-    r('marker').style.left = pos;
-    const ml = r('marker-label');
-    ml.style.left = pos;
-    ml.textContent = `You · ${n}`;
+    placeMarker(resultEl, Number(scalePercent(n).toFixed(1)), `You · ${n}`);
     r('meaning').textContent = meaningLine(n);
     r('tip').textContent = copy.tip;
 
