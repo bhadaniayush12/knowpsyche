@@ -50,8 +50,9 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
       </div>
     </div>
 
-    <!-- Every view sits in the same grid cell; unused ones are invisible, so the card keeps one height. -->
-    <div class="nm-views mt-5 grid min-h-[300px] sm:min-h-[280px]" data-view="idle">
+    <!-- Every view sits in the same grid cell; unused ones are invisible, so the card keeps one height.
+         The one column is capped at the card width (minmax(0,1fr)), so the widest view cannot push the page sideways at 320px. -->
+    <div class="nm-views mt-5 grid grid-cols-[minmax(0,1fr)] min-h-[300px] sm:min-h-[280px]" data-view="idle">
       <div data-v="idle" class="nm-view flex flex-col items-center justify-center gap-3 text-center">
         <p class="m-0 text-[17px] text-ink-soft">{ui.ready}</p>
       </div>
