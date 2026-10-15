@@ -110,10 +110,12 @@ export async function drawShareCard(canvas: HTMLCanvasElement, d: ShareData) {
 
   // Big number + unit
   ctx.fillStyle = PAPER;
-  spaced(ctx, -14);
   const unitPx = 96;
+  // Measure the unit with the spacing it is drawn with, not the big number's.
+  spaced(ctx, -3);
   ctx.font = `600 ${unitPx}px ${SANS}`;
   const unitW = d.unit ? ctx.measureText(d.unit).width + 24 : 0;
+  spaced(ctx, -14);
   const bigPx = fit(ctx, d.big, (px) => `600 ${px}px ${SANS}`, 320, w - pad * 2 - unitW);
   ctx.font = `600 ${bigPx}px ${SANS}`;
   ctx.fillText(d.big, pad, mid + 40);
