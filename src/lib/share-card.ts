@@ -49,14 +49,29 @@ async function loadFonts() {
   ]).catch(() => undefined);
 }
 
-/** Largest font size (≤ max) at which `text` fits in `width`. */
-function fit(ctx: Ctx, text: string, font: (px: number) => string, max: number, width: number) {
+/**
+ * Largest font size from `max` down to `min`, in `step` px, at which `measure(px)` fits in `width`.
+ * Returns `min` when even that is too wide; the caller then passes `width` as fillText's maxWidth,
+ * so the line is squeezed instead of running off the card.
+ */
+export function fitSize(measure: (px: number) => number, max: number, min: number, width: number, step = 2) {
   let px = max;
+  while (px > min && measure(px) > width) px = Math.max(min, px - step);
+  return px;
+}
+
+/** Sets the largest font (from `max` down to `min`) at which `text` fits in `width`, and returns its size. */
+function fit(ctx: Ctx, text: string, font: (px: number) => string, max: number, min: number, width: number) {
+  const px = fitSize(
+    (size) => {
+      ctx.font = font(size);
+      return ctx.measureText(text).width;
+    },
+    max,
+    min,
+    width,
+  );
   ctx.font = font(px);
-  while (px > 40 && ctx.measureText(text).width > width) {
-    px -= 8;
-    ctx.font = font(px);
-  }
   return px;
 }
 
@@ -95,18 +110,22 @@ export async function drawShareCard(canvas: HTMLCanvasElement, d: ShareData) {
   ctx.font = `italic 400 62px ${SERIF}`;
   spaced(ctx, 0);
   ctx.fillText('psyche', pad + kw, pad + 50);
+  const markW = kw + ctx.measureText('psyche').width;
   ctx.fillStyle = 'rgba(244,240,231,.7)';
-  ctx.font = `400 26px ${MONO}`;
   spaced(ctx, 2.5);
+  const tag = d.tag.toUpperCase();
+  const tagW = w - pad * 2 - markW - 24;
+  fit(ctx, tag, (px) => `400 ${px}px ${MONO}`, 26, 18, tagW);
   ctx.textAlign = 'right';
-  ctx.fillText(d.tag.toUpperCase(), w - pad, pad + 44);
+  ctx.fillText(tag, w - pad, pad + 44, tagW);
   ctx.textAlign = 'left';
 
   // Label
   const mid = 520;
   ctx.fillStyle = 'rgba(244,240,231,.8)';
-  ctx.font = `400 32px ${MONO}`;
-  ctx.fillText(d.label.toUpperCase(), pad, mid - 210);
+  const label = d.label.toUpperCase();
+  fit(ctx, label, (px) => `400 ${px}px ${MONO}`, 32, 20, w - pad * 2);
+  ctx.fillText(label, pad, mid - 210, w - pad * 2);
 
   // Big number + unit
   ctx.fillStyle = PAPER;
@@ -116,10 +135,10 @@ export async function drawShareCard(canvas: HTMLCanvasElement, d: ShareData) {
   ctx.font = `600 ${unitPx}px ${SANS}`;
   const unitW = d.unit ? ctx.measureText(d.unit).width + 24 : 0;
   spaced(ctx, -14);
-  const bigPx = fit(ctx, d.big, (px) => `600 ${px}px ${SANS}`, 320, w - pad * 2 - unitW);
-  ctx.font = `600 ${bigPx}px ${SANS}`;
-  ctx.fillText(d.big, pad, mid + 40);
-  const bw = ctx.measureText(d.big).width;
+  const bigMax = w - pad * 2 - unitW;
+  fit(ctx, d.big, (px) => `600 ${px}px ${SANS}`, 320, 40, bigMax);
+  const bw = Math.min(ctx.measureText(d.big).width, bigMax);
+  ctx.fillText(d.big, pad, mid + 40, bigMax);
   if (d.unit) {
     spaced(ctx, -3);
     ctx.font = `600 ${unitPx}px ${SANS}`;
@@ -144,15 +163,15 @@ export async function drawShareCard(canvas: HTMLCanvasElement, d: ShareData) {
 
   // Badge
   spaced(ctx, -2);
-  ctx.font = `600 ${fit(ctx, d.badge, (px) => `600 ${px}px ${SANS}`, 64, w - pad * 2)}px ${SANS}`;
+  fit(ctx, d.badge, (px) => `600 ${px}px ${SANS}`, 64, 32, w - pad * 2);
   ctx.fillStyle = PAPER;
-  ctx.fillText(d.badge, pad, mid + 320);
+  ctx.fillText(d.badge, pad, mid + 320, w - pad * 2);
   spaced(ctx, 0);
 
   // Tagline + site
   ctx.fillStyle = PAPER;
-  ctx.font = `italic 400 ${fit(ctx, d.tagline, (px) => `italic 400 ${px}px ${SERIF}`, 96, w - pad * 2)}px ${SERIF}`;
-  ctx.fillText(d.tagline, pad, h - pad - 70);
+  fit(ctx, d.tagline, (px) => `italic 400 ${px}px ${SERIF}`, 96, 40, w - pad * 2);
+  ctx.fillText(d.tagline, pad, h - pad - 70, w - pad * 2);
   ctx.fillStyle = 'rgba(244,240,231,.7)';
   ctx.font = `400 28px ${MONO}`;
   spaced(ctx, 2.5);
