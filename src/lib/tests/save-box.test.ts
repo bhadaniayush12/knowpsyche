@@ -197,6 +197,21 @@ describe('save box on a result page', () => {
     expect(box['[data-save-btn]'].hidden).toBe(false);
   });
 
+  it('Back/Forward restore from the cache (pageshow, persisted) re-renders; a fresh load does not need to (Q6-5)', () => {
+    const box = makeBox();
+    initSaveOptIn(box.container as unknown as HTMLElement).show(current);
+    box['[data-save-btn]'].click();
+    // Cleared while this page sat in the cache: no storage event ever reaches it.
+    localStorage.removeItem('knowpsyche_saved_results');
+    (listeners.pageshow ?? []).forEach((fn) => fn({ type: 'pageshow', persisted: false } as never));
+    expect(box['[data-save-btn]'].hidden).toBe(true);
+    (listeners.pageshow ?? []).forEach((fn) => fn({ type: 'pageshow', persisted: true } as never));
+    expect(box['[data-save-btn]'].hidden).toBe(false);
+    expect(box['[data-save-btn]'].textContent).toBe(saveCopy.save);
+    expect(box['[data-report-link]'].hidden).toBe(true);
+    expect(box['[data-clear-btn]'].hidden).toBe(true);
+  });
+
   it('a clear somewhere else on this page (change event) brings back "Save result" (Q1-05)', () => {
     const box = makeBox();
     initSaveOptIn(box.container as unknown as HTMLElement).show(current);

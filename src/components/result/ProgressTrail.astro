@@ -229,4 +229,8 @@ const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2
   window.addEventListener(CHANGE_EVENT, update);
   // Another tab saved or cleared.
   window.addEventListener('storage', update);
+  // Back/Forward restored this page from the cache: results may have changed since.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) update();
+  });
 </script>

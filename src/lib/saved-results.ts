@@ -421,6 +421,10 @@ export function initSaveOptIn(container: HTMLElement | null): SaveOptInHandle {
     window.addEventListener('storage', (e: StorageEvent) => {
       if (e.key === null || e.key === STORAGE_KEY) refresh();
     });
+    // Back/Forward restored this page from the cache: results may have changed since.
+    window.addEventListener('pageshow', (e: PageTransitionEvent) => {
+      if (e.persisted) refresh();
+    });
   } catch {
     // No window events: the box still works, it just won't follow other tabs.
   }

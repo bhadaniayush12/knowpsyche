@@ -387,4 +387,8 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
     if (document.activeElement !== input) render();
   });
   window.addEventListener('storage', render);
+  // Back/Forward restored this page from the cache: results may have changed since.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) render();
+  });
 </script>
