@@ -17,7 +17,7 @@ import Sources from '../components/result/Sources.astro';
 import WhatsHappening from '../components/result/WhatsHappening.astro';
 import ProgressTrail from '../components/result/ProgressTrail.astro';
 import TrailFlag from '../components/result/TrailFlag.astro';
-import { PRIVATE_LINE, type Faq as FaqItem, type Happening, type Source } from '../data/shared';
+import { NOSCRIPT_LINE, PRIVATE_LINE, type Faq as FaqItem, type Happening, type Source } from '../data/shared';
 import { learnMoreLabel } from '../data/learn';
 import { articlesForTest } from '../lib/learn/articles';
 import { getCollection } from 'astro:content';
@@ -86,6 +86,7 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
           >{startLabel}</button>
           <p class="m-0 text-[13.5px] text-ink-soft">{PRIVATE_LINE}</p>
         </div>
+        <noscript><p class="mt-3 mb-0 text-[15px] font-semibold text-ink">{NOSCRIPT_LINE}</p></noscript>
       </div>
       <slot name="controls" />
     </section>
