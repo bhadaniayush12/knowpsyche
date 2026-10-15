@@ -1,4 +1,4 @@
-import { numberBands } from '../../data/tests/number-memory';
+import { numberBands, result } from '../../data/tests/number-memory';
 import type { MemoryBand } from '../../data/tests/photographic-memory';
 
 export const START_DIGITS = 3;
@@ -81,8 +81,9 @@ export function getBand(digits: number): MemoryBand {
   return [...numberBands].reverse().find((b) => digits >= b.min) ?? numberBands[0];
 }
 
-/** "What does it mean?" — "You held [N] digits. [band text]" (part-2.md result copy). */
+/** "What does it mean?" — "You held [N] digits. [band text]" (part-2.md result copy). A score of 0 gets its own line. */
 export function meaningLine(digits: number): string {
+  if (digits === 0) return result.zeroLine;
   return `You held ${digits} ${digits === 1 ? 'digit' : 'digits'}. ${getBand(digits).text}`;
 }
 

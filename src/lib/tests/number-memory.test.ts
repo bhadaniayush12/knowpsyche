@@ -140,7 +140,8 @@ describe('full runs', () => {
     const s = answer(answer(startGame(), false), false);
     expect(s).toMatchObject({ over: true, best: 0, digits: 3 });
     expect(getBand(0).badge).toBe('Warming up');
-    expect(meaningLine(0)).toBe('You held 0 digits. Numbers slip away quickly. Try grouping them into pairs or threes.');
+    // Q2-12: its own kind line, badge unchanged.
+    expect(meaningLine(0)).toBe('No number landed this time. That happens, and a fresh try often goes differently.');
   });
 });
 

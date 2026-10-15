@@ -58,6 +58,8 @@ export const result = {
     'Focus, tiredness and strategy. Grouping tiles into shapes or patterns makes them easier to hold than single squares.',
   // Try this = FAQ 4's answer (approved in the build plan).
   tip: 'Practice helps, and so does grouping tiles into shapes or patterns.',
+  // Drafted (Q2-12, Dev's wording): "What does it mean?" for level 0 with no tile found at all.
+  zeroLine: 'No tiles landed this time. Try again; the first level starts small.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   nextLine: 'Try Number memory to compare how you hold numbers versus pictures.',
   learn: { href: '/method/', label: 'How we build our tests →' },

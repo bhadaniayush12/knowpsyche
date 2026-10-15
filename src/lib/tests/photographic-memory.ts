@@ -1,4 +1,4 @@
-import { photoBands, type MemoryBand } from '../../data/tests/photographic-memory';
+import { photoBands, result, type MemoryBand } from '../../data/tests/photographic-memory';
 
 export const LIVES = 3;
 /** How long the tiles stay lit, every level (part-2.md: 1.2 seconds). */
@@ -84,8 +84,9 @@ export function getBand(score: number): MemoryBand {
   return [...photoBands].reverse().find((b) => score >= b.min) ?? photoBands[0];
 }
 
-/** "What does it mean?" — band text, then total tiles (part-2.md result copy). */
+/** "What does it mean?" — band text, then total tiles (part-2.md result copy). No level and no tile at all gets its own line. */
 export function meaningLine(score: number, tiles: number): string {
+  if (score === 0 && tiles === 0) return result.zeroLine;
   return `${getBand(score).text} You remembered ${tiles} ${tiles === 1 ? 'tile' : 'tiles'} in total.`;
 }
 

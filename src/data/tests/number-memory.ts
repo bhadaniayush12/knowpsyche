@@ -54,6 +54,8 @@ export const result = {
     'Strategy matters most. Reading 49 21 73 as three chunks is easier than six single digits. Tiredness and distractions lower scores.',
   // Try this = FAQ 3's answer (approved in the build plan).
   tip: 'Group digits into chunks of two or three, say them in a rhythm, or link them to dates you know.',
+  // Drafted (Q2-12, Dev's wording): "What does it mean?" for a score of 0, instead of "You held 0 digits."
+  zeroLine: 'No number landed this time. That happens, and a fresh try often goes differently.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: the doc's line points back to Photographic memory; the chain now follows the doc order 1–7.
   nextLine: "You've tested your memory. Now see how well you stay focused in the Attention span test.",

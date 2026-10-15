@@ -150,8 +150,13 @@ describe('full runs', () => {
     expect(s.completed).toBe(0);
     expect(s.tilesRemembered).toBe(0);
     expect(getBand(0).badge).toBe('Warming up');
-    expect(meaningLine(0, 0)).toBe(
-      'Short-term visual memory fills up fast. Try again; it often improves on the second go. You remembered 0 tiles in total.',
+    // Q2-12: its own kind line, badge unchanged.
+    expect(meaningLine(0, 0)).toBe('No tiles landed this time. Try again; the first level starts small.');
+  });
+
+  it('level 0 with some tiles found keeps the band line and the tile count (Q2-12)', () => {
+    expect(meaningLine(0, 2)).toBe(
+      'Short-term visual memory fills up fast. Try again; it often improves on the second go. You remembered 2 tiles in total.',
     );
   });
 });
