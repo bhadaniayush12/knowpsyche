@@ -212,11 +212,24 @@ const first = statements[order[0] - 1];
     window.setTimeout(() => {
       locked = false;
       next();
+      // An answer given during the pulse counts for the next statement instead of being dropped.
+      if (queued !== null) {
+        const v = queued;
+        queued = null;
+        choose(v);
+      }
     }, PULSE_MS);
   };
 
+  /** The latest answer pressed while the previous one was still pulsing. */
+  let queued: number | null = null;
+
   const choose = (value: number) => {
-    if (locked || done) return;
+    if (done) return;
+    if (locked) {
+      queued = value;
+      return;
+    }
     answers[index] = value;
     confirm(answerButtons[value - 1], () => {
       if (index === TOTAL - 1) {
@@ -238,6 +251,7 @@ const first = statements[order[0] - 1];
     answers = Array(TOTAL).fill(null);
     index = 0;
     locked = false;
+    queued = null;
     done = false;
     shown = null;
     resultEl.hidden = true;
