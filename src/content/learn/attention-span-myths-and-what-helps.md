@@ -16,6 +16,7 @@ sources:
   - "Ariga, A., & Lleras, A. (2011). Brief and rare mental \"breaks\" keep you focused: Deactivation and reactivation of task goals preempt vigilance decrements. *Cognition*."
   - "Leroy, S. (2009). Why is it so hard to do my work? The challenge of attention residue when switching between work tasks. *Organizational Behavior and Human Decision Processes*."
   - "Gomez, P., Ratcliff, R., & Perea, M. (2007). A model of the go/no-go task. *Journal of Experimental Psychology: General*."
+  - "Stothart, C., Mitchum, A., & Yehnert, C. (2015). The attentional cost of receiving a cell phone notification. *Journal of Experimental Psychology: Human Perception and Performance*."
 faq:
   - question: "What is the average attention span?"
     answer: "There isn't a single number. Attention depends on the task, how interesting it is, how tired you are and what else is competing for you. The popular claim that people now focus for less time than a goldfish has no solid research behind it."
