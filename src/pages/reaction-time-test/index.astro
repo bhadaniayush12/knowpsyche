@@ -328,6 +328,8 @@ const ticks = [100, 200, 300, 400, 500];
   // Sound mode: a try only starts once the audio is running. A suspended context (silent mode, blocked
   // autoplay) would never beep, so after a short wait for resume() the test switches to visual mode.
   let checkingSound = false;
+  /** Bumped by reset() (Restart, Try again, a mode change), so a sound check started before it can't start a try. */
+  let startToken = 0;
   const soundRunning = async (): Promise<boolean> => {
     ensureAudio();
     if (!audio) return false;
@@ -348,10 +350,11 @@ const ticks = [100, 200, 300, 400, 500];
     }
     if (checkingSound) return;
     checkingSound = true;
+    const token = startToken;
     void soundRunning().then((ok) => {
       checkingSound = false;
       // The mode was changed (or the test reset) while waiting: nothing to start.
-      if (mode !== 'sound' || running()) return;
+      if (token !== startToken || mode !== 'sound' || running()) return;
       if (ok) {
         beginTry();
         return;
@@ -476,6 +479,7 @@ const ticks = [100, 200, 300, 400, 500];
   };
 
   const reset = () => {
+    startToken += 1;
     cancelAnimationFrame(frame);
     endedAt = -Infinity;
     tries = [];

@@ -31,3 +31,22 @@ describe.each(['enneagram-test', 'emotional-intelligence-test'])('%s: the answer
     expect(s).toMatch(/\[data-try-again\][\s\S]{0,80}reset\(\);/);
   });
 });
+
+describe('reaction time: the sound check (Q6-2)', () => {
+  const s = script('reaction-time-test');
+  const startTry = s.slice(s.indexOf('const startTry'), s.indexOf('const beginTry'));
+
+  it('reset() bumps the start token first', () => {
+    expect(s).toMatch(/const reset = \(\) => \{\s+startToken \+= 1;/);
+  });
+
+  it('a mode change goes through reset()', () => {
+    expect(s).toMatch(/const setMode = \(m: ReactionMode\) => \{[^}]*reset\(\);\s+\};/);
+  });
+
+  it('a check only starts a try if no reset happened while it waited', () => {
+    expect(startTry).toMatch(/const token = startToken;\s+void soundRunning\(\)\.then/);
+    expect(startTry).toContain('if (token !== startToken || ');
+    expect(startTry.indexOf('token !== startToken')).toBeLessThan(startTry.indexOf('beginTry()', startTry.indexOf('.then')));
+  });
+});
