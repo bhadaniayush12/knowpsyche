@@ -133,3 +133,13 @@ describe('attention article claims only what its sources support (Q3-C)', () => 
     expect(page).not.toMatch(/heavy phone use/i);
   });
 });
+
+describe('method page uses the same tie-break wording as the Enneagram page (Q3-19)', () => {
+  it('the Enneagram maths row says a short tie-break round follows', () => {
+    const page = read('src/pages/method/index.astro');
+    expect(page).toContain(
+      "['Enneagram', 'You rate 45 statements from 1 to 5, five for each of the nine types, so each type scores 5 to 25. If your top types are very close, a short tie-break round follows.'],",
+    );
+    expect(page).not.toContain('within a point of the top score');
+  });
+});
