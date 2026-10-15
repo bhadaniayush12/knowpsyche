@@ -6,7 +6,7 @@ export type AreaId = 'knowing' | 'managing' | 'reading' | 'relationships';
 
 export const page = {
   // Drafted: title and description shortened to fit 60 / 155 characters.
-  title: 'Emotional Intelligence Test: Free, 28 Questions | KnowPsyche',
+  title: 'Emotional Intelligence Test: Free, 28 Questions',
   description:
     'A free, private emotional intelligence test. 28 quick statements on how you notice, manage and read feelings. About 5 minutes, nothing sent.',
   h1: 'How do you handle feelings?',
