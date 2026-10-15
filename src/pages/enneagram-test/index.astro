@@ -109,7 +109,7 @@ const choiceBtn =
         <div class="flex min-w-0 flex-[999_1_480px] flex-col gap-3 border border-ink bg-card p-[22px]">
           <div class="mono flex flex-wrap justify-between gap-2 text-[11px]">
             <span>Your scores · out of 25</span>
-            <span class="flex gap-3">
+            <span data-r="bar-key" class="flex gap-3">
               <span class="inline-flex items-center gap-1.5"><span class="inline-block size-2.5 bg-blue" aria-hidden="true"></span>Main</span>
               <span class="inline-flex items-center gap-1.5"><span class="inline-block size-2.5 bg-violet" aria-hidden="true"></span>Wing</span>
             </span>
@@ -186,6 +186,7 @@ const choiceBtn =
   import { milestones, result as copy, statements, tieBreak as tbCopy, tieBreakLines, typeStep, types, ui, wingLines, type TypeNumber } from '../../data/tests/enneagram';
   import {
     applyTieBreak,
+    barRoles,
     getResult,
     needsTieBreak,
     resultStrength,
@@ -406,21 +407,23 @@ const choiceBtn =
   const label = (n: TypeNumber) => `${n}`;
 
   const renderBars = (res: EnneagramResult) => {
-    const wingSet = new Set(res.top.flatMap((n) => res.wings[n] ?? []));
-    const mainSet = new Set(res.top);
+    // Even scores: no "Main" or "Wing" tags and every bar neutral, since no single type stood out.
+    const roles = barRoles(res);
+    const isMain = (t: TypeNumber) => Number(roles[t] === 'main');
     const list = r('bars');
     // Highest first; on equal scores the main type (e.g. the tie-break winner) goes first.
-    const ordered = [...res.ranked].sort((x, y) => y.sum - x.sum || Number(mainSet.has(y.type)) - Number(mainSet.has(x.type)));
+    const ordered = [...res.ranked].sort((x, y) => y.sum - x.sum || isMain(y.type) - isMain(x.type));
     list.replaceChildren(
       ...ordered.map(({ type, sum, pct }, i) => {
-        const role = mainSet.has(type) ? 'main' : wingSet.has(type) ? 'wing' : '';
+        const role = roles[type];
         const li = el('li', 'flex flex-col gap-1');
+        li.dataset.role = role;
         // Top 3, plus any main type or wing further down, show by default; the rest sit behind "Show all 9".
-        if (i >= 3 && !role) li.dataset.extra = '';
+        if (i >= 3 && role === 'none') li.dataset.extra = '';
         const row = el('div', 'flex items-baseline justify-between gap-3 text-[14.5px]');
         const name = el('span', 'min-w-0');
         name.append(el('b', 'font-semibold', `Type ${type}`), ` · ${short(type)}`);
-        if (role) name.append(el('span', 'mono ml-2 text-[10px] text-muted', role === 'main' ? 'Main' : 'Wing'));
+        if (role !== 'none') name.append(el('span', 'mono ml-2 text-[10px] text-muted', role === 'main' ? 'Main' : 'Wing'));
         row.append(name, el('span', 'mono flex-none text-[12px]', `${sum}/25`));
         const track = el('div', 'h-2.5 overflow-hidden rounded-full bg-line');
         track.setAttribute('role', 'img');
@@ -433,9 +436,10 @@ const choiceBtn =
         return li;
       }),
     );
-    // With even scores every type matters, so show all 9.
+    // With even scores every type matters, so show all 9. Nothing is marked, so the Main/Wing key goes too.
     setAllBars(res.kind === 'even');
     r('toggle-bars').hidden = res.kind === 'even';
+    r('bar-key').hidden = res.kind === 'even';
   };
 
   const setAllBars = (all: boolean) => {

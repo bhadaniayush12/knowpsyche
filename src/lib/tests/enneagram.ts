@@ -81,6 +81,22 @@ export function getResult(answers: readonly number[]): EnneagramResult {
   return { kind, top, ranked, wings };
 }
 
+// ---------- Bar chart roles ----------
+
+export type BarRole = 'main' | 'wing' | 'none';
+
+/**
+ * How each type's bar is marked on the result: `main` (blue + "Main" tag), `wing` (violet + "Wing" tag) or `none` (neutral).
+ * Even scores mark nothing, to match "No single type stood out". A type that is both a main type and a wing shows as main.
+ */
+export function barRoles(res: EnneagramResult): Record<TypeNumber, BarRole> {
+  const roles = Object.fromEntries(TYPE_NUMBERS.map((t) => [t, 'none'])) as Record<TypeNumber, BarRole>;
+  if (res.kind === 'even') return roles;
+  for (const n of res.top) for (const w of res.wings[n] ?? []) roles[w] = 'wing';
+  for (const n of res.top) roles[n] = 'main';
+  return roles;
+}
+
 // ---------- Strength of the result ----------
 
 /** A lead of this many points or more is a "clear lead". One answer can move a type by up to 4. */

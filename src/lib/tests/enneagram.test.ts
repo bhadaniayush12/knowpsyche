@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { statements, tieBreakLines, types, wingLines, type TypeNumber } from '../../data/tests/enneagram';
 import {
   applyTieBreak,
+  barRoles,
   getResult,
   needsTieBreak,
   neighbours,
@@ -166,6 +167,54 @@ describe('getResult', () => {
     expect(r.top).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     expect(new Set(r.ranked.map((x) => x.pct))).toEqual(new Set([pct]));
     expect(r.wings[1]).toEqual([9, 2]);
+  });
+});
+
+describe('barRoles (result bars: Main tag + blue, Wing tag + violet, or neutral)', () => {
+  const marked = (r: ReturnType<typeof barRoles>) => Object.entries(r).filter(([, v]) => v !== 'none');
+
+  it('clear winner: one main type and its wing, the rest neutral', () => {
+    const roles = barRoles(getResult(answersForSums({ 4: 24, 5: 19, 3: 12 }, 10)));
+    expect(marked(roles)).toEqual([['4', 'main'], ['5', 'wing']]);
+  });
+
+  it('two-way near tie (1 point apart): both types are main, each with its wing', () => {
+    const r = getResult(answersForSums({ 4: 21, 9: 22, 5: 14, 1: 13 }, 10));
+    expect(r.kind).toBe('tie');
+    expect(marked(barRoles(r))).toEqual([['1', 'wing'], ['4', 'main'], ['5', 'wing'], ['9', 'main']]);
+  });
+
+  it('two-way tie where one finalist is the other one\'s wing: it shows as main', () => {
+    const r = getResult(answersForSums({ 4: 22, 5: 22 }, 10));
+    expect(barRoles(r)[4]).toBe('main');
+    expect(barRoles(r)[5]).toBe('main');
+  });
+
+  it('fully even (all answers the same): nothing marked', () => {
+    const r = getResult(answersFor({}, 3));
+    expect(r.kind).toBe('even');
+    expect(marked(barRoles(r))).toEqual([]);
+  });
+
+  it('three types within a point (even): nothing marked, though they have wings', () => {
+    const r = getResult(answersForSums({ 2: 20, 6: 20, 7: 19 }, 10));
+    expect(r.kind).toBe('even');
+    expect(Object.keys(r.wings)).toHaveLength(3);
+    expect(marked(barRoles(r))).toEqual([]);
+  });
+
+  it('three-way tie-break left undecided (even): nothing marked', () => {
+    const r0 = getResult(answersForSums({ 2: 20, 6: 20, 7: 19 }, 10));
+    const r = applyTieBreak(r0, Array(9).fill('same'));
+    expect(r.kind).toBe('even');
+    expect(marked(barRoles(r))).toEqual([]);
+  });
+
+  it('tie settled by the tie-break: only the winner is main', () => {
+    const r0 = getResult(answersForSums({ 4: 22, 9: 22 }, 10));
+    const r = applyTieBreak(r0, ['a', 'a', 'a'].map((_, i) => (tieBreakQuestions([4, 9])[i].a === 9 ? 'a' : 'b')) as Choice[]);
+    expect(r.top).toEqual([9]);
+    expect(Object.entries(barRoles(r)).filter(([, v]) => v === 'main')).toEqual([['9', 'main']]);
   });
 });
 
