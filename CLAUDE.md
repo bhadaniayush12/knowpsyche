@@ -84,6 +84,7 @@ Set `trailingSlash: 'always'` and `site: 'https://knowpsyche.com'` in `astro.con
 3. Google Analytics 4: `PUBLIC_GA_ID=G-H9999QB11B` is already in `.env.production` (committed; the ID is public). The loader in `BaseLayout` only runs on knowpsyche.com / www.knowpsyche.com, so it starts working once the custom domain is live. After launch, check in GA4 Realtime that page views arrive, and that Admin → Data streams → Web → Enhanced measurement is off and data retention is 2 months (the Privacy page says so).
 4. Disable workers.dev: set `"workers_dev": false` in `wrangler.jsonc` (and `"preview_urls": false`), then `npm run deploy`.
 5. Update the staging URL line under Stack, and re-run the live checks (status codes, headers, sitemap, robots.txt).
+6. Sweep all Learn article dates (datePublished/dateModified) to 2026-10-17.
 
 ## Performance + accessibility targets
 
