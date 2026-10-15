@@ -38,3 +38,14 @@ describe('/terms/ says there are no ads yet', () => {
     expect(page).not.toMatch(/AdSense|paid for by ads|ads and links|cookies and ads/i);
   });
 });
+
+describe('/about/ says there are no ads yet', () => {
+  const page = read('src/pages/about/index.astro');
+
+  it('says the site is free and shows no ads right now', () => {
+    expect(page).toContain(
+      "KnowPsyche is free and shows no ads right now. If we add ads later, they will sit around the content, never inside a test while you're taking it.",
+    );
+    expect(page).not.toMatch(/AdSense/);
+  });
+});
