@@ -51,8 +51,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     <!-- Header: counter + restart -->
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <!-- Two lines reserved: on phones the counter and note wrap differently from state to state (no layout shift). -->
-      <div class="mono flex flex-wrap max-sm:min-h-[calc(2lh+0.25rem)] items-center gap-x-4 gap-y-1 text-[11px]">
+      <!-- Two lines reserved: on phones the counter and note sit on their own lines, top-aligned, so no state moves them (no layout shift). -->
+      <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] max-sm:min-h-[calc(2lh+0.25rem)] max-sm:flex-col max-sm:items-start max-sm:justify-start">
         <span class="st-counter">{ui.practiceLabel}</span>
         <span class="st-note text-muted">{ui.practiceNote}</span>
       </div>

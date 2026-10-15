@@ -39,8 +39,8 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     class="as-card rounded-[26px] outline-none border border-line-card bg-white p-[clamp(16px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)] select-none"
   >
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <!-- Two lines reserved: on phones the counter and note wrap differently from state to state (no layout shift). -->
-      <div class="mono flex flex-wrap max-sm:min-h-[calc(2lh+0.25rem)] items-center gap-x-4 gap-y-1 text-[11px]">
+      <!-- Two lines reserved: on phones the counter and note sit on their own lines, top-aligned, so no state moves them (no layout shift). -->
+      <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] max-sm:min-h-[calc(2lh+0.25rem)] max-sm:flex-col max-sm:items-start max-sm:justify-start">
         <span class="as-counter">{ui.practiceLabel}</span>
         <span class="as-note text-muted">{ui.practiceNote}</span>
       </div>
