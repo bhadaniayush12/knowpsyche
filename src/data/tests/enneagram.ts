@@ -283,7 +283,7 @@ export const happening: Happening = {
     // Drafted.
     { title: 'Nine scores.', text: 'Each of the nine types has five statements, so each type gets a score from 5 to 25.' },
     // Drafted.
-    { title: 'A close call?', text: 'If two or three types end up within a point of the top score, a short tie-break round asks which motives fit you better.' },
+    { title: 'A close call?', text: 'If your top types are very close, a short tie-break round follows.' },
     // Drafted (Q2-04, Dev's wording).
     { id: 'your-type', title: 'Your type.', text: `${typeStep.main} ${typeStep.wing}` },
   ],
