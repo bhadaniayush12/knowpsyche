@@ -288,6 +288,8 @@ const ticks = [100, 200, 300, 400, 500];
     big.textContent = p.big;
     small.textContent = p.small;
     tag.textContent = p.tag;
+    // White at 80% on blue is only 4.1:1; full opacity is 5.4:1 for this small text. The other states pass at 80%.
+    for (const e of [count, tag]) e.classList.toggle('opacity-80', phase !== 'shown');
     const n = Math.min(tries.length + (phase === 'done' ? 0 : 1), TRIES);
     count.textContent = `${modeInfo(mode).label} · try ${n} / ${TRIES}`;
     lightsWrap.hidden = mode !== 'f1';
