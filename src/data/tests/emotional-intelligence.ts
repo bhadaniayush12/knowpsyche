@@ -161,7 +161,15 @@ export const resultUi = {
   cardTitle: 'Your four areas · out of 100',
   tryThis: 'Try this',
   shareLabel: 'My emotional intelligence',
-  shareStrongest: (names: string[]) => (allEven(names) ? evenLine : `Strongest: ${names.join(' & ')}`),
+  /** The share card's badge line: the area names alone don't fit when two or three tie. */
+  shareStrongest: (names: string[]) =>
+    names.length === 1
+      ? `Strongest: ${names[0]}`
+      : allEven(names)
+        ? evenLine
+        : names.length === 2
+          ? 'Two areas tied for strongest'
+          : 'Three areas tied for strongest',
   shareTagline: 'How do you handle feelings?',
   /** Area row and card label, e.g. "71/100 · Strong". */
   scoreBand: (score: number, badge: string) => `${score}/100 · ${badge}`,

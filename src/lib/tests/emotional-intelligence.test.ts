@@ -84,6 +84,7 @@ describe('EQ: strongest area and ties', () => {
     const res = getResult(answersWith(3, { 15: 5 }));
     expect(res.strongest.map((a) => a.id)).toEqual(['reading']);
     expect(strongestLine(res.strongest.map((a) => a.name))).toBe('Your strongest area: Reading other people.');
+    expect(resultUi.shareStrongest(res.strongest.map((a) => a.name))).toBe('Strongest: Reading other people');
   });
 
   it('shows both areas when two tie', () => {
@@ -94,6 +95,7 @@ describe('EQ: strongest area and ties', () => {
     expect(strongestLine(res.strongest.map((a) => a.name))).toBe(
       'Your strongest areas: Knowing your feelings and Reading other people.',
     );
+    expect(resultUi.shareStrongest(res.strongest.map((a) => a.name))).toBe('Two areas tied for strongest');
   });
 
   it('says the areas came out even when all four tie', () => {
@@ -110,7 +112,7 @@ describe('EQ: strongest area and ties', () => {
     expect(strongestLine(names)).toBe(
       'Your strongest areas: Knowing your feelings, Managing your feelings and Reading other people.',
     );
-    expect(resultUi.shareStrongest(names)).toBe('Strongest: Knowing your feelings & Managing your feelings & Reading other people');
+    expect(resultUi.shareStrongest(names)).toBe('Three areas tied for strongest');
   });
 });
 
