@@ -39,11 +39,11 @@ const categories = ['All', ...new Set(articles.map((a) => a.data.category))];
     {articles.length > 0 && (
       <section aria-label="Guides" class="guides-section flex flex-col gap-5">
         {pillar && (
-          <ArticleCard article={pillar} wide class="card-lift" />
+          <ArticleCard article={pillar} wide level={2} class="card-lift" />
         )}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {otherArticles.map((a) => (
-            <ArticleCard article={a} class="card-lift" />
+            <ArticleCard article={a} level={2} class="card-lift" />
           ))}
         </div>
       </section>

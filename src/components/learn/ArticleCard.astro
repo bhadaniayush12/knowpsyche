@@ -11,10 +11,13 @@ interface Props {
   featured?: boolean;
   /** Learn hub pillar card: wide featured card on its own row. */
   wide?: boolean;
+  /** Title heading level: 2 on /learn/ (straight under the H1), 3 under a section's H2 elsewhere. */
+  level?: 2 | 3;
   class?: string;
   [key: string]: unknown;
 }
-const { article, featured = false, wide = false, class: className, ...rest } = Astro.props;
+const { article, featured = false, wide = false, level = 3, class: className, ...rest } = Astro.props;
+const H = `h${level}`;
 const test = testFor(article);
 const dark = !test || test.dark;
 ---
@@ -47,7 +50,7 @@ const dark = !test || test.dark;
           </div>
         )}
         <div>
-          <h3 class="m-0 mb-2 font-semibold text-[clamp(26px,3.2vw,44px)] leading-[1.08] tracking-[-.04em] line-clamp-3 max-w-[28ch]">{article.data.title}</h3>
+          <H class="m-0 mb-2 font-semibold text-[clamp(26px,3.2vw,44px)] leading-[1.08] tracking-[-.04em] line-clamp-3 max-w-[28ch]">{article.data.title}</H>
           <p class="m-0 text-[16px] md:text-[17px] leading-[1.6] opacity-[.88] max-w-[56ch] line-clamp-4">{article.data.deck ?? article.data.description}</p>
         </div>
         <span class="text-[15.5px] font-semibold mt-2">Read <span class="card-arrow">→</span></span>
@@ -70,7 +73,7 @@ const dark = !test || test.dark;
       {/* Text on the left, scene in its own column on the right; scene above the text on small screens. */}
       <div class="grid grid-cols-1 items-center gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:gap-10">
         <div class="flex flex-col gap-3.5">
-          <h3 class="m-0 max-w-[18ch] font-semibold text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]">{article.data.title}</h3>
+          <H class="m-0 max-w-[18ch] font-semibold text-[clamp(32px,4vw,52px)] leading-[1] tracking-[-.045em]">{article.data.title}</H>
           <p class="m-0 max-w-[52ch] text-[17px] leading-[1.55] opacity-[.88] line-clamp-4">{article.data.deck ?? article.data.description}</p>
           <span class="text-[15.5px] font-semibold mt-2">Read <span class="card-arrow">→</span></span>
         </div>
@@ -96,7 +99,7 @@ const dark = !test || test.dark;
         </div>
       )}
       <div>
-        <h3 class="m-0 mb-1.5 font-semibold line-clamp-3 text-[24px] leading-[1.15] tracking-[-.035em]">{article.data.title}</h3>
+        <H class="m-0 mb-1.5 font-semibold line-clamp-3 text-[24px] leading-[1.15] tracking-[-.035em]">{article.data.title}</H>
         <p class="m-0 leading-[1.55] opacity-[.88] line-clamp-4 text-[15.5px]">{article.data.deck ?? article.data.description}</p>
       </div>
       <span class="text-[15.5px] font-semibold mt-auto">Read <span class="card-arrow">→</span></span>
