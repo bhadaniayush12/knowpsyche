@@ -37,7 +37,7 @@ const rows = [
       <h3 class="m-0 mb-2.5 text-[26px] tracking-[-.03em]">Fair questions</h3>
       {homeFaqs.map((f) => (
         <details class="rounded-14 bg-paper px-[18px] py-4">
-          <summary class="flex justify-between gap-3 text-[17px] font-semibold"><span>{f.q}</span><span class="plus" aria-hidden="true">+</span></summary>
+          <summary class="-my-2.5 flex justify-between gap-3 py-2.5 text-[17px] font-semibold"><span>{f.q}</span><span class="plus" aria-hidden="true">+</span></summary>
           <p class="mt-2.5 mb-0 text-[15.5px] leading-[1.6] text-ink-soft">{f.a}</p>
         </details>
       ))}

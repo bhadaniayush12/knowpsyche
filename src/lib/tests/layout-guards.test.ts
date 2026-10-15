@@ -41,3 +41,18 @@ describe('without JavaScript (Q4-A6)', () => {
     expect(layout.slice(ns, layout.indexOf('</noscript>', ns))).toContain('{NOSCRIPT_LINE}');
   });
 });
+
+describe('tap targets of at least 44px (Q4-A7)', () => {
+  it('homepage FAQ question: 26px line + 2 × 10px padding, pulled back by the same negative margin so nothing moves', () => {
+    expect(read('src/components/home/ResultsFaq.astro')).toContain('<summary class="-my-2.5 flex justify-between gap-3 py-2.5 text-[17px] font-semibold">');
+  });
+
+  it('article contents links are at least 44px tall', () => {
+    expect(read('src/pages/learn/[slug].astro')).toMatch(/<a href=\{`#\$\{t\.slug\}`\}[^>]*class="flex min-h-11 items-center/);
+  });
+
+  it('article header "Learn" link gets the invisible 44px tap area', () => {
+    expect(read('src/pages/learn/[slug].astro')).toContain('<a href="/learn/" class="hit-44 text-muted">Learn</a>');
+    expect(read('src/styles/global.css')).toMatch(/\.hit-44::after \{[^}]*width: max\(100%, 44px\);\s+height: max\(100%, 44px\);/);
+  });
+});

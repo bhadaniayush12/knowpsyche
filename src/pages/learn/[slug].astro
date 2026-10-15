@@ -79,7 +79,7 @@ const articleLd = {
 
   <section class="mx-auto flex max-w-[1200px] flex-wrap items-end gap-10 px-[clamp(16px,3vw,40px)] pt-[clamp(20px,4vw,48px)] pb-10">
     <div class="min-w-0 flex-[2_1_560px]">
-      <div class="mb-[18px] text-[14px] text-muted"><a href="/learn/" class="text-muted">Learn</a> / {data.category}</div>
+      <div class="mb-[18px] text-[14px] text-muted"><a href="/learn/" class="hit-44 text-muted">Learn</a> / {data.category}</div>
       <h1 class="m-0 text-[clamp(46px,6.6vw,96px)] leading-[.94] font-semibold tracking-[-.05em]">{h1[0]}{h1[1] && <span class="serif text-blue">{h1[1]}</span>}{h1[2]}</h1>
       <p class="mt-[22px] mb-0 max-w-[620px] text-[21px] leading-[1.55] text-ink-soft">{data.deck ?? data.description}</p>
       <div class="mt-[26px] flex flex-wrap items-center gap-3 text-[14.5px] text-ink-soft">
@@ -112,7 +112,7 @@ const articleLd = {
       <nav aria-label={tocLabel} class="toc flex min-w-0 max-w-[240px] flex-[1_1_200px] flex-col gap-1.5 text-[15px]">
         <span class="mb-1.5 text-[13px] font-semibold text-muted">{tocLabel}</span>
         {toc.map((t, i) => (
-          <a href={`#${t.slug}`} data-active={i === 0 ? '' : undefined} class="flex min-h-9 items-center border-l-2 border-line pl-3 no-underline data-active:border-blue">{t.num} · {t.text}</a>
+          <a href={`#${t.slug}`} data-active={i === 0 ? '' : undefined} class="flex min-h-11 items-center border-l-2 border-line pl-3 no-underline data-active:border-blue">{t.num} · {t.text}</a>
         ))}
       </nav>
     )}
