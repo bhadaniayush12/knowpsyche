@@ -13,6 +13,8 @@ import {
   summarize,
   TRIES,
   waitMs,
+  settled,
+  SETTLE_MS,
 } from './reaction-time';
 
 describe('isGuess', () => {
@@ -167,5 +169,16 @@ describe('F1 lights', () => {
 
   it('lights go out after the fifth light plus the hold', () => {
     expect(f1Total(500)).toBe(4500);
+  });
+});
+
+describe('settled (Q2-24)', () => {
+  it('ignores presses within 250 ms of the end of a try', () => {
+    expect(SETTLE_MS).toBe(250);
+    expect(settled(1000, 1000)).toBe(false);
+    expect(settled(1000, 1120)).toBe(false);
+    expect(settled(1000, 1249.9)).toBe(false);
+    expect(settled(1000, 1250)).toBe(true);
+    expect(settled(-Infinity, 0)).toBe(true);
   });
 });

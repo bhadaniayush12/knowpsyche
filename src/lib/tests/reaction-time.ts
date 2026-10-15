@@ -9,6 +9,14 @@ export const TRIES = 5;
 /** Spread above this gets the "bit inconsistent" challenge. */
 export const SPREAD_CHALLENGE_MS = 60;
 
+/** Presses this soon after a try ends are ignored, so a double click can't start the next try. */
+export const SETTLE_MS = 250;
+
+/** True when a press at `now` should start the next try (not part of a double click on the last one). */
+export function settled(endedAt: number, now: number): boolean {
+  return now - endedAt >= SETTLE_MS;
+}
+
 export function isGuess(ms: number): boolean {
   return ms < GUESS_THRESHOLD_MS;
 }

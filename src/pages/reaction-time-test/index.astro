@@ -153,6 +153,7 @@ const ticks = [100, 200, 300, 400, 500];
     getBand,
     isInconsistent,
     meaningLine,
+    settled,
     shareText,
     summarize,
     TRIES,
@@ -442,18 +443,23 @@ const ticks = [100, 200, 300, 400, 500];
     resultEl.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
   };
 
+  /** When the last try ended (a timed press or a too-early one), on the performance.now() clock. */
+  let endedAt = -Infinity;
+
   /** A press on the box (pointer or key). `t` = the event's high-resolution timestamp. */
   const press = (t: number) => {
     switch (phase) {
       case 'wait':
         cancelAnimationFrame(frame);
         if (mode === 'f1') renderLights(0);
+        endedAt = performance.now();
         phase = 'early';
         cue('wrong');
         render();
         return;
       case 'go': {
         last = Math.round((t >= shownAt ? t : performance.now()) - shownAt);
+        endedAt = performance.now();
         const out = addTry(tries, last);
         tries = out.tries;
         phase = !out.counted ? 'guess' : out.done ? 'done' : 'shown';
@@ -465,12 +471,15 @@ const ticks = [100, 200, 300, 400, 500];
       case 'done':
         return;
       default:
+        // The second click of a double click (or a bounce) right after a try ended doesn't start the next one.
+        if (!settled(endedAt, performance.now())) return;
         startTry();
     }
   };
 
   const reset = () => {
     cancelAnimationFrame(frame);
+    endedAt = -Infinity;
     tries = [];
     phase = 'idle';
     renderLights(0);
