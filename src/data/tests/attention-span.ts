@@ -26,10 +26,11 @@ export const page = {
     'Click for green, hold back for red. A 2-minute focus test based on a classic psychology task. Free, instant results for focus and self-control.',
   h1: 'Attention span test',
   // Drafted: em dash removed.
-  intro: "Circles will appear one at a time. Click (or tap) when you see green. Do nothing when you see red. Stay with it: it's longer than it feels.",
+  // Q2-05: "a red circle with an X" (Dev's wording), so the shape cue is in the instructions too.
+  intro: "Circles will appear one at a time. Click (or tap) when you see green. Do nothing when you see a red circle with an X. Stay with it: it's longer than it feels.",
   // Touch screens: same line with "tap" (shared rule).
   // Drafted: em dash removed.
-  introTouch: "Circles will appear one at a time. Tap when you see green. Do nothing when you see red. Stay with it: it's longer than it feels.",
+  introTouch: "Circles will appear one at a time. Tap when you see green. Do nothing when you see a red circle with an X. Stay with it: it's longer than it feels.",
   crumb: 'Attention span',
   // Drafted (eyebrow and metaLine).
   eyebrow: 'Test / 05 · Attention · 2–3 min',
@@ -48,7 +49,7 @@ export const ui = {
   // Drafted: touch version of the line above; em dash removed.
   oopsGreenTouch: 'Missed: tap on green',
   // Drafted: touch version of the stage line (the doc intro's first instruction, with "Tap").
-  stageLineTouch: 'Tap when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.',
+  stageLineTouch: 'Tap when you see <b class="text-teal-ink">green</b>. Do nothing when you see a <b class="text-coral-ink">red circle with an X</b>.',
   // Drafted: everything from here to the end of `ui`.
   ready: 'Click or press Space to start practice.',
   readyTouch: 'Tap to start practice.',

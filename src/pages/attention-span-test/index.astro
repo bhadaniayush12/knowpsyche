@@ -68,7 +68,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
         <p class="pointer-swap m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
           <!-- From the doc intro. -->
-          <span class="on-mouse">Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see <b class="text-coral-ink">red</b>.</span><span class="on-touch" set:html={ui.stageLineTouch} />
+          <span class="on-mouse">Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see a <b class="text-coral-ink">red circle with an X</b>.</span><span class="on-touch" set:html={ui.stageLineTouch} />
         </p>
         <button
           type="button"
@@ -180,6 +180,25 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   .as-circle[data-color='red'] {
     background-color: var(--color-red);
     box-shadow: 0 0 28px rgba(201, 88, 75, 0.45);
+  }
+  /* Red also carries a white X, so colour is never the only signal (white on red is 4.2:1). */
+  .as-circle {
+    position: relative;
+  }
+  .as-circle[data-color='red']::before,
+  .as-circle[data-color='red']::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 52%;
+    height: 11%;
+    border-radius: 999px;
+    background: #fff;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .as-circle[data-color='red']::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
   .as-circle[data-blank] {
     opacity: 0;
