@@ -74,6 +74,6 @@ You can't change the size of the workspace, but you can change what you put in i
 - **Find a pattern.** A shape, a letter or a path through the grid is easier to hold than scattered dots.
 - **Tell yourself a quick story.** A silly picture tends to stick where a plain list slips away.
 - **Use a route.** Place what you need to remember along a path you know well, as the champions do.
-- **Slow down.** Rushing the first look is the commonest way to lose detail.
+- **Settle in first.** Start each level ready, so the short look gets your full attention.
 
 If you'd like to see how this plays out with numbers instead of pictures, read [how much your short-term memory can hold](/learn/short-term-memory-capacity/), or look at [what psychology tests can and can't tell you](/learn/what-psychology-tests-can-and-cant-tell-you/) before you take any result to heart.
