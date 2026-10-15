@@ -48,7 +48,7 @@ A large review that gathered half a century of studies found the effect again an
 
 The Stroop effect is a neat window into how automatic habits and deliberate goals interact. But it's easy to read too much into one person's number.
 
-- **Everyone shows it.** A slowdown isn't a flaw. It's what a reading mind does.
+- **Nearly everyone shows it.** A slowdown isn't a flaw. It's what a reading mind does.
 - **Many things move it.** Practice, tiredness, how carefully you are going and which colours are used all change the size of the effect.
 - **Colour vision matters.** People with some colour-vision differences may find the task harder or easier for reasons that have nothing to do with attention.
 
