@@ -139,7 +139,7 @@ describe('Stroop: 85% accuracy note at 84%, 85%, and 86%', () => {
     expect(scores.under85Note).toBe(true);
 
     const line = meaningLine(scores);
-    expect(line).toContain('You were fast but made several mistakes. Try again a little slower for a fairer score.');
+    expect(line).toContain('You were quick on the words you answered, and missed several. Try again a little slower for a fairer score.');
   });
 
   it('excludes under-85% note at 85% accuracy', () => {
@@ -148,7 +148,7 @@ describe('Stroop: 85% accuracy note at 84%, 85%, and 86%', () => {
     expect(scores.under85Note).toBe(false);
 
     const line = meaningLine(scores);
-    expect(line).not.toContain('You were fast but made several mistakes');
+    expect(line).not.toContain('missed several');
   });
 
   it('excludes under-85% note at 86% accuracy', () => {
@@ -157,7 +157,7 @@ describe('Stroop: 85% accuracy note at 84%, 85%, and 86%', () => {
     expect(scores.under85Note).toBe(false);
 
     const line = meaningLine(scores);
-    expect(line).not.toContain('You were fast but made several mistakes');
+    expect(line).not.toContain('missed several');
   });
 });
 

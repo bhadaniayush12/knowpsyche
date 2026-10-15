@@ -40,8 +40,8 @@ export const ui = {
   colourVisionNote: 'This test relies on telling colours apart, so it may not work well for people with colour-vision differences.',
   // Drafted: the doc says the note "allows a skip" but gives no link text.
   skipNote: 'Skip to the attention span test →',
-  // Drafted: em dash removed.
-  lowAccuracyNote: 'You were fast but made several mistakes. Try again a little slower for a fairer score.',
+  // Drafted: em dash removed. Q2-17: first sentence is Dev's wording.
+  lowAccuracyNote: 'You were quick on the words you answered, and missed several. Try again a little slower for a fairer score.',
   // Drafted: the doc says "4 rounds with feedback" but gives no lines. Everything from here to the end of `ui`.
   practiceCorrect: 'Correct!',
   // Drafted: em dash removed.
