@@ -155,7 +155,7 @@ describe('Attention span: steadiness comparison', () => {
     expect(scores.steadiness.dipped).toBe(true);
 
     const line = meaningLine(scores);
-    expect(line).toContain("Your focus dipped in the second half. That's normal; attention tires with time.");
+    expect(line).toContain('Your focus dipped in the second half. Attention tires with time, so a dip late in the run is expected.');
   });
 
   it('does not flag dip when second half is worse by only 4 points', () => {

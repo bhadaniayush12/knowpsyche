@@ -90,8 +90,8 @@ export const result = {
   change: 'Sleep, phone notifications, noise and how interested you are in the task.',
   // Drafted: "Try this" reuses FAQ 4's answer word for word (the doc gives no tip).
   tip: "Remove notifications, work in focused blocks (for example 25 minutes), sleep well, and take short breaks before you're exhausted.",
-  // Drafted: em dash removed.
-  dippedNote: "Your focus dipped in the second half. That's normal; attention tires with time.",
+  // Drafted: em dash removed. Q2-23: second sentence is Dev's wording.
+  dippedNote: 'Your focus dipped in the second half. Attention tires with time, so a dip late in the run is expected.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: em dash removed.
   nextLine: 'Try the Stroop test. It puts your focus up against your reading habit.',
