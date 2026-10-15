@@ -79,7 +79,7 @@ Because the slowdown is the difference between two kinds of trial, it is steadie
 The effect is steady, so you won't make it vanish, but a few things shape your result:
 
 - Do it when you're rested. Tired minds slip more.
-- Look at the ink, not the word. Some people squint a little, which helps.
+- Look at the ink, not the word.
 - Go at a pace you can keep up. Speed and accuracy trade off.
 - Treat each run as a fresh snapshot, and look at the pattern across a few.
 
