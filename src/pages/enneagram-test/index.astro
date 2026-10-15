@@ -478,15 +478,6 @@ const choiceBtn =
     return d;
   };
 
-  /** Short card for the "even" result: name, desire and fear only. */
-  const shortCard = (n: TypeNumber) => {
-    const t = typeInfo(n);
-    const box = el('article', 'flex flex-col gap-1.5 border border-ink bg-card p-5');
-    box.append(el('h3', 'm-0 text-[19px] font-semibold tracking-[-.02em]', `Type ${n}: ${t.name}`));
-    box.append(el('p', 'm-0 text-[15px] text-ink-soft', `Core desire: ${t.desire}. Core fear: ${lower(t.fear)}.`));
-    return box;
-  };
-
   /** Wings for any type, from the full scores (runner-ups aren't in `res.wings`). */
   const wingsOf = (res: EnneagramResult, n: TypeNumber): TypeNumber[] => {
     if (res.wings[n]) return res.wings[n]!;
@@ -510,6 +501,7 @@ const choiceBtn =
     const strength = r('strength');
     meaning.replaceChildren();
     strength.hidden = true;
+    details.hidden = res.kind === 'even';
     let tip = t1.tip;
 
     if (res.kind === 'clear') {
@@ -541,7 +533,8 @@ const choiceBtn =
       r('badge').textContent = 'Even';
       r('badge-name').textContent = 'No single type stood out';
       meaning.textContent = copy.evenMeaning;
-      details.replaceChildren(...res.top.slice(0, 3).map(shortCard));
+      // No single type stands out, so no type cards: "The nine types" list below has every description.
+      details.replaceChildren();
       tip = copy.evenTip;
     }
 

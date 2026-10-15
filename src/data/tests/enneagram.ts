@@ -186,11 +186,13 @@ export const wingLines: Record<string, string> = {
 
 export const result = {
   change: 'Results can shift with mood and life stage. Come back in a few months and compare.',
-  // Drafted.
-  evenMeaning: 'Three or more types scored within a point of each other, so no single type stands out this time.',
+  // Drafted (Q2-10, Dev's wording). The result page shows no type cards for an even result.
+  evenMeaning: 'Your scores are very even, so no single type stands out. That can happen when every statement feels equally true or equally untrue.',
   evenTip:
-    // Drafted: em dash removed.
-    'Read your top three descriptions above. The one that feels most true about your motives, not just your behaviour, is usually your type.',
+    // Drafted: em dash removed. Q2-10: first sentence is Dev's wording; it points at "The nine types" list on the result page.
+    'Read through the descriptions and notice which feel closest. The one that feels most true about your motives, not just your behaviour, is usually your type.',
+  // Drafted (Q2-10, approved by Dev): the /report/ sheet lists no descriptions, so its tip doesn't point at any.
+  evenTipReport: 'Notice which motives feel most true for you, not just your behaviour; that is usually your type.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: part-1.md has no next-test line for the Enneagram.
   nextLine: 'You know what drives you. Now see how much you remember from a quick look.',

@@ -114,9 +114,9 @@ export function meaningFor(id: TestId, r: SavedTestResult): string[] {
 export function boxCopy(r: SavedTestResult): { standout: string; tip: string } | null {
   const id = r.testId;
   if (id === 'enneagram') {
-    // The main type's own tip, or the "even" tip.
+    // The main type's own tip, or the report's "even" tip (the sheet lists no type descriptions to read through).
     const e = enneagramTypes(r.badge, r.data && typeof r.data === 'object' ? r.data : null);
-    const tip = e.kind === 'even' ? enneagramCopy.evenTip : (enneagramTypes_.find((t) => t.n === e.types[0])?.tip ?? enneagramCopy.evenTip);
+    const tip = e.kind === 'even' ? enneagramCopy.evenTipReport : (enneagramTypes_.find((t) => t.n === e.types[0])?.tip ?? enneagramCopy.evenTipReport);
     return standout.enneagram.all ? { standout: standout.enneagram.all, tip } : null;
   }
   const bands: readonly { badge: string }[] = single[id]?.bands ?? (id === 'emotional-intelligence' ? eqBands : []);

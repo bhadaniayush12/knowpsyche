@@ -8,7 +8,7 @@ import type { SavedTestResult, TestId } from '../saved-results';
 const saved = (testId: TestId, badge: string, data: SavedTestResult['data'] = 7): SavedTestResult => ({ testId, date: '2026-10-14', badge, headline: `${badge} result`, data });
 
 // Every line of Enneagram copy the two boxes could ever show.
-const enneagramLines = [standout.enneagram.all!, enneagramCopy.evenTip, ...enneagramTypes.map((t) => t.tip)];
+const enneagramLines = [standout.enneagram.all!, enneagramCopy.evenTipReport, ...enneagramTypes.map((t) => t.tip)];
 
 // A stand-in sheet: just the two boxes and their row.
 const fakeSheet = () => {
@@ -77,8 +77,10 @@ describe('the Enneagram keeps its own copy', () => {
   it('a tie uses the first type tip', () => {
     expect(boxCopy(saved('enneagram', '4 or 9', scores))?.tip).toBe(enneagramTypes.find((t) => t.n === 4)!.tip);
   });
-  it('"Even" uses the even tip', () => {
-    expect(boxCopy(saved('enneagram', 'Even', scores))?.tip).toBe(enneagramCopy.evenTip);
+  it('"Even" uses the report\'s even tip, which points at no descriptions (the sheet has none) (Q2-10)', () => {
+    const tip = boxCopy(saved('enneagram', 'Even', scores))?.tip;
+    expect(tip).toBe(enneagramCopy.evenTipReport);
+    expect(tip).not.toMatch(/description/i);
   });
 });
 
