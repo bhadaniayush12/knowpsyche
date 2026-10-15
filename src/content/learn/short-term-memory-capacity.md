@@ -51,7 +51,7 @@ The classic model came from Alan Baddeley and Graham Hitch in 1974. It treats wo
 
 ## How people hold long numbers
 
-A famous training study from 1982 followed a volunteer who began with an ordinary span. He was a keen runner, and over many sessions he learned to link digits to running times and ages, turning strings of numbers into meaningful chunks. In the end he could recall a very long string.
+A famous training study from around 1980 followed a volunteer who began with an ordinary span. He was a keen runner, and over many sessions he learned to link digits to running times and ages, turning strings of numbers into meaningful chunks. In the end he could recall a very long string.
 
 The details are the interesting part. When he was tested with letters instead of digits, his span dropped back to ordinary. He hadn't grown a bigger memory. He had built a better method for one kind of material.
 
