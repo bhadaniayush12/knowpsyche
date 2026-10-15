@@ -67,7 +67,7 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
   <TrailFlag slot="head" />
   <div class="mx-auto max-w-[1120px] px-[clamp(16px,3vw,40px)] pt-[18px] pb-20">
 
-    <!-- Only for people who saved a result (C1). Above the intro, never inside the running test. -->
+    {/* Only for people who saved a result (C1). Above the intro, never inside the running test. */}
     <ProgressTrail variant="strip" current={testId} />
 
     <section class="mb-[22px] flex flex-wrap items-end justify-between gap-5" aria-labelledby="test-title">
@@ -99,7 +99,7 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
       <slot name="result" />
     </section>
 
-    <!-- Below the test and its result, never inside it. -->
+    {/* Below the test and its result, never inside it. */}
     <AdSlot class="my-10" />
 
     <div class="mt-14 flex max-w-[760px] flex-col gap-12">

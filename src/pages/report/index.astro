@@ -43,7 +43,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
     <section class="rp-intro mb-8 flex flex-col gap-3">
       <h1 class="m-0 text-[clamp(40px,5.4vw,72px)] leading-[.95] font-semibold tracking-[-.05em]">Your <span class="serif text-blue">report</span></h1>
       <p class="m-0 max-w-[560px] text-[17px] leading-[1.55] text-ink-soft">{reportPage.deviceLine}</p>
-      <!-- Screen only, and only when something is saved (hidden in print and in the empty state). -->
+      {/* Screen only, and only when something is saved (hidden in print and in the empty state). */}
       <div class="rp-pdf mt-2 flex-col items-start gap-2">
         <button type="button" data-rp-print class:list={[btn, 'border-0 bg-ink font-semibold text-paper hover:bg-blue']}>{reportPage.savePdf}</button>
         <p class="m-0 text-[14.5px] leading-[1.5] text-ink-soft">{reportPage.pdfHint}</p>
@@ -51,7 +51,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
       <p data-rp-status role="status" aria-live="polite" class="m-0 min-h-[1.5em] text-[14.5px] text-ink-soft"></p>
     </section>
 
-    <!-- Nothing saved (or storage blocked): a friendly way in. -->
+    {/* Nothing saved (or storage blocked): a friendly way in. */}
     <section class="rp-empty flex flex-col gap-5" aria-labelledby="rp-empty-title">
       <div class="flex max-w-[620px] flex-col gap-2">
         <h2 id="rp-empty-title" tabindex="-1" class="m-0 text-[clamp(26px,3vw,34px)] font-semibold tracking-[-.03em]">{reportPage.emptyTitle}</h2>
@@ -70,7 +70,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
       </ul>
     </section>
 
-    <!-- Something saved: name, buttons, and the pages. -->
+    {/* Something saved: name, buttons, and the pages. */}
     <div class="rp-has">
       <div class="rp-controls mb-10 flex flex-wrap items-end gap-x-8 gap-y-5 border border-ink bg-card p-[clamp(18px,3vw,28px)]">
         <div class="flex min-w-0 flex-[1_1_320px] flex-col gap-2">
@@ -80,7 +80,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
         </div>
         <div class="flex flex-wrap items-center gap-2.5">
           <button type="button" data-rp-clear class:list={[btn, 'border border-ink bg-transparent text-ink hover:border-coral-ink hover:text-coral-ink']}>{reportPage.clear}</button>
-          <!-- Two-step clear: the first press swaps the button for this question. Keep or Escape cancels. -->
+          {/* Two-step clear: the first press swaps the button for this question. Keep or Escape cancels. */}
           <div data-rp-confirm role="group" aria-labelledby="rp-confirm-q" class="flex flex-wrap items-center gap-x-4 gap-y-2.5" hidden>
             <p id="rp-confirm-q" class="m-0 text-[16px] font-semibold">{reportPage.clearConfirm}</p>
             <div class="flex flex-wrap gap-2.5">
@@ -92,7 +92,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
       </div>
 
       <section aria-label={reportPage.previewLabel} class="rp-doc">
-        <!-- Cover -->
+        {/* Cover */}
         <article class="rp-sheet rp-cover" data-cover aria-label="Cover">
           <div class="rp-in">
             <header class="rp-top">
@@ -116,7 +116,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
           </div>
         </article>
 
-        <!-- One page per saved test -->
+        {/* One page per saved test */}
         {tests.map((t) => (
           <article class="rp-sheet rp-test" data-id={t.id} aria-label={t.name}>
             <div class="rp-in">
@@ -136,7 +136,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center px-5 py-3 text-bas
           </article>
         ))}
 
-        <!-- Last page: tests not tried yet (if any), then the notes. -->
+        {/* Last page: tests not tried yet (if any), then the notes. */}
         <article class="rp-sheet rp-last" aria-label={reportSheet.notesTitle}>
           <div class="rp-in">
             <header class="rp-top">

@@ -45,14 +45,14 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
         </span>
       </div>
       <div class="flex flex-wrap gap-2">
-        <!-- basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). -->
+        {/* basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). */}
         <FeedbackToggle class="grow basis-0" />
         <button type="button" class="nm-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
       </div>
     </div>
 
-    <!-- Every view sits in the same grid cell; unused ones are invisible, so the card keeps one height.
-         The one column is capped at the card width (minmax(0,1fr)), so the widest view cannot push the page sideways at 320px. -->
+    {/* Every view sits in the same grid cell; unused ones are invisible, so the card keeps one height.
+         The one column is capped at the card width (minmax(0,1fr)), so the widest view cannot push the page sideways at 320px. */}
     <div class="nm-views mt-5 grid grid-cols-[minmax(0,1fr)] min-h-[300px] sm:min-h-[280px]" data-view="idle">
       <div data-v="idle" class="nm-view flex flex-col items-center justify-center gap-3 text-center">
         <p class="m-0 text-[17px] text-ink-soft">{ui.ready}</p>

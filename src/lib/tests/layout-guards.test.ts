@@ -74,7 +74,7 @@ describe('200% text: rows wrap instead of overflowing (Q4-A8)', () => {
   });
 
   it.each(TOGGLE_PAGES)('%s: Sound & vibration + Restart wrap', (slug) => {
-    expect(read(`src/pages/${slug}/index.astro`)).toMatch(/<div class="flex flex-wrap gap-2">\s+<!--[^>]*-->\s+<FeedbackToggle class="grow basis-0" \/>/);
+    expect(read(`src/pages/${slug}/index.astro`)).toMatch(/<div class="flex flex-wrap gap-2">\s+\{\/\*[^*]*\*\/\}\s+<FeedbackToggle class="grow basis-0" \/>/);
   });
 
   it('emotional intelligence: count, Back + Restart wrap', () => {

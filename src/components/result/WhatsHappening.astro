@@ -15,7 +15,7 @@ const article = (await getArticles()).find((a) => a.id === happening.article);
 if (!article) throw new Error(`WhatsHappening: no published Learn article "${happening.article}"`);
 ---
 <section aria-labelledby="happening-title">
-  <!-- Drafted: section heading given by Dev; the labels below are Drafted. -->
+  {/* Drafted: section heading given by Dev; the labels below are Drafted. */}
   <h2 id="happening-title" class="m-0 mb-3.5 text-[clamp(28px,3.4vw,34px)] font-semibold tracking-[-.04em]">What’s happening in this test?</h2>
   <ol class="m-0 list-none border-y border-ink p-0">
     {happening.steps.map((s, i) => (

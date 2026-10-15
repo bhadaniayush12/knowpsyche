@@ -39,7 +39,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     tabindex="-1"
     class="st-card rounded-[26px] outline-none border border-line-card bg-white p-[clamp(16px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)] select-none"
   >
-    <!-- Colour-vision note and skip option -->
+    {/* Colour-vision note and skip option */}
     <div class="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3 text-xs text-muted">
       <p class="m-0 max-w-[560px] leading-relaxed">
         {ui.colourVisionNote}
@@ -49,15 +49,15 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       </a>
     </div>
 
-    <!-- Header: counter + restart -->
+    {/* Header: counter + restart */}
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <!-- Two lines reserved: on phones the counter and note sit on their own lines, top-aligned, so no state moves them (no layout shift). -->
+      {/* Two lines reserved: on phones the counter and note sit on their own lines, top-aligned, so no state moves them (no layout shift). */}
       <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] max-sm:min-h-[calc(2lh+0.25rem)] max-sm:flex-col max-sm:items-start max-sm:justify-start">
         <span class="st-counter">{ui.practiceLabel}</span>
         <span class="st-note text-muted">{ui.practiceNote}</span>
       </div>
       <div class="flex flex-wrap gap-2">
-        <!-- basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). -->
+        {/* basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). */}
         <FeedbackToggle class="grow basis-0" />
         <button
           type="button"
@@ -66,11 +66,11 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       </div>
     </div>
 
-    <!-- Word display arena -->
+    {/* Word display arena */}
     <div
       class="st-arena relative mt-4 flex min-h-[290px] sm:min-h-[260px] w-full flex-col items-center justify-center rounded-[20px] border border-line-inner/40 bg-card p-6 text-center"
     >
-      <!-- Idle view -->
+      {/* Idle view */}
       <div data-st-view="idle" class="flex flex-col items-center gap-3">
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
         <p class="pointer-swap m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">
@@ -84,7 +84,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         </button>
       </div>
 
-      <!-- Active Word view -->
+      {/* Active Word view */}
       <div data-st-view="active" class="flex flex-col items-center justify-center gap-2" hidden>
         <div
           class="st-word text-[clamp(54px,11vw,96px)] font-bold tracking-tight leading-none select-none transition-transform duration-75"
@@ -92,7 +92,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         <p class="st-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium" aria-live="polite"></p>
       </div>
 
-      <!-- Practice complete view -->
+      {/* Practice complete view */}
       <div data-st-view="practice-done" class="flex flex-col items-center gap-3" hidden>
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceDoneTitle}</p>
         <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.practiceDoneText}</p>
@@ -104,7 +104,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         </button>
       </div>
 
-      <!-- Paused view (when tab is hidden or blurred) -->
+      {/* Paused view (when tab is hidden or blurred) */}
       <div data-st-view="paused" class="flex flex-col items-center gap-3" hidden>
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-coral-ink">{ui.pausedTitle}</p>
         <p class="m-0 max-w-[460px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.pausedMessage}</p>
@@ -117,7 +117,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
       </div>
     </div>
 
-    <!-- 4 Answer buttons: 44px min height, thumb-friendly at 360px -->
+    {/* 4 Answer buttons: 44px min height, thumb-friendly at 360px */}
     <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label={ui.choicesLabel}>
       <button
         type="button"
@@ -180,7 +180,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
         <div class="flex min-w-0 flex-[1_1_320px] flex-col justify-between gap-4 border border-ink bg-card p-[22px]">
           <div class="mono text-[11px] text-muted">{resultUi.cardTitle}</div>
 
-          <!-- Two comparative bars for matching vs clashing -->
+          {/* Two comparative bars for matching vs clashing */}
           <div class="flex flex-col gap-3">
             <div>
               <div class="mono flex justify-between text-[11px]">

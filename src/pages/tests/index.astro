@@ -9,10 +9,10 @@ import { title, description, h1, intro } from '../../data/tests-index';
 <BaseLayout title={title} description={description} path="/tests/" ogImage="/og/tests.png" crumbs={[{ name: 'Tests' }]}>
   <div class="mx-auto flex max-w-[1200px] flex-col gap-[clamp(32px,4vw,48px)] px-[clamp(16px,3vw,40px)] pt-[clamp(24px,4vw,48px)] pb-20">
     <section>
-      <!-- Drafted eyebrow. -->
+      {/* Drafted eyebrow. */}
       <div class="mono mb-[18px] text-[11px] text-muted">Tests · 07 free</div>
       <h1 class="m-0 text-[clamp(48px,9vw,124px)] leading-[.9] font-semibold tracking-[-.055em]">{h1[0]}<br /><span class="serif text-violet">{h1[1]}</span></h1>
-      <!-- The seven card motifs, small, settling in once on load. Decorative: the cards below carry the names. -->
+      {/* The seven card motifs, small, settling in once on load. Decorative: the cards below carry the names. */}
       <div aria-hidden="true" class="mt-6 flex flex-wrap gap-2">
         {homeTests.map((t, i) => (
           <span

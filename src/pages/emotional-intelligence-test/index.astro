@@ -44,7 +44,7 @@ const first = statements[order[0] - 1];
       <div class="eq-bar h-full rounded-full bg-blue transition-[width] duration-300 ease-house" style="width:0%"></div>
     </div>
 
-    <!-- Room for the longest statement (4 lines on phones, 2 above), so answers never move. -->
+    {/* Room for the longest statement (4 lines on phones, 2 above), so answers never move. */}
     <p id="eq-statement" class="mt-6 mb-0 min-h-[4.8em] text-[clamp(24px,3.4vw,40px)] leading-[1.2] font-semibold tracking-[-.03em] sm:min-h-[2.4em]" aria-live="polite">
       <span class="eq-text inline-block">{first.text}</span>
     </p>

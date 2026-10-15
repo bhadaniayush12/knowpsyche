@@ -87,8 +87,8 @@ const articleLd = {
         <span><b class="text-ink">{AUTHOR.name}</b> · Updated <time datetime={iso(data.dateModified)}>{formatDate(data.dateModified)}</time> · {minutes}</span>
       </div>
     </div>
-    <!-- Ink panel as designed for the dark test card and the pillar; the other glyphs are drawn for their
-         tint and go faint on ink, so those panels use the test's tint. -->
+    {/* Ink panel as designed for the dark test card and the pillar; the other glyphs are drawn for their
+         tint and go faint on ink, so those panels use the test's tint. */}
     <div
       aria-hidden="true"
       class:list={['flex aspect-[360/220] min-w-0 max-w-[420px] flex-[1_1_300px] items-center justify-center overflow-hidden rounded-[26px] p-5', (!test || test.dark) && 'bg-ink']}
@@ -154,7 +154,7 @@ const articleLd = {
       </div>
     </article>
 
-    <!-- Wide screens: the side notes' column (they float into it from the text). -->
+    {/* Wide screens: the side notes' column (they float into it from the text). */}
     <div aria-hidden="true" class="hidden min-[1200px]:block"></div>
   </div>
 </BaseLayout>

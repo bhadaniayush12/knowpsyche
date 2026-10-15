@@ -39,13 +39,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     class="as-card rounded-[26px] outline-none border border-line-card bg-white p-[clamp(16px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)] select-none"
   >
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <!-- Two lines reserved: on phones the counter and note sit on their own lines, top-aligned, so no state moves them (no layout shift). -->
+      {/* Two lines reserved: on phones the counter and note sit on their own lines, top-aligned, so no state moves them (no layout shift). */}
       <div class="mono flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] max-sm:min-h-[calc(2lh+0.25rem)] max-sm:flex-col max-sm:items-start max-sm:justify-start">
         <span class="as-counter">{ui.practiceLabel}</span>
         <span class="as-note text-muted">{ui.practiceNote}</span>
       </div>
       <div class="flex flex-wrap gap-2">
-        <!-- basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). -->
+        {/* basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). */}
         <FeedbackToggle class="grow basis-0" />
         <button
           type="button"
@@ -54,22 +54,22 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
       </div>
     </div>
 
-    <!-- Progress bar across the top -->
+    {/* Progress bar across the top */}
     <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
       <div class="as-bar h-full w-0 rounded-full bg-blue transition-[width] duration-150"></div>
     </div>
 
-    <!-- Stage arena: clickable everywhere -->
+    {/* Stage arena: clickable everywhere */}
     <div
       role="region"
       aria-label={ui.arenaLabel}
       class="as-arena relative mt-4 flex h-[clamp(320px,46vw,440px)] w-full touch-manipulation select-none items-center justify-center rounded-[20px] border border-line-inner/40 bg-card text-center cursor-pointer transition-colors duration-150"
     >
-      <!-- Idle view (before practice starts) -->
+      {/* Idle view (before practice starts) */}
       <div data-as-view="idle" class="flex flex-col items-center gap-3 px-4">
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceLabel}</p>
         <p class="pointer-swap m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">
-          <!-- From the doc intro. -->
+          {/* From the doc intro. */}
           <span class="on-mouse">Click (or tap) when you see <b class="text-teal-ink">green</b>. Do nothing when you see a <b class="text-coral-ink">red circle with an X</b>.</span><span class="on-touch" set:html={ui.stageLineTouch} />
         </p>
         <button
@@ -80,13 +80,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         </button>
       </div>
 
-      <!-- Active Stimulus view -->
+      {/* Active Stimulus view */}
       <div data-as-view="active" class="flex flex-col items-center justify-center gap-4" hidden>
         <div class="as-circle size-[clamp(110px,22vw,160px)] rounded-full transition-transform duration-75"></div>
         <p class="as-feedback mono absolute inset-x-4 bottom-4 m-0 text-center text-[15px] font-medium" aria-live="polite"></p>
       </div>
 
-      <!-- Practice complete view -->
+      {/* Practice complete view */}
       <div data-as-view="practice-done" class="flex flex-col items-center gap-3 px-4" hidden>
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-ink">{ui.practiceDoneTitle}</p>
         <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.practiceDoneText}</p>
@@ -98,7 +98,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         </button>
       </div>
 
-      <!-- Paused view (when tab is hidden or blurred) -->
+      {/* Paused view (when tab is hidden or blurred) */}
       <div data-as-view="paused" class="flex flex-col items-center gap-3 px-4" hidden>
         <p class="serif m-0 text-[clamp(28px,4vw,38px)] text-coral-ink">{ui.pausedTitle}</p>
         <p class="m-0 max-w-[480px] text-[16.5px] leading-[1.55] text-ink-soft">{ui.pausedMessage}</p>

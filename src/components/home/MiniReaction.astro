@@ -25,14 +25,14 @@ const kindLine = 'One try on this device. Sleep, focus and your screen all chang
       class="rt-box relative flex h-[220px] w-full touch-manipulation items-center justify-center overflow-hidden rounded-18 border-0 text-center transition-[background] duration-[120ms]"
       style="background:var(--color-ink);color:var(--color-paper)"
     >
-      <!-- Full width, so changing text never moves the label sideways (no layout shift). -->
+      {/* Full width, so changing text never moves the label sideways (no layout shift). */}
       <span class="rt-label pop relative flex w-full flex-col items-center gap-1.5 px-4" aria-live="polite">
         <span class="rt-big block w-full text-[clamp(34px,4.6vw,52px)] leading-[1.05] font-semibold tracking-[-.04em]">Tap to start</span>
         <span class="rt-small block w-full text-base opacity-[.92]">Then tap again the moment it turns green.</span>
       </span>
     </button>
 
-    <!-- After a try: your time, one kind line, and where to go next. One try only; nothing is kept. -->
+    {/* After a try: your time, one kind line, and where to go next. One try only; nothing is kept. */}
     <div class="rt-result fade flex flex-col gap-2 rounded-14 bg-paper p-3.5" hidden>
       <p class="m-0 text-[17px] font-semibold">Your time: <span class="rt-ms"></span> ms</p>
       <p class="m-0 text-[15px] leading-[1.5] text-ink-soft">{kindLine}</p>

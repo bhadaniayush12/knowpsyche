@@ -8,6 +8,7 @@
 // - a <title> over 60 characters or a meta description over 155 (Google cuts longer ones)
 // - missing canonical (noindex pages are skipped)
 // - JSON-LD that isn't valid JSON
+// - HTML comments (<!-- -->): source notes belong in Astro {/* */} comments, which don't ship
 // - og:image and twitter:image missing, or the og:image not a 1200×630 PNG in dist/
 // - icon files missing from dist/ or the wrong size, pages without the icon links, a manifest that isn't valid JSON
 // - robots.txt that doesn't allow all or doesn't point to the sitemap
@@ -82,6 +83,11 @@ const descriptions = new Map();
 for (const [file, { html, url }] of pages) {
   // Scripts and styles can contain "<a" or "<h1" in strings; leave them out of the tag scan.
   const body = html.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<style\b[\s\S]*?<\/style>/gi, '');
+
+  // HTML comments ship to view-source; notes go in Astro {/* */} comments instead.
+  for (const m of html.matchAll(/<!--[\s\S]*?-->/g)) {
+    report(url, `HTML comment: ${m[0].replace(/\s+/g, ' ').slice(0, 100)}`);
+  }
 
   // Links and assets.
   for (const m of body.matchAll(/<(a|link|img|script|source|iframe)\b[^>]*>/gi)) {

@@ -25,14 +25,14 @@ const pages = [
       <div class="flex min-w-0 flex-[999_1_560px] flex-col items-start gap-6">
         <div class="mono text-[11px] text-muted">Error 404</div>
         <h1 class="m-0 max-w-[1000px] text-[clamp(46px,6.4vw,100px)] leading-[.92] font-semibold tracking-[-.055em]">Nothing to find here, <span class="serif text-blue">but plenty to try.</span></h1>
-        <!-- Filled in by the script below when the URL looks like a typo of a real page. Space is reserved so nothing jumps. -->
+        {/* Filled in by the script below when the URL looks like a typo of a real page. Space is reserved so nothing jumps. */}
         <p id="suggest" class="m-0 min-h-[58px] text-lg sm:min-h-[29px] leading-[1.6] text-ink-soft"></p>
         <div class="flex flex-wrap gap-2.5">
           <Button href="/">Go to the homepage</Button>
           <Button href="/tests/" variant="outline">Browse the tests →</Button>
         </div>
       </div>
-      <!-- A lost character. Static SVG, so it shows without JavaScript; the motion only adds to it. -->
+      {/* A lost character. Static SVG, so it shows without JavaScript; the motion only adds to it. */}
       <Character skin="medium" hair={{ style: 'short', color: 'ink' }} shirt="yellow" expression="puzzled" prop="map" size={240} class="flex-none rotate-[-1.5deg] max-sm:w-[200px]!">
         <g class="qm" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M184 40 Q184 26 198 26 Q212 26 212 39 Q212 48 201 52 Q198 54 198 60 L198 64" />

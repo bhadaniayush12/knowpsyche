@@ -128,8 +128,8 @@ const notes = [
         <span class="mono text-[11px] text-muted">Test by test</span>
       </div>
       <h2 class="m-0 mb-[26px] text-[clamp(36px,4.4vw,60px)] leading-[.95] font-semibold tracking-[-.05em]">What each test does, <span class="serif text-violet">and doesn't.</span></h2>
-      <!-- Flex rows (as designed) with ARIA table roles: Safari drops native table semantics on display:flex.
-           Below lg the rows stack, so the heading row is visually hidden and each cell shows its own label. -->
+      {/* Flex rows (as designed) with ARIA table roles: Safari drops native table semantics on display:flex.
+           Below lg the rows stack, so the heading row is visually hidden and each cell shows its own label. */}
       <div role="table" aria-label="What each test does, and doesn't" class="border-t border-ink">
         <div role="rowgroup">
           <div role="row" class="mono flex gap-4 border-b border-ink py-3 text-[10.5px] text-muted max-lg:sr-only">
@@ -151,7 +151,7 @@ const notes = [
       </div>
     </section>
 
-    <!-- Drafted (M1): how each score is worked out. -->
+    {/* Drafted (M1): how each score is worked out. */}
     <section aria-labelledby="maths-title">
       <div class="mb-3 flex items-center gap-3">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={icons.calculator} />
@@ -168,7 +168,7 @@ const notes = [
       </dl>
     </section>
 
-    <!-- Drafted (M1): bands, corrections, reviews. -->
+    {/* Drafted (M1): bands, corrections, reviews. */}
     {notes.map((n, i) => (
       <section aria-labelledby={`note-${i}`}>
         <div class="mb-3 flex items-center gap-3">
