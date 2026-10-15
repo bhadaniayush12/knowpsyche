@@ -176,7 +176,13 @@ export const resultUi = {
   copyOverall: (overall: number, badge: string) => `Emotional intelligence: ${overall}/100 (${badge})`,
   copyArea: (name: string, score: number, badge: string) => `${name}: ${score}/100 (${badge})`,
   shareText: (overall: number, names: string[]) =>
-    `My emotional intelligence result: ${overall}/100. ${allEven(names) ? evenLine : `Strongest area: ${names.join(' & ')}.`} How do you handle feelings?`,
+    `My emotional intelligence result: ${overall}/100. ${
+      names.length === 1
+        ? `Strongest area: ${names[0]}.`
+        : allEven(names)
+          ? evenLine
+          : `${names.length === 2 ? 'Two areas tied for strongest' : 'Three areas tied for strongest'}.`
+    } How do you handle feelings?`,
 };
 
 export const faqs: Faq[] = [

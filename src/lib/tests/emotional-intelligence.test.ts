@@ -85,6 +85,9 @@ describe('EQ: strongest area and ties', () => {
     expect(res.strongest.map((a) => a.id)).toEqual(['reading']);
     expect(strongestLine(res.strongest.map((a) => a.name))).toBe('Your strongest area: Reading other people.');
     expect(resultUi.shareStrongest(res.strongest.map((a) => a.name))).toBe('Strongest: Reading other people');
+    expect(resultUi.shareText(70, res.strongest.map((a) => a.name))).toBe(
+      'My emotional intelligence result: 70/100. Strongest area: Reading other people. How do you handle feelings?',
+    );
   });
 
   it('shows both areas when two tie', () => {
@@ -96,6 +99,9 @@ describe('EQ: strongest area and ties', () => {
       'Your strongest areas: Knowing your feelings and Reading other people.',
     );
     expect(resultUi.shareStrongest(res.strongest.map((a) => a.name))).toBe('Two areas tied for strongest');
+    expect(resultUi.shareText(68, res.strongest.map((a) => a.name))).toBe(
+      'My emotional intelligence result: 68/100. Two areas tied for strongest. How do you handle feelings?',
+    );
   });
 
   it('says the areas came out even when all four tie', () => {
@@ -113,6 +119,9 @@ describe('EQ: strongest area and ties', () => {
       'Your strongest areas: Knowing your feelings, Managing your feelings and Reading other people.',
     );
     expect(resultUi.shareStrongest(names)).toBe('Three areas tied for strongest');
+    expect(resultUi.shareText(80, names)).toBe(
+      'My emotional intelligence result: 80/100. Three areas tied for strongest. How do you handle feelings?',
+    );
   });
 });
 
