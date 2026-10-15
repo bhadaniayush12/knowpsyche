@@ -63,6 +63,14 @@ describe('/about/ says there are no ads yet', () => {
     expect(page).toContain(">Why it's free</div>");
     expect(page).not.toContain('How the site pays for itself');
   });
+
+  it('the meta description ends the same way, under 160 characters (Q3-C)', () => {
+    const description =
+      "Why KnowPsyche exists: free psychology tests scored in your browser and explained in plain words. Who builds it, and why it's free.";
+    expect(page).toContain(`"${description}"`);
+    expect(description.length).toBeLessThan(160);
+    expect(page).not.toMatch(/pays for itself/i);
+  });
 });
 
 describe('home FAQ says there are no ads yet', () => {
