@@ -58,6 +58,11 @@ describe('/about/ says there are no ads yet', () => {
     );
     expect(page).not.toMatch(/AdSense/);
   });
+
+  it('the small heading says "Why it\'s free"', () => {
+    expect(page).toContain(">Why it's free</div>");
+    expect(page).not.toContain('How the site pays for itself');
+  });
 });
 
 describe('home FAQ says there are no ads yet', () => {
