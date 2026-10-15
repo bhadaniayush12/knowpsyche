@@ -9,14 +9,16 @@ const root = fileURLToPath(new URL('../../../', import.meta.url));
 const read = (p: string) => readFileSync(join(root, p), 'utf8');
 
 describe('band scale label without container query units (Q6-6)', () => {
-  const label = read('src/components/result/BandScale.astro').match(/\.bs-label \{[^}]*\}/)![0];
+  const css = read('src/components/result/BandScale.astro');
+  const label = css.match(/\.bs-label \{[^}]*\}/)![0];
 
-  it('a plain centring translate comes first, the cqw clamp second', () => {
-    const plain = label.indexOf('translate: -50% 0;');
-    const clamp = label.indexOf('translate: clamp(');
-    expect(plain).toBeGreaterThan(-1);
-    expect(clamp).toBeGreaterThan(plain);
-    expect(label.slice(clamp)).toContain('cqw');
+  it('the cqw clamp stays the only translate in the main rule', () => {
+    expect(label.match(/translate:/g)).toHaveLength(1);
+    expect(label).toMatch(/translate: clamp\([^;]*cqw/);
+  });
+
+  it('browsers without cqw centre it plainly, in @supports (a fallback line would be dropped: the clamp uses var())', () => {
+    expect(css).toMatch(/@supports not \(width: 1cqw\) \{\s+\.bs-label \{\s+translate: -50% 0;\s+\}\s+\}/);
   });
 });
 

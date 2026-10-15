@@ -61,8 +61,13 @@ const { segments, ticks, class: className } = Astro.props;
   .bs-label {
     --o: 14px;
     left: calc(var(--p) * 1%);
-    /* Without container query units the clamp below is dropped: plain centring then. */
-    translate: -50% 0;
     translate: clamp(calc(var(--p) * -1cqw - var(--o)), -50%, calc((100 - var(--p)) * 1cqw + var(--o) - 100%)) 0;
+  }
+  /* Without container query units: plain centring. A fallback line before the clamp can't do this, since the
+     clamp uses var() and so is only found invalid after the fallback was already dropped (translate: none). */
+  @supports not (width: 1cqw) {
+    .bs-label {
+      translate: -50% 0;
+    }
   }
 </style>
