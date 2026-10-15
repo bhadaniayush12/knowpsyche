@@ -52,7 +52,7 @@ A feeling of recognition isn't a reason to dismiss the Enneagram. A good descrip
 
 ## Why we show all nine scores
 
-Most people see a bit of themselves in several types. A single label hides that, so our [Enneagram test](/enneagram-test/) shows all nine scores instead of one verdict. Your highest score is where to start reading, not where to stop. If two types come out level, the test asks a short extra round to help separate them.
+Most people see a bit of themselves in several types. A single label hides that, so our [Enneagram test](/enneagram-test/) shows all nine scores instead of one verdict. Your highest score is where to start reading, not where to stop. If your top two or three types come out within a point, the test asks a short extra round to help separate them.
 
 > **Side note** If you get a different result on another day, that doesn't mean the test is broken. Your answers move with your mood and what's happening in your life, and the types overlap.
 
