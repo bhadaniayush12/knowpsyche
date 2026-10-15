@@ -57,6 +57,11 @@ describe('cleanAnswer', () => {
     expect(cleanAnswer('12-34')).toBe('1234');
     expect(cleanAnswer('   ')).toBe('');
   });
+  it('turns full-width digits into plain digits (Q2-20)', () => {
+    expect(cleanAnswer('４９２１７３')).toBe('492173');
+    expect(cleanAnswer('４９　２１')).toBe('4921');
+    expect(cleanAnswer('49２1')).toBe('4921');
+  });
 });
 
 describe('compareDigits', () => {

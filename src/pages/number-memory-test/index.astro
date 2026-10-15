@@ -395,13 +395,16 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   };
 
   // ---------- Input ----------
+  input.addEventListener('compositionend', () => input.dispatchEvent(new Event('input')));
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     submit();
   });
   // Paste is fine: the answer is cleaned to digits (spaces, dashes and line breaks dropped).
-  input.addEventListener('input', () => {
+  input.addEventListener('input', (e) => {
     hint.textContent = '';
+    // Leave text alone while an input method is composing (full-width digits); it is cleaned once committed.
+    if ((e as InputEvent).isComposing) return;
     const clean = cleanAnswer(input.value);
     if (clean !== input.value) input.value = clean;
   });

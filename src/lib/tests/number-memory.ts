@@ -28,9 +28,9 @@ export function generateNumber(digits: number, rand: () => number = Math.random)
   return out;
 }
 
-/** Digits only: trims a pasted answer and drops spaces, dashes and anything else. */
+/** Digits only: trims a pasted answer and drops spaces, dashes and anything else. NFKC first, so full-width digits (１２３) count. */
 export function cleanAnswer(raw: string): string {
-  return raw.trim().replace(/\D/g, '');
+  return raw.normalize('NFKC').trim().replace(/\D/g, '');
 }
 
 /**
