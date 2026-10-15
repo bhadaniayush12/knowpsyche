@@ -206,11 +206,16 @@ describe('Stroop: zero, negative and unmeasured effect', () => {
     expect(meaningLine(scores)).toBe("We couldn't measure this one. Try again.");
   });
 
-  it('cannot measure the effect when no clashing word was answered correctly', () => {
+  it('cannot measure the effect when no clashing word was answered correctly, and says why (Q2-16)', () => {
     const scores = calculateStroopScores([r(true, 400), r(false, 500, false)]);
     expect(scores.measured).toBe(false);
-    expect(meaningLine(scores)).toBe("We couldn't measure this one. Try again.");
+    expect(meaningLine(scores)).toBe('Too many clashing words were answered wrongly to measure the slowdown.');
     expect(meaningLine(scores)).not.toMatch(/\d+ ms/);
+  });
+
+  it('no correct answer on either word type: the clashing reason (Q2-16)', () => {
+    const scores = calculateStroopScores([r(true, 400, false), r(false, 500, false)]);
+    expect(meaningLine(scores)).toBe('Too many clashing words were answered wrongly to measure the slowdown.');
   });
 });
 

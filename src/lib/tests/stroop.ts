@@ -185,7 +185,8 @@ export function getBand(effectMs: number): StroopBand {
  * "What does it mean?" line from the content doc.
  */
 export function meaningLine(scores: StroopScores): string {
-  if (!scores.measured) return result.notMeasured;
+  // Not measured: say why when it was the clashing words (none answered correctly).
+  if (!scores.measured) return scores.clashingCorrectCount === 0 ? result.notMeasuredClashing : result.notMeasured;
   // 0 ms or less: just the one line, since the band text ("barely slowed you down") would contradict it.
   let line =
     scores.stroopEffectMs > 0
