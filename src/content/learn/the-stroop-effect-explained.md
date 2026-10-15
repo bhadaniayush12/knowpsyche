@@ -66,7 +66,7 @@ With a few runs people usually get faster and the gap shrinks a little, but it r
 
 ## How our version works
 
-Our [Stroop test](/stroop-test/) asks you to pick the ink colour and ignore the word. Your score is how much the clashing words slowed you down compared with matching ones. A small slowdown and a large one are both ordinary. If there's no slowdown at all, it usually means you were careful, or went fast on easy ones, not that the effect is missing in you.
+Our [Stroop test](/stroop-test/) asks you to pick the ink colour and ignore the word. Your score is how much the clashing words slowed you down compared with matching ones. A small slowdown and a large one are both ordinary. If there's no slowdown at all, it usually means you went carefully on every word, not that the effect is missing in you.
 
 ## Reading your result
 
