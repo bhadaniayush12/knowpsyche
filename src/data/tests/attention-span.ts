@@ -141,7 +141,7 @@ export const happening: Happening = {
     // Drafted.
     { title: 'Practise first.', text: "Six practice circles with feedback come first. They don't count." },
     // Drafted.
-    { title: 'Green or red.', text: 'Circles appear one at a time for half a second each. Click or tap for green, and do nothing for red. A press only counts while the circle is on screen.' },
+    { title: 'Green or red.', text: 'Circles appear one at a time for half a second each. Click or tap for green, and do nothing for a red circle with an X. A press only counts while the circle is on screen.' },
     // Drafted.
     { title: 'Stay with it.', text: 'The real run is 80 circles, 60 green and 20 red, with no feedback.' },
     // Drafted.
