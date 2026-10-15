@@ -10,6 +10,7 @@ import {
   newPattern,
   nextRound,
   pick,
+  redeal,
   scalePercent,
   startGame,
   tileCount,
@@ -185,5 +186,20 @@ describe('bands', () => {
     expect(scalePercent(40)).toBe(98);
     expect(scalePercent(4)).toBeLessThan(25);
     expect(scalePercent(5)).toBeGreaterThan(25);
+  });
+});
+
+describe('redeal after a tab switch (Q2-15)', () => {
+  it('deals a new pattern for the same level, keeping lives, score and tiles', () => {
+    const rand = seeded(7);
+    let s: PhotoState = { ...startGame(rand), level: 5, lives: 2, completed: 4, tilesRemembered: 18 };
+    s = { ...s, pattern: newPattern(5, rand), picked: [] };
+    const before = s.pattern;
+    const r = redeal(s, seeded(99));
+    expect(r.pattern).not.toEqual(before);
+    expect(r.pattern).toHaveLength(tileCount(5));
+    expect(new Set(r.pattern).size).toBe(tileCount(5));
+    expect(r.picked).toEqual([]);
+    expect(r).toMatchObject({ level: 5, lives: 2, completed: 4, tilesRemembered: 18, over: false });
   });
 });

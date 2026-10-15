@@ -80,6 +80,11 @@ export function nextRound(state: PhotoState, rand: () => number = Math.random): 
   return { ...state, level, pattern: newPattern(level, rand), picked: [] };
 }
 
+/** The same round with a fresh pattern: for when the pattern was seen under unfair conditions (a tab switch). Lives and score unchanged. */
+export function redeal(state: PhotoState, rand: () => number = Math.random): PhotoState {
+  return { ...state, pattern: newPattern(state.level, rand), picked: [] };
+}
+
 export function getBand(score: number): MemoryBand {
   return [...photoBands].reverse().find((b) => score >= b.min) ?? photoBands[0];
 }

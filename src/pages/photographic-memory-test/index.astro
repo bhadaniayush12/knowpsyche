@@ -131,6 +131,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     growsAt,
     meaningLine,
     nextRound,
+    redeal,
     pick,
     scalePercent,
     shareText,
@@ -410,7 +411,8 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
 
   guardLeave(() => phase !== 'idle' && phase !== 'done', ui.leaveWarning);
 
-  // Leaving the tab while tiles are lit would spoil the round, so the round is dealt again on return (no life lost).
+  // Leaving the tab while tiles are lit would spoil the round, so a new pattern is dealt on return (no life lost),
+  // like number memory deals a new number.
   let dealOnReturn = false;
   document.addEventListener('visibilitychange', () => {
     if (document.hidden && game && (phase === 'watch' || phase === 'notice')) {
@@ -419,6 +421,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
       dealOnReturn = true;
     } else if (!document.hidden && dealOnReturn) {
       dealOnReturn = false;
+      game = redeal(game!);
       beginRound();
     }
   });
