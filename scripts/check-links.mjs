@@ -2,7 +2,8 @@
 // which is fine for Astro's own output. Reports:
 // - internal links and assets that don't resolve to a file in dist/ (and #fragments that don't exist)
 // - <img> without an alt attribute
-// - pages with zero or more than one <h1>
+// - pages with zero or more than one <h1>, and headings that skip a level going down (h2 → h4)
+// - <svg> without aria-hidden="true", role="img" or a non-empty aria-label
 // - duplicate <title> and duplicate meta descriptions
 // - a <title> over 60 characters or a meta description over 155 (Google cuts longer ones)
 // - missing canonical (noindex pages are skipped)
@@ -124,6 +125,24 @@ for (const [file, { html, url }] of pages) {
   // One h1.
   const h1s = (body.match(/<h1\b/gi) ?? []).length;
   if (h1s !== 1) report(url, `${h1s} <h1> elements`);
+
+  // Heading order: going down, each heading is at most one level below the one before (h2 → h3, not h2 → h4).
+  let prevLevel = 0;
+  for (const m of body.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi)) {
+    const level = Number(m[1]);
+    if (level > prevLevel + 1) {
+      const text = decode(m[2].replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim().slice(0, 50);
+      report(url, `heading skips a level: <h${level}> "${text}" after ${prevLevel ? `<h${prevLevel}>` : 'no heading'}`);
+    }
+    prevLevel = level;
+  }
+
+  // SVGs: hidden from screen readers, or named as an image.
+  for (const m of body.matchAll(/<svg\b[^>]*>/gi)) {
+    const tag = m[0];
+    const ok = attr(tag, 'aria-hidden') === 'true' || attr(tag, 'role') === 'img' || (attr(tag, 'aria-label') ?? '').trim() !== '';
+    if (!ok) report(url, `<svg> without aria-hidden="true", role="img" or aria-label: ${tag.slice(0, 80)}`);
+  }
 
   // Title and description.
   const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim();
