@@ -161,7 +161,7 @@ const ticks = [100, 200, 300, 400, 500];
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, markRunning, today } from '../../lib/test-ui';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
 
@@ -450,6 +450,8 @@ const ticks = [100, 200, 300, 400, 500];
 
   // ---------- Input ----------
   const running = () => phase === 'wait' || phase === 'go';
+  // From the first try to the result, analytics waits (see markRunning).
+  markRunning(() => phase !== 'idle' && phase !== 'done');
 
   box.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;

@@ -38,6 +38,8 @@ interface Props {
 
 const { title, description, path, ogImage = '/og/site.png', noindex = false, crumbs, crumbWidth = 1200, variant = 'inner', preloadFonts = true, preloadBold = false } = Astro.props;
 const site = Astro.site ?? new URL('https://knowpsyche.com');
+// Google Analytics 4 measurement ID (public, set in .env.production). Empty = no analytics code at all.
+const gaId = (import.meta.env.PUBLIC_GA_ID ?? '').trim();
 const canonical = new URL(path, site).href;
 const image = new URL(ogImage, site).href;
 // One list drives both the visible breadcrumb and the JSON-LD, so they always match.
@@ -91,6 +93,37 @@ const breadcrumbLd = trail.length > 0 && {
     {preloadFonts && <FontPreloads bold={preloadBold} />}
     {breadcrumbLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />}
     <slot name="head" />
+    {/*
+      Google Analytics 4: the automatic page_view only, no events, no user properties, no extra parameters.
+      Runs only on knowpsyche.com (checked here, before any request to Google), loads 3 s after the window
+      load event once the browser is idle (outside Lighthouse's measuring window), and waits while a test is running (window.kpTestRunning,
+      set by guardLeave in src/lib/test-ui.ts). Test answers, results and names never reach it.
+    */}
+    {gaId && (
+      <script is:inline define:vars={{ gaId }}>
+        if (location.hostname === 'knowpsyche.com' || location.hostname === 'www.knowpsyche.com') {
+          var kpLoadGa = function () {
+            if (window.kpTestRunning && window.kpTestRunning()) return setTimeout(kpLoadGa, 2000);
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { dataLayer.push(arguments); };
+            gtag('js', new Date());
+            gtag('config', gaId, { allow_google_signals: false, allow_ad_personalization_signals: false });
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
+            document.head.appendChild(s);
+          };
+          var kpLater = function () {
+            setTimeout(function () {
+              if ('requestIdleCallback' in window) requestIdleCallback(kpLoadGa, { timeout: 2000 });
+              else kpLoadGa();
+            }, 3000);
+          };
+          if (document.readyState === 'complete') kpLater();
+          else addEventListener('load', kpLater, { once: true });
+        }
+      </script>
+    )}
   </head>
   <!-- Flex column at full screen height, so the footer sits at the bottom of short pages. -->
   <body id="top" class="flex min-h-dvh flex-col">

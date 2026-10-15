@@ -5,12 +5,21 @@
  * doesn't throw away a half-finished test. Browsers show their own wording; the message is a fallback.
  */
 export function guardLeave(inProgress: () => boolean, message: string) {
+  markRunning(inProgress);
   window.addEventListener('beforeunload', (e) => {
     if (!inProgress()) return;
     e.preventDefault();
     e.returnValue = message;
     return message;
   });
+}
+
+/**
+ * Lets the analytics loader in BaseLayout see whether a test is running, so the Google Analytics
+ * script never loads mid-test (it waits until the test ends, or loads on the next page).
+ */
+export function markRunning(inProgress: () => boolean) {
+  (window as Window & { kpTestRunning?: () => boolean }).kpTestRunning = inProgress;
 }
 
 /**

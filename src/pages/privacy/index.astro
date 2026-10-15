@@ -5,6 +5,7 @@ import PolicySection from '../../components/policy/PolicySection.astro';
 
 // Copy word for word from docs/design/Privacy.dc.html. Placeholders filled as Dev decided:
 // date = 17 October 2026, the analytics sentence removed, a link to /terms/ added to section 06.
+// Drafted (Task G2): the Analytics section, its contents entry and the Google line in the short version.
 const title = 'Privacy & disclaimer | KnowPsyche';
 const description =
   "Your test answers are scored in your browser and never sent to us. Here's how cookies and Google ads work on KnowPsyche, and why no result is a diagnosis.";
@@ -12,13 +13,14 @@ const description =
 const summary = [
   'Tests are scored in your browser. Your answers and scores are not sent to us.',
   'No accounts, no sign-up, no email collection.',
-  'Google shows ads here and may use cookies. You can control this.',
+  'Google counts page views and shows ads here, using cookies. You can control this.',
   'Nothing here is medical advice or a diagnosis.',
 ];
 const toc = [
   { id: 'collect', label: 'What we collect' },
   // Drafted: contents entry for the saved-results section.
   { id: 'saved', label: 'Saved results on your device' },
+  { id: 'analytics', label: 'Analytics' },
   { id: 'ads', label: 'Cookies & advertising' },
   { id: 'choices', label: 'Your choices' },
   { id: 'children', label: 'Children' },
@@ -47,6 +49,15 @@ const toc = [
         <button type="button" data-privacy-clear-btn class="mono inline-flex min-h-11 items-center border border-ink bg-transparent px-4 text-xs text-ink hover:border-coral-ink hover:text-coral-ink">Clear saved results now</button>
         <span data-privacy-clear-status role="status" aria-live="polite" class="text-[14px] text-ink-soft"></span>
       </div>
+    </PolicySection>
+
+    <!-- Drafted (Task G2): this whole section. -->
+    <PolicySection id="analytics" toc={toc} color="text-violet-ink" title="Analytics">
+      <p class="pp">We use Google Analytics 4 to count page views, so we can see which pages people visit. It sets cookies in your browser, named _ga and _ga_*.</p>
+      <p class="pp">Like any website you visit, Google may see your approximate location and your device or browser type. We have turned off Google signals and ad personalisation for Analytics.</p>
+      <p class="pp">We never send your test answers, results, scores or the name you type in your report to Google Analytics, or anywhere else. Saved results stay on your device in local storage and are never sent.</p>
+      <p class="pp">The Analytics data is kept for 2 months.</p>
+      <p class="pp">To opt out, install <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">Google's official opt-out browser add-on</a>. Blocking cookies in your browser settings works too. The tests will still work.</p>
     </PolicySection>
 
     <PolicySection id="ads" toc={toc} color="text-gold-ink" title="Cookies & advertising">

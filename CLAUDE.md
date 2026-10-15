@@ -10,6 +10,7 @@ Every score is calculated in the browser. Nothing is stored, sent or sold.
 - Interactivity = plain TypeScript in Astro `<script>` tags. Keep JS per page small.
 - Fonts self-hosted with `@fontsource` packages (Space Grotesk, Instrument Serif, DM Mono). No Google Fonts requests.
 - `@astrojs/sitemap` for the sitemap. Vitest for scoring logic tests.
+- Google Analytics 4 (page views only): inline loader in `BaseLayout`, ID from `PUBLIC_GA_ID` (`.env.production`). Runs only on knowpsyche.com, 3 s after load when idle, never while a test is running (`markRunning`/`guardLeave` in `src/lib/test-ui.ts`). No other analytics or third-party scripts.
 - Hosting: Cloudflare Workers with static assets only (no Worker script), config in `wrangler.jsonc`, serving `dist/`. Deploy with `npm run deploy`. Staging lives at https://knowpsyche.fix-the-speaker.workers.dev (noindex).
 - Use the Astro docs MCP (`astro-docs`) whenever you are unsure how Astro does something.
 
@@ -42,7 +43,7 @@ Copy text from the content docs word for word. Do not rewrite, shorten or "impro
 1. No clinical tests, no diagnosis language. Never say "MBTI", "IQ score", "brain age", "diagnosis" as something we give.
 2. No percentiles, "top X%", "better than X% of people". We have no population data.
 3. Every result shows the line: "These bands are our own guide to help you read your result. They're not compared with a population, and they're not a diagnosis."
-4. Test data is never sent anywhere: no network call ever carries answers, scores or saved results. It is stored only in the user's own browser (localStorage, key `knowpsyche_saved_results`, via `src/lib/saved-results.ts`) and only after an explicit opt-in (the "Save result" button, off by default, never automatic). Stored fields are exactly: test id, ISO day, band badge, headline, and the data the result already shows (Enneagram nine type scores, EQ four area scores, every other test its main number), plus an optional name. Never answers, never per-try timings. Every storage call sits in try/catch; if storage is blocked, the opt-in is not shown. Retaking a test overwrites its entry. A "Clear saved results" control must always be available while anything is saved. No sessionStorage, cookies or IndexedDB for test data.
+4. Test data is never sent anywhere, including analytics: no network call (Google Analytics included) ever carries answers, scores, results, saved results or the report name, and none of it goes into the URL, page title or any GA parameter. GA4 sends only its automatic page_view (no custom events, user properties or parameters; `src/lib/tests/analytics.test.ts` enforces this). It is stored only in the user's own browser (localStorage, key `knowpsyche_saved_results`, via `src/lib/saved-results.ts`) and only after an explicit opt-in (the "Save result" button, off by default, never automatic). Stored fields are exactly: test id, ISO day, band badge, headline, and the data the result already shows (Enneagram nine type scores, EQ four area scores, every other test its main number), plus an optional name. Never answers, never per-try timings. Every storage call sits in try/catch; if storage is blocked, the opt-in is not shown. Retaking a test overwrites its entry. A "Clear saved results" control must always be available while anything is saved. No sessionStorage, cookies or IndexedDB for test data.
 5. No email gate, no sign-up, no "unlock your result".
 6. No ads inside a running test or between questions. Ad slots only: below the intro, below the result, inside the FAQ area. Build `AdSlot.astro` that renders nothing until `PUBLIC_ADS_ENABLED=true`.
 7. Plain English. No brain-region names or neurotransmitters on test/result pages.
@@ -80,7 +81,7 @@ Set `trailingSlash: 'always'` and `site: 'https://knowpsyche.com'` in `astro.con
 
 1. Cloudflare dashboard → Workers & Pages → knowpsyche → Settings → Domains & Routes: add `knowpsyche.com` (and `www`) as a Custom Domain.
 2. Remove the staging noindex rule: delete the `https://:worker.:account.workers.dev/*` block (and the unused `pages.dev` blocks) from `public/_headers`. Check `curl -sI https://knowpsyche.com/` has no `X-Robots-Tag`.
-3. Set `PUBLIC_GA_ID` for the production build (only once analytics is approved).
+3. Google Analytics 4: `PUBLIC_GA_ID=G-H9999QB11B` is already in `.env.production` (committed; the ID is public). The loader in `BaseLayout` only runs on knowpsyche.com / www.knowpsyche.com, so it starts working once the custom domain is live. After launch, check in GA4 Realtime that page views arrive, and that Admin → Data streams → Web → Enhanced measurement is off and data retention is 2 months (the Privacy page says so).
 4. Disable workers.dev: set `"workers_dev": false` in `wrangler.jsonc` (and `"preview_urls": false`), then `npm run deploy`.
 5. Update the staging URL line under Stack, and re-run the live checks (status codes, headers, sitemap, robots.txt).
 
