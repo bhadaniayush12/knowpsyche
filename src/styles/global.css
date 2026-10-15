@@ -289,8 +289,12 @@ details[open] .plus {
 .cyc { animation: cyc 12s cubic-bezier(.65, 0, .35, 1) infinite, morph 12s linear infinite; }
 .draw { stroke-dasharray: 420; stroke-dashoffset: 420; animation: draw 1.4s .4s cubic-bezier(.6, 0, .2, 1) forwards; }
 .marq { animation: marq 26s linear infinite; }
-.marq-wrap:hover .marq,
-.marq-wrap:has(a:focus-visible) .marq { animation-play-state: paused; }
+.marq-wrap:hover .marq { animation-play-state: paused; }
+/* A rule of its own (in @supports, or the minifier joins it back to the hover rule): a browser without
+   :has() drops only this one, not the hover pause above. */
+@supports selector(:has(a)) {
+  .marq-wrap:has(a:focus-visible) .marq { animation-play-state: paused; }
+}
 .float { animation: float 6s ease-in-out infinite; }
 .spin { animation: spin 30s linear infinite; }
 .bob { animation: bob 1.8s ease-in-out infinite; }
