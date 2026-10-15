@@ -32,7 +32,7 @@ export const page = {
   introTouch: 'Wait for the box to change, then tap as fast as you can. Five tries, then your average.',
   crumb: 'Reaction time',
   // Drafted.
-  eyebrow: 'Test / 01 · Attention · 1–2 min',
+  eyebrow: 'Test / 01 · Attention · 1 min',
   metaLine: 'About 1 minute · 5 tries · Saved only if you choose',
 };
 

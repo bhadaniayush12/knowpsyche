@@ -79,6 +79,6 @@ The aim isn't an unbroken stretch. It is getting quicker at noticing that you dr
 
 ## What a short test can and can't show
 
-A two-minute task on one afternoon tells you how steady your responses were during those two minutes. It can't tell you how well you focus in general, and it isn't a test for any condition. If your attention keeps getting in the way of work, study or daily life, a doctor or a mental-health professional can look at it properly.
+A two- to three-minute task on one afternoon tells you how steady your responses were during those few minutes. It can't tell you how well you focus in general, and it isn't a test for any condition. If your attention keeps getting in the way of work, study or daily life, a doctor or a mental-health professional can look at it properly.
 
 If you'd like to compare notes on speed, there is a related piece on [what a reaction time test measures](/learn/what-a-reaction-time-test-measures/), and another on the [Stroop effect](/learn/the-stroop-effect-explained/), a classic example of two things competing for your attention.

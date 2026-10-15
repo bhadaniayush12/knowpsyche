@@ -90,7 +90,7 @@ export interface FooterMode {
 export const footerModes: FooterMode[] = [
   { key: 'calm', label: 'Calm', title: 'Breathe with the circle.', note: 'In as it grows, out as it shrinks. Three rounds is enough.', col: '#8FD0C2', anim: 'breathe', speed: '60s' },
   // Drafted: em dash removed.
-  { key: 'focus', label: 'Focus', title: 'One thing at a time.', note: 'See how well you ignore distractions. It takes three minutes.', cta: { label: 'Attention span test', href: '/attention-span-test/' }, col: '#7d8cf0', anim: 'pulse-loop', speed: '26s' },
+  { key: 'focus', label: 'Focus', title: 'One thing at a time.', note: 'See how well you ignore distractions. It takes 2 to 3 minutes.', cta: { label: 'Attention span test', href: '/attention-span-test/' }, col: '#7d8cf0', anim: 'pulse-loop', speed: '26s' },
   { key: 'reflect', label: 'Reflect', title: 'What did you notice today?', note: 'A thought that kept coming back is worth a closer look.', col: '#EDCA69', anim: 'breathe', speed: '90s' },
 ];
 

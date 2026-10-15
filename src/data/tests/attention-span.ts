@@ -23,7 +23,7 @@ export const page = {
   // Drafted: em dash removed.
   title: 'Attention Span Test: How Well Do You Stay Focused?',
   description:
-    'Click for green, hold back for red. A 2-minute focus test based on a classic psychology task. Free, instant results for focus and self-control.',
+    'Click for green, hold back for a red X. A 2–3 minute focus test based on a classic psychology task. Free, instant results for focus and self-control.',
   h1: 'Attention span test',
   // Drafted: em dash removed.
   // Q2-05: "a red circle with an X" (Dev's wording), so the shape cue is in the instructions too.
