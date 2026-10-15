@@ -44,8 +44,9 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
           <span class="pm-lives text-muted">{ui.livesLeft(LIVES)}</span>
         </span>
       </div>
-      <div class="flex gap-2">
-        <FeedbackToggle />
+      <div class="flex flex-wrap gap-2">
+        <!-- basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). -->
+        <FeedbackToggle class="grow basis-0" />
         <button type="button" class="pm-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
       </div>
     </div>

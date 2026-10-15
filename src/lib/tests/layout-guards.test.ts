@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -57,12 +57,23 @@ describe('tap targets of at least 44px (Q4-A7)', () => {
   });
 });
 
+const TOGGLE_PAGES = ['attention-span-test', 'number-memory-test', 'photographic-memory-test', 'reaction-time-test', 'stroop-test'];
+
 describe('200% text: rows wrap instead of overflowing (Q4-A8)', () => {
   it('the header wraps', () => {
     expect(read('src/components/Header.astro')).toContain("'relative mx-auto flex flex-wrap items-center justify-between gap-4");
   });
 
-  it.each(['attention-span-test', 'stroop-test'])('%s: Sound & vibration + Restart wrap', (slug) => {
+  it('every page with the Sound & vibration toggle is covered', () => {
+    const withToggle = readdirSync(join(root, 'src/pages'), { withFileTypes: true })
+      .filter((d) => d.isDirectory() && existsSync(join(root, 'src/pages', d.name, 'index.astro')))
+      .map((d) => d.name)
+      .filter((slug) => read(`src/pages/${slug}/index.astro`).includes('<FeedbackToggle'))
+      .sort();
+    expect(withToggle).toEqual(TOGGLE_PAGES.toSorted());
+  });
+
+  it.each(TOGGLE_PAGES)('%s: Sound & vibration + Restart wrap', (slug) => {
     expect(read(`src/pages/${slug}/index.astro`)).toMatch(/<div class="flex flex-wrap gap-2">\s+<!--[^>]*-->\s+<FeedbackToggle class="grow basis-0" \/>/);
   });
 

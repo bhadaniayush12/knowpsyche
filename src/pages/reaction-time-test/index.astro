@@ -73,8 +73,9 @@ const ticks = [100, 200, 300, 400, 500];
           <span role="listitem" class="rt-slot mono min-w-[84px] rounded-full border border-ink px-3.5 py-[9px] text-center text-xs text-muted">· ·</span>
         ))}
       </div>
-      <div class="flex gap-2">
-        <FeedbackToggle />
+      <div class="flex flex-wrap gap-2">
+        <!-- basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). -->
+        <FeedbackToggle class="grow basis-0" />
         <button type="button" class="rt-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue">Restart ↺</button>
       </div>
     </div>
