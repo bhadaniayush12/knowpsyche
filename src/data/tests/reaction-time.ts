@@ -58,6 +58,9 @@ export const modes: { key: ReactionMode; label: string; note?: string; resultNot
   { key: 'space', label: 'Spacebar', note: 'Press the spacebar instead of clicking.' },
 ];
 
+// Drafted (Q2-14, Dev's wording): sound mode can't start a try because the audio isn't running.
+export const soundBlocked = "Sound can't play right now (silent mode or blocked). Switching to visual mode.";
+
 /** Box text per phase. `{v}` = Click/Tap, `{V}` = capitalised. Drafted except where the content doc gives it. */
 export const arena = {
   idle: {

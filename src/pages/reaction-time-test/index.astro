@@ -143,7 +143,7 @@ const ticks = [100, 200, 300, 400, 500];
 </style>
 
 <script>
-  import { arena as copy, modes, result as resultCopy, type ReactionMode } from '../../data/tests/reaction-time';
+  import { arena as copy, modes, result as resultCopy, soundBlocked, type ReactionMode } from '../../data/tests/reaction-time';
   import {
     addTry,
     f1HoldMs,
@@ -322,7 +322,43 @@ const ticks = [100, 200, 300, 400, 500];
     frame = requestAnimationFrame(tick);
   };
 
+  // Sound mode: a try only starts once the audio is running. A suspended context (silent mode, blocked
+  // autoplay) would never beep, so after a short wait for resume() the test switches to visual mode.
+  let checkingSound = false;
+  const soundRunning = async (): Promise<boolean> => {
+    ensureAudio();
+    if (!audio) return false;
+    if (audio.state !== 'running') {
+      try {
+        await Promise.race([audio.resume(), new Promise((r) => setTimeout(r, 300))]);
+      } catch {
+        // resume() rejected: still not running.
+      }
+    }
+    return audio.state === 'running';
+  };
+
   const startTry = () => {
+    if (mode !== 'sound' || audio?.state === 'running') {
+      beginTry();
+      return;
+    }
+    if (checkingSound) return;
+    checkingSound = true;
+    void soundRunning().then((ok) => {
+      checkingSound = false;
+      // The mode was changed (or the test reset) while waiting: nothing to start.
+      if (mode !== 'sound' || running()) return;
+      if (ok) {
+        beginTry();
+        return;
+      }
+      setMode('visual');
+      modeNote.textContent = soundBlocked;
+    });
+  };
+
+  const beginTry = () => {
     cancelAnimationFrame(frame);
     ensureAudio();
     phase = 'wait';
