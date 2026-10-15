@@ -3,6 +3,13 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { homeFaqs } from '../../data/home';
+import { faqs as attentionFaqs } from '../../data/tests/attention-span';
+import { faqs as eqFaqs } from '../../data/tests/emotional-intelligence';
+import { faqs as enneagramFaqs } from '../../data/tests/enneagram';
+import { faqs as numberFaqs } from '../../data/tests/number-memory';
+import { faqs as photoFaqs } from '../../data/tests/photographic-memory';
+import { faqs as reactionFaqs } from '../../data/tests/reaction-time';
+import { faqs as stroopFaqs } from '../../data/tests/stroop';
 
 // Q3 audit: the site shows no ads yet, so no page may say it does. These read the source.
 
@@ -77,5 +84,20 @@ describe('dates are not in the future at launch', () => {
     const dates = [...read(`${dir}/${f}`).matchAll(/^date(?:Published|Modified): (\S+)$/gm)].map((m) => m[1]);
     expect(dates).toHaveLength(2);
     for (const d of dates) expect(d <= '2026-10-17').toBe(true);
+  });
+});
+
+describe('FAQs about saving stay true now that "Save result" exists', () => {
+  const all = [...homeFaqs, ...attentionFaqs, ...eqFaqs, ...enneagramFaqs, ...numberFaqs, ...photoFaqs, ...reactionFaqs, ...stroopFaqs];
+
+  it('the EQ answer mentions the opt-in', () => {
+    expect(eqFaqs.find((f) => f.q === 'Do you save my answers?')?.a).toBe(
+      'No. Everything is calculated in your browser, and your answers disappear when you close the page. If you press "Save result", only your scores are kept, on this device.',
+    );
+  });
+
+  it.each(all.map((f) => [f.q, f.a]))('%s: no blanket "nothing is kept" claim', (_q, a) => {
+    expect(a).not.toMatch(/nothing is (saved|stored|kept)|we (don't|do not|never) (save|store|keep)|we save nothing|everything[^.]*disappears/i);
+    if (/disappear/i.test(a)) expect(a).toContain('Save result');
   });
 });

@@ -194,7 +194,7 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Do you save my answers?',
-    a: 'No. Everything is calculated in your browser and disappears when you close the page.',
+    a: 'No. Everything is calculated in your browser, and your answers disappear when you close the page. If you press "Save result", only your scores are kept, on this device.',
   },
   {
     q: 'How long does the test take?',
