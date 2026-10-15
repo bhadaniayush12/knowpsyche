@@ -212,7 +212,7 @@ export const tieBreakLines: Record<TypeNumber, { desire: string; fear: string; s
   4: { desire: 'Being true to who I really am', fear: 'Losing my sense of who I am', stress: 'I compare myself with others and pull back' },
   5: { desire: 'Understanding how things work', fear: 'Being out of my depth', stress: 'I go quiet and need space' },
   6: { desire: 'Feeling safe and backed up', fear: 'Being left without support', stress: 'I worry and second-guess' },
-  7: { desire: 'Being free to try new things', fear: 'Feeling trapped or missing out', stress: "I keep busy so I don't dwell on it" },
+  7: { desire: 'Being free to try new things', fear: 'Feeling trapped or held back', stress: "I keep busy so I don't dwell on it" },
   8: { desire: 'Being strong and in charge of my life', fear: 'Being controlled by someone else', stress: 'I get forceful and take over' },
   9: { desire: 'Keeping things calm and peaceful', fear: 'Conflict with people I care about', stress: 'I switch off and put things off' },
 };

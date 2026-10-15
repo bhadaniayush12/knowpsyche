@@ -151,3 +151,34 @@ describe('method page uses the same tie-break wording as the Enneagram page (Q3-
     expect(page).not.toContain('within a point of the top score');
   });
 });
+
+describe('no banned wording in any visible string in src/data/ (Q5)', () => {
+  const BANNED: [RegExp, string][] = [
+    [/missing out/i, '"missing out"'],
+    [/you(?:'|’)re missing/i, `"you're missing"`],
+    [/percentile/i, 'percentile'],
+    [/\btop\s*(?:\d+|x)\s*%/i, '"top X%"'],
+    [/\bMBTI\b/i, 'MBTI'],
+    [/confetti/i, 'confetti'],
+    [/streak/i, 'streak'],
+  ];
+  // String literals only; comments (source notes) are skipped. Whichever token starts first wins, so a quote
+  // inside a comment or a // inside a string is read correctly.
+  const TOKEN = /\/\/[^\n]*|\/\*[\s\S]*?\*\/|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\.|[^`\\])*`/g;
+  const walk = (dir: string): string[] =>
+    readdirSync(join(root, dir), { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walk(`${dir}/${e.name}`) : e.name.endsWith('.ts') ? [`${dir}/${e.name}`] : [],
+    );
+
+  it.each(walk('src/data'))('%s', (file) => {
+    const src = read(file);
+    const hits: string[] = [];
+    for (const m of src.matchAll(TOKEN)) {
+      if (m[0].startsWith('/')) continue;
+      for (const [re, label] of BANNED) {
+        if (re.test(m[0])) hits.push(`${file}:${src.slice(0, m.index).split('\n').length}  ${label} in ${m[0]}`);
+      }
+    }
+    expect(hits, hits.join('\n')).toEqual([]);
+  });
+});
