@@ -340,7 +340,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     r('headline').textContent = `${n} digits · ${band.badge}`;
     r('span').textContent = String(n);
     r('longest').textContent = longest || 'None';
-    placeMarker(resultEl, Number(scalePercent(n).toFixed(1)), `You · ${n}`);
+    placeMarker(resultEl, Number(scalePercent(n).toFixed(1)), `You · ${n}`, band.badge);
     r('meaning').textContent = meaningLine(n);
     r('tip').textContent = copy.tip;
 

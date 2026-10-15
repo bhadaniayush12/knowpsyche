@@ -304,7 +304,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
     r('headline').textContent = `Level ${score} · ${band.badge}`;
     r('level').textContent = String(score);
     r('tiles').textContent = String(tilesN);
-    placeMarker(resultEl, Number(scalePercent(score).toFixed(1)), `You · ${score}`);
+    placeMarker(resultEl, Number(scalePercent(score).toFixed(1)), `You · ${score}`, band.badge);
     r('meaning').textContent = meaningLine(score, tilesN);
     r('tip').textContent = copy.tip;
 

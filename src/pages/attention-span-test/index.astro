@@ -448,7 +448,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     $('[data-r=badge]', resultEl).textContent = band.badge;
 
     // Marker
-    placeMarker(resultEl, scalePercent(scores.overall), `You · ${scores.overall}`);
+    placeMarker(resultEl, scalePercent(scores.overall), `You · ${scores.overall}`, band.badge);
 
     // Breakdown
     $('[data-r=focus]', resultEl).textContent = `${scores.focus}%`;

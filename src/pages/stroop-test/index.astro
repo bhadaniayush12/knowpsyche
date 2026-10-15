@@ -506,7 +506,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Marker
     const marker = $('[data-r=marker]', resultEl);
     const markerLabel = $('[data-r=marker-label]', resultEl);
-    placeMarker(resultEl, scalePercent(scores.stroopEffectMs), `You · ${effectLabel(scores.stroopEffectMs)}`);
+    placeMarker(resultEl, scalePercent(scores.stroopEffectMs), `You · ${effectLabel(scores.stroopEffectMs)}`, measured ? band.badge : undefined);
     marker.hidden = !measured;
     markerLabel.hidden = !measured;
 

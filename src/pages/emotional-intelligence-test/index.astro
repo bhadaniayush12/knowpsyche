@@ -277,7 +277,7 @@ const first = statements[order[0] - 1];
 
     r('overall').textContent = String(res.overall);
     r('badge').textContent = res.overallBand.badge;
-    placeMarker(resultEl, scalePercent(res.overall), `You · ${res.overall}`);
+    placeMarker(resultEl, scalePercent(res.overall), `You · ${res.overall}`, res.overallBand.badge);
 
     for (const { area, score, band, high } of res.areas) {
       const scoreBand = resultUi.scoreBand(score, band.badge);

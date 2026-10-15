@@ -23,7 +23,7 @@ const { segments, ticks, class: className } = Astro.props;
       {ticks.map((t) => <span>{t}</span>)}
     </div>
   ) : (
-    <div class="mt-2.5 flex" aria-hidden="true">
+    <div class="mt-2.5 flex max-sm:hidden" aria-hidden="true">
       {segments.map((s) => (
         <span class:list={[s.class.split(' ').filter((c) => c.startsWith('flex-')), 'flex min-w-0 flex-col gap-0.5 pr-1.5']}>
           <span class="mono text-[11px] text-muted">{s.range}</span>
@@ -31,6 +31,19 @@ const { segments, ticks, class: className } = Astro.props;
         </span>
       ))}
     </div>
+  )}
+  {/* Phones: the bands are too narrow for their names, so they're listed under the bar instead, one per line. */}
+  {!ticks && (
+    <ul data-band-legend class="m-0 mt-3 flex list-none flex-col gap-1.5 p-0 sm:hidden" aria-hidden="true">
+      {segments.map((s) => (
+        <li data-band={s.label} class="group flex items-center gap-2.5 text-[14px] leading-[1.3] text-ink-soft data-current:font-semibold data-current:text-ink">
+          <span class="invisible h-4 w-1 flex-none bg-coral group-data-current:visible"></span>
+          <span class:list={['size-3 flex-none border border-ink', s.class.split(' ').filter((c) => c.startsWith('bg-'))]}></span>
+          <span class="mono min-w-[8ch] flex-none text-[11px] text-muted">{s.range}</span>
+          <span class="min-w-0">{s.label}</span>
+        </li>
+      ))}
+    </ul>
   )}
 </div>
 
