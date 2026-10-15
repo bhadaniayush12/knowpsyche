@@ -2,8 +2,8 @@
 title: "The Stroop effect, explained"
 em: "Stroop"
 description: "Why is it hard to name the ink colour when the word spells a different colour? A plain explanation of the Stroop effect and what it does and doesn't show."
-datePublished: 2026-10-21
-dateModified: 2026-10-21
+datePublished: 2026-10-17
+dateModified: 2026-10-17
 category: "Focus"
 scene: the-stroop-effect-explained
 relatedTest: stroop-test

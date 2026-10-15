@@ -2,8 +2,8 @@
 title: "Attention span: myths, and what helps"
 em: "myths"
 description: "No, you don't have a goldfish's attention span. What research says about how focus drifts, why it dips over time, and small habits that help."
-datePublished: 2026-10-21
-dateModified: 2026-10-21
+datePublished: 2026-10-17
+dateModified: 2026-10-17
 category: "Attention"
 relatedTest: attention-span-test
 scene: attention-span-myths-and-what-helps

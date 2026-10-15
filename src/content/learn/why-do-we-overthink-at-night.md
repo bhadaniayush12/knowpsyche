@@ -2,8 +2,8 @@
 title: "Why do we overthink at night?"
 em: "overthink"
 description: "Quiet rooms, tired minds and unfinished business. Here is what's going on when you can't switch off, and three small things that actually help."
-datePublished: 2026-10-21
-dateModified: 2026-10-21
+datePublished: 2026-10-17
+dateModified: 2026-10-17
 category: "Psychology in real life"
 scene: why-do-we-overthink-at-night
 relatedTest: emotional-intelligence-test

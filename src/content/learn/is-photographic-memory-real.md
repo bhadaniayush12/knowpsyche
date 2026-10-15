@@ -2,8 +2,8 @@
 title: "Is photographic memory real?"
 em: "real"
 description: "Can anyone recall a scene like a photograph? A look at eidetic imagery, memory champions and what a visual memory test actually shows."
-datePublished: 2026-10-21
-dateModified: 2026-10-21
+datePublished: 2026-10-17
+dateModified: 2026-10-17
 category: "Memory"
 relatedTest: photographic-memory-test
 scene: is-photographic-memory-real

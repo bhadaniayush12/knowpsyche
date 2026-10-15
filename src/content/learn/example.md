@@ -38,8 +38,8 @@ title: 'Placeholder: what slows your reactions?'
 em: slows
 deck: 'Placeholder article for testing the Learn layout. Dev will replace it before launch.'
 description: 'Placeholder article used to test the Learn page layout on KnowPsyche. It will be replaced before launch.'
-datePublished: 2026-10-14
-dateModified: 2026-10-14
+datePublished: 2026-10-10
+dateModified: 2026-10-10
 category: Psychology in real life
 relatedTest: reaction-time-test
 related: []

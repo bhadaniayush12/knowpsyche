@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -60,5 +60,21 @@ describe('home FAQ says there are no ads yet', () => {
 
   it('"Will there be ads?" still says ads may come later', () => {
     expect(answer('Will there be ads?')).toMatch(/^The site is free to use\. We may show ads later/);
+  });
+});
+
+describe('dates are not in the future at launch', () => {
+  it.each([
+    ['src/pages/privacy/index.astro', 'Last updated 17 October 2026'],
+    ['src/pages/terms/index.astro', 'Last updated 17 October 2026'],
+    ['src/pages/method/index.astro', 'Last reviewed: 17 October 2026'],
+  ])('%s says %s', (path, text) => expect(read(path)).toContain(text));
+
+  const dir = 'src/content/learn';
+  const files = readdirSync(join(root, dir)).filter((f) => f.endsWith('.md'));
+  it.each(files)('%s has no date after 2026-10-17', (f) => {
+    const dates = [...read(`${dir}/${f}`).matchAll(/^date(?:Published|Modified): (\S+)$/gm)].map((m) => m[1]);
+    expect(dates).toHaveLength(2);
+    for (const d of dates) expect(d <= '2026-10-17').toBe(true);
   });
 });
