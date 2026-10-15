@@ -51,9 +51,9 @@ The lesson isn't that people are bad at paying attention. Staying alert to somet
 
 ## Do phones shrink our attention?
 
-It is a popular worry, and a fair question, but the evidence doesn't back the biggest claims. Studies of heavy phone use and attention give mixed results, and many rely on people's own reports instead of measured performance.
+It is a popular worry, and a fair question, but the evidence doesn't back the biggest claims.
 
-What looks more solid is smaller and more practical. Notifications interrupt you, and getting interrupted costs time and focus. That is a good reason to manage your interruptions. It isn't proof that your attention has changed for good.
+What looks more solid is smaller and more practical. In one experiment, simply getting a phone notification, without picking up the phone, made people's performance on an attention task worse. That is a good reason to manage your interruptions. It isn't proof that your attention has changed for good.
 
 ## Multitasking is mostly switching
 

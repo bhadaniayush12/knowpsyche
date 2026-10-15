@@ -117,3 +117,19 @@ describe('no popularity claims (we have no visitor data to back them)', () => {
     for (const t of homeTests) expect(`${t.kind} ${t.desc}`).not.toMatch(/popular|trending|everyone/i);
   });
 });
+
+describe('attention article claims only what its sources support (Q3-C)', () => {
+  const page = read('src/content/learn/attention-span-myths-and-what-helps.md');
+
+  it('the notification sentence matches Stothart, Mitchum & Yehnert (2015)', () => {
+    expect(page).toContain(
+      "In one experiment, simply getting a phone notification, without picking up the phone, made people's performance on an attention task worse.",
+    );
+    expect(page).toContain('Stothart, C., Mitchum, A., & Yehnert, C. (2015)');
+    expect(page).not.toContain('costs time and focus');
+  });
+
+  it('no uncited claim about heavy phone use studies', () => {
+    expect(page).not.toMatch(/heavy phone use/i);
+  });
+});
