@@ -252,6 +252,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     meaningLine,
     scalePercent,
     shareText,
+    effectLabel,
     GAP_MS,
     TOTAL_TRIALS,
     WORD_TIMEOUT_MS,
@@ -487,13 +488,18 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     const headline = $('[data-r=headline]', resultEl);
     // No correct answer on one word type: no effect number anywhere.
     const measured = scores.measured;
-    headline.textContent = measured ? `${band.badge} · ${scores.stroopEffectMs} ms` : copy.notMeasured;
+    // 0 ms or less shows "No slowdown", never a negative number.
+    const slowed = scores.stroopEffectMs > 0;
+    headline.textContent = measured ? `${band.badge} · ${effectLabel(scores.stroopEffectMs)}` : copy.notMeasured;
     headline.focus({ preventScroll: true });
 
     // Scores
-    $('[data-r=effect]', resultEl).textContent = measured ? String(scores.stroopEffectMs) : 'None';
+    const effectEl = $('[data-r=effect]', resultEl);
+    effectEl.textContent = !measured ? 'None' : slowed ? String(scores.stroopEffectMs) : copy.noSlowdownLabel;
+    // The words need a smaller size than a number to stay inside the card.
+    effectEl.parentElement!.style.fontSize = measured && !slowed ? 'clamp(44px,7vw,96px)' : '';
     $('[data-r=badge]', resultEl).textContent = measured ? band.badge : '';
-    $('[data-r=effect-unit]', resultEl).hidden = !measured;
+    $('[data-r=effect-unit]', resultEl).hidden = !measured || !slowed;
 
     // Marker
     const marker = $('[data-r=marker]', resultEl);
@@ -501,7 +507,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     const pct = scalePercent(scores.stroopEffectMs);
     marker.style.left = `${pct}%`;
     markerLabel.style.left = `${pct}%`;
-    markerLabel.textContent = `You · ${scores.stroopEffectMs} ms`;
+    markerLabel.textContent = `You · ${effectLabel(scores.stroopEffectMs)}`;
     marker.hidden = !measured;
     markerLabel.hidden = !measured;
 
@@ -524,7 +530,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
 
     // Your own record to compare later. Nothing is saved.
     copyText = [
-      measured ? `Stroop effect: ${scores.stroopEffectMs} ms (${band.badge})` : copy.notMeasured,
+      measured ? `Stroop effect: ${effectLabel(scores.stroopEffectMs)} (${band.badge})` : copy.notMeasured,
       `Matching: ${scores.matchingAvgMs} ms · Clashing: ${scores.clashingAvgMs} ms · Accuracy: ${scores.accuracy}%`,
       `knowpsyche.com/stroop-test · ${today()}`,
     ].join('\n');
@@ -532,8 +538,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     // Share card
     void share.update({
       label: resultUi.shareLabel,
-      big: measured ? String(scores.stroopEffectMs) : 'None',
-      unit: measured ? 'ms' : '',
+      big: !measured ? 'None' : slowed ? String(scores.stroopEffectMs) : copy.noSlowdownLabel,
+      unit: measured && slowed ? 'ms' : '',
       badge: measured ? band.badge : '',
       tagline: resultUi.shareTagline,
       tag: 'Test / 06',

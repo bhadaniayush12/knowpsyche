@@ -5,6 +5,7 @@ import {
   getBand,
   getPracticeTrials,
   meaningLine,
+  effectLabel,
   scalePercent,
   shareText,
   CONGRUENT_COUNT,
@@ -173,14 +174,24 @@ describe('Stroop: zero, negative and unmeasured effect', () => {
     expect(scores.measured).toBe(true);
     expect(scores.stroopEffectMs).toBe(-100);
     expect(getBand(scores.stroopEffectMs).badge).toBe('Unshakeable');
-    expect(meaningLine(scores)).toBe("Clashing words didn't slow you down. The clashing words barely slowed you down.");
+    expect(meaningLine(scores)).toBe('The clashing words did not slow you down.');
   });
 
   it('says the words didn\'t slow you down when the effect is exactly 0', () => {
     const scores = calculateStroopScores([r(true, 500), r(false, 500)]);
     expect(scores.measured).toBe(true);
     expect(scores.stroopEffectMs).toBe(0);
-    expect(meaningLine(scores)).toBe("Clashing words didn't slow you down. The clashing words barely slowed you down.");
+    expect(meaningLine(scores)).toBe('The clashing words did not slow you down.');
+  });
+
+  it('shows "No slowdown" for 0 ms or less, never a negative number (Q2-11)', () => {
+    expect(effectLabel(-100)).toBe('No slowdown');
+    expect(effectLabel(0)).toBe('No slowdown');
+    expect(effectLabel(1)).toBe('1 ms');
+    expect(shareText(-100)).toBe('My Stroop effect: No slowdown, Unshakeable. Can you beat it?');
+    expect(shareText(0)).toBe('My Stroop effect: No slowdown, Unshakeable. Can you beat it?');
+    // The stored value is not touched: scoring still returns the real (negative) number.
+    expect(calculateStroopScores([r(true, 600), r(false, 500)]).stroopEffectMs).toBe(-100);
   });
 
   it('shows the ms number only when the effect is above 0', () => {

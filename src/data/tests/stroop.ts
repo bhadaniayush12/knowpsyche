@@ -83,8 +83,10 @@ export const result = {
   change: 'Reading speed, practice, tiredness and how fast you try to go.',
   // Drafted: the doc gives no "Try this" tip.
   tip: 'Try again a little slower and see if the gap shrinks.',
-  // Drafted: the doc's "What does it mean?" line only covers a positive slow-down.
-  noSlowdown: "Clashing words didn't slow you down.",
+  // Drafted: the doc's "What does it mean?" line only covers a positive slow-down. Q2-11: Dev's wording, shown on its own.
+  noSlowdown: 'The clashing words did not slow you down.',
+  // Drafted (Q2-11, Dev's wording): shown instead of the number when the effect is 0 ms or less.
+  noSlowdownLabel: 'No slowdown',
   // Drafted: shown when either word type has no correct answer, so there's no effect to report.
   notMeasured: "We couldn't measure this one. Try again.",
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.

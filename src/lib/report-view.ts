@@ -75,9 +75,14 @@ function visualFor(id: TestId, r: SavedTestResult): HTMLElement {
   // Single number + the bands for this test, the one you landed in filled.
   const unit = scoreUnit[id] ?? {};
   const num = el('div', 'rp-num');
-  if (unit.before) num.append(el('span', 'rp-unit', unit.before));
-  num.append(el('span', 'rp-num-v', String(r.data)));
-  if (unit.after) num.append(el('span', 'rp-unit', unit.after));
+  // A Stroop effect of 0 ms or less reads "No slowdown", never a negative number (the saved value is unchanged).
+  if (id === 'stroop' && typeof r.data === 'number' && r.data <= 0) {
+    num.append(el('span', 'rp-num-v rp-num-words', stroopCopy.noSlowdownLabel));
+  } else {
+    if (unit.before) num.append(el('span', 'rp-unit', unit.before));
+    num.append(el('span', 'rp-num-v', String(r.data)));
+    if (unit.after) num.append(el('span', 'rp-unit', unit.after));
+  }
   const chips = el('ul', 'rp-chips');
   for (const b of single[id]?.bands ?? []) {
     const c = el('li', `rp-chip${b.badge === r.badge ? ' rp-chip-on' : ''}`, b.badge);

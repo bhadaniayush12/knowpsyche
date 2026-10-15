@@ -186,10 +186,11 @@ export function getBand(effectMs: number): StroopBand {
  */
 export function meaningLine(scores: StroopScores): string {
   if (!scores.measured) return result.notMeasured;
-  const band = getBand(scores.stroopEffectMs);
-  const slowdown =
-    scores.stroopEffectMs > 0 ? `Clashing words slowed you down by ${scores.stroopEffectMs} ms.` : result.noSlowdown;
-  let line = `${slowdown} ${band.text}`;
+  // 0 ms or less: just the one line, since the band text ("barely slowed you down") would contradict it.
+  let line =
+    scores.stroopEffectMs > 0
+      ? `Clashing words slowed you down by ${scores.stroopEffectMs} ms. ${getBand(scores.stroopEffectMs).text}`
+      : result.noSlowdown;
   if (scores.under85Note) {
     line += ` ${ui.lowAccuracyNote}`;
   }
@@ -203,6 +204,11 @@ export function scalePercent(effectMs: number): number {
   return Math.max(2, Math.min(98, (effectMs / 320) * 100));
 }
 
+/** The effect as shown everywhere: "No slowdown" at 0 ms or less, never a negative number. The stored value stays as it is. */
+export function effectLabel(effectMs: number): string {
+  return effectMs > 0 ? `${effectMs} ms` : result.noSlowdownLabel;
+}
+
 export function shareText(effectMs: number): string {
-  return `My Stroop effect: ${effectMs} ms, ${getBand(effectMs).badge}. Can you beat it?`;
+  return `My Stroop effect: ${effectLabel(effectMs)}, ${getBand(effectMs).badge}. Can you beat it?`;
 }
