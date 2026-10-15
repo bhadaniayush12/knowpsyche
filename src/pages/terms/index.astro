@@ -6,7 +6,7 @@ import PolicySection from '../../components/policy/PolicySection.astro';
 // No design for this page: it uses the Privacy layout. Text written for KnowPsyche, pending Dev's approval.
 const title = 'Terms of use | KnowPsyche';
 const description =
-  'Plain-English terms for KnowPsyche: the tests are for learning, not medical advice. Our content is ours, and ads and links come from third parties.';
+  'Plain-English terms for KnowPsyche: the tests are for learning, not medical advice. Our content is ours, and links to other sites are run by others.';
 
 const summary = [
   'KnowPsyche is free to use, for learning and self-reflection.',
@@ -19,7 +19,7 @@ const toc = [
   { id: 'advice', label: 'Not medical advice' },
   { id: 'warranty', label: 'No warranty' },
   { id: 'content', label: 'Who owns the content' },
-  { id: 'third-parties', label: 'Ads & other sites' },
+  { id: 'third-parties', label: 'Other sites' },
   { id: 'changes', label: 'Changes to these terms' },
   { id: 'contact', label: 'Contact' },
 ];
@@ -45,8 +45,8 @@ const toc = [
       <p class="pp">The questions, text, illustrations and design on KnowPsyche belong to us unless a page says otherwise. Sharing a link or your own result is always fine. Copying our questions or pages into another site, app or product needs our written permission first. Research we cite belongs to its authors and is listed in each page's sources.</p>
     </PolicySection>
 
-    <PolicySection id="third-parties" toc={toc} color="text-gold-ink" title="Ads and links to other sites">
-      <p class="pp">KnowPsyche is paid for by ads from Google AdSense. Those ads, and any links to other websites, are run by third parties. We don't control what they show or how they handle your data, so please check their own terms and privacy policies. Our <a href="/privacy/">privacy page</a> explains how cookies and ads work here.</p>
+    <PolicySection id="third-parties" toc={toc} color="text-gold-ink" title="Links to other sites">
+      <p class="pp">KnowPsyche shows no ads at the moment. Links to other websites lead to sites run by third parties. We don't control what they show or how they handle your data, so please check their own terms and privacy policies. Our <a href="/privacy/">privacy page</a> explains how cookies work here.</p>
     </PolicySection>
 
     <PolicySection id="changes" toc={toc} color="text-blue" title="Changes to these terms">

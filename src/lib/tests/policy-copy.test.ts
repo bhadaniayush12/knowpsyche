@@ -22,3 +22,19 @@ describe('/privacy/ says there are no ads yet', () => {
     expect(page).not.toMatch(/AdSense|consent tool|European Economic Area|adssettings|aboutads/i);
   });
 });
+
+describe('/terms/ says there are no ads yet', () => {
+  const page = read('src/pages/terms/index.astro');
+
+  it.each([
+    'Our content is ours, and links to other sites are run by others.',
+    "{ id: 'third-parties', label: 'Other sites' }",
+    'title="Links to other sites"',
+    'KnowPsyche shows no ads at the moment. Links to other websites lead to sites run by third parties.',
+    'Our <a href="/privacy/">privacy page</a> explains how cookies work here.',
+  ])('says: %s', (text) => expect(page).toContain(text));
+
+  it('has no AdSense or ads text', () => {
+    expect(page).not.toMatch(/AdSense|paid for by ads|ads and links|cookies and ads/i);
+  });
+});
