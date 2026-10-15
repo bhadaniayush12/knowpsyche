@@ -201,6 +201,9 @@ const first = statements[order[0] - 1];
     }
   };
 
+  /** The pending pulse, cleared on reset so an old answer can't move a fresh run on. */
+  let pulseTimer = 0;
+
   /** Pulse the chosen button, then run `next`. Instant with reduced motion. Locks input meanwhile. */
   const confirm = (btn: HTMLButtonElement, next: () => void) => {
     if (reducedMotion.matches) {
@@ -210,7 +213,7 @@ const first = statements[order[0] - 1];
     locked = true;
     answerButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
     btn.classList.add('eq-chosen');
-    window.setTimeout(() => {
+    pulseTimer = window.setTimeout(() => {
       locked = false;
       next();
       // An answer given during the pulse counts for the next statement instead of being dropped.
@@ -249,6 +252,7 @@ const first = statements[order[0] - 1];
   };
 
   const reset = () => {
+    window.clearTimeout(pulseTimer);
     answers = Array(TOTAL).fill(null);
     index = 0;
     locked = false;
