@@ -26,8 +26,8 @@ export const scale = ['Not like me', 'A little', 'Somewhat', 'Mostly', 'Very muc
 export const milestones: { at: number; text: string }[] = [
   { at: 15, text: 'A third done. Your answers are starting to form a pattern.' },
   { at: 30, text: 'Two thirds done. Your top types are taking shape.' },
-  // Drafted: em dash removed.
-  { at: 40, text: 'Almost there, 5 to go.' },
+  // Drafted: em dash removed. Q2-09: no count, since it shows on statements 41 to 45 (Dev's wording).
+  { at: 40, text: 'Almost there.' },
 ];
 
 /** The 45 statements, in the order shown. `type` is hidden from users and used only for scoring. */
