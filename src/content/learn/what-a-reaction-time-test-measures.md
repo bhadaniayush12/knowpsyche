@@ -26,7 +26,7 @@ faq:
 draft: false
 ---
 
-A box turns green and you click. The page shows a number in milliseconds. It looks like a direct reading of how fast your mind works, but that number is really the sum of several small steps, and not all of them happen in your head.
+A box changes colour and you click. The page shows a number in milliseconds. It looks like a direct reading of how fast your mind works, but that number is really the sum of several small steps, and not all of them happen in your head.
 
 ## What happens in that fraction of a second
 
