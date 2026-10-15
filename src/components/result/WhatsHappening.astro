@@ -21,7 +21,7 @@ if (!article) throw new Error(`WhatsHappening: no published Learn article "${hap
     {happening.steps.map((s, i) => (
       <li class:list={['flex gap-4 py-4', i > 0 && 'border-t border-line-inner']}>
         <span class="mono w-7 flex-none pt-[3px] text-[11px] text-blue" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-        <p class="m-0 text-[16.5px] leading-[1.6]"><b class="font-semibold">{s.title}</b> {s.text}</p>
+        <p class="m-0 text-[16.5px] leading-[1.6]"><b class="font-semibold">{s.title}</b> <span data-step={s.id}>{s.text}</span></p>
       </li>
     ))}
   </ol>

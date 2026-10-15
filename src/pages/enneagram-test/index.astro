@@ -183,7 +183,7 @@ const choiceBtn =
 </style>
 
 <script>
-  import { milestones, result as copy, statements, tieBreak as tbCopy, tieBreakLines, types, ui, wingLines, type TypeNumber } from '../../data/tests/enneagram';
+  import { milestones, result as copy, statements, tieBreak as tbCopy, tieBreakLines, typeStep, types, ui, wingLines, type TypeNumber } from '../../data/tests/enneagram';
   import {
     applyTieBreak,
     getResult,
@@ -358,7 +358,14 @@ const choiceBtn =
     shown = null;
     resultEl.hidden = true;
     saveOptIn.reset();
+    setTypeStep(false);
     render();
+  };
+
+  /** "What's happening": after a decided tie-break the main type may not be the highest bar, so that step says so. */
+  const typeStepEl = document.querySelector<HTMLElement>('[data-step="your-type"]');
+  const setTypeStep = (byTieBreak: boolean) => {
+    if (typeStepEl) typeStepEl.textContent = `${byTieBreak ? typeStep.byTieBreak : typeStep.main} ${typeStep.wing}`;
   };
 
   // ---------- Result ----------
@@ -543,6 +550,7 @@ const choiceBtn =
     badge.style.fontSize = (badge.textContent ?? '').length > 4 ? 'clamp(52px,6.4vw,76px)' : '';
 
     renderBars(res);
+    setTypeStep(!!res.tieBreak?.decided);
     $$('.en-row', resultEl).forEach((row) => row.toggleAttribute('data-mine', res.kind !== 'even' && res.top.includes(Number(row.dataset.type) as TypeNumber)));
     r('tip').textContent = tip;
 

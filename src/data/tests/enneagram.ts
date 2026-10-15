@@ -261,6 +261,16 @@ export const sources: Source[] = [
   { before: 'Hook, J. N., et al. (2021). The Enneagram: A systematic review of the literature and directions for future research. ', title: 'Journal of Clinical Psychology', after: '.' },
 ];
 
+/** The "Your type." step, in parts: once the tie-break round has decided the main type, the page swaps `main` for `byTieBreak`. */
+export const typeStep = {
+  // Drafted (Q2-04, Dev's wording).
+  main: 'Your highest score is your main type. If two or three types are within a point of the top, a short tie-break round decides between them.',
+  // Drafted (Q2-04, Dev's wording).
+  wing: 'Your wing is the neighbouring type with the higher score. If both neighbours score the same, we show both.',
+  // Drafted (Q2-04, Dev's wording).
+  byTieBreak: 'The tie-break round decided between your closest scores, so your main type may not be the single highest bar.',
+};
+
 // "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/enneagram.ts and the page script.
 export const happening: Happening = {
   steps: [
@@ -272,8 +282,8 @@ export const happening: Happening = {
     { title: 'Nine scores.', text: 'Each of the nine types has five statements, so each type gets a score from 5 to 25.' },
     // Drafted.
     { title: 'A close call?', text: 'If two or three types end up within a point of the top score, a short tie-break round asks which motives fit you better.' },
-    // Drafted.
-    { title: 'Your type.', text: 'The top score is your main type, and the higher-scoring of its two neighbours on the circle is your wing.' },
+    // Drafted (Q2-04, Dev's wording).
+    { id: 'your-type', title: 'Your type.', text: `${typeStep.main} ${typeStep.wing}` },
   ],
   // Drafted.
   change: "your mood, what's going on in your life right now, and how honestly you answer. Results can shift over time.",

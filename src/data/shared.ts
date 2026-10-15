@@ -18,7 +18,8 @@ export interface Source {
 
 /** "What's happening in this test?": 3 to 5 short steps, one "What can change your result" line, one Learn article. */
 export interface Happening {
-  steps: { title: string; text: string }[];
+  /** `id` marks a step the page script may rewrite after a result (`data-step` on its text). */
+  steps: { title: string; text: string; id?: string }[];
   /** The text after "What can change your result:". */
   change: string;
   /** Learn article slug (src/content/learn/<slug>.md). */
