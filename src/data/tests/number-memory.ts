@@ -43,6 +43,8 @@ export const ui = {
   nextNumber: 'Next number',
   seeResult: 'See my result',
   submit: 'Submit',
+  // Drafted (Q2-19, Dev's wording): announced when Enter is pressed with nothing typed.
+  emptyAnswer: 'Type the digits you saw, then press Enter.',
   digits: (n: number) => `${n} digits`,
   livesLeft: (lives: number) => (lives === 1 ? '1 life left' : `${lives} lives left`),
   copyScore: 'Copy my score',

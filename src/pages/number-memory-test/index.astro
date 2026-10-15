@@ -84,6 +84,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
           />
           <button type="submit" class:list={[btn, 'min-h-14']}>{ui.submit}</button>
         </div>
+        <p class="nm-hint sr-only" aria-live="polite"></p>
       </form>
 
       <div data-v="correct" class="nm-view flex flex-col items-center justify-center gap-2 text-center">
@@ -223,6 +224,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   const bar = $('.nm-bar');
   const form = $<HTMLFormElement>('.nm-form');
   const input = $<HTMLInputElement>('.nm-input');
+  const hint = $('.nm-hint');
   const lenEl = $('.nm-len');
   const livesEl = $('.nm-lives');
   const lifeDots = $$('.nm-life');
@@ -293,7 +295,13 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   const submit = () => {
     if (view !== 'input') return;
     const given = cleanAnswer(input.value);
-    if (!given) return;
+    if (!given) {
+      // Nothing typed: say what to do. Cleared first, so a second empty Enter is announced again.
+      hint.textContent = '';
+      window.setTimeout(() => (hint.textContent = ui.emptyAnswer), 100);
+      return;
+    }
+    hint.textContent = '';
     const cmp = compareDigits(target, given);
     game = answer(game, cmp.correct);
     cue(cmp.correct ? 'right' : 'wrong');
@@ -371,6 +379,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
     longest = '';
     numberEl.textContent = '';
     input.value = '';
+    hint.textContent = '';
     dealOnReturn = false;
     setView('idle');
     renderHud();
@@ -392,6 +401,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   });
   // Paste is fine: the answer is cleaned to digits (spaces, dashes and line breaks dropped).
   input.addEventListener('input', () => {
+    hint.textContent = '';
     const clean = cleanAnswer(input.value);
     if (clean !== input.value) input.value = clean;
   });
