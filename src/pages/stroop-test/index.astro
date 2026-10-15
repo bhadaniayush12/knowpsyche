@@ -476,6 +476,8 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   function finishMainTest() {
     clearTimers();
     mode = 'done';
+    // The last word would otherwise stay above the result in its ink colour.
+    blankWord();
     const scores = calculateStroopScores(responses);
     renderResults(scores);
   }
