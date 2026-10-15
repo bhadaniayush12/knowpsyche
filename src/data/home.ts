@@ -61,7 +61,7 @@ export const marqueeQuestions: { t: string; bg: string }[] = [
 ];
 
 export const homeFaqs: { q: string; a: string }[] = [
-  { q: 'Is it really free?', a: 'Yes. Every test and every result is free, with no sign-up. The site is supported by ads.' },
+  { q: 'Is it really free?', a: 'Yes. Every test and every result is free, with no sign-up.' },
   // Drafted: em dash removed.
   { q: 'How accurate are these tests?', a: "They're based on well-known psychology experiments and questionnaires. Great for learning about yourself, but one result is a snapshot, not a final answer." },
   { q: 'Do you save my answers?', a: 'No. Your answers are scored on your own device and never sent to us.' },

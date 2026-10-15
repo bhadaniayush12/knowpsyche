@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { homeFaqs } from '../../data/home';
 
 // Q3 audit: the site shows no ads yet, so no page may say it does. These read the source.
 
@@ -47,5 +48,17 @@ describe('/about/ says there are no ads yet', () => {
       "KnowPsyche is free and shows no ads right now. If we add ads later, they will sit around the content, never inside a test while you're taking it.",
     );
     expect(page).not.toMatch(/AdSense/);
+  });
+});
+
+describe('home FAQ says there are no ads yet', () => {
+  const answer = (q: string) => homeFaqs.find((f) => f.q === q)?.a;
+
+  it('"Is it really free?" does not say the site is supported by ads', () => {
+    expect(answer('Is it really free?')).toBe('Yes. Every test and every result is free, with no sign-up.');
+  });
+
+  it('"Will there be ads?" still says ads may come later', () => {
+    expect(answer('Will there be ads?')).toMatch(/^The site is free to use\. We may show ads later/);
   });
 });
