@@ -12,6 +12,7 @@ describe('/privacy/ says there are no ads yet', () => {
   const page = read('src/pages/privacy/index.astro');
 
   it.each([
+    "Here's what we keep, how Google Analytics works here, and why no result is a diagnosis.",
     "{ id: 'ads', label: 'Advertising' }",
     "We don't show ads at the moment. If we add them, we'll update this page first and list the cookies they use.",
     "You can block or delete cookies in your browser settings, or install Google's opt-out add-on described above. The tests will still work.",
