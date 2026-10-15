@@ -39,8 +39,11 @@ const { segments, ticks, class: className } = Astro.props;
         <li data-band={s.label} class="group flex items-center gap-2.5 text-[14px] leading-[1.3] text-ink-soft data-current:font-semibold data-current:text-ink">
           <span class="invisible h-4 w-1 flex-none bg-coral group-data-current:visible"></span>
           <span class:list={['size-3 flex-none border border-ink', s.class.split(' ').filter((c) => c.startsWith('bg-'))]}></span>
-          <span class="mono min-w-[8ch] flex-none text-[11px] text-muted">{s.range}</span>
-          <span class="min-w-0">{s.label}</span>
+          {/* Range and name share a line until large text makes the name too wide, then the name wraps under the range. */}
+          <span class="flex min-w-0 flex-wrap items-center gap-x-2.5">
+            <span class="mono min-w-[8ch] flex-none text-[11px] text-muted">{s.range}</span>
+            <span class="min-w-0">{s.label}</span>
+          </span>
         </li>
       ))}
     </ul>

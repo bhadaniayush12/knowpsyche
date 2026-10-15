@@ -96,6 +96,17 @@ describe('BandScale markup', () => {
     expect(scale).toContain('invisible h-4 w-1 flex-none bg-coral group-data-current:visible');
   });
 
+  it('a legend line wraps the name under its range when large text leaves no room, never past the card', () => {
+    expect(scale).toMatch(/<span class="flex min-w-0 flex-wrap items-center gap-x-2\.5">\s+<span class="mono min-w-\[8ch\][^"]*">\{s\.range\}<\/span>\s+<span class="min-w-0">\{s\.label\}<\/span>/);
+  });
+
+  it('only one version is on screen (and the scale stays hidden from screen readers) at any width, with no soft hyphens', () => {
+    expect(scale.match(/max-sm:hidden/g)).toHaveLength(1);
+    expect(scale).toMatch(/<ul data-band-legend class="[^"]*\bsm:hidden" aria-hidden="true">/);
+    expect(scale).toContain('<div class="bs-bar relative flex h-10 border border-ink" aria-hidden="true">');
+    expect(scale).not.toMatch(/­|&shy;/);
+  });
+
   it.each([
     ['attention-span-test', 'band.badge'],
     ['number-memory-test', 'band.badge'],
