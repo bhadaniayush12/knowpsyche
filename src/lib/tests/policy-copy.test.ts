@@ -23,6 +23,7 @@ describe('/privacy/ says there are no ads yet', () => {
     "Here's what we keep, how Google Analytics works here, and why no result is a diagnosis.",
     'Never your answers, and never the time of each try. If you type a name on your report page, it is kept the same way, on this device only, and cleared with the rest.',
     "{ id: 'ads', label: 'Advertising' }",
+    '<PolicySection id="ads" toc={toc} color="text-gold-ink" title="Advertising">',
     "We don't show ads at the moment. If we add them, we'll update this page first and list the cookies they use.",
     "You can block or delete cookies in your browser settings, or install Google's opt-out add-on described above. The tests will still work.",
   ])('says: %s', (text) => expect(page).toContain(text));
