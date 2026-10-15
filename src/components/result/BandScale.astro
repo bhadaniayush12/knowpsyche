@@ -20,7 +20,8 @@ const { segments, ticks, class: className } = Astro.props;
   </div>
   {ticks ? (
     <div class="mono mt-2.5 flex justify-between text-[11px] text-muted" aria-hidden="true">
-      {ticks.map((t) => <span>{t}</span>)}
+      {/* Under 360px every second tick goes, so large text can't run them together; an odd count keeps the rest evenly placed. */}
+      {ticks.map((t) => <span class="max-[360px]:even:hidden">{t}</span>)}
     </div>
   ) : (
     <div class="mt-2.5 flex max-sm:hidden" aria-hidden="true">

@@ -100,6 +100,11 @@ describe('BandScale markup', () => {
     expect(scale).toMatch(/<span class="flex min-w-0 flex-wrap items-center gap-x-2\.5">\s+<span class="mono min-w-\[8ch\][^"]*">\{s\.range\}<\/span>\s+<span class="min-w-0">\{s\.label\}<\/span>/);
   });
 
+  it('under 360px every second tick is hidden, and reaction time has an odd count so the rest stay evenly placed', () => {
+    expect(scale).toContain('{ticks.map((t) => <span class="max-[360px]:even:hidden">{t}</span>)}');
+    expect(read('src/pages/reaction-time-test/index.astro')).toContain('const ticks = [100, 200, 300, 400, 500];');
+  });
+
   it('only one version is on screen (and the scale stays hidden from screen readers) at any width, with no soft hyphens', () => {
     expect(scale.match(/max-sm:hidden/g)).toHaveLength(1);
     expect(scale).toMatch(/<ul data-band-legend class="[^"]*\bsm:hidden" aria-hidden="true">/);
