@@ -44,8 +44,9 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
         <span class="as-counter">{ui.practiceLabel}</span>
         <span class="as-note text-muted">{ui.practiceNote}</span>
       </div>
-      <div class="flex gap-2">
-        <FeedbackToggle />
+      <div class="flex flex-wrap gap-2">
+        <!-- basis-0: the label goes to two lines before Restart drops to a new row (only at large text sizes). -->
+        <FeedbackToggle class="grow basis-0" />
         <button
           type="button"
           class="as-restart mono inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border border-ink bg-transparent px-4 text-xs text-ink hover:border-blue hover:text-blue"

@@ -56,3 +56,28 @@ describe('tap targets of at least 44px (Q4-A7)', () => {
     expect(read('src/styles/global.css')).toMatch(/\.hit-44::after \{[^}]*width: max\(100%, 44px\);\s+height: max\(100%, 44px\);/);
   });
 });
+
+describe('200% text: rows wrap instead of overflowing (Q4-A8)', () => {
+  it('the header wraps', () => {
+    expect(read('src/components/Header.astro')).toContain("'relative mx-auto flex flex-wrap items-center justify-between gap-4");
+  });
+
+  it.each(['attention-span-test', 'stroop-test'])('%s: Sound & vibration + Restart wrap', (slug) => {
+    expect(read(`src/pages/${slug}/index.astro`)).toMatch(/<div class="flex flex-wrap gap-2">\s+<!--[^>]*-->\s+<FeedbackToggle class="grow basis-0" \/>/);
+  });
+
+  it('emotional intelligence: count, Back + Restart wrap', () => {
+    const page = read('src/pages/emotional-intelligence-test/index.astro');
+    expect(page).toMatch(/<div class="flex flex-wrap items-center justify-between gap-3">\s+<span class="eq-count[^>]*>[^<]*<\/span>\s+<div class="flex flex-wrap gap-2">/);
+  });
+
+  it('enneagram: Back + Restart wrap', () => {
+    expect(read('src/pages/enneagram-test/index.astro')).toContain(`<div class="flex flex-wrap gap-2">\n        <button type="button" class:list={['en-back', btnSmall]} disabled>`);
+  });
+
+  it('the Learn hub pillar title is never cut off', () => {
+    const card = read('src/components/learn/ArticleCard.astro');
+    const title = card.match(/<H class="m-0 mb-2 font-semibold text-\[clamp\(26px,3\.2vw,44px\)\][^"]*"/)![0];
+    expect(title).not.toContain('line-clamp');
+  });
+});

@@ -33,9 +33,9 @@ const first = statements[order[0] - 1];
   sourcesNote={sourcesNote}
 >
   <div slot="stage" class="eq-card rounded-[26px] border border-line-card bg-white p-[clamp(18px,4vw,40px)] shadow-[0_26px_54px_rgba(36,34,56,.12)]">
-    <div class="flex items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center justify-between gap-3">
       <span class="eq-count mono text-[11px] whitespace-nowrap text-muted">{ui.count(1, order.length)}</span>
-      <div class="flex flex-none gap-2">
+      <div class="flex flex-wrap gap-2">
         <button type="button" class:list={['eq-back', btnSmall]} disabled>{ui.back}</button>
         <button type="button" class:list={['eq-restart', btnSmall]}>{ui.restart}</button>
       </div>
