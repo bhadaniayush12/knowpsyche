@@ -588,12 +588,14 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
   // Keyboard: Space starts, answers, and starts again after a finished run. On a focused button or link, Space does that control's own
   // job, except during a run, when it always answers (bar Restart, so keyboard users can still restart).
+  // Enter answers too, but only during a run; otherwise it keeps its usual job on the focused control.
   window.addEventListener('keydown', (e) => {
-    if (e.key !== ' ' || e.metaKey || e.ctrlKey || e.altKey) return;
+    if ((e.key !== ' ' && e.key !== 'Enter') || e.metaKey || e.ctrlKey || e.altKey) return;
     // Don't intercept Space if scrolling outside test
     if (!isCardOnScreen()) return;
     const target = e.target as HTMLElement;
     const running = mode === 'practice' || mode === 'main';
+    if (e.key === 'Enter' && !running) return;
     if (running ? target === restartBtn || target === pausedRestartBtn : !!target.closest('a, button')) return;
     if (!running && mode !== 'idle' && mode !== 'practice-done' && mode !== 'paused' && mode !== 'done') return;
     // After a finished run, Space starts again only when no control has focus (FAQ, fields).
