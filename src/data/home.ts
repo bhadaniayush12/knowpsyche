@@ -24,7 +24,7 @@ export interface HomeTest {
 
 export const homeTests: HomeTest[] = [
   // Drafted. desc: Dev's wording (no comparison with others).
-  { name: 'Reaction time', kind: 'Most popular', topic: 'focus', time: '1 min', desc: 'How fast you respond when something changes on screen.', href: '/reaction-time-test/', count: '5 tries', looksAt: 'How fast you respond when something changes', glyph: 'rt', dark: true },
+  { name: 'Reaction time', kind: 'Quick start', topic: 'focus', time: '1 min', desc: 'How fast you respond when something changes on screen.', href: '/reaction-time-test/', count: '5 tries', looksAt: 'How fast you respond when something changes', glyph: 'rt', dark: true },
   { name: 'Enneagram', kind: 'Personality', topic: 'personality', time: '8 min', desc: 'Which of 9 personality types drives your choices, fears and habits.', href: '/enneagram-test/', count: '45 statements', looksAt: 'The motives behind your choices', glyph: 'en', color: 'var(--color-violet)', tint: 'var(--color-tint-violet)' },
   { name: 'Photographic memory', kind: 'Memory', topic: 'memory', time: '2–3 min', desc: 'How much you remember from a quick look at a picture.', href: '/photographic-memory-test/', count: '3 lives', looksAt: 'Memory for what you see', glyph: 'pm', color: 'var(--color-ochre)', tint: 'var(--color-tint-ochre)' },
   { name: 'Number memory', kind: 'Memory', topic: 'memory', time: '1–2 min', desc: 'How many digits you can hold in your head at once.', href: '/number-memory-test/', count: '2 lives', looksAt: 'Memory for numbers', glyph: 'nm', color: 'var(--color-teal-dark)', tint: 'var(--color-tint-teal)' },

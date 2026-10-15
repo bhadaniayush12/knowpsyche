@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { homeFaqs } from '../../data/home';
+import { homeFaqs, homeTests } from '../../data/home';
 import { faqs as attentionFaqs } from '../../data/tests/attention-span';
 import { faqs as eqFaqs } from '../../data/tests/emotional-intelligence';
 import { faqs as enneagramFaqs } from '../../data/tests/enneagram';
@@ -99,5 +99,15 @@ describe('FAQs about saving stay true now that "Save result" exists', () => {
   it.each(all.map((f) => [f.q, f.a]))('%s: no blanket "nothing is kept" claim', (_q, a) => {
     expect(a).not.toMatch(/nothing is (saved|stored|kept)|we (don't|do not|never) (save|store|keep)|we save nothing|everything[^.]*disappears/i);
     if (/disappear/i.test(a)) expect(a).toContain('Save result');
+  });
+});
+
+describe('no popularity claims (we have no visitor data to back them)', () => {
+  it('the reaction time card is labelled "Quick start"', () => {
+    expect(homeTests.find((t) => t.href === '/reaction-time-test/')?.kind).toBe('Quick start');
+  });
+
+  it('no test card claims popularity', () => {
+    for (const t of homeTests) expect(`${t.kind} ${t.desc}`).not.toMatch(/popular|trending|everyone/i);
   });
 });
