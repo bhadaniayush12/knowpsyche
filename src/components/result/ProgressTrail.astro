@@ -44,7 +44,6 @@ const reportExists = Object.keys(import.meta.glob('/src/pages/report/index.astro
 const card = variant === 'card';
 // Server default for the Next link (nothing saved yet); the script corrects it from what is saved.
 const firstNext = trailState([], current).next!;
-const labelId = `kp-trail-label-${variant}`;
 const maskId = `kp-trail-mask-${variant}`;
 // A slightly uneven line, so the connector feels drawn by hand rather than ruled.
 const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2, 400 7 S 470 10, 500 5 S 560 3, 600 6';
@@ -53,7 +52,7 @@ const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2
   data-kp-trail
   data-variant={variant}
   data-current={current}
-  aria-labelledby={labelId}
+  aria-label={trailCopy.labels[variant].region}
   class:list={[
     'kp-trail border border-ink bg-card',
     card ? 'kp-card p-[clamp(18px,3vw,28px)]' : 'kp-strip mb-[18px] px-[clamp(12px,2vw,18px)] py-2',
@@ -63,13 +62,13 @@ const wobble = 'M0 6 C 40 2, 70 10, 100 6 S 160 1, 200 6 S 265 11, 300 6 S 360 2
   <div class:list={[card ? 'flex flex-col gap-4' : 'grid items-center gap-x-6 gap-y-1 md:grid-cols-[minmax(0,1fr)_auto]']}>
     <div class:list={['flex min-w-0 flex-col', card ? 'gap-2' : 'md:col-start-1 md:row-start-1']}>
       {card ? (
-        <h2 id={labelId} data-trail-heading class="m-0 text-[clamp(22px,2.6vw,28px)] leading-[1.15] font-semibold tracking-[-.03em]">&nbsp;</h2>
+        <h2 data-trail-heading class="m-0 text-[clamp(22px,2.6vw,28px)] leading-[1.15] font-semibold tracking-[-.03em]">&nbsp;</h2>
       ) : (
-        <p id={labelId} data-trail-heading class="mono m-0 truncate text-[11px] leading-[22px] text-muted">&nbsp;</p>
+        <p data-trail-heading class="mono m-0 truncate text-[11px] leading-[22px] text-muted">&nbsp;</p>
       )}
     </div>
 
-    <nav aria-labelledby={labelId} class:list={[card ? '' : 'md:col-start-2 md:row-span-2 md:row-start-1']}>
+    <nav aria-label={trailCopy.labels[variant].nav} class:list={[card ? '' : 'md:col-start-2 md:row-span-2 md:row-start-1']}>
       <ol class:list={['kp-row relative m-0 flex list-none justify-between p-0', card ? 'max-w-[460px]' : 'max-w-[360px] md:w-[340px]']}>
         <svg class="kp-line pointer-events-none absolute top-[22px] right-[22px] left-[22px] h-3 w-[calc(100%-44px)] -translate-y-1/2" viewBox="0 0 600 12" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <mask id={maskId}><path d={wobble} class="kp-draw" pathLength="1200" stroke-dasharray="1200" fill="none" stroke="#fff" stroke-width="10" vector-effect="non-scaling-stroke"></path></mask>

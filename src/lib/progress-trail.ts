@@ -36,6 +36,12 @@ export function trailState(savedIds: Iterable<string>, current: TestId | null = 
 
 // Drafted: the trail's copy.
 export const trailCopy = {
+  // Screen reader names for the trail and its row of test links (Q5: they were the same). A result page shows
+  // both variants, so all four differ.
+  labels: {
+    strip: { region: 'Your test progress', nav: 'Jump to a test' },
+    card: { region: 'Your report so far', nav: 'Choose a test to try next' },
+  },
   heading: (count: number, total: number) => `Your KnowPsyche report · ${count} of ${total} tried`,
   next: (name: string) => `Next: ${name}`,
   allDone: 'All 7 tried. Your report is ready.',

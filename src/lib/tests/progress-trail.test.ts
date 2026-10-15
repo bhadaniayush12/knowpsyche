@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { TRAIL_ORDER, testHref, trailCopy, trailState } from '../progress-trail';
 
@@ -44,5 +46,23 @@ describe('progress trail', () => {
   it('marker labels say saved or not', () => {
     expect(trailCopy.marker('Stroop test', true)).toBe('Stroop test: saved');
     expect(trailCopy.marker('Stroop test', false)).toBe('Stroop test: not saved yet');
+  });
+
+  it('the trail and its row of links have plain-English names, all four different (Q5)', () => {
+    expect(trailCopy.labels).toEqual({
+      strip: { region: 'Your test progress', nav: 'Jump to a test' },
+      card: { region: 'Your report so far', nav: 'Choose a test to try next' },
+    });
+    const all = [trailCopy.labels.strip, trailCopy.labels.card].flatMap((l) => [l.region, l.nav]);
+    expect(new Set(all).size).toBe(4);
+    for (const l of all) expect(l).not.toMatch(/[—–]/);
+  });
+
+  it('the component uses them, not one shared aria-labelledby', () => {
+    const src = readFileSync(fileURLToPath(new URL('../../components/result/ProgressTrail.astro', import.meta.url)), 'utf8');
+    expect(src).toContain('<section\n  data-kp-trail');
+    expect(src).toContain('  aria-label={trailCopy.labels[variant].region}\n');
+    expect(src).toContain('<nav aria-label={trailCopy.labels[variant].nav}');
+    expect(src).not.toContain('aria-labelledby');
   });
 });
