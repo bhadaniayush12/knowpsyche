@@ -28,7 +28,7 @@ Some people seem to know what they feel, and what the person across the table fe
 
 ## Where the idea came from
 
-The term was introduced in 1990 by two psychologists, Peter Salovey and John Mayer. They described it as a set of abilities: noticing your own and other people's emotions, using them in your thinking, understanding what they mean, and managing them.
+The term had appeared before, but the first scientific model came in 1990 from two psychologists, Peter Salovey and John Mayer. They described it as a set of abilities: noticing your own and other people's emotions, using them in your thinking, understanding what they mean, and managing them.
 
 Daniel Goleman's 1995 book brought the idea to a very wide audience and widened it to include things like motivation and social skills. That popular version is the one most people have heard of.
 
