@@ -3,6 +3,8 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
 
 # Staging: every *.workers.dev address of this Worker (knowpsyche.<account>.workers.dev and its preview
 # URLs) must never be indexed. Host-specific, so knowpsyche.com is not affected. Remove on launch day
