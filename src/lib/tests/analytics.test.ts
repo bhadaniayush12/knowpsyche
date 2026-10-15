@@ -174,8 +174,8 @@ describe('/privacy/ describes the GA4 setup', () => {
   });
 
   it.each([
-    'We use Google Analytics 4 to count page views',
-    'named _ga and _ga_*',
+    'We use Google Analytics 4 to count page views and how long a page stays open, so we can see which pages people visit and read.',
+    'named <code class="mono">_ga</code> and <code class="mono">_ga_*</code>.',
     'Google may see your approximate location and your device or browser type',
     'We never send your test answers, results, scores or the name you type in your report to Google Analytics',
     'Saved results stay on your device in local storage and are never sent.',
