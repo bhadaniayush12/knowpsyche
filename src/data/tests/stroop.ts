@@ -91,6 +91,8 @@ export const result = {
   notMeasured: "We couldn't measure this one. Try again.",
   // Drafted (Q2-16, Dev's wording): the meaning line when no clashing word was answered correctly.
   notMeasuredClashing: 'Too many clashing words were answered wrongly to measure the slowdown.',
+  // Q3-18 (Dev's wording): the meaning line when no matching word was answered correctly.
+  notMeasuredMatching: 'Too many matching words were answered wrongly to measure the slowdown.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: the doc's line points back to Attention span; the chain now follows the doc order 1–7.
   nextLine: 'Now a change of pace: see how well you notice and handle feelings.',
