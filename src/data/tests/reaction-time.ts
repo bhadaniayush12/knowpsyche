@@ -125,8 +125,8 @@ export const happening: Happening = {
   steps: [
     // Drafted: Dev's base.
     { title: 'Wait.', text: "The box sits still, then changes after a random pause, so you can't guess when." },
-    // Drafted: Dev's base, plus the other modes (sound, F1 lights, spacebar).
-    { title: 'React.', text: 'When it turns green, click or tap as fast as you can. The other modes use a beep, race lights going out, or the spacebar instead.' },
+    // Drafted: Dev's base, plus the other modes (sound, F1 lights, spacebar). Q2-08: "light teal", the colour on screen.
+    { title: 'React.', text: 'When it turns light teal, click or tap as fast as you can. The other modes use a beep, race lights going out, or the spacebar instead.' },
     // Drafted: Dev's base; the code also repeats presses under 100 ms.
     { title: 'Five tries.', text: "Each try is timed from the change to your press. If you press before the change, or less than 100 ms after it, that try doesn't count and you go again." },
     // Drafted: Dev's base.
