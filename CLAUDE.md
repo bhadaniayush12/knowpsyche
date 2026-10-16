@@ -11,7 +11,7 @@ Every score is calculated in the browser. Nothing is stored, sent or sold.
 - Fonts self-hosted with `@fontsource` packages (Space Grotesk, Instrument Serif, DM Mono). No Google Fonts requests.
 - `@astrojs/sitemap` for the sitemap. Vitest for scoring logic tests.
 - Google Analytics 4 (page views only): inline loader in `BaseLayout`, ID from `PUBLIC_GA_ID` (`.env.production`). Runs only on knowpsyche.com, 3 s after load when idle, never while a test is running (`markRunning`/`guardLeave` in `src/lib/test-ui.ts`). No other analytics or third-party scripts.
-- Hosting: Cloudflare Workers with static assets only (no Worker script), config in `wrangler.jsonc`, serving `dist/`. Deploy with `npm run deploy`. Staging lives at https://knowpsyche.fix-the-speaker.workers.dev (noindex).
+- Hosting: Cloudflare Workers with static assets only (no Worker script), config in `wrangler.jsonc`, serving `dist/`. Deploy with `npm run deploy`. Live at https://knowpsyche.com (and www.knowpsyche.com) as Custom Domains (`routes` in `wrangler.jsonc`), with no noindex. The workers.dev address is off.
 - Use the Astro docs MCP (`astro-docs`) whenever you are unsure how Astro does something.
 
 ## Commands
@@ -74,15 +74,15 @@ Set `trailingSlash: 'always'` and `site: 'https://knowpsyche.com'` in `astro.con
 - `BaseLayout` takes title, description, canonical, ogImage. Canonical always `https://knowpsyche.com/...`.
 - Open Graph + Twitter card tags on every page.
 - JSON-LD: `WebSite` + `Organization` on home; `BreadcrumbList` on all inner pages; `FAQPage` on every page that shows FAQs (same questions as visible on the page). No `aggregateRating`, no reviews.
-- `public/_headers`: `X-Robots-Tag: noindex` for `https://:worker.:account.workers.dev/*` so the staging address never gets indexed (the older `pages.dev` rules are kept but unused). The rule is host-specific, so knowpsyche.com is never noindex.
+- `public/_headers`: no `X-Robots-Tag` and no noindex anywhere (`src/lib/tests/headers.test.ts` enforces it). The site is live at https://knowpsyche.com.
 - `robots.txt` allows all and points to `/sitemap-index.xml`.
 
 ## Launch-day checklist (knowpsyche.com)
 
-1. Cloudflare dashboard → Workers & Pages → knowpsyche → Settings → Domains & Routes: add `knowpsyche.com` (and `www`) as a Custom Domain.
-2. Remove the staging noindex rule: delete the `https://:worker.:account.workers.dev/*` block (and the unused `pages.dev` blocks) from `public/_headers`. Check `curl -sI https://knowpsyche.com/` has no `X-Robots-Tag`.
+1. ✅ Done 2026-10-16. Cloudflare dashboard → Workers & Pages → knowpsyche → Settings → Domains & Routes: add `knowpsyche.com` (and `www`) as a Custom Domain.
+2. ✅ Done 2026-10-16. Remove the staging noindex rule: delete the `https://:worker.:account.workers.dev/*` block (and the unused `pages.dev` blocks) from `public/_headers`. Check `curl -sI https://knowpsyche.com/` has no `X-Robots-Tag`.
 3. Google Analytics 4: `PUBLIC_GA_ID=G-H9999QB11B` is already in `.env.production` (committed; the ID is public). The loader in `BaseLayout` only runs on knowpsyche.com / www.knowpsyche.com, so it starts working once the custom domain is live. After launch, check in GA4 Realtime that page views arrive, and that Admin → Data streams → Web → Enhanced measurement is off and data retention is 2 months (the Privacy page says so).
-4. Disable workers.dev: set `"workers_dev": false` in `wrangler.jsonc` (and `"preview_urls": false`), then `npm run deploy`.
+4. ✅ Done 2026-10-16. Disable workers.dev: set `"workers_dev": false` in `wrangler.jsonc` (and `"preview_urls": false`), then `npm run deploy`.
 5. Update the staging URL line under Stack, and re-run the live checks (status codes, headers, sitemap, robots.txt).
 6. Sweep all Learn article dates (datePublished/dateModified) to 2026-10-17.
 
