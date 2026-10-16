@@ -241,6 +241,18 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
   .st-word[data-blank] {
     opacity: 0;
   }
+
+  /* After the last word the answer buttons are disabled and greyed, so the finished run no longer looks live.
+     Unlayered, so it beats the hover utility. The label stays muted on card (above 4.5:1). */
+  .st-btn:disabled {
+    border-color: var(--color-line-inner);
+    background-color: var(--color-card);
+    color: var(--color-muted);
+    cursor: default;
+  }
+  .st-btn:disabled > span:first-child {
+    opacity: 0.4;
+  }
 </style>
 
 <script>
@@ -473,11 +485,21 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     next(Math.min(t, performance.now()), PRACTICE_FEEDBACK_MS);
   }
 
+  /** Off after the scored run, back on with a restart. Focus is never left on a disabled button: the result headline takes it. */
+  function setAnswersEnabled(on: boolean) {
+    choiceBtns.forEach((btn) => {
+      btn.disabled = !on;
+      if (on) btn.removeAttribute('aria-disabled');
+      else btn.setAttribute('aria-disabled', 'true');
+    });
+  }
+
   function finishMainTest() {
     clearTimers();
     mode = 'done';
     // The last word would otherwise stay above the result in its ink colour.
     blankWord();
+    setAnswersEnabled(false);
     const scores = calculateStroopScores(responses);
     renderResults(scores);
   }
@@ -568,6 +590,7 @@ const ranges = ['<80 ms', '80–160', '161–250', '>250 ms'];
     counter.textContent = ui.practiceLabel;
     note.textContent = ui.practiceNote;
     blankWord();
+    setAnswersEnabled(true);
     feedbackEl.textContent = '';
     resultEl.hidden = true;
     saveOptIn.reset();
