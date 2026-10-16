@@ -34,7 +34,8 @@ describe('public/_headers (Q6-3)', () => {
     expect(headers).not.toMatch(/Strict-Transport-Security/i);
   });
 
-  it('staging stays noindex', () => {
-    expect(block('https://:worker.:account.workers.dev/*')).toEqual(['X-Robots-Tag: noindex']);
+  it('nothing is noindex (L1: the site is live on knowpsyche.com)', () => {
+    expect(headers).not.toMatch(/noindex/i);
+    expect(headers).not.toMatch(/X-Robots-Tag/i);
   });
 });
