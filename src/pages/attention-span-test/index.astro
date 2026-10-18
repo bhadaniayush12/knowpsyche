@@ -206,6 +206,13 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     opacity: 0;
     transform: scale(0.85);
   }
+  /* After the scored run the arena takes no answers: greyed, no pointer cursor, so it no longer looks live.
+     It is a region, not a control, so there is no disabled state to set. Unlayered, so it beats the utilities. */
+  .as-arena[data-done] {
+    border-color: var(--color-line-inner);
+    background-color: var(--color-line-row);
+    cursor: default;
+  }
   @media (prefers-reduced-motion: reduce) {
     .as-circle {
       transition: none !important;
@@ -428,6 +435,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     clearTimers();
     mode = 'done';
     bar.style.width = '100%';
+    arena.setAttribute('data-done', '');
     const scores = calculateAttentionScores(trialResults);
     renderResults(scores);
   }
@@ -511,6 +519,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
     counter.textContent = ui.practiceLabel;
     note.textContent = ui.practiceNote;
     bar.style.width = '0%';
+    arena.removeAttribute('data-done');
     blankCircle();
     feedbackEl.textContent = '';
     resultEl.hidden = true;

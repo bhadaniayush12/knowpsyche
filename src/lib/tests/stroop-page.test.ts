@@ -32,4 +32,25 @@ describe('Stroop result screen', () => {
   it('focus still lands on the result headline', () => {
     expect(fn('renderResults')).toContain('headline.focus({ preventScroll: true });');
   });
+
+  // UX-2: a finished run must not look live. The four answer buttons are really disabled (no click, no
+  // focus, no Enter) with aria-disabled, greyed in CSS, and back on with any restart.
+  it('the finished run disables the answer buttons before the result takes focus', () => {
+    expect(fn('setAnswersEnabled')).toMatch(/btn\.disabled = !on;/);
+    expect(fn('setAnswersEnabled')).toContain("btn.setAttribute('aria-disabled', 'true')");
+    expect(fn('setAnswersEnabled')).toContain("btn.removeAttribute('aria-disabled')");
+    expect(fn('finishMainTest')).toMatch(/setAnswersEnabled\(false\);[\s\S]*renderResults\(scores\);/);
+  });
+
+  it('every restart turns the answer buttons back on', () => {
+    expect(fn('restartAll')).toContain('setAnswersEnabled(true);');
+    expect(script.match(/setAnswersEnabled\((true|false)\)/g)).toHaveLength(2);
+  });
+
+  it('disabled answer buttons are greyed with design tokens', () => {
+    const rule = page.match(/\.st-btn:disabled \{([^}]*)\}/)?.[1] ?? '';
+    expect(rule).toContain('var(--color-line-inner)');
+    expect(rule).toContain('var(--color-muted)');
+    expect(rule).toContain('cursor: default');
+  });
 });

@@ -20,9 +20,10 @@ const learn = article ? { href: `/learn/${article.id}/`, label: `${article.data.
 <div class="flex flex-col gap-4">
   <h3 class="mono m-0 text-[11px] font-medium text-muted">What next?</h3>
   <div class="grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-4">
-    <a href={next?.href ?? '/tests/'} class="flex min-h-[150px] flex-col gap-2.5 border border-t-[5px] border-ink border-t-blue bg-card p-5 no-underline">
+    {/* The name is drawn as a filled button (same as the primary buttons), so the card reads as the way on, not as one more result panel. */}
+    <a href={next?.href ?? '/tests/'} class="group flex min-h-[150px] flex-col items-start gap-3 border border-t-[5px] border-ink border-t-blue bg-card p-5 no-underline">
       <span class="mono text-[10.5px] text-blue">{next ? `Next test · ${next.time}` : 'All tests'}</span>
-      <span class="text-[26px] font-semibold tracking-[-.04em]">{next?.name ?? 'All tests'} →</span>
+      <span class="inline-flex min-h-12 items-center rounded-12 bg-ink px-5 py-2.5 text-[clamp(19px,2.2vw,22px)] leading-[1.2] font-semibold tracking-[-.03em] text-paper transition-colors duration-300 ease-house group-hover:bg-blue">{next?.name ?? 'All tests'} →</span>
       <span class="text-[15px] leading-[1.5] text-ink-soft">{line}</span>
     </a>
     <a href={learn.href} class="flex min-h-[150px] flex-col justify-end gap-2.5 border border-ink bg-lilac p-5 no-underline">
