@@ -60,6 +60,16 @@ const h1Accent = cut > 0 ? h1.slice(cut + 1) : h1;
 // Learn articles that go with this test (relatedTest), shown near Sources. None published = no line.
 // "/reaction-time-test/" → "reaction-time", for the progress trail.
 const testId = path.replace(/^\/|-test\/$/g, '') as TestId;
+const testCategory = testId === 'enneagram' || testId === 'emotional-intelligence' ? 'personality' : 'cognitive';
+const questionCounts: Record<TestId, number> = {
+  'reaction-time': 5,
+  enneagram: 45,
+  stroop: 40,
+  'number-memory': 1,
+  'photographic-memory': 1,
+  'attention-span': 80,
+  'emotional-intelligence': 28,
+};
 
 const articles = articlesForTest(await getCollection('learn'), path.replace(/\//g, ''));
 ---
@@ -91,7 +101,7 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
       <slot name="controls" />
     </section>
 
-    <section aria-label="Test" data-stage>
+    <section aria-label="Test" data-stage data-test-name={testId} data-test-category={testCategory} data-question-count={questionCounts[testId]}>
       <slot name="stage" />
     </section>
 
@@ -116,6 +126,53 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
       </div>
     </div>
   </div>
+  <script>
+  import { trackEvent } from '../lib/analytics';
+
+  const stage = document.querySelector<HTMLElement>('[data-stage][data-test-name]');
+  const result = document.querySelector<HTMLElement>('[data-result]');
+  if (stage && result) {
+    const test_name = stage.dataset.testName!;
+    const test_category = stage.dataset.testCategory!;
+    const question_count = Number(stage.dataset.questionCount);
+    const language = document.documentElement.lang || 'en';
+    let started = false;
+    let resultVisible = false;
+
+    const start = () => {
+      if (started) return;
+      started = true;
+      trackEvent('test_start', { test_name, test_category, language });
+    };
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest('[data-test-start], [data-try-again], .as-start-practice, .st-start-practice')) start();
+      if (target.closest('.eq-answer, .en-answer')) start();
+      if (target.closest('.eq-restart, .en-restart, .rt-restart, .nm-restart, .pm-restart, .as-restart, .st-restart, .as-paused-restart, .st-paused-restart')) {
+        started = false;
+      }
+      const share = target.closest<HTMLElement>('[data-share-action]');
+      if (share && result.contains(share)) {
+        const method = share.dataset.shareAction;
+        if (method === 'share' || method === 'download' || method === 'copy') {
+          trackEvent('result_share', { test_name, method });
+        }
+      }
+    });
+
+    const observeResult = () => {
+      const visible = !result.hidden && !result.classList.contains('invisible');
+      if (visible && !resultVisible) {
+        trackEvent('test_complete', { test_name, test_category, language, question_count });
+        started = false;
+      }
+      resultVisible = visible;
+    };
+    new MutationObserver(observeResult).observe(result, { attributes: true, attributeFilter: ['hidden', 'class'] });
+  }
+  </script>
 </BaseLayout>
 
 <style>

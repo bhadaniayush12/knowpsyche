@@ -2,9 +2,10 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { trackEvent } from '../analytics';
 
-// Google Analytics 4 (Task G2): page views only, only on knowpsyche.com, and no test data ever.
+// Google Analytics 4: page views and safe test metadata, only on knowpsyche.com.
 // These read the source, and run the BaseLayout loader in a small fake browser.
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
@@ -26,7 +27,7 @@ const sources = walk(srcDir)
 const CONFIG_CALL = "gtag('config', gaId, { allow_google_signals: false, allow_ad_personalization_signals: false });";
 
 describe('no test data goes to Google Analytics', () => {
-  it('the only gtag( calls in src are the init and the config call, both in BaseLayout', () => {
+  it('only the loader and the small event helper call gtag', () => {
     const calls = sources.flatMap((f) =>
       [...f.text.matchAll(/\bgtag\s*\(.*$/gm)].map((m) => ({ path: f.path, call: m[0].trim() })),
     );
@@ -34,26 +35,57 @@ describe('no test data goes to Google Analytics', () => {
     expect(calls).toEqual([
       { path: 'src/layouts/BaseLayout.astro', call: "gtag('js', new Date());" },
       { path: 'src/layouts/BaseLayout.astro', call: CONFIG_CALL },
+      { path: 'src/lib/analytics.ts', call: "gtag('event', name, params);" },
     ]);
   });
 
-  it('nothing else talks to Google tags: no dataLayer pushes, gtag set or event calls outside the loader', () => {
+  it('nothing else talks to Google tags outside the loader and event helper', () => {
     for (const f of sources) {
-      if (f.path === 'src/layouts/BaseLayout.astro') continue;
+      if (f.path === 'src/layouts/BaseLayout.astro' || f.path === 'src/lib/analytics.ts') continue;
       expect(f.text, f.path).not.toMatch(/dataLayer|googletagmanager|google-analytics|\bgtag\b|\bga\s*\(/);
     }
     expect(layout.match(/dataLayer\.push/g)).toHaveLength(1); // inside the gtag function only
     expect(layout.match(/\bgtag\b/g)).toHaveLength(4); // the function, js, config, and the gtag/js script URL
   });
 
-  it('no custom events, user properties, consent mode, ads or Tag Manager code', () => {
-    expect(layout).not.toMatch(/'event'|"event"|user_properties|user_id|'set'|'consent'|GTM-|gtm\.js|AW-|send_page_view|page_title|page_location/);
+  it('no user properties, consent mode, ads or Tag Manager code', () => {
+    expect(layout).not.toMatch(/user_properties|user_id|'set'|'consent'|GTM-|gtm\.js|AW-|send_page_view|page_title|page_location/);
   });
 
   it('no network calls anywhere in src, so answers, scores and saved results have no way out', () => {
     for (const f of sources) {
       expect(f.text, f.path).not.toMatch(/\bfetch\s*\(|sendBeacon|XMLHttpRequest|new WebSocket|EventSource/);
     }
+  });
+});
+
+describe('test event contract', () => {
+  const testPage = read('src/layouts/TestPage.astro');
+
+  it('sends only fixed test metadata and observes each visible completion', () => {
+    expect(testPage).toContain("trackEvent('test_start', { test_name, test_category, language });");
+    expect(testPage).toContain("trackEvent('test_complete', { test_name, test_category, language, question_count });");
+    expect(testPage).toContain("trackEvent('result_share', { test_name, method });");
+    expect(testPage).toContain("visible && !resultVisible");
+    expect(testPage).toContain("resultVisible = visible");
+    expect(testPage).toContain("method === 'share' || method === 'download' || method === 'copy'");
+  });
+
+  it('does nothing without gtag and never throws when gtag fails', () => {
+    vi.stubGlobal('window', {});
+    expect(() => trackEvent('test_start', { test_name: 'enneagram' })).not.toThrow();
+    vi.stubGlobal('window', { gtag: () => { throw new Error('blocked'); } });
+    expect(() => trackEvent('test_start', { test_name: 'enneagram' })).not.toThrow();
+    vi.unstubAllGlobals();
+  });
+
+  it('passes the exact event name and safe params to the existing gtag', () => {
+    const gtag = vi.fn();
+    vi.stubGlobal('window', { gtag });
+    const params = { test_name: 'enneagram', test_category: 'personality', language: 'en' };
+    trackEvent('test_start', params);
+    expect(gtag).toHaveBeenCalledExactlyOnceWith('event', 'test_start', params);
+    vi.unstubAllGlobals();
   });
 });
 
@@ -151,10 +183,14 @@ describe('loader behaviour', () => {
   it('waits while a test is running and loads once it ends', () => {
     let running = true;
     const r = runLoader('knowpsyche.com', { readyState: 'complete', running: () => running });
+    (r.win.gtag as (...args: unknown[]) => void)('event', 'test_start', {
+      test_name: 'enneagram', test_category: 'personality', language: 'en',
+    });
+    expect((r.win.dataLayer as IArguments[]).map((a) => a[0])).toEqual(['js', 'config', 'event']);
     r.timers.shift()!.fn();
     r.idles[0]();
     expect(r.appended).toHaveLength(0);
-    expect(r.win.dataLayer).toBeUndefined();
+    expect((r.win.dataLayer as IArguments[]).map((a) => a[0])).toEqual(['js', 'config', 'event']);
     expect(r.timers.map((t) => t.ms)).toEqual([2000]);
     r.timers.shift()!.fn(); // still running
     expect(r.appended).toHaveLength(0);
