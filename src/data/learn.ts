@@ -3,10 +3,15 @@
 // live in src/content/learn/*.md.
 
 /**
- * Author and publisher of every article, in the byline and the Article JSON-LD.
- * One constant, so a named author can replace it later in one place.
+ * Public author identity and separate organizational publisher for Article JSON-LD.
  */
 export const AUTHOR = {
+  '@type': 'Person',
+  name: 'Dev',
+  url: 'https://knowpsyche.com/about/',
+} as const;
+
+export const PUBLISHER = {
   '@type': 'Organization',
   name: 'KnowPsyche',
   url: 'https://knowpsyche.com/',

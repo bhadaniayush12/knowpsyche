@@ -3,7 +3,7 @@ title: "What a reaction time test really measures"
 em: "really"
 description: "A reaction time test clocks how fast you respond to a change on screen. Here is what goes into that number, and why it shifts from one try to the next."
 datePublished: 2026-10-17
-dateModified: 2026-10-17
+dateModified: 2026-10-24
 category: "Attention"
 relatedTest: reaction-time-test
 scene: what-a-reaction-time-test-measures

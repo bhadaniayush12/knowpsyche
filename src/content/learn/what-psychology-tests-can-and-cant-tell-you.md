@@ -3,7 +3,7 @@ title: "What psychology tests can and can't tell you"
 em: "can't"
 description: "A plain guide to reading any online psychology test: what a result shows, what it leaves out, and how to use it without taking it too seriously."
 datePublished: 2026-10-17
-dateModified: 2026-10-17
+dateModified: 2026-10-24
 category: "The basics"
 scene: what-psychology-tests-can-and-cant-tell-you
 related:

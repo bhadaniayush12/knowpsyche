@@ -3,7 +3,7 @@ title: "How much can your short-term memory hold?"
 em: "short-term memory"
 description: "Seven, plus or minus two? Four? Here is what the famous memory-span research found, why chunking matters, and how to hold a longer number."
 datePublished: 2026-10-17
-dateModified: 2026-10-17
+dateModified: 2026-10-24
 category: "Memory"
 relatedTest: number-memory-test
 scene: short-term-memory-capacity
