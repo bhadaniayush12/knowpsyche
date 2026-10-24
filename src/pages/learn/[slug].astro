@@ -6,6 +6,7 @@
  */
 import { getEntries } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResearchDiagram from '../../components/ResearchDiagram.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import Faq from '../../components/result/Faq.astro';
 import Sources from '../../components/result/Sources.astro';
@@ -118,6 +119,7 @@ const articleLd = {
     )}
 
     <article class="min-w-0 max-w-[700px] flex-[999_1_560px]">
+      <ResearchDiagram page={article.id} />
       <div class="prose" data-article-body>
         {chunks.map((c, i) => (
           <>

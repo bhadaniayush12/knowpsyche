@@ -1,0 +1,29 @@
+---
+/** Original explanatory diagrams. Fixed paper panels keep labels legible in either page theme. */
+interface Props { page: string }
+const diagrams: Record<string, [string, string, string]> = {
+  'attention-span': ['attention', 'A green circle with a check means respond; a red circle with an X means hold back.', 'Respond to the go signal; hold back on the no-go signal.'],
+  'attention-span-myths-and-what-helps': ['attention', 'Go/no-go task: respond to the green check and hold back for the red X.', 'A go/no-go task asks you to respond or hold back according to the signal.'],
+  'photographic-memory': ['visual-memory', 'Visual memory task sequence: look at the tiles, hold the pattern, then rebuild it.', 'The task asks you to recall a pattern after it disappears.'],
+  'is-photographic-memory-real': ['visual-memory', 'A visual-memory task moves from seeing tiles to holding their pattern and rebuilding it.', 'Remembering a pattern is a task, rather than proof of camera-like recall.'],
+  'number-memory': ['number-memory', 'Digit recall strategy: see the digits, group them into chunks, then recall them in order.', 'Grouping gives a string of digits a structure to remember.'],
+  'short-term-memory-capacity': ['number-memory', 'Chunking strategy: digits are grouped before being recalled in their original order.', 'Chunks give the same digits a more meaningful structure.'],
+  'stroop': ['stroop', 'Congruent RED in red ink and incongruent BLUE in red ink both require the answer red.', 'For both examples, name the red ink and ignore the word.'],
+  'the-stroop-effect-explained': ['stroop', 'RED written in red is congruent; BLUE written in red is incongruent. The ink answer is red for both.', 'Matching and clashing words: the task is always to name the ink.'],
+  'reaction-time': ['reaction-time', 'Timeline from stimulus to response to recorded reaction time, without a numerical scale.', 'The recorded time includes the response and the equipment used to measure it.'],
+  'what-a-reaction-time-test-measures': ['reaction-time', 'A stimulus leads to a response and a recorded time; no durations or benchmarks are shown.', 'A measured response belongs to a particular task and device.'],
+  'enneagram': ['enneagram', 'Nine Enneagram type numbers arranged around a circle, with no ranking or connecting claims.', 'Numbers identify the nine types; they are not ranks.'],
+  'what-is-the-enneagram': ['enneagram', 'Enneagram type numbers one through nine around a circle, without wings or relationship lines.', 'The nine numbers are type labels, rather than a ranking.'],
+  'emotional-intelligence': ['emotional-intelligence', 'Four questionnaire areas: self-awareness, self-management, social awareness and relationship skills.', 'These are the four areas used by this self-report questionnaire.'],
+  'what-is-emotional-intelligence': ['emotional-intelligence', 'Four areas used on this site: self-awareness, self-management, social awareness and relationship skills.', 'This site groups its questionnaire into these four areas.'],
+  'why-do-we-overthink-at-night': ['rumination', 'Repeated worry runs through the same thought; reflection asks what one next step could be.', 'A repeated worry and a question that leads to a next step are different patterns.'],
+  'what-psychology-tests-can-and-cant-tell-you': ['test-context', 'A task produces a result in the context of this session, rather than describing all of a person.', 'Read a result alongside the task and the conditions of the session.'],
+};
+const diagram = diagrams[Astro.props.page];
+if (!diagram) throw new Error(`Missing research diagram for ${Astro.props.page}`);
+const [name, alt, caption] = diagram;
+---
+<figure class="m-0 my-8" data-research-diagram>
+  <img src={`/diagrams/${name}.svg`} alt={alt} width="720" height="260" loading="lazy" decoding="async" class="block h-auto w-full rounded-[20px] border border-line" />
+  <figcaption class="mt-3 text-[14px] leading-[1.6] text-ink-soft">{caption}</figcaption>
+</figure>

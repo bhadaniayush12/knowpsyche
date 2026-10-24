@@ -91,3 +91,7 @@ Mental-health professional/referral wording has been retained. Abstracts unavail
 ## 3. Honest authorship
 
 All nine articles now show “By Dev · Updated <date>”, with Dev linked to /about/. Article author is a Person named Dev with the requested absolute About URL; publisher remains the existing KnowPsyche Organization (including its logo). Updated article modification dates to 2026-10-24 for the source and diagram revisions, preserving publication dates. About includes “Who writes KnowPsyche”, research/education limits, lack of clinical credentials and a corrections link. Removed the existing invented “Illustration of Dev” portrait. No real name, photo or credentials added. Existing professional-help wording retained.
+
+## 4. Original SVG diagrams
+
+One explanatory SVG image on each of nine articles and seven test pages, below the hero/test stage. Each uses a descriptive alt, width 720, height 260, lazy loading, responsive sizing and a visible caption. The SVGs use the existing ink/paper/blue/lilac/coral-ink/teal-ink palette on an opaque paper panel so page themes cannot reduce contrast; colour-critical examples also have text/shape cues. No benchmark numbers, external figures, photos or generated people. Enneagram numbers are labels already in the article; all diagrams describe existing article/test concepts. Existing decorative glyphs remain decorative. Full per-page image inventory is recorded below after final build.
