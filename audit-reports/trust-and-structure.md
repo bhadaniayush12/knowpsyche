@@ -135,7 +135,7 @@ All images below are original SVGs with width/height 720×260 and `loading="lazy
 
 ## Built-output verification
 
-All 26 baseline paths retained. Every page has exactly one H1; every JSON-LD block parses; canonicals are byte-for-byte unchanged against the pre-edit build, including noindex pages; all img elements have nonempty alt text. All schemas outside the requested Article author/date changes and hub FAQ additions are unchanged. 46 linked citation occurrences in Sources across articles and tests. No scoring code or GA event handler was modified.
+All 26 baseline paths retained. Every page has exactly one H1; every JSON-LD block parses; canonicals are byte-for-byte unchanged against the pre-edit build, including noindex pages; all img elements have nonempty alt text. All schemas outside the requested Article author/date changes and hub FAQ additions are unchanged. 44 linked citation occurrences in Sources across articles and tests. No scoring code or GA event handler was modified.
 
 | Page | H1 | JSON-LD | Canonical | Images / alt |
 | --- | ---: | --- | --- | --- |
@@ -165,3 +165,16 @@ All 26 baseline paths retained. Every page has exactly one H1; every JSON-LD blo
 | /stroop-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
 | /terms/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
 | /tests/ | 1 | 2 valid block(s) | unchanged | 0 / all have alt |
+
+### Final checks and limits
+
+- Baseline: main `11615bf1e460b6016f2f0ae36165719df9a76b9c`, built before edits; audited on 2026-10-24.
+- `npm run build`: **PASS**, 26 pages, zero errors.
+- `npm test`: **PASS**, 33 files / 780 tests. This includes all 777 existing tests and three citation-identity regression tests. Updated the existing hard-coded launch-date ceiling to reject dates after the current UTC day and reject invalid dates; policy launch-date assertions remain unchanged.
+- `npm run check`: **PASS**, “26 pages, no problems.” Checks links/assets, headings, images, schema JSON, metadata and sitemap.
+- Additional baseline comparison: exact same path set and canonicals; H1 count, all JSON-LD parses, Person/Organization identities, byline links, four FAQ records per hub, introduction word limits, diagram dimensions/loading/alt and referenced files all passed.
+- Inspected every rendered Sources list: all paper entries link; Goleman/Lilienfeld book entries remain text. Citation lookup checks author, year and full title to avoid collisions between Goleman's book, Salovey/Mayer's 1990 paper and Mayer/Caruso/Salovey's 2016 paper.
+- Existing `test_start` and `test_complete` tracking code is unchanged, as are all seven scoring modules and test-page scripts. Existing analytics and page/scoring tests pass. No claim of live GA delivery was made; that requires a browser session with analytics consent/network access.
+- Nine SVGs rendered and visually inspected; browser viewport screenshots were not captured. All sixteen placements use responsive width and intrinsic aspect ratio.
+- Claims flagged above remain editorial follow-up as requested. A correct DOI identifies a publication; it does not make an overstated claim correct. No inaccessible abstract was represented as supporting a claim.
+- **No deployment performed.** No wrangler command, merge or publication was run. Five item-specific commits plus a final verification/regression commit are pushed to the requested review branch.
