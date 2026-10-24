@@ -95,3 +95,73 @@ All nine articles now show “By Dev · Updated <date>”, with Dev linked to /a
 ## 4. Original SVG diagrams
 
 One explanatory SVG image on each of nine articles and seven test pages, below the hero/test stage. Each uses a descriptive alt, width 720, height 260, lazy loading, responsive sizing and a visible caption. The SVGs use the existing ink/paper/blue/lilac/coral-ink/teal-ink palette on an opaque paper panel so page themes cannot reduce contrast; colour-critical examples also have text/shape cues. No benchmark numbers, external figures, photos or generated people. Enneagram numbers are labels already in the article; all diagrams describe existing article/test concepts. Existing decorative glyphs remain decorative. Full per-page image inventory is recorded below after final build.
+
+## 5. Hub structure and contact guidance
+
+Added distinct 250–400-word introductions to /tests/ and /learn/, including audiences, use, context and educational/non-diagnostic limits. Tests grouped as Memory, Attention & response, and Personality & emotions. All nine articles listed under Memory & Brain, Personality, Emotions & Relationships, Sleep & Stress, and Biases & Thinking. Added four visible FAQs and matching FAQPage schema to each hub via the existing Faq component. Existing card grids and category filters retained. Header and footer navigation now label /learn/ as “Learn (Blog)”. Contact now explains corrections, test feedback, privacy requests and information helpful for each, retaining the existing hello@knowpsyche.com and 3-working-day response expectation; no address/phone invented.
+
+### Hub word counts
+
+Counts use rendered `<main>` text, excluding scripts, styles and SVG contents; words use Unicode word boundaries with internal apostrophes/hyphens retained. FAQ answers and card labels are included; global header/footer are excluded. Before is the actual current-main baseline built before edits, so it differs from the estimates in the request. Intro count includes its heading.
+
+| Page | Before | After | New intro |
+| --- | ---: | ---: | ---: |
+| /contact/ | 167 | 338 | — |
+| /learn/ | 380 | 885 | 320 |
+| /tests/ | 259 | 713 | 304 |
+
+### Image inventory
+
+All images below are original SVGs with width/height 720×260 and `loading="lazy"`. Nine reusable assets cover sixteen pages. Rendered all nine with Sharp and visually inspected the contact sheet for clipping and label accuracy.
+
+| Page | Image | Alt text |
+| --- | --- | --- |
+| /attention-span-test/ | `/diagrams/attention.svg` | A green circle with a check means respond; a red circle with an X means hold back. |
+| /emotional-intelligence-test/ | `/diagrams/emotional-intelligence.svg` | Four questionnaire areas: self-awareness, self-management, social awareness and relationship skills. |
+| /enneagram-test/ | `/diagrams/enneagram.svg` | Nine Enneagram type numbers arranged around a circle, with no ranking or connecting claims. |
+| /learn/attention-span-myths-and-what-helps/ | `/diagrams/attention.svg` | Go/no-go task: respond to the green check and hold back for the red X. |
+| /learn/is-photographic-memory-real/ | `/diagrams/visual-memory.svg` | A visual-memory task moves from seeing tiles to holding their pattern and rebuilding it. |
+| /learn/short-term-memory-capacity/ | `/diagrams/number-memory.svg` | Chunking strategy: digits are grouped before being recalled in their original order. |
+| /learn/the-stroop-effect-explained/ | `/diagrams/stroop.svg` | RED written in red is congruent; BLUE written in red is incongruent. The ink answer is red for both. |
+| /learn/what-a-reaction-time-test-measures/ | `/diagrams/reaction-time.svg` | A stimulus leads to a response and a recorded time; no durations or benchmarks are shown. |
+| /learn/what-is-emotional-intelligence/ | `/diagrams/emotional-intelligence.svg` | Four areas used on this site: self-awareness, self-management, social awareness and relationship skills. |
+| /learn/what-is-the-enneagram/ | `/diagrams/enneagram.svg` | Enneagram type numbers one through nine around a circle, without wings or relationship lines. |
+| /learn/what-psychology-tests-can-and-cant-tell-you/ | `/diagrams/test-context.svg` | A task produces a result in the context of this session, rather than describing all of a person. |
+| /learn/why-do-we-overthink-at-night/ | `/diagrams/rumination.svg` | Repeated worry runs through the same thought; reflection asks what one next step could be. |
+| /number-memory-test/ | `/diagrams/number-memory.svg` | Digit recall strategy: see the digits, group them into chunks, then recall them in order. |
+| /photographic-memory-test/ | `/diagrams/visual-memory.svg` | Visual memory task sequence: look at the tiles, hold the pattern, then rebuild it. |
+| /reaction-time-test/ | `/diagrams/reaction-time.svg` | Timeline from stimulus to response to recorded reaction time, without a numerical scale. |
+| /stroop-test/ | `/diagrams/stroop.svg` | Congruent RED in red ink and incongruent BLUE in red ink both require the answer red. |
+
+## Built-output verification
+
+All 26 baseline paths retained. Every page has exactly one H1; every JSON-LD block parses; canonicals are byte-for-byte unchanged against the pre-edit build, including noindex pages; all img elements have nonempty alt text. All schemas outside the requested Article author/date changes and hub FAQ additions are unchanged. 46 linked citation occurrences in Sources across articles and tests. No scoring code or GA event handler was modified.
+
+| Page | H1 | JSON-LD | Canonical | Images / alt |
+| --- | ---: | --- | --- | --- |
+| /404.html | 1 | 0 valid block(s) | unchanged | 0 / all have alt |
+| /about/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /attention-span-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /contact/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /emotional-intelligence-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /enneagram-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| / | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /learn/attention-span-myths-and-what-helps/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/ | 1 | 2 valid block(s) | unchanged | 0 / all have alt |
+| /learn/is-photographic-memory-real/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/short-term-memory-capacity/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/the-stroop-effect-explained/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-a-reaction-time-test-measures/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-is-emotional-intelligence/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-is-the-enneagram/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-psychology-tests-can-and-cant-tell-you/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/why-do-we-overthink-at-night/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /method/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /number-memory-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /photographic-memory-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /privacy/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /reaction-time-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /report/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /stroop-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /terms/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /tests/ | 1 | 2 valid block(s) | unchanged | 0 / all have alt |

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Faq from '../../components/result/Faq.astro';
+import { learnIntro, articleGroups, learnFaq } from '../../data/hubs';
 import ArticleCard from '../../components/learn/ArticleCard.astro';
 import { getArticles } from '../../lib/learn/collection';
 import { hubDescription, hubEmpty, hubEyebrow, hubH1, hubIntro, hubTitle } from '../../data/learn';
@@ -32,6 +34,18 @@ const categories = ['All', ...new Set(articles.map((a) => a.data.category))];
       <p class="mt-6 mb-0 max-w-[600px] text-[17px] leading-[1.55] text-ink-soft">{hubIntro}</p>
     </section>
 
+    <section aria-labelledby="reading-the-guides" class="prose max-w-[800px]" data-hub-intro>
+      <h2 id="reading-the-guides">Explore psychology and read the evidence</h2>
+      {learnIntro.map((paragraph) => <p>{paragraph}</p>)}
+    </section>
+    <section aria-labelledby="article-topics">
+      <h2 id="article-topics" class="text-3xl font-semibold">Articles by topic</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {articleGroups.map((group) => <div><h3 class="text-xl font-semibold">{group.title}</h3><ul class="pl-5">
+          {group.slugs.map((slug) => { const article = articles.find((article) => article.id === slug); return article && <li class="my-3"><a href={`/learn/${slug}/`}>{article.data.title}</a></li>; })}
+        </ul></div>)}
+      </div>
+    </section>
     {articles.length === 0 && (
       <p class="m-0 text-[17px] leading-[1.55] text-ink-soft">{hubEmpty} <a href="/tests/" class="font-semibold">All tests →</a></p>
     )}
@@ -48,6 +62,7 @@ const categories = ['All', ...new Set(articles.map((a) => a.data.category))];
         </div>
       </section>
     )}
+    <Faq faqs={learnFaq} heading="Questions about the blog" />
   </div>
 </BaseLayout>
 
