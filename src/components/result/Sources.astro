@@ -1,5 +1,6 @@
 ---
 import type { Source } from '../../data/shared';
+import { citationUrl } from '../../data/citations';
 
 /**
  * A source is either the test pages' { before, title, after } shape, or (Learn articles) a citation
@@ -16,11 +17,17 @@ const { sources, note } = Astro.props;
 
 /** "A. (2008). Title. *Journal*." → text and italic parts, alternating. */
 const parts = (s: string) => s.split(/\*([^*]+)\*/);
+const linkedSources = sources.map((source) => {
+  if (typeof source !== 'string' && 'url' in source) return source;
+  const title = typeof source === 'string' ? source : `${source.before}*${source.title}*${source.after ?? ''}`;
+  const url = citationUrl(title);
+  return url ? { title, url } : source;
+});
 ---
 <section aria-labelledby="sources-title">
   <h2 id="sources-title" class="mono m-0 mb-3 text-[11px] font-medium text-muted">Sources</h2>
   <ol class="m-0 flex list-decimal flex-col gap-2 pl-5 text-[15px] leading-[1.6] text-ink-soft">
-    {sources.map((s) =>
+    {linkedSources.map((s) =>
       typeof s === 'string' ? <li>{parts(s).map((p, i) => (i % 2 ? <i>{p}</i> : p))}</li>
       : 'url' in s ? <li><a href={s.url} rel="noopener" class="text-ink-soft">{parts(s.title).map((p, i) => (i % 2 ? <i>{p}</i> : p))}</a></li>
       : <li>{s.before}<i>{s.title}</i>{s.after}</li>,

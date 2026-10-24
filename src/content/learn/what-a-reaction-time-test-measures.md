@@ -12,7 +12,7 @@ related:
   - attention-span-myths-and-what-helps
 sources:
   - "Woods, D. L., et al. (2015). Factors influencing the latency of simple reaction time. *Frontiers in Human Neuroscience*."
-  - "Jain, A., et al. (2015). A comparative study of visual and auditory reaction times. *International Journal of Applied and Basic Medical Research*."
+  - "Jain, A., et al. (2015). A comparative study of visual and auditory reaction times on the basis of gender and physical activity levels of medical first year students. *International Journal of Applied and Basic Medical Research*."
   - "Donders, F. C. (1969). On the speed of mental processes (W. G. Koster, Trans.). *Acta Psychologica*, 30, 412–431. (Original work published 1868.)"
   - "Hick, W. E. (1952). On the rate of gain of information. *Quarterly Journal of Experimental Psychology*."
   - "Hyman, R. (1953). Stimulus information as a determinant of reaction time. *Journal of Experimental Psychology*."

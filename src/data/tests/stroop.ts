@@ -130,7 +130,7 @@ export const sources: Source[] = [
     after: '.',
   },
   {
-    before: 'MacLeod, C. M. (1991). Half a century of research on the Stroop effect. ',
+    before: 'MacLeod, C. M. (1991). Half a century of research on the Stroop effect: An integrative review. ',
     title: 'Psychological Bulletin',
     after: '.',
   },

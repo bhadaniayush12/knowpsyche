@@ -76,7 +76,7 @@ export const faqs: Faq[] = [
 
 export const sources: Source[] = [
   { before: 'Luck, S. J., & Vogel, E. K. (1997). The capacity of visual working memory for features and conjunctions. ', title: 'Nature', after: '.' },
-  { before: 'Haber, R. N. (1979). Twenty years of haunting eidetic imagery. ', title: 'Behavioral and Brain Sciences', after: '.' },
+  { before: 'Haber, R. N. (1979). Twenty years of haunting eidetic imagery: where\'s the ghost?. ', title: 'Behavioral and Brain Sciences', after: '.' },
 ];
 
 // "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/photographic-memory.ts and the page script.

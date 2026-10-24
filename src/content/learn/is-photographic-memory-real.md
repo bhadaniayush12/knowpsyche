@@ -11,7 +11,7 @@ related:
   - short-term-memory-capacity
   - what-psychology-tests-can-and-cant-tell-you
 sources:
-  - "Haber, R. N. (1979). Twenty years of haunting eidetic imagery. *Behavioral and Brain Sciences*."
+  - "Haber, R. N. (1979). Twenty years of haunting eidetic imagery: where's the ghost?. *Behavioral and Brain Sciences*."
   - "Luck, S. J., & Vogel, E. K. (1997). The capacity of visual working memory for features and conjunctions. *Nature*."
   - "Ericsson, K. A., & Chase, W. G. (1982). Exceptional memory. *American Scientist*."
   - "Maguire, E. A., Valentine, E. R., Wilding, J. M., & Kapur, N. (2003). Routes to remembering: the brains behind superior memory. *Nature Neuroscience*."

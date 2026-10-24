@@ -72,8 +72,8 @@ export const faqs: Faq[] = [
 ];
 
 export const sources: Source[] = [
-  { before: 'Miller, G. A. (1956). The magical number seven, plus or minus two. ', title: 'Psychological Review', after: '.' },
-  { before: 'Cowan, N. (2001). The magical number 4 in short-term memory. ', title: 'Behavioral and Brain Sciences', after: '.' },
+  { before: 'Miller, G. A. (1956). The magical number seven, plus or minus two: Some limits on our capacity for processing information. ', title: 'Psychological Review', after: '.' },
+  { before: 'Cowan, N. (2001). The magical number 4 in short-term memory: a reconsideration of mental storage capacity. ', title: 'Behavioral and Brain Sciences', after: '.' },
 ];
 
 // "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/number-memory.ts and the page script.
