@@ -20,7 +20,7 @@ const columns = [
   },
   {
     label: 'Learn',
-    links: [{ href: '/learn/', label: 'Learn psychology' }, ...articles.map((a) => ({ href: `/learn/${a.id}/`, label: a.data.title }))],
+    links: [{ href: '/learn/', label: 'Learn (Blog)' }, ...articles.map((a) => ({ href: `/learn/${a.id}/`, label: a.data.title }))],
   },
   {
     label: 'KnowPsyche',
@@ -36,7 +36,7 @@ const columns = [
 
 const compactLinks = [
   { href: '/tests/', label: 'Tests' },
-  { href: '/learn/', label: 'Learn' },
+  { href: '/learn/', label: 'Learn (Blog)' },
   { href: '/about/', label: 'About' },
   { href: '/method/', label: 'Method' },
   { href: '/privacy/', label: 'Privacy' },

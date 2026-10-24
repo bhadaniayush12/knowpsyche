@@ -3,7 +3,7 @@ title: "What is the Enneagram, really?"
 em: "really"
 description: "The Enneagram sorts people into nine types. Here is where it came from, what research says about it, and a sensible way to use your result."
 datePublished: 2026-10-17
-dateModified: 2026-10-17
+dateModified: 2026-10-24
 category: "Personality"
 relatedTest: enneagram-test
 scene: what-is-the-enneagram

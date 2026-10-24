@@ -3,7 +3,7 @@ title: "What is emotional intelligence?"
 em: "emotional intelligence"
 description: "Emotional intelligence is about noticing, understanding and handling feelings. Where the idea came from, what scientists debate, and how to build it."
 datePublished: 2026-10-17
-dateModified: 2026-10-17
+dateModified: 2026-10-24
 category: "Emotions"
 scene: what-is-emotional-intelligence
 relatedTest: emotional-intelligence-test

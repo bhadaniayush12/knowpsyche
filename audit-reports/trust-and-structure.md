@@ -1,0 +1,180 @@
+# Trust and structure audit
+
+Branch: `fix/trust-and-structure`. No deployment authorized or performed.
+
+## 1. Homepage schema
+
+Already present on main: WebSite (KnowPsyche, canonical site URL, inLanguage en) and Organization (KnowPsyche, URL, /icon-512.png logo), plus existing homepage FAQPage. Retained without adding SearchAction. Baseline build succeeds; built JSON-LD parses. Schema on other pages is unchanged by this item.
+
+## 2. Sources and abstract review
+
+All nine articles and seven test pages use the shared Sources renderer. Linked 30 distinct research citations to identifiers verified against publisher, author-institution or PubMed records. Expanded five shortened paper titles in citation text only. Existing `et al.` abbreviations retained after checking the lead author and full record; journal issue year is used (some online dates differ). No article claim was silently edited.
+
+### Full citation → identifier table
+
+The citation column is the complete displayed article citation (test pages repeat a subset); each occurrence is covered. Verified means bibliographic identity, not endorsement of every nearby claim.
+
+| Citation | DOI / official link | Status / verification record |
+| --- | --- | --- |
+| Miller, G. A. (1956). The magical number seven, plus or minus two: Some limits on our capacity for processing information. *Psychological Review*. | [10.1037/h0043158](https://doi.org/10.1037/h0043158) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/13310704/) |
+| Cowan, N. (2001). The magical number 4 in short-term memory: a reconsideration of mental storage capacity. *Behavioral and Brain Sciences*. | [10.1017/S0140525X01003922](https://doi.org/10.1017/S0140525X01003922) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/11515286/) |
+| Baddeley, A. D., & Hitch, G. (1974). Working memory. In *The Psychology of Learning and Motivation*. | [10.1016/S0079-7421(08)60452-1](https://doi.org/10.1016/S0079-7421(08)60452-1) | Verified; [record](https://doi.org/10.1016/S0079-7421(08)60452-1) |
+| Ericsson, K. A., & Chase, W. G. (1982). Exceptional memory. *American Scientist*. | [PubMed (no DOI in record)](https://pubmed.ncbi.nlm.nih.gov/7181217/) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/7181217/) |
+| Nolen-Hoeksema, S., Wisco, B. E., & Lyubomirsky, S. (2008). Rethinking rumination. *Perspectives on Psychological Science*. | [10.1111/j.1745-6924.2008.00088.x](https://doi.org/10.1111/j.1745-6924.2008.00088.x) | Verified; [record](https://journals.sagepub.com/doi/10.1111/j.1745-6924.2008.00088.x) |
+| Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N., & Bliwise, D. L. (2018). The effects of bedtime writing on difficulty falling asleep: A polysomnographic study comparing to-do lists and completed activity lists. *Journal of Experimental Psychology: General*. | [10.1037/xge0000374](https://doi.org/10.1037/xge0000374) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/29058942/) |
+| Borkovec, T. D., Wilkinson, L., Folensbee, R., & Lerman, C. (1983). Stimulus control applications to the treatment of worry. *Behaviour Research and Therapy*. | [10.1016/0005-7967(83)90206-1](https://doi.org/10.1016/0005-7967(83)90206-1) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/6615390/) |
+| Stroop, J. R. (1935). Studies of interference in serial verbal reactions. *Journal of Experimental Psychology*. | [10.1037/h0054651](https://doi.org/10.1037/h0054651) | Verified; [record](https://doi.org/10.1037/h0054651) |
+| MacLeod, C. M. (1991). Half a century of research on the Stroop effect: An integrative review. *Psychological Bulletin*. | [10.1037/0033-2909.109.2.163](https://doi.org/10.1037/0033-2909.109.2.163) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/2034749/) |
+| Kane, M. J., & Engle, R. W. (2003). Working-memory capacity and the control of attention: The contributions of goal neglect, response competition, and task set to Stroop interference. *Journal of Experimental Psychology: General*. | [10.1037/0096-3445.132.1.47](https://doi.org/10.1037/0096-3445.132.1.47) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/12656297/) |
+| Woods, D. L., et al. (2015). Factors influencing the latency of simple reaction time. *Frontiers in Human Neuroscience*. | [10.3389/fnhum.2015.00131](https://doi.org/10.3389/fnhum.2015.00131) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/25859198/) |
+| Jain, A., et al. (2015). A comparative study of visual and auditory reaction times on the basis of gender and physical activity levels of medical first year students. *International Journal of Applied and Basic Medical Research*. | [10.4103/2229-516X.157168](https://doi.org/10.4103/2229-516X.157168) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/26097821/) |
+| Donders, F. C. (1969). On the speed of mental processes (W. G. Koster, Trans.). *Acta Psychologica*, 30, 412–431. (Original work published 1868.) | [10.1016/0001-6918(69)90065-1](https://doi.org/10.1016/0001-6918(69)90065-1) | Verified; [record](https://doi.org/10.1016/0001-6918(69)90065-1) |
+| Hick, W. E. (1952). On the rate of gain of information. *Quarterly Journal of Experimental Psychology*. | [10.1080/17470215208416600](https://doi.org/10.1080/17470215208416600) | Verified; [record](https://doi.org/10.1080/17470215208416600) |
+| Hyman, R. (1953). Stimulus information as a determinant of reaction time. *Journal of Experimental Psychology*. | [10.1037/h0056940](https://doi.org/10.1037/h0056940) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/13052851/) |
+| Hook, J. N., et al. (2021). The Enneagram: A systematic review of the literature and directions for future research. *Journal of Clinical Psychology*. | [10.1002/jclp.23097](https://doi.org/10.1002/jclp.23097) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/33332604/) |
+| Forer, B. R. (1949). The fallacy of personal validation: A classroom demonstration of gullibility. *Journal of Abnormal and Social Psychology*. | [10.1037/h0059240](https://doi.org/10.1037/h0059240) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/18110193/) |
+| Lilienfeld, S. O., Lynn, S. J., Ruscio, J., & Beyerstein, B. L. (2010). *50 Great Myths of Popular Psychology*. Wiley-Blackwell. | — | Not found: no verified DOI or PubMed/PMC record for this book/edition; kept plain text. |
+| Open Science Collaboration. (2015). Estimating the reproducibility of psychological science. *Science*. | [10.1126/science.aac4716](https://doi.org/10.1126/science.aac4716) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/26315443/) |
+| Haber, R. N. (1979). Twenty years of haunting eidetic imagery: where's the ghost?. *Behavioral and Brain Sciences*. | [10.1017/S0140525X00064542](https://doi.org/10.1017/S0140525X00064542) | Verified; [record](https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/twenty-years-of-haunting-eidetic-imagery-wheres-the-ghost/8D03DBD96D9AEA757ECE5DB9A55D7AA9) |
+| Luck, S. J., & Vogel, E. K. (1997). The capacity of visual working memory for features and conjunctions. *Nature*. | [10.1038/36846](https://doi.org/10.1038/36846) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/9384378/) |
+| Maguire, E. A., Valentine, E. R., Wilding, J. M., & Kapur, N. (2003). Routes to remembering: the brains behind superior memory. *Nature Neuroscience*. | [10.1038/nn988](https://doi.org/10.1038/nn988) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/12483214/) |
+| Wells, G. L., & Olson, E. A. (2003). Eyewitness testimony. *Annual Review of Psychology*. | [10.1146/annurev.psych.54.101601.145028](https://doi.org/10.1146/annurev.psych.54.101601.145028) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/12209024/) |
+| Mackworth, N. H. (1948). The breakdown of vigilance during prolonged visual search. *Quarterly Journal of Experimental Psychology*. | [10.1080/17470214808416738](https://doi.org/10.1080/17470214808416738) | Verified; [record](https://doi.org/10.1080/17470214808416738) |
+| Killingsworth, M. A., & Gilbert, D. T. (2010). A wandering mind is an unhappy mind. *Science*. | [10.1126/science.1192439](https://doi.org/10.1126/science.1192439) | Verified; [record](https://dash.harvard.edu/entities/publication/73120378-d8a3-6bd4-e053-0100007fdf3b) |
+| Ariga, A., & Lleras, A. (2011). Brief and rare mental "breaks" keep you focused: Deactivation and reactivation of task goals preempt vigilance decrements. *Cognition*. | [10.1016/j.cognition.2010.12.007](https://doi.org/10.1016/j.cognition.2010.12.007) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/21211793/) |
+| Leroy, S. (2009). Why is it so hard to do my work? The challenge of attention residue when switching between work tasks. *Organizational Behavior and Human Decision Processes*. | [10.1016/j.obhdp.2009.04.002](https://doi.org/10.1016/j.obhdp.2009.04.002) | Verified; [record](https://doi.org/10.1016/j.obhdp.2009.04.002) |
+| Gomez, P., Ratcliff, R., & Perea, M. (2007). A model of the go/no-go task. *Journal of Experimental Psychology: General*. | [10.1037/0096-3445.136.3.389](https://doi.org/10.1037/0096-3445.136.3.389) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/17696690/) |
+| Stothart, C., Mitchum, A., & Yehnert, C. (2015). The attentional cost of receiving a cell phone notification. *Journal of Experimental Psychology: Human Perception and Performance*. | [10.1037/xhp0000100](https://doi.org/10.1037/xhp0000100) | Verified; [record](https://pubmed.ncbi.nlm.nih.gov/26121498/) |
+| Salovey, P., & Mayer, J. D. (1990). Emotional intelligence. *Imagination, Cognition and Personality*, 9(3), 185–211. | [10.2190/DUGG-P24E-52WK-6CDG](https://doi.org/10.2190/DUGG-P24E-52WK-6CDG) | Verified; [record](https://doi.org/10.2190/DUGG-P24E-52WK-6CDG) |
+| Goleman, D. (1995). *Emotional Intelligence: Why It Can Matter More Than IQ*. Bantam Books. | — | Not found: no verified DOI or PubMed/PMC record for this book/edition; kept plain text. |
+| Mayer, J. D., Caruso, D. R., & Salovey, P. (2016). The ability model of emotional intelligence: Principles and updates. *Emotion Review*. | [10.1177/1754073916639667](https://doi.org/10.1177/1754073916639667) | Verified; [record](https://doi.org/10.1177/1754073916639667) |
+
+Not linked: Goleman (1995), *Emotional Intelligence: Why It Can Matter More Than IQ* (article and EQ test); Lilienfeld, Lynn, Ruscio & Beyerstein (2010), *50 Great Myths of Popular Psychology* (two articles). These are books, not peer-reviewed journal articles; no matching DOI/PubMed/PMC edition was verified. The [Goleman publisher guide](https://www.penguinrandomhouse.com/books/69105/emotional-intelligence-by-daniel-goleman/readers-guide/) confirms the original year. The [Wiley catalog](https://www.wiley.com/en-us/50-great-myths-of-popular-psychology-shattering-widespread-misconceptions-about-human-behavior-p-9781444360745) is a later edition and does not establish a 2010 identifier.
+
+### Claim-to-abstract audit (claims retained)
+
+Sources are listed by page, rather than attached with inline citation markers. I reviewed factual body/FAQ/result claims against each listed abstract where available. A missing abstract is explicitly unverified; a verified bibliographic link is not a claim-verification pass. The items below need editorial follow-up, and have **not** been silently corrected.
+
+| Page / source | Abstract-supported scope | Mismatch, overstatement or verification limit |
+| --- | --- | --- |
+| Attention article: Mackworth (1948) | Vigilance research identity verified. | Publisher record exposes no abstract; the clock apparatus, radar history and time-course details cannot be certified from the abstract. “Nearly everyone slips” is broader than a study result. |
+| Attention article: Killingsworth & Gilbert (2010) | Smartphone experience sampling found frequent mind wandering. | “For everyone” universalizes a sampled population. |
+| Attention article: Ariga & Lleras (2011) | Occasional switches to a digit-recall goal prevented a vigilance decrement. | General “short, planned breaks” advice extends beyond the particular task-switch manipulation; sleep advice, desk clearing and the ten-minute exercise were not tested here. |
+| Attention article: Leroy (2009) | Residual thoughts, particularly about unfinished tasks, impaired the next task. | “Each switch has a price” and “finishing one thing” as a sufficient solution overgeneralize; task completion and time pressure both mattered. The abstract does not establish every switch makes the next task slower. |
+| Attention article: Gomez et al. (2007) | Models of go/no-go decisions and response criteria. | Does not establish that rare red trials in this site's game measure general attention span or that withholding rare signals is universally harder. |
+| Attention article: Stothart et al. (2015) | Notifications disrupted task performance without device interaction. | This claim matches. Does not establish permanent phone-related attention changes; the article appropriately avoids that conclusion. |
+| Photographic-memory article/test: Haber (1979) | Abstract describes rare childhood eidetic imagery and its virtual absence in adults. | Age-related disappearance in individual children is not the same as a cross-sectional age difference. Perfect recall and all adult-camera claims need fuller review. |
+| Photographic-memory article/test: Luck & Vogel (1997) | Roughly four integrated objects/features in the studied visual-memory task. | The article extends this to positions, everyday memory, individual/day-to-day variation, a fixed unchangeable workspace, and “three tiles ... are one item”. The abstract does not establish those general claims or the benefits of practice, stories and grouping for this site task. |
+| Photographic-memory article: Maguire et al. (2003) | Superior memorizers used spatial strategies, without exceptional general intelligence or structural brain differences. | The familiar-house-route details require full text, beyond the abstract. |
+| Photographic-memory / short-term-memory articles: Ericsson & Chase (1982) | Author/year/title verified in PubMed. | No abstract available in the record; runner history, lack of transfer to letters and training findings cannot be certified from its abstract. |
+| Photographic-memory article: Wells & Olson (2003) | Eyewitness identification errors and variables affecting accuracy. | The specific claims that repetition/agreement increase confidence, and that confidence guarantees neither detail nor accuracy, are not established by the abstract alone. |
+| Short-term-memory article/number test: Miller (1956) | Historical span/chunking paper. | No PubMed abstract; full text is available from a university, but “seven digits, seven letters, seven words” and a uniform across-task seven limit are not abstract-verified. Word superiority over digits, ten digits versus two groups, and Indian phone-number conventions are not established by these abstracts. |
+| Short-term-memory article/number test: Cowan (2001) | A limited-capacity account of around four chunks under specified conditions. | Calling it “the true limit” without the conditions overstates a theoretical review. Sleep/stress, rhythm, age and date-linking advice are not all demonstrated by this abstract. |
+| Short-term-memory article: Baddeley & Hitch (1974) | Working memory's role in reasoning, comprehension and learning. | Verbal/visual subsystem details and forward-versus-backward definitions require the chapter; publisher summary alone does not establish them. |
+| Stroop article/test: Stroop (1935) | Conflict between word and ink influences naming; identity verified. | Article attributes a matching-word versus mismatching-word baseline to Stroop; his classic color-naming control used color patches, not matching words. This historical account needs correction after review. |
+| Stroop article/test: MacLeod (1991) | Review supports robust interference and parallel processing accounts. | Reducing the explanation to automatic reading or relative speed alone misses the abstract's criticism of both explanations. “Everyone”, “can't choose not to read”, effect never vanishing, the difference score being steadier than raw time, no slowdown usually meaning care, and a guaranteed practice-related gap reduction are not established by the abstract. Color-vision and tiredness effects require additional evidence. |
+| Stroop article: Kane & Engle (2003) | Goal neglect increased incongruent errors in high-congruency conditions, particularly with lower working-memory capacity. | The side note omits the working-memory and task-condition qualifications, but preserves the basic goal-maintenance mechanism. Does not validate this site's score as a general focus measure. |
+| Reaction-time article/test: Woods et al. (2015) | Hardware/software delays and age affect measured latency. | General quarter-second browser norm, sleep and caffeine advice, high-refresh gaming hardware “help most”, warm-up improvement, alertness ranking and wireless delays are not all established by the abstract. Screen delay occurs before perception; mouse delay also occurs after the response, so “before your brain is even involved” is too broad. “Says nothing about intelligence” is stronger than a warning against interpreting a single online score. |
+| Reaction-time article/test: Jain et al. (2015) | Compared auditory/visual latency in medical students, including activity and gender. | Extrapolating to all people/devices or “many studies” exceeds this individual sample. General practice ceilings are not established. |
+| Reaction-time article: Donders (1868/1969), Hick (1952), Hyman (1953) | Simple/choice tasks and information-related choice latency are relevant to the described distinction. | Donders translation and Hyman record lack accessible abstracts; precise subtraction/history claims require full text. Equal increments on doubling options assumes the appropriate stimulus probabilities/conditions. |
+| Emotional-intelligence article/test: Salovey & Mayer (1990), Mayer et al. (2016) | Emotion-related abilities and an evolving ability model. | The site's four self/social-awareness and relationship areas are a different organization from the ability model's branches; neither abstract validates the site's questionnaire. First-ever scientific model, general trainability, fixed response gains from naming/pausing, self-report disagreement and success/IQ comparisons need additional evidence. Goleman is a popular book with no paper abstract. |
+| Enneagram article/test: Hook et al. (2021) | Review of 104 samples found mixed reliability/validity and limited support for some theoretical features. | “Not in the way a measurement from a lab is” is an unhelpful blanket distinction; absence of evidence for permanent boxes does not establish that types actually change. Specific history, moods changing types, overlap and benefits of a weekly reflection routine are not established by this abstract. |
+| Enneagram / psychology-tests articles: Forer (1949) | Bibliographic identity verified; classic personal-validation demonstration. | No abstract in PubMed record, so student procedure, identical text and their ratings require full text. General claims about all rich descriptions remain broader than the original demonstration. |
+| Psychology-tests article: Open Science Collaboration (2015) | Replications of 100 studies, with many weaker/non-reproduced effects. | Matches the cautious description of the replication project. This does not directly establish mood, practice/device variation on these particular questionnaires or reliability/validity definitions. Lilienfeld et al. is a book without a paper abstract. |
+| Night-overthinking article: Nolen-Hoeksema et al. (2008) | Review links rumination with negative thinking and impaired problem solving. | Equating all future-oriented worry with rumination blurs distinct constructs. Fewer distractions, exhaustion making problems bigger at night, checking clocks and thought suppression are not established by this abstract. |
+| Night-overthinking article: Scullin et al. (2018) | A small laboratory comparison found faster sleep onset after to-do writing than after completed-activity writing. | Core comparison matches; it does not establish the full evening routine, general worry journaling, long-term benefit or insomnia treatment. |
+| Night-overthinking article: Borkovec et al. (1983) | Four-week stimulus-control instructions reduced daily worry relative to control. | The fifteen-minute prescription, evening timing and leaving bed in dim light are not specified by the abstract. A mechanism of “teaching your mind” is an interpretation, not a directly demonstrated mechanism. |
+| All seven test pages | Local game rules, scoring descriptions and durations are implementation facts, not claims that the cited research validated this exact game. | No cited abstract validates the site's original questions, score bands, diagnosis, population ranking or general improvement promises. Those remain educational interpretations. Attention-test “25 minutes”, sleep/noise/interest advice and a late-run dip being expected are not established by its Gomez/Donders abstracts; EQ “it improves with practice” likewise needs intervention evidence. |
+
+Mental-health professional/referral wording has been retained. Abstracts unavailable or blocked by a publisher are not treated as verified claim support. Shortened titles were expanded for Haber, Miller, Cowan, MacLeod (test citation) and Jain; no year or authors were replaced to force a match.
+
+## 3. Honest authorship
+
+All nine articles now show “By Dev · Updated <date>”, with Dev linked to /about/. Article author is a Person named Dev with the requested absolute About URL; publisher remains the existing KnowPsyche Organization (including its logo). Updated article modification dates to 2026-10-24 for the source and diagram revisions, preserving publication dates. About includes “Who writes KnowPsyche”, research/education limits, lack of clinical credentials and a corrections link. Removed the existing invented “Illustration of Dev” portrait. No real name, photo or credentials added. Existing professional-help wording retained.
+
+## 4. Original SVG diagrams
+
+One explanatory SVG image on each of nine articles and seven test pages, below the hero/test stage. Each uses a descriptive alt, width 720, height 260, lazy loading, responsive sizing and a visible caption. The SVGs use the existing ink/paper/blue/lilac/coral-ink/teal-ink palette on an opaque paper panel so page themes cannot reduce contrast; colour-critical examples also have text/shape cues. No benchmark numbers, external figures, photos or generated people. Enneagram numbers are labels already in the article; all diagrams describe existing article/test concepts. Existing decorative glyphs remain decorative. Full per-page image inventory is recorded below after final build.
+
+## 5. Hub structure and contact guidance
+
+Added distinct 250–400-word introductions to /tests/ and /learn/, including audiences, use, context and educational/non-diagnostic limits. Tests grouped as Memory, Attention & response, and Personality & emotions. All nine articles listed under Memory & Brain, Personality, Emotions & Relationships, Sleep & Stress, and Biases & Thinking. Added four visible FAQs and matching FAQPage schema to each hub via the existing Faq component. Existing card grids and category filters retained. Header and footer navigation now label /learn/ as “Learn (Blog)”. Contact now explains corrections, test feedback, privacy requests and information helpful for each, retaining the existing hello@knowpsyche.com and 3-working-day response expectation; no address/phone invented.
+
+### Hub word counts
+
+Counts use rendered `<main>` text, excluding scripts, styles and SVG contents; words use Unicode word boundaries with internal apostrophes/hyphens retained. FAQ answers and card labels are included; global header/footer are excluded. Before is the actual current-main baseline built before edits, so it differs from the estimates in the request. Intro count includes its heading.
+
+| Page | Before | After | New intro |
+| --- | ---: | ---: | ---: |
+| /contact/ | 167 | 338 | — |
+| /learn/ | 380 | 885 | 320 |
+| /tests/ | 259 | 713 | 304 |
+
+### Image inventory
+
+All images below are original SVGs with width/height 720×260 and `loading="lazy"`. Nine reusable assets cover sixteen pages. Rendered all nine with Sharp and visually inspected the contact sheet for clipping and label accuracy.
+
+| Page | Image | Alt text |
+| --- | --- | --- |
+| /attention-span-test/ | `/diagrams/attention.svg` | A green circle with a check means respond; a red circle with an X means hold back. |
+| /emotional-intelligence-test/ | `/diagrams/emotional-intelligence.svg` | Four questionnaire areas: self-awareness, self-management, social awareness and relationship skills. |
+| /enneagram-test/ | `/diagrams/enneagram.svg` | Nine Enneagram type numbers arranged around a circle, with no ranking or connecting claims. |
+| /learn/attention-span-myths-and-what-helps/ | `/diagrams/attention.svg` | Go/no-go task: respond to the green check and hold back for the red X. |
+| /learn/is-photographic-memory-real/ | `/diagrams/visual-memory.svg` | A visual-memory task moves from seeing tiles to holding their pattern and rebuilding it. |
+| /learn/short-term-memory-capacity/ | `/diagrams/number-memory.svg` | Chunking strategy: digits are grouped before being recalled in their original order. |
+| /learn/the-stroop-effect-explained/ | `/diagrams/stroop.svg` | RED written in red is congruent; BLUE written in red is incongruent. The ink answer is red for both. |
+| /learn/what-a-reaction-time-test-measures/ | `/diagrams/reaction-time.svg` | A stimulus leads to a response and a recorded time; no durations or benchmarks are shown. |
+| /learn/what-is-emotional-intelligence/ | `/diagrams/emotional-intelligence.svg` | Four areas used on this site: self-awareness, self-management, social awareness and relationship skills. |
+| /learn/what-is-the-enneagram/ | `/diagrams/enneagram.svg` | Enneagram type numbers one through nine around a circle, without wings or relationship lines. |
+| /learn/what-psychology-tests-can-and-cant-tell-you/ | `/diagrams/test-context.svg` | A task produces a result in the context of this session, rather than describing all of a person. |
+| /learn/why-do-we-overthink-at-night/ | `/diagrams/rumination.svg` | Repeated worry runs through the same thought; reflection asks what one next step could be. |
+| /number-memory-test/ | `/diagrams/number-memory.svg` | Digit recall strategy: see the digits, group them into chunks, then recall them in order. |
+| /photographic-memory-test/ | `/diagrams/visual-memory.svg` | Visual memory task sequence: look at the tiles, hold the pattern, then rebuild it. |
+| /reaction-time-test/ | `/diagrams/reaction-time.svg` | Timeline from stimulus to response to recorded reaction time, without a numerical scale. |
+| /stroop-test/ | `/diagrams/stroop.svg` | Congruent RED in red ink and incongruent BLUE in red ink both require the answer red. |
+
+## Built-output verification
+
+All 26 baseline paths retained. Every page has exactly one H1; every JSON-LD block parses; canonicals are byte-for-byte unchanged against the pre-edit build, including noindex pages; all img elements have nonempty alt text. All schemas outside the requested Article author/date changes and hub FAQ additions are unchanged. 44 linked citation occurrences in Sources across articles and tests. No scoring code or GA event handler was modified.
+
+| Page | H1 | JSON-LD | Canonical | Images / alt |
+| --- | ---: | --- | --- | --- |
+| /404.html | 1 | 0 valid block(s) | unchanged | 0 / all have alt |
+| /about/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /attention-span-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /contact/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /emotional-intelligence-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /enneagram-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| / | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /learn/attention-span-myths-and-what-helps/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/ | 1 | 2 valid block(s) | unchanged | 0 / all have alt |
+| /learn/is-photographic-memory-real/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/short-term-memory-capacity/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/the-stroop-effect-explained/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-a-reaction-time-test-measures/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-is-emotional-intelligence/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-is-the-enneagram/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/what-psychology-tests-can-and-cant-tell-you/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /learn/why-do-we-overthink-at-night/ | 1 | 3 valid block(s) | unchanged | 1 / all have alt |
+| /method/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /number-memory-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /photographic-memory-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /privacy/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /reaction-time-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /report/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /stroop-test/ | 1 | 2 valid block(s) | unchanged | 1 / all have alt |
+| /terms/ | 1 | 1 valid block(s) | unchanged | 0 / all have alt |
+| /tests/ | 1 | 2 valid block(s) | unchanged | 0 / all have alt |
+
+### Final checks and limits
+
+- Baseline: main `11615bf1e460b6016f2f0ae36165719df9a76b9c`, built before edits; audited on 2026-10-24.
+- `npm run build`: **PASS**, 26 pages, zero errors.
+- `npm test`: **PASS**, 33 files / 780 tests. This includes all 777 existing tests and three citation-identity regression tests. Updated the existing hard-coded launch-date ceiling to reject dates after the current UTC day and reject invalid dates; policy launch-date assertions remain unchanged.
+- `npm run check`: **PASS**, “26 pages, no problems.” Checks links/assets, headings, images, schema JSON, metadata and sitemap.
+- Additional baseline comparison: exact same path set and canonicals; H1 count, all JSON-LD parses, Person/Organization identities, byline links, four FAQ records per hub, introduction word limits, diagram dimensions/loading/alt and referenced files all passed.
+- Inspected every rendered Sources list: all paper entries link; Goleman/Lilienfeld book entries remain text. Citation lookup checks author, year and full title to avoid collisions between Goleman's book, Salovey/Mayer's 1990 paper and Mayer/Caruso/Salovey's 2016 paper.
+- Existing `test_start` and `test_complete` tracking code is unchanged, as are all seven scoring modules and test-page scripts. Existing analytics and page/scoring tests pass. No claim of live GA delivery was made; that requires a browser session with analytics consent/network access.
+- Nine SVGs rendered and visually inspected; browser viewport screenshots were not captured. All sixteen placements use responsive width and intrinsic aspect ratio.
+- Claims flagged above remain editorial follow-up as requested. A correct DOI identifies a publication; it does not make an overstated claim correct. No inaccessible abstract was represented as supporting a claim.
+- **No deployment performed.** No wrangler command, merge or publication was run. Five item-specific commits plus a final verification/regression commit are pushed to the requested review branch.

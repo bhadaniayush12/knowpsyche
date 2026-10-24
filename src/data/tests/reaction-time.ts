@@ -120,7 +120,7 @@ export const faqs: Faq[] = [
 
 export const sources: Source[] = [
   { before: 'Woods, D. L., et al. (2015). Factors influencing the latency of simple reaction time. ', title: 'Frontiers in Human Neuroscience', after: '.' },
-  { before: 'Jain, A., et al. (2015). A comparative study of visual and auditory reaction times. ', title: 'International Journal of Applied and Basic Medical Research', after: '.' },
+  { before: 'Jain, A., et al. (2015). A comparative study of visual and auditory reaction times on the basis of gender and physical activity levels of medical first year students. ', title: 'International Journal of Applied and Basic Medical Research', after: '.' },
 ];
 
 // "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/reaction-time.ts and the page script.

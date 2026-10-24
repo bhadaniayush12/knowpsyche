@@ -6,6 +6,7 @@
  */
 import { getEntries } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResearchDiagram from '../../components/ResearchDiagram.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import Faq from '../../components/result/Faq.astro';
 import Sources from '../../components/result/Sources.astro';
@@ -15,7 +16,7 @@ import ArticleCard from '../../components/learn/ArticleCard.astro';
 import Scene from '../../components/learn/scenes/Scene.astro';
 import { dropTrailingLine, enhanceArticleHtml, readingTime, splitAtH2, tocFromHeadings } from '../../lib/learn/articles';
 import { formatDate, getArticles, testFor, type Article } from '../../lib/learn/collection';
-import { AUTHOR, articleFootnote, keepReadingLabel, tocLabel, tryTestLabel } from '../../data/learn';
+import { AUTHOR, PUBLISHER, articleFootnote, keepReadingLabel, tocLabel, tryTestLabel } from '../../data/learn';
 
 export async function getStaticPaths() {
   const articles = await getArticles();
@@ -69,7 +70,7 @@ const articleLd = {
   image: new URL(ogImage, site).href,
   mainEntityOfPage: { '@type': 'WebPage', '@id': new URL(path, site).href },
   author: AUTHOR,
-  publisher: AUTHOR,
+  publisher: PUBLISHER,
 };
 ---
 <BaseLayout title={`${data.title} | KnowPsyche`} description={data.description} path={path} ogImage={ogImage} crumbs={[{ name: 'Learn', href: '/learn/' }, { name: data.title }]}>
@@ -84,7 +85,7 @@ const articleLd = {
       <p class="mt-[22px] mb-0 max-w-[620px] text-[21px] leading-[1.55] text-ink-soft">{data.deck ?? data.description}</p>
       <div class="mt-[26px] flex flex-wrap items-center gap-3 text-[14.5px] text-ink-soft">
         <span aria-hidden="true" class="inline-flex size-10 items-center justify-center rounded-full bg-lilac font-bold text-ink">{AUTHOR.name[0]}</span>
-        <span><b class="text-ink">{AUTHOR.name}</b> · Updated <time datetime={iso(data.dateModified)}>{formatDate(data.dateModified)}</time> · {minutes}</span>
+        <span>By <a href="/about/" class="font-semibold text-ink">{AUTHOR.name}</a> · Updated <time datetime={iso(data.dateModified)}>{formatDate(data.dateModified)}</time> · {minutes}</span>
       </div>
     </div>
     {/* Ink panel as designed for the dark test card and the pillar; the other glyphs are drawn for their
@@ -118,6 +119,7 @@ const articleLd = {
     )}
 
     <article class="min-w-0 max-w-[700px] flex-[999_1_560px]">
+      <ResearchDiagram page={article.id} />
       <div class="prose" data-article-body>
         {chunks.map((c, i) => (
           <>

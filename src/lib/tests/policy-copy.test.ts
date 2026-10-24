@@ -85,7 +85,7 @@ describe('home FAQ says there are no ads yet', () => {
   });
 });
 
-describe('dates are not in the future at launch', () => {
+describe('policy launch dates and article dates are honest', () => {
   it.each([
     ['src/pages/privacy/index.astro', 'Last updated 17 October 2026'],
     ['src/pages/terms/index.astro', 'Last updated 17 October 2026'],
@@ -94,10 +94,14 @@ describe('dates are not in the future at launch', () => {
 
   const dir = 'src/content/learn';
   const files = readdirSync(join(root, dir)).filter((f) => f.endsWith('.md'));
-  it.each(files)('%s has no date after 2026-10-17', (f) => {
+  it.each(files)('%s has no date after today', (f) => {
     const dates = [...read(`${dir}/${f}`).matchAll(/^date(?:Published|Modified): (\S+)$/gm)].map((m) => m[1]);
     expect(dates).toHaveLength(2);
-    for (const d of dates) expect(d <= '2026-10-17').toBe(true);
+    const today = new Date().toISOString().slice(0, 10);
+    for (const d of dates) {
+      expect(Number.isNaN(Date.parse(d))).toBe(false);
+      expect(d <= today).toBe(true);
+    }
   });
 });
 

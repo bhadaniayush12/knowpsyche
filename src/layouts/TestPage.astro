@@ -11,6 +11,7 @@
  * The Start button has `data-test-start`; the page script decides what it does.
  */
 import BaseLayout from './BaseLayout.astro';
+import ResearchDiagram from '../components/ResearchDiagram.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Faq from '../components/result/Faq.astro';
 import Sources from '../components/result/Sources.astro';
@@ -113,6 +114,7 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
     <AdSlot class="my-10" />
 
     <div class="mt-14 flex max-w-[760px] flex-col gap-12">
+      <ResearchDiagram page={testId} />
       <WhatsHappening happening={happening} />
       <Faq faqs={faqs} />
       <div class="flex flex-col gap-6">
