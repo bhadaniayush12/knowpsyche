@@ -11,7 +11,7 @@ export const page = {
     'A free, private emotional intelligence test. 28 quick statements on how you notice, manage and read feelings. About 5 minutes, nothing sent.',
   h1: 'How do you handle feelings?',
   intro:
-    "Emotional intelligence is how well you notice feelings, yours and other people's, and what you do with them. Rate 28 statements about how you usually act. There are no right answers, only honest ones. Your result shows four areas, so you can see where you're already strong and what's worth practising.",
+    "Emotional intelligence is how well you notice feelings, yours and other people's, and what you do with them. Rate 28 statements about how you usually act. There are no right answers, only honest ones. Your result summarizes your ratings in four areas. These areas differ from the cited ability model, and the questionnaire has not been validated as an ability measure.",
   crumb: 'Emotional intelligence',
   // Drafted (eyebrow, and metaLine in the same format as the other tests).
   eyebrow: 'Test / 07 · Emotions · 5 min',
@@ -34,15 +34,15 @@ export const areas: Area[] = [
     id: 'knowing',
     name: 'Knowing your feelings',
     high: 'You usually know what you feel and why. That makes it easier to choose how to respond instead of just reacting.',
-    lower: "Feelings sometimes show up before you can name them. That's common, and it gets easier.",
-    tip: 'Once a day, stop and name your feeling in one specific word ("restless", "proud", "left out"). Naming a feeling is one of the simplest ways to get some distance from it.',
+    lower: "Your answers suggest that naming feelings is an area to reflect on.",
+    tip: 'Once a day, stop and name your feeling in one specific word ("restless", "proud", "left out"). This is an optional reflection prompt, not a benefit demonstrated by the cited papers.',
   },
   {
     id: 'managing',
     name: 'Managing your feelings',
     high: "Strong feelings don't easily push you around. You can pause, reset and keep going.",
-    lower: "Big feelings can take the wheel for a while. That's human, and it's a skill you can build.",
-    tip: 'When you feel the surge, take three slow breaths before you reply. Even a short pause gives you more choice about what you say next.',
+    lower: "Your ratings suggest reflecting on how you respond to strong feelings.",
+    tip: 'When you feel the surge, take three slow breaths before you reply. This is an optional suggestion, not a proven intervention for this questionnaire.',
   },
   {
     id: 'reading',
@@ -115,7 +115,7 @@ export interface EqBand {
 
 /** Bands (our guide, not a norm): Under 50 Growing, 50–70 Solid, 70–85 Strong, 85+ Very strong. Each starts at its lower number. */
 export const bands: EqBand[] = [
-  { min: 0, badge: 'Growing', text: 'This area is still developing. Totally normal; it improves with practice.' },
+  { min: 0, badge: 'Growing', text: 'Your ratings were lower in this area. This label is a reflection prompt, not a measured ability or prediction of improvement.' },
   { min: 50, badge: 'Solid', text: 'You handle this well most of the time.' },
   { min: 70, badge: 'Strong', text: 'A clear strength for you.' },
   { min: 85, badge: 'Very strong', text: 'Something people probably rely on you for.' },
@@ -124,7 +124,7 @@ export const bands: EqBand[] = [
 export const result = {
   sameAnswerNote: 'You gave every statement the same answer. Your result may be less useful. Want to try again?',
   closing:
-    "Emotional intelligence isn't fixed. Everyone's result moves as they practise. Come back in a few months and see what's changed.",
+    "These scores summarize your answers today. The cited sources do not establish that practice changes this questionnaire score or that a score change measures an ability change.",
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: the last test links to /tests/ (the doc suggests the Enneagram, which would loop).
   nextLine: "That's all seven. See the full list and pick one to try again.",
@@ -192,15 +192,15 @@ export const faqs: Faq[] = [
   },
   {
     q: 'Is EQ more important than IQ?',
-    a: 'They measure different things. IQ tests are about reasoning and problem-solving; emotional intelligence is about feelings and relationships. Both matter, in different situations. Claims that EQ "matters twice as much" as IQ aren\'t well supported by research.',
+    a: 'This questionnaire does not compare EQ with IQ or establish how either predicts success. The cited models do not validate that use of our score.',
   },
   {
     q: 'Can you improve your emotional intelligence?',
-    a: 'Yes. These are skills, not fixed traits. Practising things like naming feelings, pausing before reacting and asking people how they feel can help over time.',
+    a: 'You could explore the optional reflection prompts. The cited sources do not establish that they improve scores on this questionnaire.',
   },
   {
     q: 'How accurate is this test?',
-    a: "It's a self-report test, so it shows how you see yourself. That's useful, but people don't always see themselves clearly. For a fuller picture, ask someone who knows you well how they'd answer a few of the statements about you.",
+    a: "It summarizes your self-ratings. We have not validated it against observed behaviour or ratings by other people. You may discuss the prompts with someone you trust as an optional reflection exercise.",
   },
   {
     q: 'Is this a clinical or professional assessment?',
@@ -234,7 +234,7 @@ export const sources: Source[] = [
 ];
 
 export const sourcesNote =
-  'The four areas follow the common self-awareness / self-management / social awareness / relationship skills grouping. All 28 statements are our own writing; we do not use any published, copyrighted EQ questionnaire.';
+  'Our four areas use self-awareness / self-management / social awareness / relationship skills. They are not the branches of the cited ability model, and the cited sources do not validate this questionnaire. All 28 statements are our own writing; we do not use any published, copyrighted EQ questionnaire.';
 
 // "What's happening in this test?" (D1). Every line Drafted, checked against src/lib/tests/emotional-intelligence.ts and the page script.
 export const happening: Happening = {
@@ -249,6 +249,6 @@ export const happening: Happening = {
     { title: 'Your scores.', text: 'Each area becomes a score from 0 to 100, and your overall score is the average of the four.' },
   ],
   // Drafted.
-  change: 'your mood, recent events, and how honestly you answer. It shows how you see yourself, not how others see you.',
+  change: 'the ratings you enter. We have not established how mood or recent events affect these scores, or how they compare with ratings by others.',
   article: 'what-is-emotional-intelligence',
 };

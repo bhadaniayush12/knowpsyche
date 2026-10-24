@@ -13,9 +13,9 @@ export interface AttentionBand {
 /** Bands: Under 70 (Drifting), 70–84 (Steady), 85–94 (Focused), 95+ (Laser). */
 export const attentionBands: AttentionBand[] = [
   // textTouch drafted: the doc line with "tapped".
-  { min: 0, badge: 'Drifting', text: 'Your focus wandered or you clicked on reds. Very common when tired or distracted.', textTouch: 'Your focus wandered or you tapped on reds. Very common when tired or distracted.' },
+  { min: 0, badge: 'Drifting', text: 'This run included missed greens or presses on red circles.', textTouch: 'This run included missed greens or taps on red circles.' },
   { min: 70, badge: 'Steady', text: 'You stayed with the task most of the time.' },
-  { min: 85, badge: 'Focused', text: 'Strong focus and good self-control.' },
+  { min: 85, badge: 'Focused', text: 'You caught most greens and held back on most reds in this run.' },
   { min: 95, badge: 'Laser', text: 'You barely missed a thing.' },
 ];
 
@@ -23,7 +23,7 @@ export const page = {
   // Drafted: em dash removed.
   title: 'Attention Span Test: How Well Do You Stay Focused?',
   description:
-    'Click for green, hold back for a red X. A 2–3 minute focus test based on a classic psychology task. Free, instant results for focus and self-control.',
+    'Click for green, hold back for a red X. A 2–3 minute focus test based on a classic psychology task. Free, instant results for this task.',
   h1: 'Attention span test',
   // Drafted: em dash removed.
   // Q2-05: "a red circle with an X" (Dev's wording), so the shape cue is in the instructions too.
@@ -87,11 +87,11 @@ export const resultUi = {
 };
 
 export const result = {
-  change: 'Sleep, phone notifications, noise and how interested you are in the task.',
+  change: 'The score summarizes responses in this run; the cited sources do not identify why you missed or pressed on a signal.',
   // Drafted: "Try this" reuses FAQ 4's answer word for word (the doc gives no tip).
-  tip: "Remove notifications, work in focused blocks (for example 25 minutes), sleep well, and take short breaks before you're exhausted.",
+  tip: "Optional suggestion: choose a manageable task and reduce interruptions. The cited sources do not establish an improvement routine for this game.",
   // Drafted: em dash removed. Q2-23: second sentence is Dev's wording.
-  dippedNote: 'Your focus dipped in the second half. Attention tires with time, so a dip late in the run is expected.',
+  dippedNote: 'Your score was lower in the second half. This comparison does not establish why it changed or whether a dip is expected.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: em dash removed.
   nextLine: 'Try the Stroop test. It puts your focus up against your reading habit.',
@@ -102,7 +102,7 @@ export const faqs: Faq[] = [
   {
     q: 'What is attention span?',
     // Drafted: em dash removed.
-    a: "How long you can keep your focus on one task. It isn't one fixed number: it changes with the task, your mood and how tired you are.",
+    a: "Here, the phrase refers to staying with a task. This game does not estimate one general attention-span duration.",
   },
   {
     q: 'Is the average attention span really 8 seconds, shorter than a goldfish?',
@@ -110,11 +110,11 @@ export const faqs: Faq[] = [
   },
   {
     q: 'What is a Go/No-Go task?',
-    a: 'A classic psychology task: respond to one kind of signal and hold back on another. It measures focus and self-control together.',
+    a: 'A classic psychology task: respond to one kind of signal and hold back on another. Here, it records responses and withheld responses; the cited model does not validate a general focus or self-control score for this game.',
   },
   {
     q: 'How can I improve my attention span?',
-    a: "Remove notifications, work in focused blocks (for example 25 minutes), sleep well, and take short breaks before you're exhausted.",
+    a: "Optional suggestion: choose a manageable task and reduce interruptions. The cited sources do not establish an improvement routine for this game.",
   },
   {
     q: 'Can this test tell if I have ADHD?',
@@ -150,6 +150,6 @@ export const happening: Happening = {
     { title: 'Your score.', text: "Your score out of 100 is the average of two numbers: the share of greens you caught and the share of reds you held back on. Your speed is shown but doesn't change the score." },
   ],
   // Drafted.
-  change: 'sleep, phone notifications, noise and how interested you are in the task.',
+  change: 'the responses entered in this session. These sources do not establish which conditions explain a score change.',
   article: 'attention-span-myths-and-what-helps',
 };

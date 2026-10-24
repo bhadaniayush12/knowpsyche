@@ -12,7 +12,7 @@ export interface MemoryBand {
 /** Levels 1–4, 5–8, 9–12, 13+. A score of 0 reads as the first band. */
 export const photoBands: MemoryBand[] = [
   // Drafted: removed comparison wording.
-  { min: 0, badge: 'Warming up', text: 'Short-term visual memory fills up fast. Try again; it often improves on the second go.' },
+  { min: 0, badge: 'Warming up', text: 'This run ended in the early levels. You can try again if you like.' },
   { min: 5, badge: 'Solid', text: 'You hold a fair amount of detail from a quick look.' },
   { min: 9, badge: 'Sharp', text: 'You keep a lot of visual detail in mind at once.' },
   { min: 13, badge: 'Exceptional', text: 'Very few patterns get past you.' },
@@ -23,7 +23,7 @@ export const page = {
   title: 'Photographic Memory Test: How Much Can You Remember?',
   description:
     // Drafted: em dash removed.
-    'Study a grid for a second, then rebuild it. Each level adds a tile. Free, instant, no sign-up. See how sharp your visual memory really is.',
+    'Study a grid for a second, then rebuild it. Each level adds a tile. Free, instant, no sign-up. See which tile patterns you recall on this run.',
   h1: 'Photographic memory test',
   intro: 'Some tiles will light up for a moment. Click the same tiles once they disappear. Each level adds one more.',
   // Touch screens: same line with "tap" (shared rule).
@@ -55,9 +55,9 @@ export const ui = {
 export const result = {
   // Drafted: removed comparison wording.
   change:
-    'Focus, tiredness and strategy. Grouping tiles into shapes or patterns makes them easier to hold than single squares.',
+    'The score records completed levels; it does not explain why a pattern was recalled or missed.',
   // Try this = FAQ 4's answer (approved in the build plan).
-  tip: 'Practice helps, and so does grouping tiles into shapes or patterns.',
+  tip: 'Optional suggestion: try describing the tiles as a shape or pattern. The cited study did not test this strategy in our game.',
   // Drafted (Q2-12, Dev's wording): "What does it mean?" for level 0 with no tile found at all.
   zeroLine: 'No tiles landed this time. Try again; the first level starts small.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
@@ -66,11 +66,11 @@ export const result = {
 };
 
 export const faqs: Faq[] = [
-  { q: 'Is photographic memory real?', a: 'A perfect, camera-like memory in adults has little solid evidence. Some children show vivid "eidetic" images, but this is rare and fades with age.' },
+  { q: 'Is photographic memory real?', a: 'Haber describes rare childhood eidetic imagery and its virtual absence in adults. This age-group difference does not establish that each child loses it with age or demonstrate perfect recall.' },
   // Drafted: em dash removed.
   { q: 'What does this test actually measure?', a: 'Visual short-term memory: how many locations you can hold in mind for a few seconds.' },
-  { q: 'How many things can we remember at once?', a: 'Classic research suggests visual short-term memory holds only a handful of items at a time, often around four.' },
-  { q: 'Can I improve my visual memory?', a: 'Practice helps, and so does grouping tiles into shapes or patterns.' },
+  { q: 'How many things can we remember at once?', a: 'Luck and Vogel found capacity for roughly four integrated objects in their visual-memory task. That is not a validated tile-location limit for this game.' },
+  { q: 'Can I improve my visual memory?', a: 'Optional suggestion: try describing the tiles as a shape or pattern. The cited study did not test this strategy in our game.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection." },
 ];
 
@@ -94,6 +94,6 @@ export const happening: Happening = {
     { title: 'Your score.', text: 'Your score is the highest level you fully completed.' },
   ],
   // Drafted.
-  change: 'tiredness, distractions, and whether you group tiles into shapes. A second go often comes out differently.',
+  change: 'the tile selections entered in this session. A score difference alone does not identify its cause.',
   article: 'is-photographic-memory-real',
 };

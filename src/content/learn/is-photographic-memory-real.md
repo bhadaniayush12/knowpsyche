@@ -18,11 +18,11 @@ sources:
   - "Wells, G. L., & Olson, E. A. (2003). Eyewitness testimony. *Annual Review of Psychology*."
 faq:
   - question: "Is photographic memory real?"
-    answer: "Visual memory is real, and some people are very good at it. But perfect, camera-like recall in adults has not been reliably shown. People with astonishing memories usually use a method and a lot of practice."
+    answer: "Haber's review describes rare childhood eidetic imagery and its virtual absence in adults. This does not establish perfect, camera-like recall."
   - question: "Can you train your visual memory?"
-    answer: "Strategies help. Grouping things into patterns, linking them to pictures you already know and slowing down all make visual material easier to hold. Practice with a method helps more than practice alone."
+    answer: "You could try grouping tiles or naming a pattern as an optional strategy. The cited visual-memory study did not test whether those suggestions improve scores in our game."
   - question: "Do some people picture things more vividly than others?"
-    answer: "Yes. People differ a lot in how vividly they can picture things in their mind, from very rich images to almost none. It doesn't tell you how good someone's memory is."
+    answer: "The cited studies do not establish how vividness relates to performance on this grid task. Our score records tile locations recalled, rather than image vividness."
 draft: false
 ---
 
@@ -32,48 +32,42 @@ Someone aces an exam and says, "I just remember what the page looked like." It s
 
 The idea is simple: you glance at a page, a street or a list of numbers, and the picture stays in your mind in perfect detail, so you can read it back like a photo.
 
-Psychologists call something close to this *eidetic imagery*. It means very vivid mental pictures that linger for a while after you look away. It has mostly been reported in some young children, and in them it fades with age. A major review of the research, published in 1979, found it rare and hard to pin down in adults, and the claims of perfect recall that went with it were never reliably shown.
+*Eidetic imagery* refers to a lingering visual image after looking away. Haber's 1979 review describes it as rare in children and virtually absent in adults. That age-group difference does not show that individual children necessarily lose it as they grow, or establish perfect recall.
 
-> **Key idea** What looks like a snapshot is usually a strategy plus practice.
+> **Key idea** In the group studied by Maguire and colleagues, superior memorizers used spatial strategies.
 
-## Memory rebuilds, it doesn't replay
+## Eyewitness memory has limits
 
-Even a very good visual memory isn't a recording. When you remember something, your mind puts it back together from pieces. Details can shift, and some can be filled in without you noticing.
+Wells and Olson review eyewitness identification errors and factors affecting identification accuracy. Their abstract does not establish that repeating a memory or hearing agreement raises confidence. A score on our grid task cannot settle the accuracy of an eyewitness account.
 
-That is why feeling sure about a memory isn't the same as being right. Research on eyewitnesses has shown people who are very confident and still wrong, and confidence can rise just from being asked again or hearing others agree.
+## What the studied superior memorizers did
 
-## What memory champions actually do
+Maguire and colleagues studied superior memorizers in 2003. Participants used spatial strategies without exceptional general intelligence or structural brain differences. The abstract does not specify a familiar-house route.
 
-People who win memory competitions can hold long lists of cards or digits. They seem to have something special. When researchers tested a group of them in 2003, the champions didn't stand out on general thinking tests. What set them apart was a method. They pictured a familiar route, like the walk through their house, and placed each item they needed to remember at a spot along the way.
+Ericsson and Chase's 1982 paper is listed for background, but its PubMed record has no abstract. We do not use that record to establish a volunteer's training history or transfer to letters.
 
-An earlier study followed a volunteer who learned to remember very long strings of digits. He did it by linking numbers to meaningful patterns, after a great deal of training. His ordinary memory for other material didn't grow with it. It was a skill, not a bigger store.
+## What a visual memory task can show
 
-## What a visual memory test really measures
+Luck and Vogel found capacity for roughly four integrated objects in their visual working-memory task. This finding concerns that task, rather than a universal limit for locations, everyday memory or this site's grid.
 
-The picture-in-your-head ability that matters for everyday life is closer to *visual working memory*: how many positions or objects you can keep in mind for a few seconds. Experiments suggest most people can hold about four items at once, and that it varies from person to person and from day to day.
+Our [photographic memory test](/photographic-memory-test/) records how many tile locations you recalled on its rounds. The cited studies do not validate it as a measure of a special gift or of memory in general.
 
-That is what our [photographic memory test](/photographic-memory-test/) looks at. It isn't a test of a special gift. It shows how many positions you could hold in mind right now, on this try.
+## An optional imagery exercise
 
-> **Side note** Your result will probably wobble. A tired afternoon, a noisy room or a rushed first try can all move it. Run it a few times before you read anything into one number.
-
-## Why your mind's pictures feel more complete than they are
-
-Try this. Picture the front door of your home. It feels clear. Now ask yourself which side the handle is on, or whether the door has a window. Many people find the picture goes fuzzy, or that they answer by guessing. The vivid feeling comes from your mind supplying a believable scene, not from reading a stored photograph.
-
-It's the same reason a memory can feel certain and still be wrong in the small details. It also explains why repeating a memory test can feel as though you are improving when you are mostly learning the task. A grid you've seen five times looks familiar, even if you couldn't draw it from scratch.
+If you like, picture your front door and then check a few details against the door itself. This is a self-reflection suggestion, rather than an experiment validated by the cited sources.
 
 ## How to read your result
 
-Your level and the number of tiles you held tell you how much you could keep in mind on those tries. If it is lower than you hoped, look at the conditions first. Were you rushing, or distracted? Did you try to hold each tile on its own? If it is higher than you expected, you may have found a grouping that worked, and that is a skill you can use again. Either way, run it a few times on different days and look at the spread instead of a single number.
+Your level records the rounds you completed here. It does not identify why you recalled or missed particular tiles. If you repeat the game, compare the records without treating a difference as proof of a general memory change.
 
-## Ways to hold more
+## Optional strategies to try
 
-You can't change the size of the workspace, but you can change what you put in it.
+These are suggestions for exploring the game, not benefits established for it by the cited abstracts.
 
-- **Group things.** Three tiles that form a line are one item for your mind, not three.
-- **Find a pattern.** A shape, a letter or a path through the grid is easier to hold than scattered dots.
-- **Tell yourself a quick story.** A silly picture tends to stick where a plain list slips away.
-- **Use a route.** Place what you need to remember along a path you know well, as the champions do.
+- **Group things.** Try describing a line of tiles as one pattern.
+- **Find a pattern.** Try naming a shape, a letter or a path through the grid.
+- **Tell yourself a quick story.** If you like, invent a picture to describe the pattern.
+- **Use a route.** You could explore a spatial strategy; the cited study does not test its benefit in this game.
 - **Settle in first.** Start each level ready, so the short look gets your full attention.
 
 If you'd like to see how this plays out with numbers instead of pictures, read [how much your short-term memory can hold](/learn/short-term-memory-capacity/), or look at [what psychology tests can and can't tell you](/learn/what-psychology-tests-can-and-cant-tell-you/) before you take any result to heart.

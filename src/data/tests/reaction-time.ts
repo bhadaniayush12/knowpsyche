@@ -11,13 +11,13 @@ export interface ReactionBand {
 
 export const reactionBands: ReactionBand[] = [
   // Drafted: removed comparison wording.
-  { max: 199, badge: 'Lightning', text: 'Crisp and very fast. Great focus, or a very responsive screen.' },
+  { max: 199, badge: 'Lightning', text: 'A short average response time on this run.' },
   // Drafted: removed comparison wording.
-  { max: 250, badge: 'Quick', text: 'Quick and alert on the trigger.' },
+  { max: 250, badge: 'Quick', text: 'A quick average response on this run.' },
   // Drafted: describes the average without comparing to others.
   { max: 300, badge: 'Steady', text: 'A steady pace. Your screen and device add a little to this.' },
-  { max: 400, badge: 'Needs a coffee', text: 'Tiredness, distractions or a laggy device often explain this.' },
-  { max: Infinity, badge: 'Running on empty', text: 'Try again on a computer with a mouse, after a short break.' },
+  { max: 400, badge: 'Needs a coffee', text: 'A longer average response time on this run. The score alone does not explain why.' },
+  { max: Infinity, badge: 'Running on empty', text: 'You can repeat the task if you want to compare runs.' },
 ];
 
 export const page = {
@@ -45,14 +45,14 @@ export const modes: { key: ReactionMode; label: string; note?: string; resultNot
     label: 'Sound',
     note: 'Your speakers can add a small delay.',
     // Drafted, from "Sound mode usually comes out a little faster than visual".
-    resultNote: 'Sound mode usually comes out a little faster than visual.',
+    resultNote: 'This result records the sound mode; it is not a prediction about which mode will be faster.',
   },
   {
     key: 'f1',
     label: 'F1 lights',
     note: 'Can you match a race start?',
     // Drafted, from "F1 mode a little slower".
-    resultNote: 'F1 mode usually comes out a little slower than visual.',
+    resultNote: 'This result records the F1 lights mode; compare it as a separate task.',
   },
   // Drafted note.
   { key: 'space', label: 'Spacebar', note: 'Press the spacebar instead of clicking.' },
@@ -87,34 +87,34 @@ export const arena = {
 
 export const result = {
   change:
-    'Sleep, alertness, practice and age all play a part. So does your device: screens and mice can add tens of milliseconds before your brain is even involved.',
+    'Woods and colleagues examined age and hardware/software timing. Display delay precedes perception; input delay can follow a response. Their findings do not set a browser norm for this game.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: the doc's line points to Attention span; the chain now follows the doc order 1–7.
   nextLine: 'Speed is one side of you. See what drives your choices in the Enneagram test.',
   learn: { href: '/method/', label: 'How we build our tests →' },
   spreadChallenge: 'Fast, but a bit inconsistent. Can you get all five within 50 ms?',
   // Drafted: em dash removed.
-  morningNight: 'Tiredness slows reactions. Test yourself in the morning and again late at night, and see the difference.',
+  morningNight: 'Optional suggestion: compare sessions and note their context, without assuming what caused a difference.',
 };
 
 export const faqs: Faq[] = [
   // Drafted: em dash removed.
   { q: 'What is reaction time?', a: 'The time between noticing a signal and responding to it: here, between the box changing and your click.' },
   // Drafted: general browser fact without comparison to what most people do.
-  { q: 'What is the average reaction time?', a: 'Browser tests often measure between 200 and 300 ms, but times vary with your screen, mouse or phone, and how alert you feel.' },
-  { q: 'What is a good reaction time?', a: 'Under 250 ms is quick; under 200 ms is very fast.' },
-  { q: 'Why is my reaction time so slow?', a: 'The usual reasons are tiredness, distraction, a phone touchscreen, or a slow monitor or mouse.' },
-  { q: 'How can I improve my reaction time?', a: 'Sleep well, warm up with a few tries, stay focused, and practise. For gaming, a fast mouse and a high-refresh monitor help most.' },
+  { q: 'What is the average reaction time?', a: 'The cited studies do not establish a general browser average. This version records a response together with device timing.' },
+  { q: 'What is a good reaction time?', a: 'Our bands are an editorial guide for this game, not validated population norms.' },
+  { q: 'Why is my reaction time so slow?', a: 'The recorded time alone cannot identify a cause. Hardware and software delays can contribute, as Woods and colleagues discuss.' },
+  { q: 'How can I improve my reaction time?', a: 'The cited abstracts do not establish a training routine or recommend gaming hardware. You can repeat the task to compare your own runs.' },
   // Drafted: em dash removed.
-  { q: 'Does being tired slow your reaction time?', a: 'Yes. Lack of sleep is one of the most reliable ways to slow down.' },
-  { q: 'Does caffeine help?', a: "Some studies find a small improvement in alertness and reaction time, especially when you're tired." },
+  { q: 'Does being tired slow your reaction time?', a: 'The cited abstracts do not establish sleep effects for this browser task. A single score cannot tell you whether tiredness caused it.' },
+  { q: 'Does caffeine help?', a: "The sources listed here do not establish a caffeine benefit for this task." },
   // Drafted: removed comparison wording.
-  { q: 'At what age is reaction time fastest?', a: 'Usually in the late teens and twenties. It slows gradually after that.' },
+  { q: 'At what age is reaction time fastest?', a: 'Woods and colleagues examined age-related latency differences; this game has no validated age-specific norms.' },
   { q: "What's the difference between a reaction and a reflex?", a: "A reflex (like the knee-jerk) happens automatically without a decision. A reaction needs your brain to notice and decide, so it's slower." },
   { q: "What's the difference between simple and choice reaction time?", a: 'Simple = one signal, one response (this test). Choice = several possible signals and responses, which takes longer.' },
   // Drafted: em dash removed.
   { q: "Why don't times under 100 ms count?", a: "Humans can't really react that fast to a signal, so it's a lucky guess. Sprint races use the same idea: a start under 0.1 seconds counts as a false start." },
-  { q: 'Why is sound faster than sight?', a: 'Many studies find people react slightly faster to sounds than to lights.' },
+  { q: 'Why is sound faster than sight?', a: 'Jain and colleagues found faster auditory than visual responses in their first-year medical-student sample. That does not predict every player or device.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection, not a diagnosis." },
 ];
 
@@ -133,9 +133,9 @@ export const happening: Happening = {
     // Drafted: Dev's base; the code also repeats presses under 100 ms.
     { title: 'Five tries.', text: "Each try is timed from the change to your press. If you press before the change, or less than 100 ms after it, that try doesn't count and you go again." },
     // Drafted: Dev's base.
-    { title: 'Your average.', text: 'The five times are averaged. First tries are often slower while you learn the task, so look at the pattern too.' },
+    { title: 'Your average.', text: 'The five times are averaged. You can also inspect the individual recorded times.' },
   ],
   // Drafted.
-  change: 'your screen and device, how rested you are, and whether you were ready. A different setup can give a different number.',
+  change: 'hardware/software timing as well as the response itself. A score alone does not identify which factor contributed.',
   article: 'what-a-reaction-time-test-measures',
 };

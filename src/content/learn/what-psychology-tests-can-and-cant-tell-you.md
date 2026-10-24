@@ -19,7 +19,7 @@ faq:
   - question: "Can an online test tell me if I have a mental health condition?"
     answer: "No. Our tests are not a diagnosis. If memory, attention, mood or sleep is getting in the way of daily life, a doctor or mental-health professional can look at it properly."
   - question: "Why do I get a different result when I retake a test?"
-    answer: "Mood, tiredness, practice and even the device you use all move a score. A small difference between two tries is normal."
+    answer: "Different answers or recorded responses can produce a different result. We have not established test-retest reliability or how much variation to expect for these tools."
 draft: false
 ---
 
@@ -31,17 +31,15 @@ That gap is worth understanding, because the same few ideas explain almost every
 
 A psychology test asks you to answer questions or do a small task under set conditions, then turns what you did into a number or a category. Two words come up whenever people judge how good a test is.
 
-*Reliability* means you get a similar result when you repeat it. *Validity* means it measures what it says it measures. A bathroom scale that always reads two kilos light is reliable, but it isn't accurate. Tests can fail the same way: steady results, wrong target.
+For this guide, *reliability* concerns consistency, including across repeated testing; *validity* concerns evidence for a proposed interpretation or use of a score. These are explanatory definitions, not findings from the replication study cited below. A bathroom scale that always reads two kilos light is reliable, but it isn't accurate. Tests can fail the same way: steady results, wrong target.
 
 > **Key idea** A result describes how you did on this test, on this day. It does not describe all of you.
 
 ## Why one result is a snapshot
 
-Sleep, noise, mood, the device in your hand and plain practice all move a score. Take a click test like our [reaction time test](/reaction-time-test/). Early tries are often slower because you are still working out the task, and times usually settle after that. A laggy screen adds delay that has nothing to do with you. Run it again after a good night's sleep and the number may shift.
+Our [reaction time test](/reaction-time-test/) records responses in one browser session. This article's replication citation does not establish sleep, device or warm-up effects for it.
 
-Neither number is the "real" you. Both are true records of different moments.
-
-Questionnaires work the same way. You answer after a stressful week differently from the way you answer after a calm one.
+A questionnaire score similarly summarizes the answers entered. We have not established how mood, practice or other conditions affect these questionnaires, or how much change between sessions is expected.
 
 ## Why we don't rank you
 
@@ -51,9 +49,9 @@ KnowPsyche doesn't collect your answers or your scores. They stay in your browse
 
 What we give you instead are bands: our own plain-language guide to reading a result. They are not compared with a population, and they are not a diagnosis. The [method page](/method/) explains how we build them.
 
-## Why descriptions can feel true for everyone
+## Why recognition is not validation
 
-In 1949 the psychologist Bertram Forer gave his students what he called a personal description, supposedly based on a test they had taken. The students rated it as a good fit for them. Every student had been given the same text, stitched together from broad statements that suit almost anyone. The effect is often called the Barnum effect.
+Forer's 1949 paper is a classic personal-validation demonstration. Its PubMed record has no abstract, so that record alone does not verify the student procedure, identical text or ratings. A feeling that a description fits is not a validation study of our questionnaires.
 
 It matters most for personality quizzes. When a type description feels spot on, ask a plain question: would most people say this about themselves? If the answer is yes, the feeling of accuracy proves very little. The [Enneagram](/learn/what-is-the-enneagram/) is a good place to practise this.
 
@@ -61,7 +59,7 @@ It matters most for personality quizzes. When a type description feels spot on, 
 
 Some tests ask how you see yourself. Others watch what you do. Each has blind spots.
 
-A self-description depends on how well you know yourself, on your mood, and, quietly, on wanting to come across well. A task like the [Stroop test](/stroop-test/) records behaviour directly, but only for one narrow skill. Neither kind can tell you how you behave at work or in a relationship.
+Our questionnaires summarize self-ratings. A task like the [Stroop test](/stroop-test/) records task responses. We have not validated either as a predictor of behaviour at work or in relationships.
 
 > **Side note** In 2015 a large team of researchers tried to repeat a hundred published psychology studies. Many of the results did not come out the same the second time. It is a fair reason to treat any single finding, and any single score, with some modesty.
 
