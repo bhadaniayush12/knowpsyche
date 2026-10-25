@@ -3,7 +3,7 @@ title: "The Stroop effect, explained"
 em: "Stroop"
 description: "Why is it hard to name the ink colour when the word spells a different colour? A plain explanation of the Stroop effect and what it does and doesn't show."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Focus"
 scene: the-stroop-effect-explained
 relatedTest: stroop-test
@@ -16,11 +16,11 @@ sources:
   - "Kane, M. J., & Engle, R. W. (2003). Working-memory capacity and the control of attention: The contributions of goal neglect, response competition, and task set to Stroop interference. *Journal of Experimental Psychology: General*."
 faq:
   - question: "Why is the Stroop test hard?"
-    answer: "Reading is so well practised that it happens automatically, even when you don't want it to. When the word spells a different colour from its ink, reading the word and naming the ink compete, and that competition slows you down."
-  - question: "Does everyone show the Stroop effect?"
-    answer: "Yes, nearly everyone who reads the language the words are written in. The slowdown on mismatched words is normal. It shows how strongly reading is wired in."
+    answer: "Word meaning can interfere with naming the ink colour. MacLeod's review describes several contributing processes; automatic reading alone is not a complete explanation."
+  - question: "How widespread is the Stroop effect?"
+    answer: "MacLeod's review found interference across many versions of the task. On a short run, look at both your response times and your accuracy; a small or absent gap is not a verdict on your reading or focus."
   - question: "Does a big Stroop effect mean poor focus?"
-    answer: "No. Tiredness, practice, the colours used and how carefully you were going all change the size of the effect. One short test can't say how well you focus in everyday life."
+    answer: "No. A larger gap means your correct answers took longer on clashing words than matching ones in this run. It cannot grade how well you focus in everyday life."
 draft: false
 ---
 
@@ -30,17 +30,17 @@ Most people feel a tiny snag before they get it out. Your mouth wants to say "bl
 
 ## What John Stroop found
 
-In 1935 the psychologist John Ridley Stroop published a set of experiments built on a simple idea. People were asked to name the ink colours of printed words. When the words spelled the same colour as the ink, people were quick. When the words spelled a different colour, they were clearly slower, and they made more slips.
+In 1935 John Ridley Stroop compared naming the ink colours of conflicting colour words with naming colours in patches or blocks. Participants took longer to name the ink colours of the conflicting words than to name the control colours. The control was colour patches, rather than matching colour words.
 
-Researchers had already noticed that people name colours more slowly than they read words. Stroop's setup made the clash easy to see, and it has been used ever since.
+Our matching-word and clashing-word comparison is a later task variation, rather than a reproduction of that original control.
 
-> **Key idea** The slowdown on mismatched words is normal. It shows how strongly reading is wired in.
+> **Key idea** Interference between word meaning and ink naming is a well-studied task effect. A single score does not reveal one underlying cause.
 
 ## Why does it happen?
 
-Reading is one of the most practised things you do. After years of it, it runs on its own. You can't look at a word in a language you know and choose not to read it.
+Word meaning can enter the picture while you are trying to name the ink colour. If the two point to different answers, resolving that conflict can take time.
 
-Naming an ink colour takes more deliberate effort. When both are triggered at once and they disagree, they compete, and your mind has to pick the right one and hold back the other. That extra effort is the time you lose.
+MacLeod's review describes several contributing processes, including processing the word and ink alongside each other. The explanation is broader than reading being automatic or faster than colour naming.
 
 A large review that gathered half a century of studies found the effect again and again, across many versions of the task.
 
@@ -48,37 +48,36 @@ A large review that gathered half a century of studies found the effect again an
 
 The Stroop effect is a neat window into how automatic habits and deliberate goals interact. But it's easy to read too much into one person's number.
 
-- **Nearly everyone shows it.** A slowdown isn't a flaw. It's what a reading mind does.
-- **Many things move it.** Practice, tiredness, how carefully you are going and which colours are used all change the size of the effect.
-- **Colour vision matters.** People with some colour-vision differences may find the task harder or easier for reasons that have nothing to do with attention.
+- **Task conditions matter.** MacLeod reviews interference across many versions of the task.
+- **Accuracy belongs beside speed.** Read the gap alongside how many answers you got right.
+- **The task uses colour.** You need to distinguish its ink colours to follow the instructions.
 
-> **Side note** Researchers have found that people sometimes slip on the rare hard trial when most trials are easy, because they stop actively keeping the goal in mind. The mistake is about holding a goal in mind, not about being unable to do the task.
+> **Side note** In Kane and Engle's study, when most words matched their ink, participants made more errors on the conflicting ones, particularly those with lower working-memory capacity. The researchers linked this pattern to losing track of the goal: name the ink colour.
 
 ## Where you feel it in daily life
 
-Any time a well-practised habit clashes with what you want to do right now, you get a small version of the Stroop snag. You reach for the old route home when you're heading somewhere new. You type last year's date. You read a billboard when you're trying to listen to a friend.
+As an analogy, think of a familiar habit clashing with a current goal. You reach for the old route home when you're heading somewhere new. You type last year's date. You read a billboard when you're trying to listen to a friend.
 
-The lab task is just a tidy, measurable version of something minds do all day: run on habit, then step in with a deliberate goal when the habit is wrong.
+These examples illustrate a possible conflict between habits and goals; they are not measurements of the Stroop effect.
 
 ## What practice does
 
-With a few runs people usually get faster and the gap shrinks a little, but it rarely disappears. Reading stays automatic. So your second go will probably look a bit different from your first, partly because you've learned the task.
+If you try again, compare both your times and your accuracy. The gap may look different on another run; there is no particular gap you need to reach.
 
 ## How our version works
 
-Our [Stroop test](/stroop-test/) asks you to pick the ink colour and ignore the word. Your score is how much the clashing words slowed you down compared with matching ones. A small slowdown and a large one are both ordinary. If there's no slowdown at all, it usually means you went carefully on every word, not that the effect is missing in you.
+Our [Stroop test](/stroop-test/) asks you to pick the ink colour and ignore the word. Your score is how much the clashing words slowed you down compared with matching ones. The result describes this run. A zero or negative gap does not tell us why the two trial types came out that way.
 
 ## Reading your result
 
 Look at two things together: how fast you were and how many you got right. Someone who is quick and accurate on matching words but slower on clashing ones is showing the effect in its usual form. Someone who rushes and slips is trading accuracy for speed, which is also ordinary.
 
-Because the slowdown is the difference between two kinds of trial, it is steadier than a single raw time. It still moves from day to day, so treat it as a snapshot.
+The slowdown is the difference between two average times. Read it alongside those times and your accuracy, as a record of this run.
 
 ## If you want to try it again
 
-The effect is steady, so you won't make it vanish, but a few things shape your result:
+You could try the following on another run:
 
-- Do it when you're rested. Tired minds slip more.
 - Look at the ink, not the word.
 - Go at a pace you can keep up. Speed and accuracy trade off.
 - Treat each run as a fresh snapshot, and look at the pattern across a few.

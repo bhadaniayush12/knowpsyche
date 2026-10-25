@@ -155,7 +155,7 @@ describe('Attention span: steadiness comparison', () => {
     expect(scores.steadiness.dipped).toBe(true);
 
     const line = meaningLine(scores);
-    expect(line).toContain('Your focus dipped in the second half. Attention tires with time, so a dip late in the run is expected.');
+    expect(line).toContain('Your score was lower in the second half. You can compare the two halves, but this run alone cannot tell you why they differed.');
   });
 
   it('does not flag dip when second half is worse by only 4 points', () => {
@@ -226,8 +226,8 @@ describe('Attention span: band edges', () => {
       ...Array.from({ length: 10 }, () => ({ color: 'red' as const, clicked: true, reactionTimeMs: 300 })),
     ];
     const scores = calculateAttentionScores(trials);
-    expect(meaningLine(scores)).toContain('you clicked on reds');
-    expect(meaningLine(scores, true)).toContain('you tapped on reds');
+    expect(meaningLine(scores)).toContain('presses on red circles');
+    expect(meaningLine(scores, true)).toContain('taps on red circles');
     expect(meaningLine(scores, true)).not.toContain('click');
   });
 });

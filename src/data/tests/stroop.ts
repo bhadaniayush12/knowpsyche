@@ -13,10 +13,10 @@ export interface StroopBand {
 export const stroopBands: StroopBand[] = [
   { min: -Infinity, badge: 'Unshakeable', text: 'The clashing words barely slowed you down.' },
   // Drafted: neutral badge name and task-framed band text.
-  { min: 80, badge: 'Mild pull', text: 'Your brain read the word first, adding a brief delay before you named the ink.' },
+  { min: 80, badge: 'Mild pull', text: 'Your correct clashing-word responses took a little longer on this run.' },
   { min: 161, badge: 'Word-pulled', text: 'The words pulled hard on your attention.' },
   // Drafted: em dash removed.
-  { min: 251, badge: 'Strongly pulled', text: 'Reading is very automatic for you: the words won the tug-of-war.' },
+  { min: 251, badge: 'Strongly pulled', text: 'Your correct clashing-word responses took longer on this run.' },
 ];
 
 export const page = {
@@ -24,7 +24,7 @@ export const page = {
   title: 'Stroop Test: Can Your Brain Ignore the Word?',
   description:
     // Drafted: em dash removed.
-    'Name the ink colour, not the word. A 1-minute version of a famous 1935 experiment. See how much clashing words slow you down. Free, instant.',
+    'Name the ink colour, not the word. A 1-minute variation on the Stroop task. See how much clashing words slow you down. Free, instant.',
   h1: 'Stroop test',
   // Drafted: em dash removed.
   intro: 'A colour word will appear in coloured ink. Click the button for the INK colour and ignore what the word says. Be fast, but accurate.',
@@ -80,9 +80,9 @@ export const resultUi = {
 };
 
 export const result = {
-  change: 'Reading speed, practice, tiredness and how fast you try to go.',
+  change: 'Your response times and which words you answer correctly determine the gap. Compare both speed and accuracy across runs.',
   // Drafted: the doc gives no "Try this" tip.
-  tip: 'Try again a little slower and see if the gap shrinks.',
+  tip: 'You could try another run and compare both time and accuracy.',
   // Drafted: the doc's "What does it mean?" line only covers a positive slow-down. Q2-11: Dev's wording, shown on its own.
   noSlowdown: 'The clashing words did not slow you down.',
   // Drafted (Q2-11, Dev's wording): shown instead of the number when the effect is 0 ms or less.
@@ -102,20 +102,20 @@ export const result = {
 export const faqs: Faq[] = [
   {
     q: 'What is the Stroop effect?',
-    a: 'Naming the ink colour takes longer when the word names a different colour. Reading is so automatic that it gets in the way.',
+    a: 'Stroop tasks commonly find slower ink naming with conflicting colour words. MacLeod reviews several contributing processes.',
   },
   {
     q: 'Who discovered it?',
-    a: 'J. Ridley Stroop, in experiments published in 1935.',
+    a: 'J. Ridley Stroop published the classic experiments in 1935. His colour-naming control used colour patches or blocks, rather than matching words as this version does.',
   },
   {
     q: 'What does the Stroop test measure?',
-    a: 'How well you can focus on one thing (the ink) while ignoring a strong habit (reading the word).',
+    a: 'It compares your average time for correct answers on clashing words with matching words. Read that gap alongside your accuracy; it is a result for this task, rather than a grade for everyday focus.',
   },
   {
     q: 'Is a bigger Stroop effect bad?',
     // Drafted: em dash removed.
-    a: "Not really. It mostly shows how automatic your reading is. It's a fun look at how your attention works, not a grade.",
+    a: "A bigger gap means clashing words took longer than matching words on this run. Look at accuracy too, without treating the gap as a judgment about your focus.",
   },
   {
     q: 'Is this a medical test?',
@@ -149,6 +149,6 @@ export const happening: Happening = {
     { title: 'The gap.', text: 'Your Stroop effect is your average time on clashing words minus your average time on matching words, using correct answers only.' },
   ],
   // Drafted.
-  change: 'reading speed, practice, tiredness and how fast you try to go. Colour-vision differences can affect it too.',
+  change: 'how quickly and accurately you answer each kind of word. Compare both when looking at another run.',
   article: 'the-stroop-effect-explained',
 };

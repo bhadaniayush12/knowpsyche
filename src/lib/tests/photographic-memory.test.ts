@@ -157,7 +157,7 @@ describe('full runs', () => {
 
   it('level 0 with some tiles found keeps the band line and the tile count (Q2-12)', () => {
     expect(meaningLine(0, 2)).toBe(
-      'Short-term visual memory fills up fast. Try again; it often improves on the second go. You remembered 2 tiles in total.',
+      'This run ended in the early levels. You can try again if you like. You remembered 2 tiles in total.',
     );
   });
 });

@@ -1,9 +1,9 @@
 ---
 title: "What is emotional intelligence?"
 em: "emotional intelligence"
-description: "Emotional intelligence is about noticing, understanding and handling feelings. Where the idea came from, what scientists debate, and how to build it."
+description: "Emotional intelligence: emotion-related abilities, the models scientists discuss, and optional prompts for reflection."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Emotions"
 scene: what-is-emotional-intelligence
 relatedTest: emotional-intelligence-test
@@ -16,11 +16,11 @@ sources:
   - "Mayer, J. D., Caruso, D. R., & Salovey, P. (2016). The ability model of emotional intelligence: Principles and updates. *Emotion Review*."
 faq:
   - question: "What are the four areas of emotional intelligence?"
-    answer: "A common way to group it is self-awareness, self-management, social awareness and relationship skills. In plain terms: noticing your own feelings, handling them, reading other people, and getting on with them."
+    answer: "Our questionnaire uses self-awareness, self-management, social awareness and relationship skills: noticing your feelings, handling them, reading other people and getting along. The ability model organizes emotional intelligence differently, around perceiving, using, understanding and managing emotions."
   - question: "Can you improve emotional intelligence?"
-    answer: "The skills behind it, like noticing and naming feelings and pausing before reacting, can be practised. That is why we describe lower scores as still developing, not as a fixed fact."
+    answer: "You could start by noticing a feeling, considering how to respond, or asking someone how they feel. Use a real situation to reflect on what you would like to handle differently; a quiz score alone cannot show whether those abilities have changed."
   - question: "Is a self-report emotional intelligence test accurate?"
-    answer: "A questionnaire shows how you see yourself, which may differ from how you act or how others see you. It is a useful prompt for reflection, not a measurement of your real-world skill."
+    answer: "It summarizes how you describe yourself. To explore an answer, think of a recent example or discuss it with someone you trust. Our questionnaire is a reflection tool, rather than a measure of how you handle every real situation."
 draft: false
 ---
 
@@ -28,13 +28,13 @@ Some people seem to know what they feel, and what the person across the table fe
 
 ## Where the idea came from
 
-The term had appeared before, but the first scientific model came in 1990 from two psychologists, Peter Salovey and John Mayer. They described it as a set of abilities: noticing your own and other people's emotions, using them in your thinking, understanding what they mean, and managing them.
+The term had appeared before, but Peter Salovey and John Mayer proposed a scientific model in 1990. They described it as a set of abilities: noticing your own and other people's emotions, using them in your thinking, understanding what they mean, and managing them.
 
-Daniel Goleman's 1995 book brought the idea to a very wide audience and widened it to include things like motivation and social skills. That popular version is the one most people have heard of.
+Daniel Goleman's 1995 book brought the idea to a very wide audience and widened it to include things like motivation and social skills. This broader popular account differs from the ability model.
 
 ## The four areas, in plain terms
 
-A common way to break it down has four parts.
+Our site uses four areas to organize everyday questions about feelings. These differ from the ability model's branches of perceiving, using, understanding and managing emotions, discussed by Mayer and colleagues.
 
 - **Self-awareness.** Noticing what you feel, and what triggers it.
 - **Self-management.** Handling those feelings, such as pausing before you react.
@@ -43,7 +43,7 @@ A common way to break it down has four parts.
 
 Our [emotional intelligence test](/emotional-intelligence-test/) is built around these four areas and shows each one separately, with your strongest area first.
 
-> **Key idea** Emotional skills can be practised. A label like "high" or "low" matters much less than "what is one thing I could try?"
+> **Key idea** Use your answers to choose a situation you would like to think through more carefully.
 
 ## What it looks like day to day
 
@@ -53,27 +53,25 @@ Or a friend goes quiet in a group chat. Someone with strong social awareness not
 
 ## What it is not
 
-It isn't being nice all the time. It isn't hiding what you feel, because pushing feelings down is different from handling them. It isn't reading minds either, since even people who are good at it get it wrong. And it isn't a personality type. It is a set of habits that can change.
+It isn't being nice all the time. It isn't hiding what you feel, because pushing feelings down is different from handling them. It isn't reading minds either, since even people who are good at it get it wrong. And it isn't a personality type. The ability model concerns emotion-related abilities; our questionnaire uses self-descriptions.
 
 ## What scientists still argue about
 
 Researchers don't fully agree on how to define emotional intelligence, or on how to measure it. Some treat it as a skill you can be tested on, like solving a problem. Others measure it by asking people to describe themselves.
 
-The two approaches don't always agree. And some of the boldest claims in popular books, about how much it matters for success, go further than the evidence supports. That doesn't mean the skills are unimportant. It means a short quiz can't settle it.
+An ability task asks what a person can do under its conditions. A self-report questionnaire asks how they describe themselves. Our quiz belongs to the second group.
 
-> **Side note** A questionnaire like ours is self-report. It shows how you see yourself, which can be different from how you act in the moment or how others see you.
+> **Side note** A self-report score is a starting point for a conversation about your experience, rather than a way to compare your future success or your IQ.
 
 ## Why a lower score isn't a verdict
 
-When a result says an area is "still developing", it is reading your answers, not judging you. Many people find some areas easier than others, and the skills can grow with practice. If you answered while you were stressed, the picture may look different on a calmer day.
+A lower score means you gave lower ratings to statements in that area. You could choose a statement that caught your attention and think of a recent example. The label is a prompt to reflect, rather than a judgment about you.
 
-## Three habits that build it
+## Some prompts to try
 
-You don't need a course. Small habits, repeated, go a long way.
-
-1. **Name it.** When something stirs, try to say exactly what it is. "Annoyed" and "let down" are different feelings and call for different responses.
-2. **Pause.** Give yourself a few breaths between a feeling and your reply. Even a short delay changes what you say.
-3. **Ask, don't assume.** If someone seems upset, a plain "Is something bothering you?" beats guessing.
+1. **Name it.** When something stirs, try to say exactly what it is. You could consider whether "annoyed" or "let down" better describes the experience.
+2. **Pause.** Give yourself a few breaths between a feeling and your reply. Notice what you would like to say.
+3. **Ask, don't assume.** If someone seems upset, you could ask, "Is something bothering you?"
 
 Notice also how your mind behaves when feelings run high at awkward times. It's worth reading about [why we overthink at night](/learn/why-do-we-overthink-at-night/), a common case where thoughts and feelings loop together.
 

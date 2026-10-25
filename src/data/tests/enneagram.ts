@@ -141,7 +141,7 @@ export const types: EnneagramType[] = [
   },
   {
     n: 7, name: 'The Visionary Explorer', desire: 'To be free and satisfied', fear: 'Being trapped or deprived',
-    strengths: 'Optimistic, adventurous, quick', stress: 'Avoiding hard feelings', tip: 'Stay with one task for 25 minutes',
+    strengths: 'Optimistic, adventurous, quick', stress: 'Avoiding hard feelings', tip: 'You could choose a manageable task to focus on',
     best: 'optimistic, adventurous, quick',
     drive: 'You want freedom and new experiences, and you hate feeling boxed in.',
     overfire: "Your optimism keeps you moving and open to new ideas. Under stress, it can help you skip over feelings you'd rather not face.",
@@ -185,14 +185,14 @@ export const wingLines: Record<string, string> = {
 };
 
 export const result = {
-  change: 'Results can shift with mood and life stage. Come back in a few months and compare.',
+  change: 'Your score follows the answers you give. If you try again, compare which answers changed rather than treating a new score as a new personality.',
   // Drafted (Q2-10, Dev's wording). The result page shows no type cards for an even result.
   evenMeaning: 'Your scores are very even, so no single type stands out. That can happen when every statement feels equally true or equally untrue.',
   evenTip:
     // Drafted: em dash removed. Q2-10: first sentence is Dev's wording; it points at "The nine types" list on the result page.
-    'Read through the descriptions and notice which feel closest. The one that feels most true about your motives, not just your behaviour, is usually your type.',
+    'Read through the descriptions and notice which feel closest. Use recognition as a reflection prompt, rather than proof of a type.',
   // Drafted (Q2-10, approved by Dev): the /report/ sheet lists no descriptions, so its tip doesn't point at any.
-  evenTipReport: 'Notice which motives feel most true for you, not just your behaviour; that is usually your type.',
+  evenTipReport: 'Notice which motives feel relevant, without treating recognition as proof of a type.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: part-1.md has no next-test line for the Enneagram.
   nextLine: 'You know what drives you. Now see how much you remember from a quick look.',
@@ -250,12 +250,12 @@ export const faqs: Faq[] = [
   { q: 'What does "Enneagram" mean?', a: 'It comes from Greek: ennea means nine, and gramma means something drawn, so it names a nine-pointed figure.' },
   { q: 'What are the 9 Enneagram types?', a: '1 Ethical Architect, 2 Intuitive Caregiver, 3 Driven Achiever, 4 Authentic Depth-Seeker, 5 Analytical Observer, 6 Vigilant Guardian, 7 Visionary Explorer, 8 Assertive Protector, 9 Harmonious Mediator.' },
   // Drafted: em dash removed.
-  { q: 'How do I find my Enneagram type?', a: 'Take the test above, then read your top two or three type descriptions. The one that feels most true about your motives, not just your behaviour, is usually your type.' },
+  { q: 'How do I find my Enneagram type?', a: 'Take the test above, then read your top two or three type descriptions. Use recognition as a reflection prompt, rather than proof of a type.' },
   { q: 'What is an Enneagram number?', a: 'Simply your type, from 1 to 9. "I\'m a 6" means Type 6.' },
   // Drafted: em dash removed.
   { q: 'What is a wing?', a: "One of the two types next to yours on the circle, which adds flavour to your main type. It's written like 4w5." },
-  { q: 'Is the Enneagram scientific?', a: "Research on it is limited and mixed. It's best used for self-reflection, not as a fixed label." },
-  { q: 'Can my type change?', a: 'Many people find their result shifts a little with mood and life stage. Retake it in a few months and compare.' },
+  { q: 'Is the Enneagram scientific?', a: "In a review of 104 samples, Hook and colleagues found mixed reliability and validity, with limited support for some features. Treat the descriptions as questions to explore, rather than settled categories." },
+  { q: 'Can my type change?', a: 'Researchers haven\'t settled whether the types are stable categories. If your result changes, compare your answers and the examples you had in mind, rather than treating the score as proof of a personality change.' },
   { q: 'Do I need to sign up?', a: 'No. Every score is shown free, and your answers never leave your device.' },
 ];
 
@@ -288,6 +288,6 @@ export const happening: Happening = {
     { id: 'your-type', title: 'Your type.', text: `${typeStep.main} ${typeStep.wing}` },
   ],
   // Drafted.
-  change: "your mood, what's going on in your life right now, and how honestly you answer. Results can shift over time.",
+  change: "the ratings you enter. You could compare your answers and the examples you had in mind if you take it again.",
   article: 'what-is-the-enneagram',
 };

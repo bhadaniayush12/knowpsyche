@@ -3,7 +3,7 @@ title: "How much can your short-term memory hold?"
 em: "short-term memory"
 description: "Seven, plus or minus two? Four? Here is what the famous memory-span research found, why chunking matters, and how to hold a longer number."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Memory"
 relatedTest: number-memory-test
 scene: short-term-memory-capacity
@@ -17,11 +17,11 @@ sources:
   - "Ericsson, K. A., & Chase, W. G. (1982). Exceptional memory. *American Scientist*."
 faq:
   - question: "What is a good digit span?"
-    answer: "There isn't one number that counts as good. Span changes with age, tiredness, distraction and how you group the digits. Our bands are only a guide for reading your own result."
+    answer: "Look first at the longest string you recalled correctly, then compare your own runs. Our bands help describe this game; they are not a ranking against other people."
   - question: "Is short-term memory the same as working memory?"
-    answer: "Close, but not identical. Short-term memory is holding something for a few seconds. Working memory is holding it while you do something with it, such as repeating a number backwards."
+    answer: "They are closely related. Short-term memory means briefly holding information; working memory includes using it, as when you hold numbers in mind while adding them together."
   - question: "Can you increase your memory span?"
-    answer: "You can usually hold more by grouping, not by stretching a fixed store. Practice with a method has stretched spans a long way in training studies, though the gains tend to stay with the kind of material practised."
+    answer: "You could try grouping digits into meaningful chunks and compare how you do with each approach. Recalling a longer string here is useful feedback about this task, rather than proof of a larger memory capacity in general."
 draft: false
 ---
 
@@ -29,54 +29,44 @@ You hear a phone number, walk across the room, and by the time you reach the pho
 
 ## Seven, plus or minus two
 
-In 1956 the psychologist George Miller published a paper with a catchy title. It pointed out that across many different tasks, people could keep about seven separate things in mind at once, give or take two. Seven digits, seven letters, seven words.
+Miller's 1956 paper made “seven, plus or minus two” a memorable phrase in discussions of memory span. It also focused attention on *chunks*: meaningful groups of information.
 
-The headline travelled well. The more important part of the paper often gets skipped: Miller stressed that the unit isn't the digit. It is the *chunk*. If you group digits into meaningful bunches, each bunch counts as one item, and you can hold more digits in total.
+A chunk might be a group of digits you recognize together. What counts as a meaningful group depends on what you already know, so the paper's title isn't a fixed limit for every list of digits, letters or words.
 
 > **Key idea** Memory span depends on what the items are and how you group them, not just on how many there are.
 
 ## Then came "four"
 
-Later researchers weren't sure seven was right. When people were stopped from silently repeating items to themselves, or from grouping them, the number that came out was smaller. A major review in 2001 argued that the true limit is closer to four chunks at a time.
+Cowan's 2001 review argued for capacity around four chunks in conditions that limit rehearsal and grouping. Rehearsal means repeating information to yourself to keep it available.
 
-Both numbers can be true, because they describe different conditions. Seven is roughly what people manage when they can repeat and group freely. Four is nearer what's left when they can't. The honest answer is "a handful, depending on the material".
+The difference between seven and four is a reminder to ask how a memory task works, rather than look for one number that fits them all.
 
 ## Short-term and working memory
 
 Psychologists separate two ideas that sound alike. *Short-term memory* is holding something for a few seconds. *Working memory* is holding it and doing something with it, like adding up a bill in your head.
 
-The classic model came from Alan Baddeley and Graham Hitch in 1974. It treats working memory as a small workspace with separate parts for words and sounds, and for pictures and positions.
+Baddeley and Hitch developed an influential working-memory model in 1974, exploring its role in reasoning, comprehension and learning. The important distinction here is between holding information and using it while you think.
 
-> **Side note** Span tests come in two forms. In forward span you repeat the digits in order. In backward span you repeat them in reverse, which asks you to work with them and not just hold them. Our [number memory test](/number-memory-test/) is the forward kind.
+> **Side note** Here, forward recall means entering digits in their displayed order. Our [number memory test](/number-memory-test/) is the forward kind.
 
-## How people hold long numbers
+## A method to explore
 
-A famous training study from around 1980 followed a volunteer who began with an ordinary span. He was a keen runner, and over many sessions he learned to link digits to running times and ages, turning strings of numbers into meaningful chunks. In the end he could recall a very long string.
+Rather than aiming for a particular number, you could ask how you approached the string. Did you try to hold each digit separately, or did some of them form a familiar group? That gives you something concrete to compare on another run.
 
-The details are the interesting part. When he was tested with letters instead of digits, his span dropped back to ordinary. He hadn't grown a bigger memory. He had built a better method for one kind of material.
+## Questions to ask after a missed number
 
-You see the same idea in daily life. Mobile numbers in India are usually said in two groups of five, and cards and bank codes are printed in blocks of four. People group them without thinking about it.
+Did you enter the digits in the displayed order? Where did you lose track? You could review a missed number before choosing an approach for the next one.
 
-## Why digits slip away
+## Optional ways to describe digits
 
-Most losses come from a few habits:
-
-- **Distraction.** Memory span is easily thrown by a noise or a notification.
-- **Rushing.** Looking away before the number has settled.
-- **Holding each digit alone.** Ten separate digits are ten items. Two groups of five are far easier.
-
-## Digits are harder than words
-
-Numbers give your mind very little to hold on to. "Cat, river, lamp" comes with meaning, sound and a picture. "4 7 1 9 2" comes with nothing. Words bring associations along, which is why a short sentence is easier to remember than the same number of random digits.
-
-It also explains how most memory tricks for numbers work. They give digits something to hang on to: a date, a price, a shape traced on a keypad.
+You could try giving a digit group a familiar meaning, or naming the groups as you look at them. Notice which approach feels useful to you.
 
 ## What your result does and doesn't mean
 
-Your longest number is the longest string you got right on this try, in this room, on this device. Span moves with sleep, stress and attention, so a result on a bad day isn't your ceiling. And it can't say how good your memory is in general. It captures one narrow kind of holding: short, in order, and in digits.
+Your longest number is the longest string you got right on this try, in this room, on this device. It captures one narrow task: holding digits briefly and recalling them in order. It isn't a ceiling for your memory in daily life.
 
-## Ways to hold more
+## Optional strategies to try
 
-Try grouping the number the way you would a phone number, and say the groups to yourself in a steady rhythm. Link a group to something you know, such as a date, a price or a house number. Take a second before you start, instead of racing in. If you want a quick way to see the difference, take the [number memory test](/number-memory-test/) once without grouping, then again with it.
+You could try grouping digits in a way that makes sense to you. To explore the difference, take the [number memory test](/number-memory-test/) once without grouping, then again with it.
 
 For the same idea applied to pictures, see [is photographic memory real?](/learn/is-photographic-memory-real/). And because any score is a snapshot, [what psychology tests can and can't tell you](/learn/what-psychology-tests-can-and-cant-tell-you/) is worth a read before you compare results with anyone.

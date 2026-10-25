@@ -11,7 +11,7 @@ export const numberBands: MemoryBand[] = [
   { min: 6, badge: 'Steady', text: 'Six or seven digits held at once, a steady span for this task.' },
   // Drafted: removed comparison wording.
   { min: 8, badge: 'Strong', text: 'You hold eight or more digits before losing track.' },
-  { min: 10, badge: 'Exceptional', text: "You're likely using a smart strategy, like chunking." },
+  { min: 10, badge: 'Exceptional', text: "You recalled a long digit string in this run." },
 ];
 
 export const page = {
@@ -30,7 +30,7 @@ export const page = {
 export const ui = {
   chunkTip: 'Tip: try splitting it into groups of 2 or 3.',
   // Drafted: removed comparison wording.
-  middle: 'The middle digits are often the hardest to hold. The first and last digits are usually easier to keep in mind.',
+  middle: 'You could notice which positions you recalled and where you lost track.',
   // Drafted.
   ready: 'The number will appear here.',
   remember: 'Remember this number',
@@ -53,9 +53,9 @@ export const ui = {
 
 export const result = {
   change:
-    'Strategy matters most. Reading 49 21 73 as three chunks is easier than six single digits. Tiredness and distractions lower scores.',
+    'The digits you recall and their order determine the result. You could try a different way of grouping them and compare your runs.',
   // Try this = FAQ 3's answer (approved in the build plan).
-  tip: 'Group digits into chunks of two or three, say them in a rhythm, or link them to dates you know.',
+  tip: 'You could try grouping digits in a way that is meaningful to you, then compare how you do with each approach.',
   // Drafted (Q2-12, Dev's wording): "What does it mean?" for a score of 0, instead of "You held 0 digits."
   zeroLine: 'No number landed this time. That happens, and a fresh try often goes differently.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
@@ -66,8 +66,8 @@ export const result = {
 
 export const faqs: Faq[] = [
   { q: 'What is digit span?', a: "The longest string of numbers you can repeat back right after seeing or hearing it. It's a classic way to measure short-term memory." },
-  { q: 'What is a normal digit span?', a: 'A famous 1956 paper suggested people hold about "seven, plus or minus two" items. Later research suggests our true limit is closer to four chunks.' },
-  { q: 'How can I improve my number memory?', a: 'Group digits into chunks of two or three, say them in a rhythm, or link them to dates you know.' },
+  { q: 'What is a normal digit span?', a: 'There is no single target for this game. Miller emphasized span and chunking, while Cowan argued for around four chunks when rehearsal and grouping were limited. Your longest correct string is a starting point for comparing your own runs.' },
+  { q: 'How can I improve my number memory?', a: 'You could try grouping digits in a way that is meaningful to you, then compare how you do with each approach.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection." },
 ];
 
@@ -89,6 +89,6 @@ export const happening: Happening = {
     { title: 'Your score.', text: 'Your score is the longest number you typed back correctly.' },
   ],
   // Drafted.
-  change: 'strategy most of all, like reading the digits in pairs or threes, plus tiredness and distractions.',
+  change: 'which digits you recall in order. You could compare where you lost track and how you grouped the string.',
   article: 'short-term-memory-capacity',
 };

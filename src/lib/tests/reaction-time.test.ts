@@ -128,12 +128,12 @@ describe('isInconsistent', () => {
 describe('meaningLine', () => {
   it('joins band text, fastest and spread without a double full stop', () => {
     const line = meaningLine(summarize([231, 262, 244, 255, 243]));
-    expect(line).toBe('Quick and alert on the trigger. Your fastest try was 231 ms, and your tries were 31 ms apart.');
+    expect(line).toBe('A quick average response on this run. Your fastest try was 231 ms, and your tries were 31 ms apart.');
     expect(line).not.toContain('..');
   });
 
   it('uses the band of the average', () => {
-    expect(meaningLine(summarize([450, 450, 450, 450, 450]))).toMatch(/^Try again on a computer with a mouse, after a short break\. /);
+    expect(meaningLine(summarize([450, 450, 450, 450, 450]))).toMatch(/^You can repeat the task if you want to compare runs\. /);
   });
 });
 
