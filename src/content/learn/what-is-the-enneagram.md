@@ -3,7 +3,7 @@ title: "What is the Enneagram, really?"
 em: "really"
 description: "The Enneagram sorts people into nine types. Here is where it came from, what research says about it, and a sensible way to use your result."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Personality"
 relatedTest: enneagram-test
 scene: what-is-the-enneagram
@@ -16,9 +16,9 @@ sources:
   - "Lilienfeld, S. O., Lynn, S. J., Ruscio, J., & Beyerstein, B. L. (2010). *50 Great Myths of Popular Psychology*. Wiley-Blackwell."
 faq:
   - question: "Is the Enneagram scientific?"
-    answer: "Hook and colleagues reviewed 104 samples and found mixed reliability and validity, with limited support for some theoretical features. That does not validate this site's questionnaire or establish permanent categories."
+    answer: "The evidence is mixed. In a review of 104 samples, Hook and colleagues found uneven support for the system's reliability and validity. Use the descriptions to ask questions about yourself, rather than as settled categories."
   - question: "Can your Enneagram type change?"
-    answer: "The review does not establish permanent types or demonstrate that an individual's type changes. A different score on this questionnaire would not resolve that question."
+    answer: "Researchers haven't settled whether the types are stable categories. If your result changes, compare the answers you gave and the descriptions that feel relevant, without treating a new score as proof that your personality changed."
   - question: "How accurate is an online Enneagram test?"
     answer: "No short test can pin down a type for certain. That is why ours shows all nine scores instead of one verdict. Use your top scores as a place to start reading about yourself."
 draft: false
@@ -32,27 +32,27 @@ The Enneagram describes nine personality types, numbered 1 to 9 and drawn around
 
 Lines across the circle link types that are said to be connected, and the neighbours on either side of your main type are called wings. The idea is that you have one home pattern but borrow from others.
 
-## A framework and a measurement are different
+## A way to ask questions about yourself
 
-The Enneagram is presented as a framework of nine types. Its history alone would not establish whether a questionnaire measures those types reliably. The cited review is the basis for the research summary below; we do not use its abstract to verify a detailed origin story.
+You could read a type as a question: “When does this pattern fit me, and when doesn't it?” That leaves room for examples and exceptions, instead of asking a description to settle who you are.
 
 ## What the research says
 
-Hook and colleagues' 2021 systematic review covered 104 samples. It found mixed reliability and validity and limited support for some theoretical features. This does not establish permanent type categories or validate our questionnaire.
+Hook and colleagues' 2021 review covered 104 samples and found mixed reliability and validity, with limited support for some theoretical features. In plain terms, the evidence was uneven on how consistently Enneagram tools measure something meaningful. Treat the types as a framework to explore, rather than permanent categories.
 
-> **Key idea** A type is a handy way to talk about patterns. It is not a scientific fact about who you are.
+> **Key idea** A useful type description gives you a question to explore, with room for exceptions.
 
 ## Why it can feel so accurate
 
-A description can feel personally relevant without that feeling establishing measurement accuracy. Forer's 1949 paper concerns personal validation, but its PubMed record has no abstract to verify the classroom procedure or ratings. We cover that in [what psychology tests can and can't tell you](/learn/what-psychology-tests-can-and-cant-tell-you/).
+Forer's work on personal validation raises a useful question: does a description feel accurate because it picks out something specific about you? We explore that question in [what psychology tests can and can't tell you](/learn/what-psychology-tests-can-and-cant-tell-you/).
 
-A feeling of recognition isn't a reason to dismiss the Enneagram. A good description can still raise a useful question. It just isn't proof that the description is true of you.
+You could look for a concrete example that fits a description, then an example that doesn't. That gives you more to think about than the feeling of recognition alone.
 
 ## Why we show all nine scores
 
 To let you compare the framework's descriptions, our [Enneagram test](/enneagram-test/) shows all nine scores instead of one verdict. Your highest score is where to start reading, not where to stop. If your top two or three types come out within a point, the test asks a short extra round to help separate them.
 
-> **Side note** If you get a different result, the score alone does not identify why. We have not established this questionnaire's test-retest reliability or whether its types overlap.
+> **Side note** If you try again, compare which answers changed. A different top score alone cannot tell you that your personality changed.
 
 ## Common misunderstandings
 
@@ -70,8 +70,8 @@ Not an answer, but a few useful things: a couple of top scores to read about, so
 
 - Read the descriptions for your top two or three types. Underline lines that fit and skip the ones that don't.
 - Ask when the pattern shows up, and when it doesn't. The exceptions are often the most interesting part.
-- If you like, observe one situation, such as a response to criticism. This is a reflection suggestion, not a routine tested by the cited review.
-- Don't use it to "type" other people. A score here does not establish another person's motives.
-- Come back in a few months. A score change alone does not establish a change in personality.
+- If you like, observe one situation, such as a response to criticism. Notice both the moments that fit the description and those that do not.
+- Let other people describe their own motives, rather than assigning them a type.
+- If you come back in a few months, compare the examples you thought of as well as your scores.
 
 Used this way, the Enneagram is a conversation starter with yourself. Used as a label, it tends to shrink people. For a wider view on personality tests, try the piece on [emotional intelligence](/learn/what-is-emotional-intelligence/), which looks at a different way of describing how people handle feelings.

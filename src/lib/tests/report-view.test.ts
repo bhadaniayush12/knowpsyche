@@ -96,7 +96,7 @@ describe('"What it means" on the EQ sheet (Q1-04)', () => {
 describe('"What it means" on the Stroop sheet (Q1-10)', () => {
   it('ends with the full "What can change your result" sentence from the Stroop page', () => {
     const lines = meaningFor('stroop', saved('stroop', 'Mild pull', 120));
-    expect(lines.at(-1)).toBe('What can change your result: the trial responses you make in this session. The task requires distinguishing the ink colours, and the gap does not isolate a single cause.');
+    expect(lines.at(-1)).toBe('What can change your result: how quickly and accurately you answer each kind of word. Compare both when looking at another run.');
     expect(lines.at(-1)).toMatch(/\.$/);
   });
 });

@@ -55,9 +55,9 @@ export const ui = {
 export const result = {
   // Drafted: removed comparison wording.
   change:
-    'The score records completed levels; it does not explain why a pattern was recalled or missed.',
+    'Different tile selections lead to different results. You could note how you described the pattern to yourself when comparing runs.',
   // Try this = FAQ 4's answer (approved in the build plan).
-  tip: 'Optional suggestion: try describing the tiles as a shape or pattern. The cited study did not test this strategy in our game.',
+  tip: 'You could try describing the tiles as a shape or pattern, then compare your own runs.',
   // Drafted (Q2-12, Dev's wording): "What does it mean?" for level 0 with no tile found at all.
   zeroLine: 'No tiles landed this time. Try again; the first level starts small.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
@@ -66,11 +66,11 @@ export const result = {
 };
 
 export const faqs: Faq[] = [
-  { q: 'Is photographic memory real?', a: 'Haber describes rare childhood eidetic imagery and its virtual absence in adults. This age-group difference does not establish that each child loses it with age or demonstrate perfect recall.' },
+  { q: 'Is photographic memory real?', a: 'Eidetic imagery means a vivid image that lingers after looking away. In one review it was rare in children and virtually absent in adults; that is different from perfect, camera-like recall.' },
   // Drafted: em dash removed.
   { q: 'What does this test actually measure?', a: 'Visual short-term memory: how many locations you can hold in mind for a few seconds.' },
-  { q: 'How many things can we remember at once?', a: 'Luck and Vogel found capacity for roughly four integrated objects in their visual-memory task. That is not a validated tile-location limit for this game.' },
-  { q: 'Can I improve my visual memory?', a: 'Optional suggestion: try describing the tiles as a shape or pattern. The cited study did not test this strategy in our game.' },
+  { q: 'How many things can we remember at once?', a: 'Luck and Vogel found capacity for roughly four integrated objects in their lab task. Our game asks you to recall tile locations, so use your completed rounds to describe how you did here.' },
+  { q: 'Can I improve my visual memory?', a: 'You could try describing the tiles as a shape or pattern, then compare your own runs.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection." },
 ];
 
@@ -94,6 +94,6 @@ export const happening: Happening = {
     { title: 'Your score.', text: 'Your score is the highest level you fully completed.' },
   ],
   // Drafted.
-  change: 'the tile selections entered in this session. A score difference alone does not identify its cause.',
+  change: 'which tiles you select. You could note the approach you used when comparing patterns across runs.',
   article: 'is-photographic-memory-real',
 };

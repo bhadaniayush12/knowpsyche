@@ -213,3 +213,13 @@ Each row records a changed passage or sentence fragment, including repeated occu
 Initial validation caught an overlong description, obsolete copy expectations, a report prompt referencing absent descriptions and a wording-linter restriction. All were corrected before the final passing checks.
 
 No merge or deployment performed.
+
+## Tone pass
+
+2026-10-25: Rewrote the nine articles and seven test pages in plain, reader-facing language. Removed research-access and audit terminology, kept study scope in natural wording, made FAQs useful, and turned tips into friendly suggestions without repeated disclaimers. Preserved the Stroop history correction byte for byte in the article and test FAQ. Updated modification dates only on the changed articles.
+
+Scoring values, functions, questionnaire items/order, source lists and article link targets/occurrences remain unchanged. Schema code, routes and canonicals were not edited. Only two existing test copy expectations changed; assertions and inputs are unchanged.
+
+Validation: `npm run build` PASS (26 pages); `npm test` PASS (33 files / 780 tests); `npm run check` PASS (26 pages, no problems); `git diff --check` PASS. The requested `git grep -n -i "abstract\|cited\|PubMed" -- src/content src/data/tests` returns no matches (exit 1, as expected). Additional comparisons confirm unchanged exported numeric/boolean values, functions, questionnaire items/order, citations, link targets and Stroop history wording.
+
+No merge or deployment performed.

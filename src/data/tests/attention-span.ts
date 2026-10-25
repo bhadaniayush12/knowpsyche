@@ -87,11 +87,11 @@ export const resultUi = {
 };
 
 export const result = {
-  change: 'The score summarizes responses in this run; the cited sources do not identify why you missed or pressed on a signal.',
+  change: 'Your responses to greens and reds make up this score. One run cannot tell you why you missed or pressed on a signal.',
   // Drafted: "Try this" reuses FAQ 4's answer word for word (the doc gives no tip).
-  tip: "Optional suggestion: choose a manageable task and reduce interruptions. The cited sources do not establish an improvement routine for this game.",
+  tip: "You could choose a manageable task, put other tasks aside and notice when your thoughts move elsewhere. Gently return to the task if that happens.",
   // Drafted: em dash removed. Q2-23: second sentence is Dev's wording.
-  dippedNote: 'Your score was lower in the second half. This comparison does not establish why it changed or whether a dip is expected.',
+  dippedNote: 'Your score was lower in the second half. You can compare the two halves, but this run alone cannot tell you why they differed.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: em dash removed.
   nextLine: 'Try the Stroop test. It puts your focus up against your reading habit.',
@@ -102,7 +102,7 @@ export const faqs: Faq[] = [
   {
     q: 'What is attention span?',
     // Drafted: em dash removed.
-    a: "Here, the phrase refers to staying with a task. This game does not estimate one general attention-span duration.",
+    a: "Attention span means how long you can stay with a task. This game records responses to its signals; use the result to describe this run, rather than set a time limit for your attention in daily life.",
   },
   {
     q: 'Is the average attention span really 8 seconds, shorter than a goldfish?',
@@ -110,11 +110,11 @@ export const faqs: Faq[] = [
   },
   {
     q: 'What is a Go/No-Go task?',
-    a: 'A classic psychology task: respond to one kind of signal and hold back on another. Here, it records responses and withheld responses; the cited model does not validate a general focus or self-control score for this game.',
+    a: 'A task where you respond to one kind of signal and hold back on another. Here, you respond to green and hold back for red; the score summarizes how you did on those two parts.',
   },
   {
     q: 'How can I improve my attention span?',
-    a: "Optional suggestion: choose a manageable task and reduce interruptions. The cited sources do not establish an improvement routine for this game.",
+    a: "You could choose a manageable task, put other tasks aside and notice when your thoughts move elsewhere. Gently return to the task if that happens.",
   },
   {
     q: 'Can this test tell if I have ADHD?',
@@ -150,6 +150,6 @@ export const happening: Happening = {
     { title: 'Your score.', text: "Your score out of 100 is the average of two numbers: the share of greens you caught and the share of reds you held back on. Your speed is shown but doesn't change the score." },
   ],
   // Drafted.
-  change: 'the responses entered in this session. These sources do not establish which conditions explain a score change.',
+  change: 'how many greens you respond to and reds you hold back on. Compare those parts as well as your total if you play again.',
   article: 'attention-span-myths-and-what-helps',
 };

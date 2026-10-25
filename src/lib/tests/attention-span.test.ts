@@ -155,7 +155,7 @@ describe('Attention span: steadiness comparison', () => {
     expect(scores.steadiness.dipped).toBe(true);
 
     const line = meaningLine(scores);
-    expect(line).toContain('Your score was lower in the second half. This comparison does not establish why it changed or whether a dip is expected.');
+    expect(line).toContain('Your score was lower in the second half. You can compare the two halves, but this run alone cannot tell you why they differed.');
   });
 
   it('does not flag dip when second half is worse by only 4 points', () => {

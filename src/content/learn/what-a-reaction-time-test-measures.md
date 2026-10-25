@@ -3,7 +3,7 @@ title: "What a reaction time test really measures"
 em: "really"
 description: "A reaction time test clocks how fast you respond to a change on screen. Here is what goes into that number, and why it shifts from one try to the next."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Attention"
 relatedTest: reaction-time-test
 scene: what-a-reaction-time-test-measures
@@ -18,11 +18,11 @@ sources:
   - "Hyman, R. (1953). Stimulus information as a determinant of reaction time. *Journal of Experimental Psychology*."
 faq:
   - question: "What is a good reaction time?"
-    answer: "There is no validated population benchmark for this browser version. Woods and colleagues found that hardware and software delays affect measured latency. Our bands are an editorial guide."
+    answer: "The most useful comparison is with your own runs on the same device. Screen and input delays are part of the recorded time, so our bands describe this game rather than rank you against a population."
   - question: "Why is my reaction time different every time?"
-    answer: "The recorded time includes a response and device timing. The cited sources do not identify the cause of a difference between your runs."
+    answer: "The clock includes the screen displaying the signal, your response and the device recording it. Look at several tries together; one faster or slower time cannot tell you which part changed."
   - question: "Can you improve your reaction time?"
-    answer: "The cited abstracts do not establish a practice benefit or ceiling for this version. You can repeat it to compare your own recorded times."
+    answer: "You could repeat the task and compare your times while keeping the device and input method the same. Look for a pattern across runs, rather than chasing a single best click or expecting a particular gain."
 draft: false
 ---
 
@@ -34,33 +34,33 @@ Four things stack up between the signal and your click.
 
 First, the change has to appear on the screen, and the screen takes a moment to draw it. Then your eyes pick it up and your mind registers that this is the signal. In a simple test there is nothing to decide, only "now". Finally your finger moves and the press is recorded.
 
-Only the middle part is what most people would call thinking. The rest is eyes, muscles and hardware. Woods and colleagues found that hardware and software delays affect measured simple reaction time; their findings do not set a general browser norm.
+The number includes perception, movement and equipment timing. Woods and colleagues found that hardware and software delays affect measured reaction time, which is why the setup matters when comparing results.
 
-> **Key idea** Your result shows how quickly you responded on this device, on this try. This score is not a validated intelligence assessment.
+> **Key idea** Your result shows how quickly you responded on this device, on this try.
 
 ## Simple and choice reaction time
 
-Here, a simple task means one signal and one response; a choice task requires selecting among responses. Donders is cited as historical background, but the accessible record does not verify the precise subtraction account.
+A simple task means one signal and one response. A choice task asks you to select among responses. This distinction is part of the reaction-time tradition associated with Donders.
 
-Hick and Hyman concern the relation between stimulus information and choice latency. Similar increments when options double depend on the stimulus probabilities and task conditions, rather than applying to every set of choices.
+Hick and Hyman studied how the information in a set of signals relates to the time needed to choose a response. The pattern depends on how likely the signals are and how the task is set up.
 
 Our [reaction time test](/reaction-time-test/) is the simple kind: one signal and one response.
 
-## What the cited studies examined
+## Why the task and setup matter
 
 Woods and colleagues examined factors in measured simple reaction time, including age and hardware/software delay. A display delay occurs before you see the signal; an input delay can occur after you respond.
 
-Jain and colleagues compared auditory and visual reaction times in first-year medical students, including comparisons by physical activity and gender. Their sample does not establish which mode will be faster for every player or device.
+In a study of first-year medical students, Jain and colleagues found faster responses to sounds than to lights. That is a finding from that sample and setup, rather than a prediction for each mode on your device.
 
-In our version, a press before the signal does not count. That is a local game rule, rather than a claim that the cited studies validate our cutoffs.
+In our version, a press before the signal does not count: the task asks you to respond to what appears, rather than guess when it will happen.
 
 ## Reading your five tries
 
-Read the five recorded times together. A slower response does not identify an attention lapse or a device problem by itself. The average summarizes these trials, rather than your response speed in every setting.
+Read the five times together and notice how close they are. The average summarizes those trials; a slower response on its own cannot tell you why it took longer.
 
 ## Optional ways to compare runs
 
-You could keep the device and input method the same when comparing sessions. This is a general suggestion for recording context, rather than a proven improvement method. The cited abstracts do not establish warm-up benefits or recommend gaming equipment.
+You could keep the device and input method the same and note which mode you used. Compare the full set of times, rather than just the fastest response. That gives you a clearer record of what you are comparing.
 
 ## Why people care about reaction time
 
@@ -68,6 +68,6 @@ Researchers like it because it is simple to measure and the stages are easy to s
 
 ## What it can't tell you
 
-This short browser test is not validated as an assessment of intelligence, driving skill or general thinking speed. It records one narrow response on one day. A quick or slow result alone cannot establish performance elsewhere or identify a health problem.
+A click test records a narrow response in one session. Driving, sport and everyday decisions involve much more than responding to a signal, so this result cannot grade those abilities or identify a health problem.
 
 For the wider picture on reading any test result, see [what psychology tests can and can't tell you](/learn/what-psychology-tests-can-and-cant-tell-you/). And if you're curious about staying focused over a longer stretch, there's a piece on [attention span](/learn/attention-span-myths-and-what-helps/).

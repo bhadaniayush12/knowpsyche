@@ -3,7 +3,7 @@ title: "Why do we overthink at night?"
 em: "overthink"
 description: "What research says about rumination, bedtime to-do writing and worry, with limits and optional reflection suggestions."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Psychology in real life"
 scene: why-do-we-overthink-at-night
 relatedTest: emotional-intelligence-test
@@ -16,7 +16,7 @@ sources:
   - "Borkovec, T. D., Wilkinson, L., Folensbee, R., & Lerman, C. (1983). Stimulus control applications to the treatment of worry. *Behaviour Research and Therapy*."
 faq:
   - question: "Why do I overthink more at night?"
-    answer: "The cited studies do not establish why thoughts feel more intrusive at night for a particular person. Nolen-Hoeksema and colleagues review rumination and its links with negative thinking and impaired problem solving."
+    answer: "There may not be one explanation for your experience. You could note what the thoughts return to: something that happened, a future worry, or a task to revisit. If they regularly keep you awake, talk to a doctor or mental-health professional."
   - question: "What is the difference between overthinking and reflecting?"
     answer: "Here, reflection means considering what to learn or do next. Rumination involves repetitive negative thinking; future-oriented worry is related but distinct. Not all overthinking is rumination."
   - question: "When should I talk to someone about overthinking?"
@@ -38,25 +38,29 @@ If repeated thoughts disrupt sleep or daily life, consider discussing them with 
 
 It might be replaying a conversation and rewording what you said. It might be running through tomorrow's meeting for the tenth time, or building a chain of "what ifs" that ends somewhere worse each round. The thoughts feel urgent, but they seldom produce a decision.
 
-## What the cited research can explain
+## When thinking stops moving forward
 
-The rumination review links repetitive negative thinking with difficulties in problem solving. It does not test whether fewer distractions, exhaustion or unfinished tasks explain nighttime experiences, or whether problems reliably feel smaller by morning.
+Nolen-Hoeksema and colleagues' review links rumination with negative thinking and difficulty solving problems. The useful distinction is between returning to a question and making progress on it.
 
-## Two findings and their limits
+You could ask, “Is there a next step here, or am I going over the same ground?” That question can guide your reflection without having to solve the whole problem tonight.
 
-**Bedtime to-do writing.** Scullin and colleagues' small laboratory study found faster sleep onset after writing a to-do list than after writing about completed activities. This comparison does not establish general worry-journaling benefits, a full evening routine, long-term benefit or insomnia treatment.
+## What writing and worry research found
 
-**Stimulus-control instructions for worry.** Borkovec and colleagues found reduced daily worry relative to a control after four weeks of instructions. The abstract does not specify a fifteen-minute evening slot or establish a mechanism of teaching the mind a time and place for worry.
+**Bedtime to-do writing.** In Scullin and colleagues' small lab study, people who wrote a to-do list fell asleep faster than those who wrote about completed activities.
 
-> **Side note** Future-oriented worry and rumination are related but distinct constructs. Neither is simply a synonym for all reflection.
+**Instructions for managing worry.** Borkovec and colleagues found less daily worry after four weeks of stimulus-control instructions than in a control group.
 
-## Optional reflection suggestion
+These findings concern particular routines in particular studies, rather than a promise that journaling will resolve persistent sleep difficulties.
 
-If you would like to try writing, you could list a task for tomorrow or note one question to revisit. This is a general suggestion, rather than a tested evening routine or a treatment recommendation.
+## Something you could try writing
 
-## What these sources do not establish
+You could list a task for tomorrow or note one question to revisit. Keep it simple: something you want to remember, or a next step you can consider later.
 
-The cited abstracts do not test whether checking the clock, suppressing thoughts or trying hard to sleep causes a worse night. They cannot explain an individual's sleep difficulty.
+Use this as a suggestion to explore, rather than another bedtime task you have to get right.
+
+## Leave room for an unfinished question
+
+You do not have to turn each thought into a decision tonight. If you want, jot down what feels unresolved and choose when to look at it again. The aim is to give yourself a manageable question, rather than a perfect evening routine.
 
 ## When it's more than that
 

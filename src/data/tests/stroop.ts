@@ -80,9 +80,9 @@ export const resultUi = {
 };
 
 export const result = {
-  change: 'This run compares your correct responses to matching and clashing words; it does not identify the cause of the gap.',
+  change: 'Your response times and which words you answer correctly determine the gap. Compare both speed and accuracy across runs.',
   // Drafted: the doc gives no "Try this" tip.
-  tip: 'Optional suggestion: try another run and compare both time and accuracy.',
+  tip: 'You could try another run and compare both time and accuracy.',
   // Drafted: the doc's "What does it mean?" line only covers a positive slow-down. Q2-11: Dev's wording, shown on its own.
   noSlowdown: 'The clashing words did not slow you down.',
   // Drafted (Q2-11, Dev's wording): shown instead of the number when the effect is 0 ms or less.
@@ -110,12 +110,12 @@ export const faqs: Faq[] = [
   },
   {
     q: 'What does the Stroop test measure?',
-    a: 'Here, the difference between average correct response times for clashing and matching words. It is not a validated measure of general focus.',
+    a: 'It compares your average time for correct answers on clashing words with matching words. Read that gap alongside your accuracy; it is a result for this task, rather than a grade for everyday focus.',
   },
   {
     q: 'Is a bigger Stroop effect bad?',
     // Drafted: em dash removed.
-    a: "A bigger gap describes this run, rather than a grade for everyday focus. It does not isolate how automatic your reading is.",
+    a: "A bigger gap means clashing words took longer than matching words on this run. Look at accuracy too, without treating the gap as a judgment about your focus.",
   },
   {
     q: 'Is this a medical test?',
@@ -149,6 +149,6 @@ export const happening: Happening = {
     { title: 'The gap.', text: 'Your Stroop effect is your average time on clashing words minus your average time on matching words, using correct answers only.' },
   ],
   // Drafted.
-  change: 'the trial responses you make in this session. The task requires distinguishing the ink colours, and the gap does not isolate a single cause.',
+  change: 'how quickly and accurately you answer each kind of word. Compare both when looking at another run.',
   article: 'the-stroop-effect-explained',
 };

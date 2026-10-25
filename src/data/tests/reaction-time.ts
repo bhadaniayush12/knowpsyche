@@ -45,7 +45,7 @@ export const modes: { key: ReactionMode; label: string; note?: string; resultNot
     label: 'Sound',
     note: 'Your speakers can add a small delay.',
     // Drafted, from "Sound mode usually comes out a little faster than visual".
-    resultNote: 'This result records the sound mode; it is not a prediction about which mode will be faster.',
+    resultNote: 'You used sound mode. Compare it with your other sound-mode runs on the same device.',
   },
   {
     key: 'f1',
@@ -87,34 +87,34 @@ export const arena = {
 
 export const result = {
   change:
-    'Woods and colleagues examined age and hardware/software timing. Display delay precedes perception; input delay can follow a response. Their findings do not set a browser norm for this game.',
+    'Your screen displays the signal, you respond, and your input is recorded. Device timing is part of the result, so compare runs on the same setup.',
   // Next test (name, link, time) comes from nextAfter() in data/home.ts, in doc order.
   // Drafted: the doc's line points to Attention span; the chain now follows the doc order 1–7.
   nextLine: 'Speed is one side of you. See what drives your choices in the Enneagram test.',
   learn: { href: '/method/', label: 'How we build our tests →' },
   spreadChallenge: 'Fast, but a bit inconsistent. Can you get all five within 50 ms?',
   // Drafted: em dash removed.
-  morningNight: 'Optional suggestion: compare sessions and note their context, without assuming what caused a difference.',
+  morningNight: 'You could compare sessions and note the setup and how you felt at the time.',
 };
 
 export const faqs: Faq[] = [
   // Drafted: em dash removed.
   { q: 'What is reaction time?', a: 'The time between noticing a signal and responding to it: here, between the box changing and your click.' },
   // Drafted: general browser fact without comparison to what most people do.
-  { q: 'What is the average reaction time?', a: 'The cited studies do not establish a general browser average. This version records a response together with device timing.' },
-  { q: 'What is a good reaction time?', a: 'Our bands are an editorial guide for this game, not validated population norms.' },
-  { q: 'Why is my reaction time so slow?', a: 'The recorded time alone cannot identify a cause. Hardware and software delays can contribute, as Woods and colleagues discuss.' },
-  { q: 'How can I improve my reaction time?', a: 'The cited abstracts do not establish a training routine or recommend gaming hardware. You can repeat the task to compare your own runs.' },
+  { q: 'What is the average reaction time?', a: 'Results depend heavily on the device, screen and input method, as well as the response itself. The useful comparison is your own runs on the same device, using the same mode and input.' },
+  { q: 'What is a good reaction time?', a: 'Look at your own times across runs on the same device. Our bands are a guide to this game, rather than a ranking against other people.' },
+  { q: 'Why is my reaction time so slow?', a: 'The time includes the screen showing the signal and the device recording your response. You could compare the full set of tries on the same setup; one slow time cannot tell you which part took longer.' },
+  { q: 'How can I improve my reaction time?', a: 'You could try again using the same device, mode and input method, then compare the full set of times. A change here describes this task, rather than a general improvement in reaction speed.' },
   // Drafted: em dash removed.
-  { q: 'Does being tired slow your reaction time?', a: 'The cited abstracts do not establish sleep effects for this browser task. A single score cannot tell you whether tiredness caused it.' },
-  { q: 'Does caffeine help?', a: "The sources listed here do not establish a caffeine benefit for this task." },
+  { q: 'Does being tired slow your reaction time?', a: 'If you feel tired, you could leave the test for another time and note how you felt when comparing runs. Your score alone cannot tell you whether tiredness affected it.' },
+  { q: 'Does caffeine help?', a: "You do not need caffeine to take this test. If you want to compare sessions, you could note whether you had any; a faster score alone would not show that caffeine helped." },
   // Drafted: removed comparison wording.
-  { q: 'At what age is reaction time fastest?', a: 'Woods and colleagues examined age-related latency differences; this game has no validated age-specific norms.' },
+  { q: 'At what age is reaction time fastest?', a: 'Age-related differences have been studied by Woods and colleagues, but this game cannot give you a personal peak age. Compare your own runs rather than using a score as a target for your age.' },
   { q: "What's the difference between a reaction and a reflex?", a: "A reflex (like the knee-jerk) happens automatically without a decision. A reaction needs your brain to notice and decide, so it's slower." },
   { q: "What's the difference between simple and choice reaction time?", a: 'Simple = one signal, one response (this test). Choice = several possible signals and responses, which takes longer.' },
   // Drafted: em dash removed.
   { q: "Why don't times under 100 ms count?", a: "Humans can't really react that fast to a signal, so it's a lucky guess. Sprint races use the same idea: a start under 0.1 seconds counts as a false start." },
-  { q: 'Why is sound faster than sight?', a: 'Jain and colleagues found faster auditory than visual responses in their first-year medical-student sample. That does not predict every player or device.' },
+  { q: 'Why is sound faster than sight?', a: 'In a study of first-year medical students, Jain and colleagues found faster responses to sounds than to lights. Here, you could compare your own sound and visual runs, keeping in mind that they use different output from your device.' },
   { q: 'Is this a medical test?', a: "No. It's for curiosity and self-reflection, not a diagnosis." },
 ];
 
@@ -136,6 +136,6 @@ export const happening: Happening = {
     { title: 'Your average.', text: 'The five times are averaged. You can also inspect the individual recorded times.' },
   ],
   // Drafted.
-  change: 'hardware/software timing as well as the response itself. A score alone does not identify which factor contributed.',
+  change: 'the response itself and the time your device takes to display the signal and record the input. Use the same setup when comparing runs.',
   article: 'what-a-reaction-time-test-measures',
 };

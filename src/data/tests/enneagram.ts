@@ -141,7 +141,7 @@ export const types: EnneagramType[] = [
   },
   {
     n: 7, name: 'The Visionary Explorer', desire: 'To be free and satisfied', fear: 'Being trapped or deprived',
-    strengths: 'Optimistic, adventurous, quick', stress: 'Avoiding hard feelings', tip: 'Optional suggestion: choose a manageable task to focus on',
+    strengths: 'Optimistic, adventurous, quick', stress: 'Avoiding hard feelings', tip: 'You could choose a manageable task to focus on',
     best: 'optimistic, adventurous, quick',
     drive: 'You want freedom and new experiences, and you hate feeling boxed in.',
     overfire: "Your optimism keeps you moving and open to new ideas. Under stress, it can help you skip over feelings you'd rather not face.",
@@ -185,7 +185,7 @@ export const wingLines: Record<string, string> = {
 };
 
 export const result = {
-  change: 'A different score would not by itself establish a personality change. This questionnaire has no established test-retest reliability.',
+  change: 'Your score follows the answers you give. If you try again, compare which answers changed rather than treating a new score as a new personality.',
   // Drafted (Q2-10, Dev's wording). The result page shows no type cards for an even result.
   evenMeaning: 'Your scores are very even, so no single type stands out. That can happen when every statement feels equally true or equally untrue.',
   evenTip:
@@ -254,8 +254,8 @@ export const faqs: Faq[] = [
   { q: 'What is an Enneagram number?', a: 'Simply your type, from 1 to 9. "I\'m a 6" means Type 6.' },
   // Drafted: em dash removed.
   { q: 'What is a wing?', a: "One of the two types next to yours on the circle, which adds flavour to your main type. It's written like 4w5." },
-  { q: 'Is the Enneagram scientific?', a: "Hook and colleagues reviewed 104 samples and found mixed reliability and validity, with limited support for some theoretical features. This does not validate our questionnaire." },
-  { q: 'Can my type change?', a: 'The cited review does not establish that an individual has a permanent type or that their type changes. A different questionnaire score would not settle that question.' },
+  { q: 'Is the Enneagram scientific?', a: "In a review of 104 samples, Hook and colleagues found mixed reliability and validity, with limited support for some features. Treat the descriptions as questions to explore, rather than settled categories." },
+  { q: 'Can my type change?', a: 'Researchers haven\'t settled whether the types are stable categories. If your result changes, compare your answers and the examples you had in mind, rather than treating the score as proof of a personality change.' },
   { q: 'Do I need to sign up?', a: 'No. Every score is shown free, and your answers never leave your device.' },
 ];
 
@@ -288,6 +288,6 @@ export const happening: Happening = {
     { id: 'your-type', title: 'Your type.', text: `${typeStep.main} ${typeStep.wing}` },
   ],
   // Drafted.
-  change: "the ratings you enter. A changed score does not identify a cause or establish that a personality type changed.",
+  change: "the ratings you enter. You could compare your answers and the examples you had in mind if you take it again.",
   article: 'what-is-the-enneagram',
 };

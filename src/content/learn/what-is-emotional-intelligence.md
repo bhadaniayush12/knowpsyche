@@ -3,7 +3,7 @@ title: "What is emotional intelligence?"
 em: "emotional intelligence"
 description: "Emotional intelligence: emotion-related abilities, the models scientists discuss, and optional prompts for reflection."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Emotions"
 scene: what-is-emotional-intelligence
 relatedTest: emotional-intelligence-test
@@ -16,11 +16,11 @@ sources:
   - "Mayer, J. D., Caruso, D. R., & Salovey, P. (2016). The ability model of emotional intelligence: Principles and updates. *Emotion Review*."
 faq:
   - question: "What are the four areas of emotional intelligence?"
-    answer: "Our questionnaire groups answers as self-awareness, self-management, social awareness and relationship skills. These are not the branches of the cited ability model. In plain terms: noticing your own feelings, handling them, reading other people, and getting on with them."
+    answer: "Our questionnaire uses self-awareness, self-management, social awareness and relationship skills: noticing your feelings, handling them, reading other people and getting along. The ability model organizes emotional intelligence differently, around perceiving, using, understanding and managing emotions."
   - question: "Can you improve emotional intelligence?"
-    answer: "You can explore reflection prompts, but the cited papers do not establish that practising them improves scores on our questionnaire. The result labels are our editorial descriptions."
+    answer: "You could start by noticing a feeling, considering how to respond, or asking someone how they feel. Use a real situation to reflect on what you would like to handle differently; a quiz score alone cannot show whether those abilities have changed."
   - question: "Is a self-report emotional intelligence test accurate?"
-    answer: "This questionnaire summarizes your own ratings. It has not been validated against observed behaviour or other people's ratings. Use it as a reflection prompt."
+    answer: "It summarizes how you describe yourself. To explore an answer, think of a recent example or discuss it with someone you trust. Our questionnaire is a reflection tool, rather than a measure of how you handle every real situation."
 draft: false
 ---
 
@@ -34,7 +34,7 @@ Daniel Goleman's 1995 book brought the idea to a very wide audience and widened 
 
 ## The four areas, in plain terms
 
-Our site uses the following four areas. They differ from the ability model's branches of perceiving, using, understanding and managing emotions, discussed by Mayer and colleagues. Neither cited model validates our original questionnaire.
+Our site uses four areas to organize everyday questions about feelings. These differ from the ability model's branches of perceiving, using, understanding and managing emotions, discussed by Mayer and colleagues.
 
 - **Self-awareness.** Noticing what you feel, and what triggers it.
 - **Self-management.** Handling those feelings, such as pausing before you react.
@@ -43,7 +43,7 @@ Our site uses the following four areas. They differ from the ability model's bra
 
 Our [emotional intelligence test](/emotional-intelligence-test/) is built around these four areas and shows each one separately, with your strongest area first.
 
-> **Key idea** Our result labels summarize answers. Use them to ask a question about your experience, rather than to infer a measured ability.
+> **Key idea** Use your answers to choose a situation you would like to think through more carefully.
 
 ## What it looks like day to day
 
@@ -59,17 +59,15 @@ It isn't being nice all the time. It isn't hiding what you feel, because pushing
 
 Researchers don't fully agree on how to define emotional intelligence, or on how to measure it. Some treat it as a skill you can be tested on, like solving a problem. Others measure it by asking people to describe themselves.
 
-These approaches ask different questions. The cited models do not establish how this quiz relates to success or how its scores compare with IQ.
+An ability task asks what a person can do under its conditions. A self-report questionnaire asks how they describe themselves. Our quiz belongs to the second group.
 
-> **Side note** A questionnaire like ours is self-report. It summarizes your ratings; we have not validated those ratings against observed behaviour or others' reports.
+> **Side note** A self-report score is a starting point for a conversation about your experience, rather than a way to compare your future success or your IQ.
 
 ## Why a lower score isn't a verdict
 
-When a result says an area is "still developing", it is reading your answers, not judging you. The labels do not establish a training effect or explain why you gave particular answers.
+A lower score means you gave lower ratings to statements in that area. You could choose a statement that caught your attention and think of a recent example. The label is a prompt to reflect, rather than a judgment about you.
 
-## Optional reflection prompts
-
-These are general suggestions, rather than interventions shown by the cited papers to improve this questionnaire's scores.
+## Some prompts to try
 
 1. **Name it.** When something stirs, try to say exactly what it is. You could consider whether "annoyed" or "let down" better describes the experience.
 2. **Pause.** Give yourself a few breaths between a feeling and your reply. Notice what you would like to say.

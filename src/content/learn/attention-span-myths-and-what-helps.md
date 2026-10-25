@@ -3,7 +3,7 @@ title: "Attention span: myths, and what helps"
 em: "myths"
 description: "Attention research on mind wandering, vigilance and interruptions, plus optional suggestions for approaching a task."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Attention"
 relatedTest: attention-span-test
 scene: attention-span-myths-and-what-helps
@@ -21,7 +21,7 @@ faq:
   - question: "What is the average attention span?"
     answer: "There isn't a single number. Attention depends on the task, how interesting it is, how tired you are and what else is competing for you. The popular claim that people now focus for less time than a goldfish has no solid research behind it."
   - question: "Can you improve your attention span?"
-    answer: "Ariga and Lleras found that occasional switches to a digit-recall goal prevented a vigilance decrement in their laboratory task. That does not establish a general improvement in attention span."
+    answer: "You could start with a manageable task and fewer interruptions. In one lab experiment, brief switches to a different task helped participants maintain performance on a long task; that finding is more specific than a general boost in attention span."
   - question: "Does an online attention test show if I have a condition?"
     answer: "No. Ours is a short task on one day, and it isn't a test for any condition. If trouble with attention is affecting your daily life, talk to a doctor or a mental-health professional."
 draft: false
@@ -31,23 +31,19 @@ You've probably seen the claim. People now hold their attention for less time th
 
 ## Attention isn't one fixed number
 
-The studies here examine particular tasks and reports of mind wandering. They do not establish one duration that describes a person across activities.
+Watching for a rare signal, reading a story and noticing where your thoughts have gone ask different things of you. Researchers study these with different tasks and questions, rather than a single attention-span clock.
 
-A task score and an experience-sampling report capture different aspects of attention. Neither provides a universal attention-span number.
+> **Key idea** A useful question is “What am I paying attention to, and under what conditions?”
 
-> **Key idea** Attention is not a fixed quantity. These studies describe attention in particular tasks and settings.
+## When minds wander
 
-## Mind wandering in a sampled population
+In a smartphone study, Killingsworth and Gilbert asked participants what they were doing and thinking about during daily life. Participants frequently reported that their thoughts were elsewhere, across a range of activities. Mind wandering was part of the experience those people reported.
 
-In Killingsworth and Gilbert's 2010 smartphone experience-sampling study, participants frequently reported mind wandering across activities. This finding describes those participants and reports, rather than every person or moment.
+## Staying with a repetitive task
 
-## Why focus dips over time
+Mackworth's work on prolonged visual search helped frame the study of vigilance: staying alert while watching for a signal. Researchers call a decline during a long watch a *vigilance decrement*.
 
-Mackworth's 1948 paper concerns vigilance during prolonged visual search. The accessible publisher record has no abstract, so it does not verify the apparatus, radar history or precise time course.
-
-A decline in performance over a prolonged vigilance task is called a vigilance decrement. It does not mean every participant must decline.
-
-> **Side note** Our [attention span test](/attention-span-test/) uses a go/no-go task: respond to green, hold back for red. Gomez and colleagues model go/no-go decisions and response criteria. That work does not validate our game as a measure of general attention span or establish that its red trials are harder for every player.
+> **Side note** Our [attention span test](/attention-span-test/) asks you to respond to green and hold back for red. This is a go/no-go task, a kind of decision task studied by Gomez and colleagues. Your result describes those responses, rather than the length of your attention span in daily life.
 
 ## Do phones shrink our attention?
 
@@ -57,23 +53,19 @@ What looks more solid is smaller and more practical. In one experiment, simply g
 
 ## Multitasking is mostly switching
 
-Leroy's task-switching experiments found that residual thoughts about a previous task could impair performance on the next, particularly when work was unfinished. Task completion and time pressure both mattered; the findings do not imply a cost for every switch.
+In Leroy's task-switching experiments, thoughts about previous work could interfere with the next task, particularly when the earlier work was unfinished. Researchers call this *attention residue*. Both completion and time pressure mattered in those experiments.
 
-Optional suggestion: try finishing a manageable part of one task before switching. This is not a guarantee that task completion removes attention residue.
+You could try reaching a manageable stopping point before moving to something else.
 
-## Findings and optional suggestions
+## What a brief change can do
 
-The findings below concern specific experiments. The suggestions are ideas to try, rather than tested prescriptions for this site's game.
-
-- **Task-goal switches in the lab.** Ariga and Lleras found that occasional switches to a digit-recall goal prevented a vigilance decrement in their task. This was not a test of general rest breaks.
-- **Attention residue.** Leroy found that thoughts about previous work could impair a subsequent task under the studied conditions.
-- **Optional suggestion.** Choose one small goal and reduce interruptions if you want to try a simpler setup.
+In Ariga and Lleras's lab experiment, participants occasionally switched from a long task to recalling digits. That brief change helped them maintain performance. It was a specific change of task, so the finding doesn't tell us that any kind of break will have the same effect.
 
 ## A ten-minute focus experiment
 
-As an optional self-reflection exercise, pick a small task and a short time window. If you notice your mind wandering, return to the task and note what happened. The cited studies did not test this exercise.
+Pick a small task and give it a short window of your time. You could put other tasks aside and notice when your thoughts move elsewhere. If that happens, gently return to what you were doing.
 
-Use the exercise to observe your experience; it does not establish an improvement in attention.
+The point is to notice your experience, without grading yourself for each distraction.
 
 ## What a short test can and can't show
 

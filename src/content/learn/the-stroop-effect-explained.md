@@ -3,7 +3,7 @@ title: "The Stroop effect, explained"
 em: "Stroop"
 description: "Why is it hard to name the ink colour when the word spells a different colour? A plain explanation of the Stroop effect and what it does and doesn't show."
 datePublished: 2026-10-17
-dateModified: 2026-10-24
+dateModified: 2026-10-25
 category: "Focus"
 scene: the-stroop-effect-explained
 relatedTest: stroop-test
@@ -18,9 +18,9 @@ faq:
   - question: "Why is the Stroop test hard?"
     answer: "Word meaning can interfere with naming the ink colour. MacLeod's review describes several contributing processes; automatic reading alone is not a complete explanation."
   - question: "How widespread is the Stroop effect?"
-    answer: "MacLeod's review found interference across many Stroop task variations. That does not mean every reader will show a slowdown on every short run."
+    answer: "MacLeod's review found interference across many versions of the task. On a short run, look at both your response times and your accuracy; a small or absent gap is not a verdict on your reading or focus."
   - question: "Does a big Stroop effect mean poor focus?"
-    answer: "No. This version records a time difference between two trial types. It has not been validated as a measure of everyday focus."
+    answer: "No. A larger gap means your correct answers took longer on clashing words than matching ones in this run. It cannot grade how well you focus in everyday life."
 draft: false
 ---
 
@@ -38,9 +38,9 @@ Our matching-word and clashing-word comparison is a later task variation, rather
 
 ## Why does it happen?
 
-Word meaning can be processed even when the task asks for ink colour. MacLeod's review considers parallel processing and multiple sources of interference.
+Word meaning can enter the picture while you are trying to name the ink colour. If the two point to different answers, resolving that conflict can take time.
 
-When word meaning conflicts with the ink response, resolving that conflict can take time. Relative reading speed or automaticity alone does not fully explain the findings reviewed by MacLeod.
+MacLeod's review describes several contributing processes, including processing the word and ink alongside each other. The explanation is broader than reading being automatic or faster than colour naming.
 
 A large review that gathered half a century of studies found the effect again and again, across many versions of the task.
 
@@ -48,11 +48,11 @@ A large review that gathered half a century of studies found the effect again an
 
 The Stroop effect is a neat window into how automatic habits and deliberate goals interact. But it's easy to read too much into one person's number.
 
-- **Task conditions matter.** MacLeod reviews interference across many task variations.
-- **One result has limits.** This short version has not been validated as a general focus assessment.
+- **Task conditions matter.** MacLeod reviews interference across many versions of the task.
+- **Accuracy belongs beside speed.** Read the gap alongside how many answers you got right.
 - **The task uses colour.** You need to distinguish its ink colours to follow the instructions.
 
-> **Side note** Kane and Engle found more errors on incongruent trials in high-congruency conditions, particularly among participants with lower working-memory capacity. They linked this pattern to neglect of the task goal; it does not validate our score as a general focus measure.
+> **Side note** In Kane and Engle's study, when most words matched their ink, participants made more errors on the conflicting ones, particularly those with lower working-memory capacity. The researchers linked this pattern to losing track of the goal: name the ink colour.
 
 ## Where you feel it in daily life
 
@@ -62,7 +62,7 @@ These examples illustrate a possible conflict between habits and goals; they are
 
 ## What practice does
 
-A repeat run need not produce the same score. The cited review does not establish that a few runs of this version will shrink the gap, or that the gap must persist.
+If you try again, compare both your times and your accuracy. The gap may look different on another run; there is no particular gap you need to reach.
 
 ## How our version works
 
@@ -72,11 +72,11 @@ Our [Stroop test](/stroop-test/) asks you to pick the ink colour and ignore the 
 
 Look at two things together: how fast you were and how many you got right. Someone who is quick and accurate on matching words but slower on clashing ones is showing the effect in its usual form. Someone who rushes and slips is trading accuracy for speed, which is also ordinary.
 
-The slowdown is a difference between two average times. The cited sources do not establish that this score is steadier than either average; treat it as a record of this run.
+The slowdown is the difference between two average times. Read it alongside those times and your accuracy, as a record of this run.
 
 ## If you want to try it again
 
-These are optional ways to approach another run, rather than research-backed improvement instructions:
+You could try the following on another run:
 
 - Look at the ink, not the word.
 - Go at a pace you can keep up. Speed and accuracy trade off.
