@@ -241,7 +241,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, onScreen, prefersReducedMotion, runEnded, runFor, runStarted, today } from '../../lib/test-ui';
 
   type Mode = 'idle' | 'practice' | 'practice-done' | 'main' | 'paused' | 'done';
 
@@ -324,6 +324,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
   guardLeave(() => mode === 'main' || mode === 'practice', ui.leaveWarning);
 
   function startPractice() {
+    runStarted(); // practice is the start of every run
     clearTimers();
     mode = 'practice';
     trialList = getPracticeTrials();
@@ -512,6 +513,7 @@ const ranges = ['<70', '70–84', '85–94', '95+'];
 
   function restartAll() {
     clearTimers();
+    runEnded();
     mode = 'idle';
     trialIndex = 0;
     trialResults = [];

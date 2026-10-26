@@ -23,6 +23,17 @@ export function markRunning(inProgress: () => boolean) {
 }
 
 /**
+ * Tell the analytics in TestPage that a run has begun (it sends test_start once per run) or has been
+ * thrown away (Restart, a new run after a pause or result). Only these signals cross over: no data.
+ */
+export function runStarted() {
+  document.dispatchEvent(new Event('kp:run-start'));
+}
+export function runEnded() {
+  document.dispatchEvent(new Event('kp:run-end'));
+}
+
+/**
  * True while at least `ratio` of `el` is on screen. Used so number keys only answer
  * the test when people can see it, not while they're reading the FAQ further down.
  */

@@ -155,7 +155,7 @@ const first = statements[order[0] - 1];
   import { getResult, scalePercent, type EqResult } from '../../lib/tests/emotional-intelligence';
   import { createShareCard } from '../../lib/share-card';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, onScreen, runEnded, runStarted, today } from '../../lib/test-ui';
 
   const card = $('.eq-card');
   const count = $('.eq-count');
@@ -235,7 +235,7 @@ const first = statements[order[0] - 1];
       return;
     }
     // The first answer begins a run, by key or tap, with or without Start (analytics in TestPage).
-    if (answeredCount() === 0) document.dispatchEvent(new Event('kp:run-start'));
+    if (answeredCount() === 0) runStarted();
     answers[index] = value;
     confirm(answerButtons[value - 1], () => {
       if (index === TOTAL - 1) {
@@ -255,6 +255,7 @@ const first = statements[order[0] - 1];
 
   const reset = () => {
     window.clearTimeout(pulseTimer);
+    runEnded();
     answers = Array(TOTAL).fill(null);
     index = 0;
     locked = false;
@@ -358,11 +359,13 @@ const first = statements[order[0] - 1];
   };
   $('[data-test-start]').addEventListener('click', () => {
     if (done) reset();
+    runStarted();
     focusCard();
   });
   $$('[data-try-again]').forEach((b) =>
     b.addEventListener('click', () => {
       reset();
+      runStarted();
       focusCard();
     }),
   );

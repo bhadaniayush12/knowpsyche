@@ -133,17 +133,14 @@ const articles = articlesForTest(await getCollection('learn'), path.replace(/\//
     const language = document.documentElement.lang || 'en';
     let resultVisible = false;
 
-    const start = () => trackEvent('test_start', { test_name, test_category, language });
-    // Enneagram and EQ runs can begin with keys 1-5 (or a tap on an answer) without pressing Start.
-    document.addEventListener('kp:run-start', start);
+    // Each test page says when a run begins and when one is thrown away (runStarted / runEnded in
+    // src/lib/test-ui.ts), so starts by Space, keys 1-5 or a tap count as well as the Start button.
+    document.addEventListener('kp:run-start', () => trackEvent('test_start', { test_name, test_category, language }));
+    document.addEventListener('kp:run-end', endRun);
 
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest('[data-test-start], [data-try-again], .as-start-practice, .st-start-practice')) start();
-      if (target.closest('.eq-restart, .en-restart, .rt-restart, .nm-restart, .pm-restart, .as-restart, .st-restart, .as-paused-restart, .st-paused-restart')) {
-        endRun();
-      }
       const share = target.closest<HTMLElement>('[data-share-action]');
       if (share && resultVisible && result.contains(share)) {
         const method = share.dataset.shareAction;

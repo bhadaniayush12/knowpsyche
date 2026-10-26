@@ -92,17 +92,74 @@ describe('test event contract', () => {
     ]);
   });
 
-  it('Enneagram and EQ start a run (test_start) on the first answer, by key 1-5 or tap', () => {
-    expect(testPage).toContain("document.addEventListener('kp:run-start', start);");
+  it('TestPage sends test_start and ends runs only on the pages\' own run signals', () => {
+    expect(testPage).toContain("document.addEventListener('kp:run-start', () => trackEvent('test_start', { test_name, test_category, language }));");
+    expect(testPage).toContain("document.addEventListener('kp:run-end', endRun);");
+    // No guessing from button class names: a page's own handler can start a new run before a bubbling click arrives.
+    expect(testPage).not.toMatch(/-restart|start-practice|data-test-start\]|data-try-again/);
+    const ui = read('src/lib/test-ui.ts');
+    expect(ui).toContain("export function runStarted() {\n  document.dispatchEvent(new Event('kp:run-start'));\n}");
+    expect(ui).toContain("export function runEnded() {\n  document.dispatchEvent(new Event('kp:run-end'));\n}");
+  });
+
+  // Where each test's run begins (however it was started: Start, Space, keys 1-5, a tap or a press)
+  // and where a run is thrown away. `head` opens the block the call must sit in.
+  const block = (page: string, head: string) => {
+    const i = page.indexOf(head);
+    expect(i, head).toBeGreaterThan(-1);
+    return page.slice(i, page.indexOf('\n  }', i) + 4);
+  };
+  it.each([
+    ['enneagram', 'const choose = (value: number) => {', /if \(answeredCount\(\) === 0\) runStarted\(\);\n\s*answers\[index\] = value;/],
+    ['emotional-intelligence', 'const choose = (value: number) => {', /if \(answeredCount\(\) === 0\) runStarted\(\);\n\s*answers\[index\] = value;/],
+    ['enneagram', "$('[data-test-start]').addEventListener('click', () => {", /if \(done\) reset\(\);\n\s*runStarted\(\);/],
+    ['emotional-intelligence', "$('[data-test-start]').addEventListener('click', () => {", /if \(done\) reset\(\);\n\s*runStarted\(\);/],
+    ['stroop', 'function startPractice() {', /\{\n\s*runStarted\(\);/],
+    ['attention-span', 'function startPractice() {', /\{\n\s*runStarted\(\);/],
+    ['reaction-time', 'const beginTry = () => {', /\{\n\s*if \(phase === 'idle'\) runStarted\(\);/],
+    ['reaction-time', "$('[data-test-start]').addEventListener('click', () => {", /if \(phase === 'done'\) reset\(\);\n\s*if \(phase === 'idle'\) runStarted\(\);/],
+    ['number-memory', 'const start = () => {', /\{\n\s*reset\(\);\n\s*runStarted\(\);/],
+    ['photographic-memory', 'const start = () => {', /\{\n\s*reset\(\);\n\s*runStarted\(\);/],
+  ] as const)('%s: a run begins with runStarted() in %s', (slug, head, re) => {
+    expect(block(read(`src/pages/${slug}-test/index.astro`), head)).toMatch(re);
+  });
+
+  it.each([
+    ['enneagram', 'const reset = () => {'],
+    ['emotional-intelligence', 'const reset = () => {'],
+    ['reaction-time', 'const reset = () => {'],
+    ['number-memory', 'const reset = () => {'],
+    ['photographic-memory', 'const reset = () => {'],
+    ['stroop', 'function restartAll() {'],
+    ['attention-span', 'function restartAll() {'],
+  ] as const)('%s: %s throws the run away (runEnded) straight after clearing its timers', (slug, head) => {
+    expect(block(read(`src/pages/${slug}-test/index.astro`), head)).toMatch(/\{\n[^\n]*\n\s*runEnded\(\);/);
+  });
+
+  it('the keys and presses that begin a run go through those functions', () => {
+    const page = (slug: string) => read(`src/pages/${slug}-test/index.astro`);
     for (const slug of ['enneagram', 'emotional-intelligence']) {
-      const page = read(`src/pages/${slug}-test/index.astro`);
-      const choose = page.slice(page.indexOf('const choose = (value: number) => {'));
-      // Inside choose(), which both the click handler and the 1-5 keydown handler call.
-      expect(choose.slice(0, choose.indexOf('};')), slug).toMatch(
-        /if \(answeredCount\(\) === 0\) document\.dispatchEvent\(new Event\('kp:run-start'\)\);\n\s*answers\[index\] = value;/,
-      );
-      expect(page, slug).toMatch(/keydown[\s\S]*v >= 1 && v <= 5\)[\s\S]{0,60}choose\(v\)/);
+      expect(page(slug), slug).toMatch(/keydown[\s\S]*v >= 1 && v <= 5\)[\s\S]{0,60}choose\(v\)/);
     }
+    // Space (Stroop, Attention span) and a tap on the arena (Attention span) start practice.
+    expect(page('stroop')).toContain("if (mode === 'idle') startPractice();");
+    expect(page('attention-span')).toContain("if (mode === 'idle') startPractice();");
+    expect(page('attention-span')).toMatch(/arena\.addEventListener\('click'[\s\S]{0,250}if \(mode === 'idle'\) \{\n\s*startPractice\(\);/);
+    // Reaction time: a click, tap, Space or Enter on the box calls press(), which starts a try from idle.
+    expect(page('reaction-time')).toMatch(/default:[\s\S]{0,200}startTry\(\);/);
+    expect(page('reaction-time')).toMatch(/const startTry = \(\) => \{[\s\S]{0,120}beginTry\(\);/);
+  });
+
+  it('runStarted and runEnded only fire DOM events on this page, with no data', async () => {
+    const events: Event[] = [];
+    vi.stubGlobal('document', { dispatchEvent: (e: Event) => events.push(e) });
+    const { runStarted, runEnded } = await import('../test-ui');
+    runStarted();
+    runEnded();
+    expect(events.map((e) => [e.type, e.constructor.name, 'detail' in e])).toEqual([
+      ['kp:run-start', 'Event', false],
+      ['kp:run-end', 'Event', false],
+    ]);
   });
 
   it('does nothing without gtag and never throws when gtag fails', () => {

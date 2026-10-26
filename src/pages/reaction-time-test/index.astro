@@ -164,7 +164,7 @@ const ticks = [100, 200, 300, 400, 500];
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, markRunning, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, markRunning, runEnded, runStarted, today } from '../../lib/test-ui';
 
   type Phase = 'idle' | 'wait' | 'go' | 'early' | 'guess' | 'shown' | 'done';
 
@@ -365,6 +365,7 @@ const ticks = [100, 200, 300, 400, 500];
   };
 
   const beginTry = () => {
+    if (phase === 'idle') runStarted(); // the first try, however it was started
     cancelAnimationFrame(frame);
     ensureAudio();
     phase = 'wait';
@@ -480,6 +481,7 @@ const ticks = [100, 200, 300, 400, 500];
 
   const reset = () => {
     startToken += 1;
+    runEnded();
     cancelAnimationFrame(frame);
     endedAt = -Infinity;
     tries = [];
@@ -551,6 +553,7 @@ const ticks = [100, 200, 300, 400, 500];
 
   $('[data-test-start]').addEventListener('click', () => {
     if (phase === 'done') reset();
+    if (phase === 'idle') runStarted();
     focusBox();
     if (!running()) startTry();
   });

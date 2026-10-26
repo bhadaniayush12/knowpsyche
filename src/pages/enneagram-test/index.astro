@@ -199,7 +199,7 @@ const choiceBtn =
   } from '../../lib/tests/enneagram';
   import { createShareCard } from '../../lib/share-card';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, guardLeave, onScreen, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, onScreen, runEnded, runStarted, today } from '../../lib/test-ui';
 
   const card = $('.en-card');
   const count = $('.en-count');
@@ -316,7 +316,7 @@ const choiceBtn =
       return;
     }
     // The first answer begins a run, by key or tap, with or without Start (analytics in TestPage).
-    if (answeredCount() === 0) document.dispatchEvent(new Event('kp:run-start'));
+    if (answeredCount() === 0) runStarted();
     answers[index] = value;
     confirm(answerButtons[value - 1], answerButtons, () => {
       if (index === TOTAL - 1) {
@@ -378,6 +378,7 @@ const choiceBtn =
 
   const reset = () => {
     window.clearTimeout(pulseTimer);
+    runEnded();
     answers = Array(TOTAL).fill(null);
     index = 0;
     locked = false;
@@ -648,11 +649,13 @@ const choiceBtn =
   };
   $('[data-test-start]').addEventListener('click', () => {
     if (done) reset();
+    runStarted();
     focusCard();
   });
   $$('[data-try-again]').forEach((b) =>
     b.addEventListener('click', () => {
       reset();
+      runStarted();
       focusCard();
     }),
   );

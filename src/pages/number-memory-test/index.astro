@@ -213,7 +213,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runEnded, runFor, runStarted, today } from '../../lib/test-ui';
 
   /** How long "Correct" shows before the next number. */
   const CORRECT_MS = 800;
@@ -373,6 +373,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
 
   const reset = () => {
     cancel();
+    runEnded();
     game = startGame();
     target = '';
     longest = '';
@@ -388,6 +389,7 @@ const btn = 'inline-flex min-h-12 items-center justify-center rounded-12 border-
 
   const start = () => {
     reset();
+    runStarted();
     card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
     card.focus({ preventScroll: true });
     round();

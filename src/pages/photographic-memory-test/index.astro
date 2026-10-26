@@ -143,7 +143,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
   import { createShareCard } from '../../lib/share-card';
   import { bindFeedbackToggle, cue } from '../../lib/feedback';
   import { initSaveOptIn } from '../../lib/saved-results';
-  import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runFor, today } from '../../lib/test-ui';
+  import { $, $$, bindCopy, guardLeave, prefersReducedMotion, runEnded, runFor, runStarted, today } from '../../lib/test-ui';
 
   /** Pause after a finished level, and after a wrong tile, before the next pattern. */
   const PAUSE_DONE_MS = 700;
@@ -337,6 +337,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
 
   const reset = () => {
     cancel();
+    runEnded();
     game = null;
     noticeShownFor = 0;
     focusIndex = 0;
@@ -352,6 +353,7 @@ const ranges = ['1–4', '5–8', '9–12', '13+'];
 
   const start = () => {
     reset();
+    runStarted();
     card.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
     tiles[0].focus({ preventScroll: true });
     game = startGame();
