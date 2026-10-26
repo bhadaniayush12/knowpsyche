@@ -315,6 +315,8 @@ const choiceBtn =
       queued = () => choose(value);
       return;
     }
+    // The first answer begins a run, by key or tap, with or without Start (analytics in TestPage).
+    if (answeredCount() === 0) document.dispatchEvent(new Event('kp:run-start'));
     answers[index] = value;
     confirm(answerButtons[value - 1], answerButtons, () => {
       if (index === TOTAL - 1) {
